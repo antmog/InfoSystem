@@ -1,10 +1,13 @@
 package com.websystique.springmvc.controller;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
 import javax.validation.Valid;
 
+import com.websystique.springmvc.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -51,8 +54,10 @@ public class AppController {
 	@RequestMapping(value = { "/newuser" }, method = RequestMethod.GET)
 	public String newUser(ModelMap model) {
 		User user = new User();
+		HashSet<String> roles = new HashSet<>(Arrays.asList(Role.CUSTOMER.getRole(), Role.ADMIN.getRole()));
 		model.addAttribute("user", user);
 		model.addAttribute("edit", false);
+		model.addAttribute("roles", roles);
 		return "registration";
 	}
 
