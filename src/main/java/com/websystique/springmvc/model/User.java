@@ -22,6 +22,25 @@ public class User implements Serializable{
 	@Column(name="NAME", nullable=false)
 	private String name;
 
+	@NotEmpty
+	@Column(name="MAIL", nullable=false, unique = true)
+	private String mail;
+
+	@NotEmpty
+	@Column(name="PASSWORD", nullable=false)
+	private String password;
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	@NotEmpty
+	@Column(name="ROLE", nullable=false)
+	private String role;
 
 	public Integer getId() {
 		return id;
@@ -30,8 +49,6 @@ public class User implements Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-
 
 	public String getName() {
 		return name;
@@ -71,5 +88,22 @@ public class User implements Serializable{
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + "]";
 	}
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 
 }

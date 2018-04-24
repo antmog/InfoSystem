@@ -2,6 +2,7 @@ package com.websystique.springmvc.service;
 
 import java.util.List;
 
+import com.websystique.springmvc.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService{
 		User entity = dao.findById(user.getId());
 		if(entity!=null){
 			entity.setName(user.getName());
+			entity.setMail(user.getMail());
+			entity.setPassword(user.getPassword());
+			entity.setRole(user.getRole());
 		}
 	}
 

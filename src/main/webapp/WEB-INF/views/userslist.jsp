@@ -19,6 +19,8 @@
 		      		<tr>
 				        <th>id</th>
 				        <th>name</th>
+				        <th>mail</th>
+				        <th>role</th>
 				        <th width="100"></th>
 				        <th width="100"></th>
 					</tr>
@@ -28,6 +30,8 @@
 					<tr>
 						<td>${user.id}</td>
 						<td>${user.name}</td>
+						<td>${user.mail}</td>
+						<td>${user.role}</td>
 						<td><a href="<c:url value='/edit-user-${user.id}' />" class="btn btn-success custom-width">edit</a></td>
 						<td><a href="<c:url value='/delete-user-${user.id}' />" class="btn btn-danger custom-width">delete</a></td>
 					</tr>
