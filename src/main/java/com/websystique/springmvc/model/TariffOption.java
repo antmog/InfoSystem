@@ -118,6 +118,6 @@ public class TariffOption implements Serializable {
 
     @Override
     public String toString() {
-        return "TariffOption [id=" + id + ", name=" + name + ", costOfAdd=" + costOfAdd + ", price=" + costOfAdd + "]";
+        return "TariffOption [id=" + id + ", name=" + name + ", costOfAdd=" + costOfAdd + ", price=" + price + "]";
     }
 }

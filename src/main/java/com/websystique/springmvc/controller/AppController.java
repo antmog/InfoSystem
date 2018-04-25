@@ -7,11 +7,10 @@ import java.util.Locale;
 
 import javax.validation.Valid;
 
-import com.websystique.springmvc.model.Contract;
-import com.websystique.springmvc.model.Role;
-import com.websystique.springmvc.model.TariffOption;
+import com.websystique.springmvc.model.*;
 import com.websystique.springmvc.service.ContractService;
 import com.websystique.springmvc.service.TariffOptionService;
+import com.websystique.springmvc.service.TariffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.websystique.springmvc.model.User;
 import com.websystique.springmvc.service.UserService;
 
 
@@ -45,6 +43,9 @@ public class AppController {
     @Autowired
     MessageSource messageSource;
 
+    @Autowired
+    TariffService tariffService;
+
     /**
      * This method will list all existing users.
      */
@@ -54,9 +55,12 @@ public class AppController {
         List<User> users = userService.findAllUsers();
         List<Contract> contracts = contractService.findAllContracts();
         List<TariffOption> options = tariffOptionService.findAllTariffOptions();
+        List<Tariff> tariffs = tariffService.findAllTariffs();
         model.addAttribute("options", options);
         model.addAttribute("users", users);
         model.addAttribute("contracts", contracts);
+        model.addAttribute("tariffs", tariffs);
+
         return "userslist";
     }
 
