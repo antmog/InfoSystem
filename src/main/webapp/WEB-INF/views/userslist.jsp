@@ -9,63 +9,87 @@
     <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
 </head>
 
-<body>
-<div class="generic-container">
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading"><span class="lead">List of Users </span></div>
+<body scrolling= "yes">
+
+    <div class="generic-container">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading"><span class="lead">List of Users </span></div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>mail</th>
+                    <th>role</th>
+                    <th width="100"></th>
+                    <th width="100"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${users}" var="user">
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.mail}</td>
+                        <td>${user.role}</td>
+                        <td><a href="<c:url value='/edit-user-${user.id}' />"
+                               class="btn btn-success custom-width">edit</a>
+                        </td>
+                        <td><a href="<c:url value='/delete-user-${user.id}' />"
+                               class="btn btn-danger custom-width">delete</a></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+        <div class="well">
+            <a href="<c:url value='/newuser' />">Add New User</a>
+        </div>
+
+        <div class="panel-heading"><span class="lead">Contracts</span></div>
         <table class="table table-hover">
             <thead>
             <tr>
                 <th>id</th>
-                <th>name</th>
-                <th>mail</th>
-                <th>role</th>
+                <th>user_id</th>
+                <th>user</th>
                 <th width="100"></th>
                 <th width="100"></th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${users}" var="user">
+            <c:forEach items="${contracts}" var="contract">
                 <tr>
-                    <td>${user.id}</td>
-                    <td>${user.name}</td>
-                    <td>${user.mail}</td>
-                    <td>${user.role}</td>
-                    <td><a href="<c:url value='/edit-user-${user.id}' />" class="btn btn-success custom-width">edit</a>
-                    </td>
-                    <td><a href="<c:url value='/delete-user-${user.id}' />"
-                           class="btn btn-danger custom-width">delete</a></td>
+                    <td>${contract.id}</td>
+                    <td>${contract.user.id}</td>
+                    <td>${contract.user}</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+
+        <div class="panel-heading"><span class="lead">Options</span></div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>user_id</th>
+                <th>user</th>
+                <th width="100"></th>
+                <th width="100"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${options}" var="option">
+                <tr>
+                    <td>${option}</td>
+
                 </tr>
             </c:forEach>
             </tbody>
         </table>
     </div>
-    <div class="well">
-        <a href="<c:url value='/newuser' />">Add New User</a>
-    </div>
 
-    <div class="panel-heading"><span class="lead">Contracts</span></div>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th>id</th>
-            <th>user_id</th>
-            <th>user</th>
-            <th width="100"></th>
-            <th width="100"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${contracts}" var="contract">
-            <tr>
-                <td>${contract.id}</td>
-                <td>${contract.user.id}</td>
-                <td>${contract.user}</td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-</div>
 </body>
 </html>

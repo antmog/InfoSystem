@@ -9,7 +9,9 @@ import javax.validation.Valid;
 
 import com.websystique.springmvc.model.Contract;
 import com.websystique.springmvc.model.Role;
+import com.websystique.springmvc.model.TariffOption;
 import com.websystique.springmvc.service.ContractService;
+import com.websystique.springmvc.service.TariffOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,9 @@ public class AppController {
     ContractService contractService;
 
     @Autowired
+    TariffOptionService tariffOptionService;
+
+    @Autowired
     MessageSource messageSource;
 
     /**
@@ -48,6 +53,8 @@ public class AppController {
 
         List<User> users = userService.findAllUsers();
         List<Contract> contracts = contractService.findAllContracts();
+        List<TariffOption> options = tariffOptionService.findAllTariffOptions();
+        model.addAttribute("options", options);
         model.addAttribute("users", users);
         model.addAttribute("contracts", contracts);
         return "userslist";
