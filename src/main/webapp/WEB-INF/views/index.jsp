@@ -42,29 +42,38 @@
     <div class="jumbotron">
         <div class="container">
             <h1 class="display-4">Info-System</h1>
-            <p>Информационная система оператора сотовой связи</p>
-            <a class="btn btn-primary btn-lg" href="/login" role="button">Войти »</a>
+            <p>Cellular Carrier Information System</p>
+            <sec:authorize var="loggedIn" access="isAuthenticated()" />
+            <c:choose>
+                <c:when test="${loggedIn}">
+                    <strong>WELCOME, dear ${loggedinuser}</strong>
+                </c:when>
+                <c:otherwise>
+                    <a class="btn btn-primary btn-lg" href="/login" role="button">Log In »</a>
+                </c:otherwise>
+            </c:choose>
+
         </div>
     </div>
 
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <h2>Тарифы</h2>
+                <h2>Tariffs</h2>
                 <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
                     mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna
                     mollis euismod. Donec sed odio dui. </p>
                 <p><a class="btn btn-secondary" href="#" role="button">Подробнее &raquo;</a></p>
             </div>
             <div class="col-md-4">
-                <h2>Личный кабинет</h2>
+                <h2>LK</h2>
                 <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
                     mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna
                     mollis euismod. Donec sed odio dui. </p>
                 <p><a class="btn btn-secondary" href="#" role="button">Подробнее &raquo;</a></p>
             </div>
             <div class="col-md-4">
-                <h2>Поиск</h2>
+                <h2>Search</h2>
                 <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula
                     porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
                     ut fermentum massa justo sit amet risus.</p>

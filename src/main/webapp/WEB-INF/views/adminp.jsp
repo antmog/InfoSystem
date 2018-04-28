@@ -11,6 +11,6 @@
     <title>ADMIN HELOU</title>
 </head>
 <body>
-
+    ADMIN AREA
 </body>
 </html>
