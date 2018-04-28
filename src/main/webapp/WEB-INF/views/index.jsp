@@ -25,7 +25,7 @@
         <div class="container">
             <h1 class="display-4">Info-System</h1>
             <p>Информационная система оператора сотовой связи</p>
-            <p><a class="btn btn-primary btn-lg" href="#" role="button">Войти &raquo;</a></p>
+            <a class="btn btn-primary btn-lg" href="/login" role="button">Войти »</a>
         </div>
     </div>
 
@@ -53,11 +53,7 @@
     </div>
 
 </main>
-
-
-<script defer src="/static/vendors/bootstrap-4.1.0/assets/js/vendor/jquery-slim.min.js"></script>
-<script defer src="/static/vendors/bootstrap-4.1.0/assets/js/vendor/popper.min.js"></script>
-<script defer src="/static/vendors/bootstrap-4.1.0/js/bootstrap.min.js"></script>
-<script defer src="/static/js/main.js"></script>
+<script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
+<script src="/static/js/main.js" defer></script>
 </body>
 </html>

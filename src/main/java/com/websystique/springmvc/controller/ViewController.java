@@ -48,6 +48,14 @@ public class ViewController {
     }
 
     /**
+     * Mapping to login screen.
+     */
+    @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
+    public String login(ModelMap model) {
+        return "login";
+    }
+
+    /**
      * This method will list all existing users.
      */
     @RequestMapping(value = {"/list"}, method = RequestMethod.GET)

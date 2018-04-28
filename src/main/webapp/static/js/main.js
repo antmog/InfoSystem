@@ -1,1 +1,6 @@
-console.log($('body'));
+(function () {
+
+ console.log("hello world");
+
+
+})();

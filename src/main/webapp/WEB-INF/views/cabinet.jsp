@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="../vendors/bootstrap-4.1.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../styles/index.css">
-    <link rel="stylesheet" href="../vendors/fontawesome-free-5.0.10/web-fonts-with-css/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/vendors/fontawesome-free-5.0.10/fontawesome-all.min.css">
 
 
     <title>Info-System</title>
@@ -104,9 +104,7 @@
 </main>
 
 
-<script defer src="../vendors/bootstrap-4.1.0/assets/js/vendor/jquery-slim.min.js"></script>
-<script defer src="../vendors/bootstrap-4.1.0/assets/js/vendor/popper.min.js"></script>
-<script defer src="../vendors/bootstrap-4.1.0/js/bootstrap.min.js"></script>
-<script defer src="../js/main.js"></script>
+<script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
+<script src="/static/js/main.js" defer></script>
 </body>
 </html>

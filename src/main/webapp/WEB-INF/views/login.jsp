@@ -1,11 +1,14 @@
-<!doctype html>
+<%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="../vendors/bootstrap-4.1.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/index.css">
 
     <title>Info-System</title>
 </head>
@@ -40,10 +43,7 @@
     </form>
 </div>
 
-
-<script defer src="../vendors/bootstrap-4.1.0/assets/js/vendor/jquery-slim.min.js"></script>
-<script defer src="../vendors/bootstrap-4.1.0/assets/js/vendor/popper.min.js"></script>
-<script defer src="../vendors/bootstrap-4.1.0/js/bootstrap.min.js"></script>
-<script defer src="../js/main.js"></script>
+<script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
+<script src="/static/js/main.js" defer></script>
 </body>
 </html>
