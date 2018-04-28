@@ -63,7 +63,7 @@ public class AppController {
 
         userService.saveUser(user);
 
-        model.addAttribute("success", "User " + user.getName() + "registered successfully");
+        model.addAttribute("success", "User " + user.getFirstName() + "registered successfully");
         //return "success";
         return "registrationsuccess";
     }
@@ -93,7 +93,7 @@ public class AppController {
 
         userService.updateUser(user);
 
-        model.addAttribute("success", "User " + user.getName() + " updated successfully");
+        model.addAttribute("success", "User " + user.getFirstName() + " updated successfully");
         return "registrationsuccess";
     }
 

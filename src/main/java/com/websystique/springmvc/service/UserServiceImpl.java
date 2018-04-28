@@ -1,6 +1,8 @@
 package com.websystique.springmvc.service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.websystique.springmvc.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.websystique.springmvc.dao.UserDao;
 import com.websystique.springmvc.model.User;
+
+import static java.util.Arrays.stream;
 
 
 @Service("userService")
@@ -39,7 +43,12 @@ public class UserServiceImpl implements UserService{
 	public void updateUser(User user) {
 		User entity = dao.findById(user.getId());
 		if(entity!=null){
-			entity.setName(user.getName());
+			entity.setFirstName(user.getFirstName());
+			entity.setLastName(user.getLastName());
+			entity.setAdress(user.getAdress());
+			entity.setBirthDate(user.getBirthDate());
+			entity.setPassport(user.getPassport());
+			entity.setLogin(user.getLogin());
 			entity.setMail(user.getMail());
 			entity.setPassword(user.getPassword());
 			entity.setRole(user.getRole());
@@ -50,6 +59,11 @@ public class UserServiceImpl implements UserService{
 	public List<User> findAllUsers() {
 
 		return dao.findAllUsers();
+	}
+
+	@Override
+	public List<User> findFirstUsers() {
+		return dao.findAllUsers().stream().limit(5).collect(Collectors.toList());
 	}
 
 	@Override

@@ -4,8 +4,8 @@ import com.websystique.springmvc.dao.ContractDao;
 import com.websystique.springmvc.model.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service("contractService")

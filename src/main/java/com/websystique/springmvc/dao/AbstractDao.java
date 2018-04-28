@@ -49,10 +49,5 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		return getSession().createCriteria(persistentClass);
 	}
 
-	protected CriteriaBuilder createCriteriaBuilder(){
-		CriteriaBuilder builder = getSession().getCriteriaBuilder();
-		return builder;
-	}
-
 
 }

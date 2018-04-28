@@ -43,7 +43,7 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 	@SuppressWarnings("unchecked")
 	public List<User> findAllUsers() {
 		List<User> users = getSession()
-				.createQuery("SELECT u FROM User u ORDER BY u.name ASC")
+				.createQuery("SELECT u FROM User u")
 				.getResultList();
 		return users;
 	}

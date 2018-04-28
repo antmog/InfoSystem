@@ -62,9 +62,24 @@ public class ViewController {
         }
         if (authentication.getAuthorities().stream()
                 .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
-            return "adminp";
+            return "redirect:/adminPanel";
         }
-        return "cabinet";
+        return "redirect:/customerPanel";
+    }
+
+    @RequestMapping("/adminPanel")
+    public String adminPanel(ModelMap model) {
+        List<User> users = userService.findFirstUsers();
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("users",users);
+        return "adminPanel";
+    }
+
+    @RequestMapping("/customerPanel")
+    public String customerPanel(ModelMap model) {
+        model.addAttribute("loggedinuser", getPrincipal());
+
+        return "customerPanel";
     }
 
 
@@ -72,6 +87,13 @@ public class ViewController {
     public String startPage(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         return "index";
+    }
+
+
+    @RequestMapping("/addd")
+    public String startwPage(ModelMap model) {
+        model.addAttribute("loggedinuser", getPrincipal());
+        return "userlist";
     }
 
 

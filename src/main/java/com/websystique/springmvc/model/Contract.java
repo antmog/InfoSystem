@@ -13,8 +13,7 @@ public class Contract implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name="USER",nullable = false, referencedColumnName = "USER_ID")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "USER_ID")
     private User user;
-
 }

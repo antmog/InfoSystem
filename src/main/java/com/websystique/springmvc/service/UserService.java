@@ -17,6 +17,8 @@ public interface UserService {
 
 	List<User> findAllUsers();
 
+	List<User> findFirstUsers();
+
 	void deleteUserById(int id);
 
 }
