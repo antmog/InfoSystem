@@ -55,7 +55,7 @@
         	<version>${hibernate.version}</version>
     	</dependency>
 
-		<!-- jsr303 validation -->
+		<!-- jsr303 validators -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
