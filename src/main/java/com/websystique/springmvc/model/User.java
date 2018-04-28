@@ -1,6 +1,7 @@
 package com.websystique.springmvc.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,10 +34,10 @@ public class User implements Serializable {
 
     @NotEmpty
     @Column(name = "BIRTH_DATE", nullable = false)
-    private String birthDate;
+    private Date birthDate;
 
-    @NotEmpty
-    @Column(name = "PASSPORT", nullable = false, unique = true)
+
+    @Column(name = "PASSPORT_ID", nullable = false, unique = true)
     private Integer passport;
 
 

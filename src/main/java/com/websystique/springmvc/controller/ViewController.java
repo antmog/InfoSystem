@@ -75,6 +75,14 @@ public class ViewController {
         return "adminPanel";
     }
 
+    @RequestMapping("/adminPanel/AllUsers")
+    public String adminPanelAllUsers(ModelMap model) {
+        List<User> users = userService.findAllUsers();
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("users",users);
+        return "allUsers";
+    }
+
     @RequestMapping("/customerPanel")
     public String customerPanel(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());

@@ -47,19 +47,7 @@
 <main class="mt-4">
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4 border-dark">
-                    <h5 class="card-header">
-                        <strong>${loggedinuser}</strong>
-                    </h5>
-                    <div class="card-body">
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                    </div>
-                </div>
-            </div>
+
             <div class="col-md-8">
                 <div class="card mb-4">
                     <h5 class="card-header">
@@ -68,44 +56,41 @@
                     <ul class="list-group list-group-flush">
 
 
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <table class="table table-hover">
-                                    <thead>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>firstName</th>
+                                    <th>lastName</th>
+                                    <th>adress</th>
+                                    <th>birthDate</th>
+                                    <th>login</th>
+                                    <th>passport</th>
+                                    <th>mail</th>
+                                    <th width="100"></th>
+                                    <th width="100"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach items="${users}" var="user">
                                     <tr>
-                                        <th>id</th>
-                                        <th>firstName</th>
-                                        <th>lastName</th>
-                                        <th>adress</th>
-                                        <th>birthDate</th>
-                                        <th>login</th>
-                                        <th>passport</th>
-                                        <th>mail</th>
-                                        <th width="100"></th>
-                                        <th width="100"></th>
+                                        <td>${user.id}</td>
+                                        <td>${user.firstName}</td>
+                                        <td>${user.lastName}</td>
+                                        <td>${user.adress}</td>
+                                        <td>${user.birthDate}</td>
+                                        <td>${user.login}</td>
+                                        <td>${user.passport}</td>
+                                        <td>${user.mail}</td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    <c:forEach items="${users}" var="user">
-                                        <tr>
-                                            <td>${user.id}</td>
-                                            <td>${user.firstName}</td>
-                                            <td>${user.lastName}</td>
-                                            <td>${user.adress}</td>
-                                            <td>${user.birthDate}</td>
-                                            <td>${user.login}</td>
-                                            <td>${user.passport}</td>
-                                            <td>${user.mail}</td>
-                                        </tr>
-                                    </c:forEach>
-                                    </tbody>
-                                </table>
-                            </li>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </li>
 
 
                     </ul>
-                    <div class="card-body">
-                        <a href="/adminPanel/AllUsers" class="card-link">All users</a>
-                    </div>
                 </div>
             </div>
 
