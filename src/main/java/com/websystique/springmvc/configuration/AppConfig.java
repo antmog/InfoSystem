@@ -44,13 +44,12 @@ public class AppConfig extends WebMvcConfigurerAdapter{
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
     }
 
-    
-    /**Optional. It's only required when handling '.' in @PathVariables which otherwise ignore everything after last '.' in @PathVaidables argument.
-     * It's a known bug in Spring [https://jira.spring.io/browse/SPR-6164], still present in Spring 4.3.0.
-     * This is a workaround for this issue.
-     */
-    
-    @Override
+
+	/**Optional. It's only required when handling '.' in @PathVariables which otherwise ignore everything after last '.' in @PathVaidables argument.
+	 * It's a known bug in Spring [https://jira.spring.io/browse/SPR-6164], still present in Spring 4.3.0.
+	 * This is a workaround for this issue.
+	 */
+	@Override
     public void configurePathMatch(PathMatchConfigurer matcher) {
         matcher.setUseRegisteredSuffixPatternMatch(true);
     }

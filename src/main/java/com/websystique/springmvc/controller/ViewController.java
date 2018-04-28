@@ -78,6 +78,7 @@ public class ViewController {
     @RequestMapping("/adminPanel/AllUsers")
     public String adminPanelAllUsers(ModelMap model) {
         List<User> users = userService.findAllUsers();
+        System.out.println("ss");
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("users",users);
         return "allUsers";
@@ -98,10 +99,10 @@ public class ViewController {
     }
 
 
-    @RequestMapping("/addd")
+    @RequestMapping("/adminPanel/addUser")
     public String startwPage(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
-        return "userlist";
+        return "addUser";
     }
 
 

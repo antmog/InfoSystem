@@ -1,10 +1,8 @@
 package com.websystique.springmvc.service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.websystique.springmvc.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +43,7 @@ public class UserServiceImpl implements UserService{
 		if(entity!=null){
 			entity.setFirstName(user.getFirstName());
 			entity.setLastName(user.getLastName());
-			entity.setAdress(user.getAdress());
+			entity.setAddress(user.getAddress());
 			entity.setBirthDate(user.getBirthDate());
 			entity.setPassport(user.getPassport());
 			entity.setLogin(user.getLogin());

@@ -75,7 +75,7 @@
                                         <th>id</th>
                                         <th>firstName</th>
                                         <th>lastName</th>
-                                        <th>adress</th>
+                                        <th>address</th>
                                         <th>birthDate</th>
                                         <th>login</th>
                                         <th>passport</th>
@@ -90,11 +90,12 @@
                                             <td>${user.id}</td>
                                             <td>${user.firstName}</td>
                                             <td>${user.lastName}</td>
-                                            <td>${user.adress}</td>
+                                            <td>${user.address}</td>
                                             <td>${user.birthDate}</td>
                                             <td>${user.login}</td>
                                             <td>${user.passport}</td>
                                             <td>${user.mail}</td>
+
                                         </tr>
                                     </c:forEach>
                                     </tbody>
