@@ -52,6 +52,8 @@ public class ViewController {
      */
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public String login(ModelMap model) {
+        List<User> users = userService.findAllUsers();
+        model.addAttribute("users", users);
         return "login";
     }
 
@@ -93,8 +95,10 @@ public class ViewController {
     @RequestMapping(value = {"/edit-user-{id}"}, method = RequestMethod.GET)
     public String editUser(@PathVariable int id, ModelMap model) {
         User user = userService.findById(id);
+        HashSet<String> roles = new HashSet<>(Arrays.asList(Role.CUSTOMER.getRole(), Role.ADMIN.getRole()));
         model.addAttribute("user", user);
         model.addAttribute("edit", true);
+        model.addAttribute("roles", roles);
         return "registration";
     }
 

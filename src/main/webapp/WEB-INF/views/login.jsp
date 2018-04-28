@@ -42,7 +42,33 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
     </form>
 </div>
-
+<div class="panel-heading"><span class="lead">List of Users </span></div>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>mail</th>
+        <th>role</th>
+        <th width="100"></th>
+        <th width="100"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${users}" var="user">
+        <tr>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.mail}</td>
+            <td>${user.role}</td>
+            <td><a href="<c:url value='/edit-user-${user.id}' />"
+                   class="btn btn-success custom-width">edit</a>
+            </td>
+            <td><a href="<c:url value='/delete-user-${user.id}' />"
+                   class="btn btn-danger custom-width">delete</a></td>
+        </tr>
+    </c:forEach>
+    </tbody>
 <script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
 <script src="/static/js/main.js" defer></script>
 </body>
