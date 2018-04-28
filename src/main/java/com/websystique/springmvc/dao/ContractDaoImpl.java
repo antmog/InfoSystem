@@ -1,16 +1,19 @@
 package com.websystique.springmvc.dao;
 
 import com.websystique.springmvc.model.Contract;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository("contractDao")
 public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements ContractDao {
+
     public Contract findById(int id) {
         Contract contract = getByKey(id);
-        if(contract!=null){
+        if (contract != null) {
             Hibernate.initialize(contract);
         }
         return contract;
@@ -18,7 +21,7 @@ public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements C
 
     @SuppressWarnings("unchecked")
     public List<Contract> findAllContracts() {
-        List<Contract> contracts = getEntityManager()
+        List<Contract> contracts = getSession()
                 .createQuery("SELECT c FROM Contract c")
                 .getResultList();
         return contracts;
@@ -29,11 +32,10 @@ public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements C
     }
 
     public void deleteById(int id) {
-        Contract contract = (Contract) getEntityManager()
+        Contract contract = (Contract) getSession()
                 .createQuery("SELECT c FROM Contract c WHERE c.id LIKE :Id")
                 .setParameter("Id", id)
                 .getSingleResult();
         delete(contract);
     }
-
 }

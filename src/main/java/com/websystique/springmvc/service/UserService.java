@@ -8,7 +8,9 @@ import com.websystique.springmvc.model.User;
 public interface UserService {
 	
 	User findById(int id);
-	
+
+	User findByLogin(String login);
+
 	void saveUser(User user);
 	
 	void updateUser(User user);

@@ -18,7 +18,6 @@ import org.springframework.web.servlet.view.JstlView;
 
 
 @Configuration
-@Import(JpaConfiguration.class)
 @EnableWebMvc
 @ComponentScan(basePackages = "com.websystique.springmvc")
 public class AppConfig extends WebMvcConfigurerAdapter{

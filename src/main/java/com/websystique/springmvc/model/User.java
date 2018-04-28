@@ -26,6 +26,10 @@ public class User implements Serializable {
     private String mail;
 
     @NotEmpty
+    @Column(name = "LOGIN", nullable = false)
+    private String login;
+
+    @NotEmpty
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 

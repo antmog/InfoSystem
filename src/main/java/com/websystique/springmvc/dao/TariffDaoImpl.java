@@ -1,7 +1,10 @@
 package com.websystique.springmvc.dao;
 
 import com.websystique.springmvc.model.Tariff;
+
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +22,7 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
 
     @SuppressWarnings("unchecked")
     public List<Tariff> findAllTariffs() {
-        List<Tariff> tariff = getEntityManager()
+        List<Tariff> tariff = getSession()
                 .createQuery("SELECT t FROM Tariff t")
                 .getResultList();
         return tariff;
@@ -30,7 +33,7 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
     }
 
     public void deleteById(int id) {
-        Tariff tariff = (Tariff) getEntityManager()
+        Tariff tariff = (Tariff) getSession()
                 .createQuery("SELECT t FROM Tariff t WHERE t.id LIKE :Id")
                 .setParameter("Id", id)
                 .getSingleResult();

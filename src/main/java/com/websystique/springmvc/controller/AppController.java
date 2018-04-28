@@ -28,7 +28,6 @@ import com.websystique.springmvc.service.UserService;
 
 @Controller
 @RequestMapping("/")
-@SessionAttributes("roles")
 public class AppController {
 
     @Autowired

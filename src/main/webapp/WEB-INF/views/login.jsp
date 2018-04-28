@@ -16,60 +16,51 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">Info-System</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="btn btn-primary" href="#">Войти</a>
+                <a class="btn btn-primary" href="#">Log In</a>
             </li>
         </ul>
     </div>
 </nav>
 
+
 <div class="form-signin-container">
-    <form class="form-signin mt-4" action="#">
-        <h1 class="h3 mb-3 font-weight-normal text-center">Авторизация</h1>
-        <div class="alert alert-danger" role="alert">
-            Пожалуйста, введите правильные имя пользователя и пароль
+    <c:url var="loginUrl" value="/login"/>
+    <form class="form-signin mt-4" action="${loginUrl}" method="POST">
+        <h1 class="h3 mb-3 font-weight-normal text-center">Log In</h1>
+        <c:if test="${param.error != null}">
+            <div class="alert alert-danger" role="alert">
+                <p>You've entered wrong login/password</p>
+            </div>
+        </c:if>
+        <c:if test="${param.logout != null}">
+            <div class="alert alert-success">
+                <p>You have been logged out successfully.</p>
+            </div>
+        </c:if>
+        <label class="sr-only">Login</label>
+        <input type="text" class="form-control" id="username" name="login" placeholder="Login" required autofocus>
+        <label class="sr-only">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+        <div class="input-group input-sm">
+            <div class="checkbox">
+                <label><input type="checkbox" id="rememberme" name="remember-me"> Remember Me</label>
+            </div>
         </div>
-        <label class="sr-only">Логин</label>
-        <input type="text" class="form-control" placeholder="Логин" required autofocus>
-        <label class="sr-only">Пароль</label>
-        <input type="password" class="form-control" placeholder="Пароль" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" value="Log in">Log in</button>
     </form>
 </div>
-<div class="panel-heading"><span class="lead">List of Users </span></div>
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>name</th>
-        <th>mail</th>
-        <th>role</th>
-        <th width="100"></th>
-        <th width="100"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach items="${users}" var="user">
-        <tr>
-            <td>${user.id}</td>
-            <td>${user.name}</td>
-            <td>${user.mail}</td>
-            <td>${user.role}</td>
-            <td><a href="<c:url value='/edit-user-${user.id}' />"
-                   class="btn btn-success custom-width">edit</a>
-            </td>
-            <td><a href="<c:url value='/delete-user-${user.id}' />"
-                   class="btn btn-danger custom-width">delete</a></td>
-        </tr>
-    </c:forEach>
-    </tbody>
-<script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
-<script src="/static/js/main.js" defer></script>
+
+    <script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
+    <script src="/static/js/main.js" defer></script>
+
 </body>
 </html>

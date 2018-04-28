@@ -93,13 +93,12 @@
         </tbody>
     </table>
 
-    <div class="panel-heading"><span class="lead">Option rules</span></div>
+    <div class="panel-heading"><span class="lead">Options excl</span></div>
     <table class="table table-hover">
-        related options
         <thead>
         <tr>
-            <th>option id</th>
-            <th>related option id</th>
+            <th>opt_id</th>
+            <th>opt_id</th>
             <th width="100"></th>
             <th width="100"></th>
         </tr>
@@ -108,36 +107,15 @@
         <c:forEach items="${options}" var="option">
             <tr>
                 <td>${option.id}</td>
-                <td><c:forEach var="relatedOption" items="${option.relatedTariffOptions}">
-                    ${relatedOption.id};
-                </c:forEach></td>
+                <td><c:forEach items="${option.excludingTariffOptions}" var="option">
+                        ${option.id};
+                </c:forEach>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 
-    <div class="panel-heading"><span class="lead">Option rules</span></div>
-    <table class="table table-hover">
-        excluding options
-        <thead>
-        <tr>
-            <th>option id</th>
-            <th>excluding option id</th>
-            <th width="100"></th>
-            <th width="100"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${options}" var="option">
-            <tr>
-                <td>${option.id}</td>
-                <td><c:forEach var="excludingTariffOption" items="${option.excludingTariffOptions}">
-                    ${excludingTariffOption.id};
-                </c:forEach></td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+
 
     <div class="panel-heading"><span class="lead">Tariffs</span></div>
     <table class="table table-hover">

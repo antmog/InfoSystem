@@ -22,6 +22,11 @@ public class UserServiceImpl implements UserService{
 		return dao.findById(id);
 	}
 
+	@Override
+	public User findByLogin(String login) {
+		return dao.findByLogin(login);
+	}
+
 	public void saveUser(User user) {
 		dao.save(user);
 	}
@@ -43,6 +48,7 @@ public class UserServiceImpl implements UserService{
 
 
 	public List<User> findAllUsers() {
+
 		return dao.findAllUsers();
 	}
 
