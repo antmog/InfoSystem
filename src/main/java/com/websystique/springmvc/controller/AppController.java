@@ -48,24 +48,18 @@ public class AppController {
 
 
 
+
     /**
-     * This method will be called on form submission, handling POST request for
-     * saving user in database. It also validates the user input
+     * This method will provide the medium to update an existing user.
      */
-    @RequestMapping(value = {"/newuser"}, method = RequestMethod.POST)
-    public String saveUser(@Valid User user, BindingResult result,
-                           ModelMap model) {
-
-        if (result.hasErrors()) {
-            return "registration";
-        }
-
-
-        userService.saveUser(user);
-
-        model.addAttribute("success", "User " + user.getFirstName() + "registered successfully");
-        //return "success";
-        return "registrationsuccess";
+    @RequestMapping(value = {"/edit-user-{id}"}, method = RequestMethod.GET)
+    public String editUser(@PathVariable int id, ModelMap model) {
+        User user = userService.findById(id);
+        HashSet<String> roles = new HashSet<>(Arrays.asList(Role.CUSTOMER.getRole(), Role.ADMIN.getRole()));
+        model.addAttribute("user", user);
+        model.addAttribute("edit", true);
+        model.addAttribute("roles", roles);
+        return "registration";
     }
 
 

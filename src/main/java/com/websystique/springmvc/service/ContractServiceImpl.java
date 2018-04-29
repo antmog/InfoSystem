@@ -23,6 +23,8 @@ public class ContractServiceImpl implements ContractService {
         dao.save(contract);
     }
 
+
+
     /*
      * Since the method is running with Transaction, No need to call hibernate update explicitly.
      * Just fetch the entity from db and update it with proper values within transaction.

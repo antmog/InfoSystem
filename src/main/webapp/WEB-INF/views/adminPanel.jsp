@@ -106,6 +106,7 @@
                         <a href="/adminPanel/allUsers" class="card-link">All users</a>
                     </div>
                     <button type="button" class="btn btn-success" id = "addUserButton">Add user</button>
+                    <button type="button" class="btn btn-success" id = "addContractButton">Add contract</button>
                 </div>
             </div>
 

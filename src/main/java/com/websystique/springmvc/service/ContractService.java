@@ -12,6 +12,7 @@ public interface ContractService {
 
     void updateContract(Contract contract);
 
+
     List<Contract> findAllContracts();
 
     void deleteContractById(int id);

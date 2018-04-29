@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService{
 		return dao.findById(id);
 	}
 
-	@Override
 	public User findByLogin(String login) {
 		return dao.findByLogin(login);
 	}
