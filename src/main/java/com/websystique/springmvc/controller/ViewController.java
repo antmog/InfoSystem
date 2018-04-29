@@ -8,6 +8,7 @@ import com.websystique.springmvc.service.TariffService;
 import com.websystique.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,18 +17,17 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
+@SessionAttributes("roles")
 public class ViewController {
 
     @Autowired
@@ -50,6 +50,8 @@ public class ViewController {
 
     @Autowired
     AuthenticationTrustResolver authenticationTrustResolver;
+
+
 
 
     @RequestMapping("/lk")
@@ -75,7 +77,7 @@ public class ViewController {
         return "adminPanel";
     }
 
-    @RequestMapping("/adminPanel/AllUsers")
+    @RequestMapping("/adminPanel/allUsers")
     public String adminPanelAllUsers(ModelMap model) {
         List<User> users = userService.findAllUsers();
         System.out.println("ss");
@@ -98,13 +100,33 @@ public class ViewController {
         return "index";
     }
 
-
-    @RequestMapping("/adminPanel/addUser")
+    @RequestMapping(value = {"/adminPanel/addUser"}, method = RequestMethod.GET)
     public String startwPage(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
+        User user = new User();
+        model.addAttribute("user", user);
+        model.addAttribute("edit", false);
+        HashSet<String> roles = new HashSet<>(Arrays.asList(Role.CUSTOMER.getRole(), Role.ADMIN.getRole()));
+        model.addAttribute("roles", roles);
         return "addUser";
     }
 
+
+    @RequestMapping(value = {"/adminPanel/addUser"}, method = RequestMethod.POST)
+    public String saveUser( @Valid User user, BindingResult result,
+                           ModelMap model) {
+
+        if (result.hasErrors()) {
+            return "userlist";
+        }
+
+        userService.saveUser(user);
+
+        model.addAttribute("success", "User " + user.getFirstName() + " " + user.getLastName() + " registered successfully");
+        model.addAttribute("loggedinuser", getPrincipal());
+        //return "success";
+        return "addSuccess";
+    }
 
     /**
      * Mapping to login screen.

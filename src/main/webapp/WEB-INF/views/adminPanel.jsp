@@ -26,20 +26,17 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item mr-4">
                 <a class="nav-link" href="#">
-                    Корзина
+                    Busket
                     <i class="fas fa-cart-arrow-down"></i>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    Личный кабинет
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    Выйти
-                </a>
-            </li>
+            <sec:authorize access="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                        <strong>${loggedinuser}</strong>, Log out
+                    </a>
+                </li>
+            </sec:authorize>
         </ul>
     </div>
 </nav>
@@ -80,6 +77,7 @@
                                         <th>login</th>
                                         <th>passport</th>
                                         <th>mail</th>
+                                        <th>contracts</th>
                                         <th width="100"></th>
                                         <th width="100"></th>
                                     </tr>
@@ -95,18 +93,19 @@
                                             <td>${user.login}</td>
                                             <td>${user.passport}</td>
                                             <td>${user.mail}</td>
-
+                                            <td><c:forEach items="${user.userContracts}" var="contract">
+                                                ${contract.id};
+                                            </c:forEach></td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
                                 </table>
                             </li>
-
-
                     </ul>
                     <div class="card-body">
-                        <a href="/adminPanel/AllUsers" class="card-link">All users</a>
+                        <a href="/adminPanel/allUsers" class="card-link">All users</a>
                     </div>
+                    <button type="button" class="btn btn-success" id = "addUserButton">Add user</button>
                 </div>
             </div>
 

@@ -17,39 +17,32 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID", unique = true)
     private Integer id;
 
-    @NotEmpty
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 
-    @NotEmpty
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
-    @NotEmpty
     @Column(name = "ADRESS", nullable = false)
     private String address;
 
 
     @Column(name = "BIRTH_DATE", nullable = false)
-    private Date birthDate;
+    private String birthDate;
 
 
     @Column(name = "PASSPORT_ID", nullable = false, unique = true)
     private Integer passport;
 
 
-    @NotEmpty
     @Column(name = "MAIL", nullable = false, unique = true)
     private String mail;
 
-    @NotEmpty
     @Column(name = "LOGIN", nullable = false, unique = true)
     private String login;
 
-    @NotEmpty
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
@@ -58,7 +51,6 @@ public class User implements Serializable {
     private Role role;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
-    @NotEmpty
     @Column(name = "USER_CONTRACTS", nullable = false)
     private Set<Contract> userContracts = new HashSet<Contract>();
 

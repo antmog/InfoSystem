@@ -26,20 +26,17 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item mr-4">
                 <a class="nav-link" href="#">
-                    Корзина
+                    Busket
                     <i class="fas fa-cart-arrow-down"></i>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    Личный кабинет
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    Выйти
-                </a>
-            </li>
+            <sec:authorize access="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                        <strong>${loggedinuser}</strong>, Log out
+                    </a>
+                </li>
+            </sec:authorize>
         </ul>
     </div>
 </nav>
@@ -68,6 +65,7 @@
                                     <th>login</th>
                                     <th>passport</th>
                                     <th>mail</th>
+                                    <th>contracts</th>
                                     <th width="100"></th>
                                     <th width="100"></th>
                                 </tr>
