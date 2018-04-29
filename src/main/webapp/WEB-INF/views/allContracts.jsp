@@ -23,7 +23,6 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="/lk">
@@ -54,7 +53,7 @@
             <div class="col-md-8">
                 <div class="card mb-4">
                     <h5 class="card-header">
-                        Users list
+                        Contract list
                     </h5>
                     <ul class="list-group list-group-flush">
 
@@ -64,32 +63,18 @@
                                 <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>firstName</th>
-                                    <th>lastName</th>
-                                    <th>address</th>
-                                    <th>birthDate</th>
-                                    <th>login</th>
-                                    <th>passport</th>
-                                    <th>mail</th>
-                                    <th>contracts</th>
+                                    <th>phoneNumber</th>
+                                    <th>user_id</th>
                                     <th width="100"></th>
                                     <th width="100"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${users}" var="user">
+                                <c:forEach items="${contracts}" var="contract">
                                     <tr>
-                                        <td>${user.id}</td>
-                                        <td>${user.firstName}</td>
-                                        <td>${user.lastName}</td>
-                                        <td>${user.address}</td>
-                                        <td>${user.birthDate}</td>
-                                        <td>${user.login}</td>
-                                        <td>${user.passport}</td>
-                                        <td>${user.mail}</td>
-                                        <td><c:forEach items="${user.userContracts}" var="contract">
-                                            ${contract.id};
-                                        </c:forEach></td>
+                                        <td>${contract.id}</td>
+                                        <td>${contract.phoneNumber}</td>
+                                        <td>${contract.user.id}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -98,7 +83,7 @@
 
 
                     </ul>
-                    <button type="button" class="btn btn-success" id = "addUserButton">Add user</button>
+                    <button type="button" class="btn btn-success" id = "addContractButton">Add contract</button>
                 </div>
             </div>
 

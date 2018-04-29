@@ -113,10 +113,17 @@ public class ViewController {
     @RequestMapping("/adminPanel/allUsers")
     public String adminPanelAllUsers(ModelMap model) {
         List<User> users = userService.findAllUsers();
-        System.out.println("ss");
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("users",users);
         return "allUsers";
+    }
+
+    @RequestMapping("/adminPanel/allContracts")
+    public String adminPanelAllContracts(ModelMap model) {
+        List<Contract> contracts = contractService.findAllContracts();
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("contracts",contracts);
+        return "allContracts";
     }
 
 

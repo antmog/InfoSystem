@@ -104,6 +104,7 @@
                     </ul>
                     <div class="card-body">
                         <a href="/adminPanel/allUsers" class="card-link">All users</a>
+                        <a href="/adminPanel/allContracts" class="card-link">All contracts</a>
                     </div>
                     <button type="button" class="btn btn-success" id = "addUserButton">Add user</button>
                     <button type="button" class="btn btn-success" id = "addContractButton">Add contract</button>
