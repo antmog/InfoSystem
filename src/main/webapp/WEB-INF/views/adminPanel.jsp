@@ -8,7 +8,6 @@
 
     <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
-    <link rel="stylesheet" href="/static/vendors/fontawesome-free-5.0.10/fontawesome-all.min.css">
 
 
     <title>Info-System</title>
@@ -56,15 +55,51 @@
                         <br/>
                     </div>
                 </div>
+                <br/>
+                <div class="card mb-4">
+                    <h5 class="card-header">
+                        <strong>Tariffs</strong>
+                    </h5>
+                    <div class="card-body">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>name</th>
+                                    <th>price</th>
+                                    <th>available options id</th>
+                                    <th width="100"></th>
+                                    <th width="100"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach items="${tariffs}" var="tariff">
+                                    <tr>
+                                        <td>${tariff.id}</td>
+                                        <td>${tariff.name}</td>
+                                        <td>${tariff.price}</td>
+                                        <td><c:forEach items="${tariff.availableOptions}" var="option">
+                                            ${option.id};
+                                        </c:forEach></td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </li>
+                    </div>
+                    <a href="/adminPanel/allTariffs" class="card-link">All tariffs</a>
+                    <button type="button" class="btn btn-success" id="addTariffButton">Add tariff</button>
+                </div>
             </div>
             <div class="col-md-8">
                 <div class="card mb-4">
+
                     <h5 class="card-header">
                         Users list
                     </h5>
-                    <ul class="list-group list-group-flush">
-
-
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <table class="table table-hover">
                                     <thead>
@@ -101,13 +136,12 @@
                                     </tbody>
                                 </table>
                             </li>
-                    </ul>
-                    <div class="card-body">
-                        <a href="/adminPanel/allUsers" class="card-link">All users</a>
-                        <a href="/adminPanel/allContracts" class="card-link">All contracts</a>
+                        </ul>
                     </div>
-                    <button type="button" class="btn btn-success" id = "addUserButton">Add user</button>
-                    <button type="button" class="btn btn-success" id = "addContractButton">Add contract</button>
+                    <a href="/adminPanel/allUsers" class="card-link">All Users</a>
+                    <a href="/adminPanel/allContracts" class="card-link">All Contracts</a>
+                    <button type="button" class="btn btn-success" id="addUserButton">Add user</button>
+                    <button type="button" class="btn btn-success" id="addContractButton">Add contract</button>
                 </div>
             </div>
 

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Set;
 
 @Service("tariffOptionService")
 @Transactional
@@ -39,6 +40,11 @@ public class TariffOptionServiceImpl implements TariffOptionService{
 
     public List<TariffOption> findAllTariffOptions() {
         return dao.findAllTariffOptions();
+    }
+
+    @Override
+    public Set<TariffOption> selectListByIdList(List<Integer> optionIdList) {
+        return dao.selectListByIdList(optionIdList);
     }
 
     public void deleteTariffOptionById(int id) {

@@ -8,7 +8,7 @@
     <title>Registration Confirmation Page</title>
     <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
-    <link rel="stylesheet" href="/static/vendors/fontawesome-free-5.0.10/fontawesome-all.min.css">
+
 </head>
 <body>
 

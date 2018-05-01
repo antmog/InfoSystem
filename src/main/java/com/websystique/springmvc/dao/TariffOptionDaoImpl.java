@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.Root;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository("TariffOptionDao")
 public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> implements TariffOptionDao {
@@ -30,6 +32,16 @@ public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> impl
                 .createQuery("SELECT t FROM TariffOption t")
                 .getResultList();
         return tariffOptions;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Set<TariffOption> selectListByIdList(List<Integer> optionIdList) {
+        List<TariffOption> tariffOptions = getSession()
+                .createQuery("SELECT t FROM TariffOption t WHERE t.id IN (:idList)")
+                .setParameter("idList",optionIdList)
+                .getResultList();
+        System.out.println(tariffOptions);
+        return new HashSet<TariffOption>(tariffOptions) ;
     }
 
     public void save(TariffOption tariffOption) {

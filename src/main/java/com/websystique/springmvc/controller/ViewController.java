@@ -2,6 +2,7 @@ package com.websystique.springmvc.controller;
 
 
 import com.websystique.springmvc.dto.ContractUserIdDto;
+import com.websystique.springmvc.dto.GetTarifAsJsonDto;
 import com.websystique.springmvc.model.*;
 import com.websystique.springmvc.service.ContractService;
 import com.websystique.springmvc.service.TariffOptionService;
@@ -9,7 +10,7 @@ import com.websystique.springmvc.service.TariffService;
 import com.websystique.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +19,6 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +61,7 @@ public class ViewController {
     /**
      * Mapping to login screen.
      */
-    @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String onLogin(@Valid User user, BindingResult result,
                           ModelMap model) {
         if (isCurrentAuthenticationAnonymous()) {
@@ -105,8 +105,10 @@ public class ViewController {
     @RequestMapping("/adminPanel")
     public String adminPanel(ModelMap model) {
         List<User> users = userService.findFirstUsers();
+        List<Tariff> tariffs =tariffService.findFirstTariffs();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("users",users);
+        model.addAttribute("tariffs",tariffs);
         return "adminPanel";
     }
 
@@ -126,8 +128,16 @@ public class ViewController {
         return "allContracts";
     }
 
+    @RequestMapping("/adminPanel/allTariffs")
+    public String adminPanelAllTariffs(ModelMap model) {
+        List<Tariff> tariffs = tariffService.findAllTariffs();
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("tariffs",tariffs);
+        return "allTariffs";
+    }
 
-    @RequestMapping(value = {"/adminPanel/addUser"}, method = RequestMethod.GET)
+
+    @RequestMapping(value = "/adminPanel/addUser", method = RequestMethod.GET)
     public String addUser(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         User user = new User();
@@ -139,7 +149,7 @@ public class ViewController {
     }
 
 
-    @RequestMapping(value = {"/adminPanel/addUser"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/adminPanel/addUser", method = RequestMethod.POST)
     public String saveUser( @Valid User user, BindingResult result,
                            ModelMap model) {
 
@@ -155,7 +165,7 @@ public class ViewController {
         return "addSuccess";
     }
 
-    @RequestMapping(value = {"/adminPanel/addContract"}, method = RequestMethod.GET)
+    @RequestMapping(value ="/adminPanel/addContract", method = RequestMethod.GET)
     public String addContract(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         ContractUserIdDto contractUserIdDto = new ContractUserIdDto();
@@ -165,7 +175,7 @@ public class ViewController {
     }
 
 
-    @RequestMapping(value = {"/adminPanel/addContract"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/adminPanel/addContract", method = RequestMethod.POST)
     public String saveContract(@Valid ContractUserIdDto contractUserIdDto, BindingResult result,
                                ModelMap model) {
 
@@ -185,10 +195,37 @@ public class ViewController {
         return "addSuccess";
     }
 
+    @RequestMapping(value = "/adminPanel/addTariff", method = RequestMethod.GET)
+    public String addTariff(ModelMap model) {
+        model.addAttribute("loggedinuser", getPrincipal());
+        List<TariffOption> options = tariffOptionService.findAllTariffOptions();
 
+        model.addAttribute("options", options);
+        model.addAttribute("edit", false);
+        return "addTariff";
+    }
 
+    @RequestMapping(value = "/adminPanel/addTariffAjax", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String saveTariffAjax(@RequestBody @Valid GetTarifAsJsonDto getTarifAsJsonDto, BindingResult result, ModelMap model) {
 
+        if (result.hasErrors()) {
+            return "addTariff";
+        }
+        tariffService.saveTariff(getTarifAsJsonDto);
+        model.addAttribute("success", "Tariff " + getTarifAsJsonDto.getTariffDto().getName()
+                + " registered successfully");
+        model.addAttribute("loggedinuser", getPrincipal());
+        return "addSuccess";
+    }
 
+    @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String saveTariff(@RequestBody @Valid Object object, BindingResult result, ModelMap model) {
+        System.out.println(object);
+        if (result.hasErrors()) {
+            return "addTariff";
+        }
+        return "addSuccess";
+    }
 
 
 

@@ -23,6 +23,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="/lk">
@@ -53,37 +54,37 @@
             <div class="col-md-8">
                 <div class="card mb-4">
                     <h5 class="card-header">
-                        Contract list
+                        <strong>All tariffs</strong>
                     </h5>
-                    <ul class="list-group list-group-flush">
-
-
+                    <div class="card-body">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>phoneNumber</th>
-                                    <th>user_id</th>
+                                    <th>name</th>
+                                    <th>price</th>
+                                    <th>available options id</th>
                                     <th width="100"></th>
                                     <th width="100"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${contracts}" var="contract">
+                                <c:forEach items="${tariffs}" var="tariff">
                                     <tr>
-                                        <td>${contract.id}</td>
-                                        <td>${contract.phoneNumber}</td>
-                                        <td>${contract.user.id}</td>
+                                        <td>${tariff.id}</td>
+                                        <td>${tariff.name}</td>
+                                        <td>${tariff.price}</td>
+                                        <td><c:forEach items="${tariff.availableOptions}" var="option">
+                                            ${option.id};
+                                        </c:forEach></td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
                         </li>
-
-
-                    </ul>
-                    <button type="button" class="btn btn-success" id = "addContractButton">Add contract</button>
+                    </div>
+                    <button type="button" class="btn btn-success" id="addTariffButton">Add tariff</button>
                 </div>
             </div>
 

@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="/static/css/index.css">
 
 
-
     <title>Info-System</title>
 </head>
 <body>
@@ -43,60 +42,55 @@
 
 <main class="mt-4">
     <div class="container">
-        <div class="alert alert-danger" role="alert">
-           Ваш номер заблокирован
-        </div>
         <div class="row">
             <div class="col-md-4">
                 <div class="card mb-4 border-dark">
                     <h5 class="card-header">
-                        Ваш контракт
+                        <strong> USER NAME : (ID)</strong>
                     </h5>
                     <div class="card-body">
-                        <p>+7 (981) 707 18 94</p>
-                        <p>Тариф: <a href="#">горячий</a></p>
-                        <a href="#" class="btn btn-sm btn-primary">Блокировка номера</a>
-                        <a href="#" class="btn btn-sm btn-primary">Сменить тариф</a>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
                     </div>
                 </div>
+                <br/>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <div class="card mb-4">
+
                     <h5 class="card-header">
-                        Мои услуги
+                        Options list
                     </h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Черный список
-                            <span class="badge badge-secondary badge-pill">
-                                *111*442#
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Черный список
-                            <span class="badge badge-secondary badge-pill">
-                                *111*442#
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Черный список
-                            <span class="badge badge-secondary badge-pill">
-                                *111*442#
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Черный список
-                            <span class="badge badge-secondary badge-pill">
-                                *111*442#
-                            </span>
-                        </li>
-                    </ul>
                     <div class="card-body">
-                        <a href="#" class="card-link">Все услуги</a>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Option id</th>
+                                        <th>name</th>
+                                        <th>price</th>
+                                        <th>costofadd</th>
+                                        <th width="100"></th>
+                                        <th width="100"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach items="${options}" var="option">
+                                        <tr>
+
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4"></div>
+
         </div>
     </div>
 
