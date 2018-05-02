@@ -46,13 +46,29 @@
             <div class="col-md-4">
                 <div class="card mb-4 border-dark">
                     <h5 class="card-header">
-                        <strong> USER NAME : (ID)</strong>
+                        <strong> ${user.id} : ${user.firstName} ${user.lastName}</strong>
                     </h5>
                     <div class="card-body">
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
+                        <table class="table table-hover">
+                            <tbody>
+                            <tr>
+                                <td>address</td>
+                                <td>${user.address}</td>
+                            </tr>
+                            <tr>
+                                <td>birth date</td>
+                                <td>${user.birthDate}</td>
+                            </tr>
+                            <tr>
+                                <td>mail</td>
+                                <td>${user.mail}</td>
+                            </tr>
+                            <tr>
+                                <td>passport number</td>
+                                <td>${user.passport}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <br/>
@@ -61,26 +77,25 @@
                 <div class="card mb-4">
 
                     <h5 class="card-header">
-                        Options list
+                        Contract list
                     </h5>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <table class="table table-hover">
+                                <table class="table table-hover contracts-table">
                                     <thead>
                                     <tr>
-                                        <th>Option id</th>
-                                        <th>name</th>
-                                        <th>price</th>
-                                        <th>costofadd</th>
+                                        <th>id</th>
+                                        <th>phone number</th>
                                         <th width="100"></th>
                                         <th width="100"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach items="${options}" var="option">
-                                        <tr>
-
+                                    <c:forEach items="${user.userContracts}" var="userContract">
+                                        <tr class="contract-row">
+                                            <td>${userContract.id}</td>
+                                            <td>${userContract.phoneNumber}</td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>

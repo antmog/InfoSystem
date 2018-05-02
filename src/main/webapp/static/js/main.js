@@ -8,32 +8,34 @@
     $('#addTariffButton').click(function () {
         document.location.href = "/adminPanel/addTariff"
     });
+    function addTariffTableBehavior(){
+        $("#addedOptions").on("click","tr.move-row", function () {
+            if ( $(this).hasClass('add-tariff-table-selected')) {
+                $(this).removeClass('add-tariff-table-selected');
+            } else {
+                $(this).addClass('add-tariff-table-selected');
+            }
+        });
+        $("#availableOptions").on("click","tr.move-row", function () {
+            if ( $(this).hasClass('add-tariff-table-selected')) {
+                $(this).removeClass('add-tariff-table-selected');
+            } else {
+                $(this).addClass('add-tariff-table-selected');
+            }
+        });
 
-    $("#addedOptions").on("click","tr.move-row", function () {
-        if ( $(this).hasClass('add-tariff-table-selected')) {
-            $(this).removeClass('add-tariff-table-selected');
-        } else {
-            $(this).addClass('add-tariff-table-selected');
-        }
-    });
-    $("#availableOptions").on("click","tr.move-row", function () {
-        if ( $(this).hasClass('add-tariff-table-selected')) {
-            $(this).removeClass('add-tariff-table-selected');
-        } else {
-            $(this).addClass('add-tariff-table-selected');
-        }
-    });
+        $('#addOption').on('click', function () {
+            var tr = $("#availableOptions tr.add-tariff-table-selected").remove().clone();
+            tr.removeClass('add-tariff-table-selected');
+            $("#addedOptions").append(tr);
+        });
+        $('#delOption').on('click', function () {
+            var tr = $("#addedOptions tr.add-tariff-table-selected").remove().clone();
+            tr.removeClass('add-tariff-table-selected');
+            $("#availableOptions").append(tr);
+        });
+    }
 
-    $('#addOption').on('click', function () {
-        var tr = $("#availableOptions tr.add-tariff-table-selected").remove().clone();
-        tr.removeClass('add-tariff-table-selected');
-        $("#addedOptions").append(tr);
-    });
-    $('#delOption').on('click', function () {
-        var tr = $("#addedOptions tr.add-tariff-table-selected").remove().clone();
-        tr.removeClass('add-tariff-table-selected');
-        $("#availableOptions").append(tr);
-    });
 
     $('#addTariff').on('click', function () {
         addOptions();
@@ -64,8 +66,15 @@
         })
     }
 
+    $("#usersTable").on("click","tr.user-row", function () {
+        document.location.href = "/adminPanel/user/"+$(this).find("td:first").html();
+    });
+    $(".contracts-table").on("click","tr.contract-row", function () {
+        document.location.href = "/adminPanel/contract/"+$(this).find("td:first").html();
+    });
 
 
+    addTariffTableBehavior();
 
 
 

@@ -205,7 +205,7 @@ public class ViewController {
         return "addTariff";
     }
 
-    @RequestMapping(value = "/adminPanel/addTariffAjax", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String saveTariffAjax(@RequestBody @Valid GetTarifAsJsonDto getTarifAsJsonDto, BindingResult result, ModelMap model) {
 
         if (result.hasErrors()) {
@@ -218,17 +218,21 @@ public class ViewController {
         return "addSuccess";
     }
 
-    @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String saveTariff(@RequestBody @Valid Object object, BindingResult result, ModelMap model) {
-        System.out.println(object);
-        if (result.hasErrors()) {
-            return "addTariff";
-        }
-        return "addSuccess";
+    @RequestMapping(value = "/adminPanel/user/{user_id}")
+    public String user(@PathVariable(value = "user_id") Integer user_id, ModelMap model) {
+        User user = userService.findById(user_id);
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("user", user);
+        return "user";
     }
 
-
-
+    @RequestMapping(value = "/adminPanel/contract/{contract_id}")
+    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) {
+        Contract contract = contractService.findById(contract_id);
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("contract", contract);
+        return "contract";
+    }
 
 
 
