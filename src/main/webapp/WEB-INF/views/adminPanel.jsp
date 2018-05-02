@@ -101,7 +101,7 @@
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <table class="table table-hover">
+                                <table class="table table-hover" id="usersTable">
                                     <thead>
                                     <tr>
                                         <th>id</th>
@@ -119,7 +119,7 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach items="${users}" var="user">
-                                        <tr>
+                                        <tr class="user-row">
                                             <td>${user.id}</td>
                                             <td>${user.firstName}</td>
                                             <td>${user.lastName}</td>

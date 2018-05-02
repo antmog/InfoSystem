@@ -59,7 +59,7 @@
 
 
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <table class="table table-hover">
+                            <table class="table table-hover contracts-table">
                                 <thead>
                                 <tr>
                                     <th>id</th>
@@ -71,7 +71,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach items="${contracts}" var="contract">
-                                    <tr>
+                                    <tr class="contract-row">
                                         <td>${contract.id}</td>
                                         <td>${contract.phoneNumber}</td>
                                         <td>${contract.user.id}</td>
