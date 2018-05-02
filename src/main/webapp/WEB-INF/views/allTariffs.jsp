@@ -58,7 +58,7 @@
                     </h5>
                     <div class="card-body">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <table class="table table-hover">
+                            <table class="table table-hover tariffs-table">
                                 <thead>
                                 <tr>
                                     <th>id</th>
@@ -71,7 +71,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach items="${tariffs}" var="tariff">
-                                    <tr>
+                                    <tr class="tariff-row">
                                         <td>${tariff.id}</td>
                                         <td>${tariff.name}</td>
                                         <td>${tariff.price}</td>

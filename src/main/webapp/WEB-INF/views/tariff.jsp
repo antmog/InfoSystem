@@ -5,10 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <!-- default header name is X-CSRF-TOKEN -->
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <!-- ... -->
+
     <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
 
@@ -48,49 +45,51 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card mb-4">
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label class="col-md-3 control-lable">name</label>
-                            <div class="col-md-7">
-                                <input type="text" id="name" class="form-control input-sm"/>
-                            </div>
-                        </div>
+                    <h5 class="card-header">
+                        <strong> ${tariff.id} : ${tariff.name}</strong>
+                    </h5>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <tbody>
+                            <tr>
+                                <td>price</td>
+                                <td>${tariff.price}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label class="col-md-3 control-lable">price</label>
-                            <div class="col-md-7">
-                                <input type="text"  id="price" class="form-control input-sm"/>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-success" id="addTariff">Add Tariff</button>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card mb-4">
                     <h5 class="card-header">
-                        <strong>Added options</strong>
+                        <strong>Options available for tariff</strong>
                     </h5>
                     <div class="card-body">
                         <div class="container">
-                            <table class="table" id="addTariffAddedOptions">
+                            <table class="table" id="tariffAddedOptions">
                                 <thead>
                                 <tr>
                                     <th>id</th>
                                     <th>name</th>
                                     <th>price</th>
                                     <th>costofadd</th>
-                                    </tr>
+                                </tr>
                                 </thead>
                                 <tbody>
-
+                                <c:forEach items="${tariff.availableOptions}" var="availableOption">
+                                    <tr class="move-row">
+                                        <td>${availableOption.id}</td>
+                                        <td>${availableOption.name}</td>
+                                        <td>${availableOption.price}</td>
+                                        <td>${availableOption.costOfAdd}</td>
+                                    </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="addTariffDelOption">Delete selected option</button>
+                    <button type="button" class="btn btn-success" id="tariffDelOption">Delete selected option</button>
                 </div>
             </div>
             <div class="col-md-4">
@@ -100,7 +99,7 @@
                     </h5>
                     <div class="card-body">
                         <div class="container">
-                            <table class="table" id="addTariffAvailableOptions">
+                            <table class="table" id="tariffAvailableOptions">
                                 <thead>
                                 <tr>
                                     <th>id</th>
@@ -122,7 +121,7 @@
                             </table>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="addTariffAddOption">Add selected option</button>
+                    <button type="button" class="btn btn-success" id="tariffAddOption">Add selected option</button>
                 </div>
             </div>
 
@@ -131,9 +130,7 @@
 
 </main>
 
-<script>
 
-</script>
 <script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
 <script src="/static/vendors/jquery/jquery.tabletojson.min.js" defer></script>
 <script src="/static/js/main.js" defer></script>

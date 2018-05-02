@@ -234,6 +234,18 @@ public class ViewController {
         return "contract";
     }
 
+    @RequestMapping(value = "/adminPanel/tariff/{tariff_id}")
+    public String tariff(@PathVariable(value = "tariff_id") Integer tariff_id, ModelMap model) {
+        Tariff tariff = tariffService.findById(tariff_id);
+        List<TariffOption> options = tariffOptionService.findAllTariffOptions();
+
+        model.addAttribute("options", options);
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("tariff", tariff);
+        return "tariff";
+    }
+
+
 
 
 

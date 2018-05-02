@@ -44,7 +44,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <div class="card mb-4 border-dark">
+                <div class="card mb-4">
                     <h5 class="card-header">
                         <strong> ${contract.id} : ${contract.phoneNumber}</strong>
                     </h5>
@@ -54,13 +54,6 @@
                 </div>
                 <br/>
             </div>
-            <div class="col-md-8">
-                <div class="card mb-4">
-
-
-                </div>
-            </div>
-
         </div>
     </div>
 

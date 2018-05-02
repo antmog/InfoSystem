@@ -75,7 +75,7 @@
                     </h5>
                     <div class="card-body">
                         <div class="container">
-                            <table class="table" id="addedOptions">
+                            <table class="table" id="addTariffAddedOptions">
                                 <thead>
                                 <tr>
                                     <th>id</th>
@@ -90,7 +90,7 @@
                             </table>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="delOption">Delete selected option</button>
+                    <button type="button" class="btn btn-success" id="addTariffDelOption">Delete selected option</button>
                 </div>
             </div>
             <div class="col-md-4">
@@ -100,7 +100,7 @@
                     </h5>
                     <div class="card-body">
                         <div class="container">
-                            <table class="table" id="availableOptions">
+                            <table class="table" id="addTariffAvailableOptions">
                                 <thead>
                                 <tr>
                                     <th>id</th>
@@ -122,7 +122,7 @@
                             </table>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="addOption">Add selected option</button>
+                    <button type="button" class="btn btn-success" id="addTariffAddOption">Add selected option</button>
                 </div>
             </div>
 
