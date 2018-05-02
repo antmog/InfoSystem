@@ -49,7 +49,22 @@
                         <strong> ${contract.id} : ${contract.phoneNumber}</strong>
                     </h5>
                     <div class="card-body">
-                        <!-- some data --->
+                        <table class="table table-hover contracts-table">
+                            <tbody>
+                            <tr class="contract-row">
+                                <td>owner id</td><td>${contract.user.id}</td>
+                            </tr>
+                            <tr class="contract-row">
+                                <td>tariff_id</td><td>${contract.tariff.id}</td>
+                            </tr>
+                            <tr class="contract-row">
+                                <td>active options</td>
+                                <td><c:forEach items="${contract.activeOptions}" var="option">
+                                    ${option.id};
+                                </c:forEach></td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <br/>

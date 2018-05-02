@@ -68,7 +68,6 @@
                                     <th>lastName</th>
                                     <th>address</th>
                                     <th>birthDate</th>
-                                    <th>login</th>
                                     <th>passport</th>
                                     <th>mail</th>
                                     <th>contracts</th>
@@ -84,7 +83,6 @@
                                         <td>${user.lastName}</td>
                                         <td>${user.address}</td>
                                         <td>${user.birthDate}</td>
-                                        <td>${user.login}</td>
                                         <td>${user.passport}</td>
                                         <td>${user.mail}</td>
                                         <td><c:forEach items="${user.userContracts}" var="contract">
