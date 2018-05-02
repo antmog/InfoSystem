@@ -8,6 +8,11 @@
     $('#addTariffButton').click(function () {
         document.location.href = "/adminPanel/addTariff"
     });
+    $('#addContractToUserButton').click(function () {
+        document.location.href = "/adminPanel/addContractToUser/"+user_id
+    });
+
+
     function addTariffTableBehavior(){
         $("#addTariffAddedOptions").on("click","tr.move-row", function () {
             if ( $(this).hasClass('add-tariff-table-selected')) {

@@ -80,10 +80,8 @@
                                 </tbody>
                             </table>
                         </li>
-
-
                     </ul>
-                    <button type="button" class="btn btn-success" id = "addContractButton">Add contract</button>
+                    <button type="button" class="btn btn-success" id="addContractButton">Add contract</button>
                 </div>
             </div>
 

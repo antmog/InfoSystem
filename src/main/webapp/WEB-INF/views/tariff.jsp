@@ -95,7 +95,7 @@
             <div class="col-md-4">
                 <div class="card mb-4">
                     <h5 class="card-header">
-                        <strong>Available options</strong>
+                        <strong>All available options</strong>
                     </h5>
                     <div class="card-body">
                         <div class="container">

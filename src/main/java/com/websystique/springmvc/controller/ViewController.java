@@ -174,12 +174,19 @@ public class ViewController {
         return "addContract";
     }
 
+    @RequestMapping(value ="/adminPanel/addContractToUser/{user_id}", method = RequestMethod.GET)
+    public String addContractToUser(@PathVariable(value = "user_id") Integer user_id,ModelMap model) {
+        model.addAttribute("loggedinuser", getPrincipal());
+        ContractUserIdDto contractUserIdDto = new ContractUserIdDto();
+        model.addAttribute("user_id",user_id);
+        model.addAttribute("contractUserIdDto", contractUserIdDto);
+        model.addAttribute("edit", false);
+        return "addContractToUser";
+    }
 
-    @RequestMapping(value = "/adminPanel/addContract", method = RequestMethod.POST)
+    @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"}, method = RequestMethod.POST)
     public String saveContract(@Valid ContractUserIdDto contractUserIdDto, BindingResult result,
                                ModelMap model) {
-
-
         if (result.hasErrors()) {
             return "addContract";
         }

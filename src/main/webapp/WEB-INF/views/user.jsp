@@ -103,6 +103,8 @@
                             </li>
                         </ul>
                     </div>
+                    <button type="button" class="btn btn-success" id="addContractToUserButton">Add contract
+                    </button>
                 </div>
             </div>
 
@@ -111,7 +113,9 @@
 
 </main>
 
-
+<script>
+    var user_id = ${user.id}
+</script>
 <script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
 <script src="/static/js/main.js" defer></script>
 </body>
