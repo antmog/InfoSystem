@@ -3,6 +3,7 @@ package com.websystique.springmvc.service;
 import com.websystique.springmvc.dao.TariffDao;
 import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDto;
+import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.TariffOption;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +73,22 @@ public class TariffServiceImpl implements TariffService {
     public List<Tariff> findFirstTariffs() {
         return dao.findAllTariffs().stream().limit(5).collect(Collectors.toList());
     }
+
+    @Override
+    public boolean addOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById) {
+        List<Integer> optionIdList = new ArrayList<>();
+        for( GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDtoById.getGetOptionsAsJsonDtoList()){
+            optionIdList.add(getOptionsAsJsonDto.getId());
+        }
+        Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
+        Tariff tariff = dao.findById(getTarifAsJsonDtoById.getTariffId());
+        tariffOptionList.addAll(tariff.getAvailableOptions());
+        tariff.setAvailableOptions(tariffOptionList);
+        dao.save(tariff);
+
+        // LOGIC RULES ETC
+        return false;
+    }
+
 
 }

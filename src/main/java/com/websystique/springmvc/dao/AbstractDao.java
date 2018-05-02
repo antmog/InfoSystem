@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,6 +35,10 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 	}
 
 	public void persist(T entity) {
+		getSession().persist(entity);
+	}
+
+	public void persist(List<T> entity){
 		getSession().persist(entity);
 	}
 

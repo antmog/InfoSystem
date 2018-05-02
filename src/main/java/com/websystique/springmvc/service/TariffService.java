@@ -2,6 +2,7 @@ package com.websystique.springmvc.service;
 
 import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDto;
+import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.User;
 
@@ -22,4 +23,6 @@ public interface TariffService {
     void deleteTariffById(int id);
 
     List<Tariff> findFirstTariffs();
+
+    boolean addOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById);
 }

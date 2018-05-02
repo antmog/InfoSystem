@@ -99,33 +99,36 @@
 
         $('#tariffAddOption').on('click', function () {
             // OPTIONS RULES
-            tr = $("#tariffAvailableOptions tr.add-tariff-table-selected");
-            var rows = $("#tariffAvailableOptions").tableToJSON().slice(tr[0].rowIndex-1,tr[tr.length-1].rowIndex);
-            console.log(JSON.stringify(rows));
-            //console.log($('#tariffAvailableOptions').tableToJSON({onlyColumns:columns}));
-            //$('#tariffAvailableOptions').tableToJSON({onlyColumns:[3, 4]})
-
-
-            // $.ajax({
-            //     beforeSend:function (xhr) {
-            //         xhr.setRequestHeader(header, token);
-            //     },
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'Accept': 'text/html; charset=utf-8'
-            //     },
-            //     type: "POST",
-            //     url: "/adminPanel/tariff/addOptions",
-            //     // The key needs to match your method's input parameter (case-sensitive).
-            //     data: JSON.stringify({getOptionsAsJsonDtoList:part1, tariffDto:part2}) ,
-            //     contentType:  "application/json; charset=utf-8",
-            //     dataType: "json"
-            // }).fail(function (xhr,a,error) {
-            //     alert(error);
-            //
-            // var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").remove().clone();
-            // tr.removeClass('add-tariff-table-selected');
-            // $("#tariffAddedOptions").append(tr);
+            var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").clone();
+            var table = $('#parseTable');
+            for (var i = 0; i < tr.length; i++) {
+                table.append(tr[i]);
+            }
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend:function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/adminPanel/tariff/addOptions",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), tariffId : tariff_id}),
+                contentType:  "application/json; charset=utf-8",
+            }).done(function( msg ) {
+                if (msg === "ok") {
+                    var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").remove().clone();
+                    tr.removeClass('add-tariff-table-selected');
+                    $("#tariffAddedOptions").append(tr);
+                }
+            }).fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+            $('#parseTable tr.move-row').remove();
         });
 
         $('#tariffDelOption').on('click', function () {
@@ -136,6 +139,7 @@
             // $("#tarifffAvailableOptions").append(tr);
         });
     }
+
 
     addTariffTableBehavior();
     tariffTableBehavior();

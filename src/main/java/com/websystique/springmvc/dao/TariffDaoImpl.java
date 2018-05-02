@@ -1,5 +1,6 @@
 package com.websystique.springmvc.dao;
 
+import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
 import com.websystique.springmvc.model.Tariff;
 
 import org.hibernate.Criteria;
@@ -39,4 +40,5 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
                 .getSingleResult();
         delete(tariff);
     }
+
 }

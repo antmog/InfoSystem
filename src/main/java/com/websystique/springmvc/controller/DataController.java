@@ -1,6 +1,8 @@
 package com.websystique.springmvc.controller;
 
+import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDto;
+import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
 import com.websystique.springmvc.model.Contract;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.TariffOption;
@@ -39,10 +41,17 @@ public class DataController {
     @Autowired
     TariffService tariffService;
 
-    @RequestMapping(value = "/sss", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-    public@ResponseBody String s (){
-        return " s";
+    @RequestMapping(value = "/adminPanel/tariff/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String tariffAddOptions(@RequestBody @Valid GetTarifAsJsonDtoById getTarifAsJsonDtoById, BindingResult result) {
+        tariffService.addOptions(getTarifAsJsonDtoById);
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
     }
+
+
+
 
 
 

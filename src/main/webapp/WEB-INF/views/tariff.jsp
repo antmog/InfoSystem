@@ -5,7 +5,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <!-- ... -->
     <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
 
@@ -128,8 +131,23 @@
         </div>
     </div>
 
-</main>
+    <table style="visibility:hidden" class="table" id="parseTable">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>price</th>
+            <th>costofadd</th>
+        </tr>
+        </thead>
+        <tbody>
 
+        </tbody>
+    </table>
+</main>
+<script>
+    var tariff_id = ${tariff.id};
+</script>
 
 <script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
 <script src="/static/vendors/jquery/jquery.tabletojson.min.js" defer></script>

@@ -1,5 +1,6 @@
 package com.websystique.springmvc.dao;
 
+import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
 import com.websystique.springmvc.model.Tariff;
 
 import java.util.List;
