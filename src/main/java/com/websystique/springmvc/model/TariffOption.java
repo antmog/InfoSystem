@@ -16,6 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "TARIFF_OPTIONS")
 public class TariffOption implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OPTION_ID")
@@ -52,7 +53,7 @@ public class TariffOption implements Serializable {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", name=" + name + ", price=" + price
+        return "TariffOption [id=" + id + ", name=" + name + ", price=" + price
                 + ", costOfAdd=" + costOfAdd + "]";
 
     }

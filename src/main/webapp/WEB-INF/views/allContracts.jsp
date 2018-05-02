@@ -63,8 +63,10 @@
                                 <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>phoneNumber</th>
                                     <th>user_id</th>
+                                    <th>phoneNumber</th>
+                                    <th>tariff_id</th>
+                                    <th>active options</th>
                                     <th width="100"></th>
                                     <th width="100"></th>
                                 </tr>
@@ -73,8 +75,12 @@
                                 <c:forEach items="${contracts}" var="contract">
                                     <tr class="contract-row">
                                         <td>${contract.id}</td>
-                                        <td>${contract.phoneNumber}</td>
                                         <td>${contract.user.id}</td>
+                                        <td>${contract.phoneNumber}</td>
+                                        <td>${contract.tariff.id}</td>
+                                        <td><c:forEach items="${contract.activeOptions}" var="option">
+                                            ${option.id};
+                                        </c:forEach></td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

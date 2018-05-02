@@ -17,6 +17,7 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Integer id;
 
     @Column(name = "FIRST_NAME", nullable = false)
@@ -50,6 +51,10 @@ public class User implements Serializable {
     @Column(name = "ROLE", nullable = false)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS", nullable = false)
+    private Status status = Status.ACTIVE;
+
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     @Column(name = "USER_CONTRACTS", nullable = false)
     private Set<Contract> userContracts = new HashSet<Contract>();
@@ -58,7 +63,7 @@ public class User implements Serializable {
     public String toString() {
         return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
                 + ", address=" + address + ", birthDate=" + birthDate+ ", passport=" + passport +
-                ", role=" + role +  ", mail=" + mail +  ", login=" +  login  +"]";
+                ", role=" + role +  ", mail=" + mail +  ", login=" +  login  + ", status=" + status + "]";
 
     }
 

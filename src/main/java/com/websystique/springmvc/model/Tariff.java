@@ -25,7 +25,6 @@ public class Tariff implements Serializable {
      * per month
      * Allows to use the tariff -> allows to use the options (options have its own cost/price)
      */
-
     @Column(name="PRICE", nullable=false)
     private Double price;
 
@@ -34,4 +33,10 @@ public class Tariff implements Serializable {
             joinColumns = {@JoinColumn(name = "TARIFF_ID", nullable = false, referencedColumnName = "TARIFF_ID")},
             inverseJoinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> availableOptions = new HashSet<TariffOption>();
+
+    @Override
+    public String toString() {
+        return "Tariff [id=" + id + ", name=" + name + ", price=" + price +"]";
+    }
+
 }

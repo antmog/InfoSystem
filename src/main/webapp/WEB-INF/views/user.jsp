@@ -87,6 +87,8 @@
                                     <tr>
                                         <th>id</th>
                                         <th>phone number</th>
+                                        <th>tariff_id</th>
+                                        <th>active options</th>
                                         <th width="100"></th>
                                         <th width="100"></th>
                                     </tr>
@@ -96,6 +98,10 @@
                                         <tr class="contract-row">
                                             <td>${userContract.id}</td>
                                             <td>${userContract.phoneNumber}</td>
+                                            <td>${userContract.tariff.id}</td>
+                                            <td><c:forEach items="${userContract.activeOptions}" var="option">
+                                                ${option.id};
+                                            </c:forEach></td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>

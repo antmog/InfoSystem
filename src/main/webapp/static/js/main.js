@@ -46,7 +46,7 @@
         addOptions();
     });
 
-    <!--- How to catch suceess? always fail -->
+
     function addOptions(){
         var part1 = $('#addTariffAddedOptions').tableToJSON() ;
         var part2 = {name: $('#name').val(), price: $('#price').val()};
