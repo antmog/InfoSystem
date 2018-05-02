@@ -1,5 +1,6 @@
 package com.websystique.springmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class TariffOption implements Serializable {
     private Double costOfAdd;
 
 
-
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "RELATED_OPTIONS",
             joinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")},
@@ -43,7 +44,7 @@ public class TariffOption implements Serializable {
     private Set<TariffOption> relatedTariffOptions = new HashSet<TariffOption>();
 
 
-
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "EXCLUDING_OPTIONS",
             joinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")},

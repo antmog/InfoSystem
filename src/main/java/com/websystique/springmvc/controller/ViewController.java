@@ -168,6 +168,8 @@ public class ViewController {
     public String addContract(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         ContractUserIdDto contractUserIdDto = new ContractUserIdDto();
+        List<Tariff> tariffs = tariffService.findAllTariffs();
+        model.addAttribute("tariffs",tariffs);
         model.addAttribute("contractUserIdDto", contractUserIdDto);
         model.addAttribute("edit", false);
         return "addContract";
@@ -177,7 +179,9 @@ public class ViewController {
     public String addContractToUser(@PathVariable(value = "user_id") Integer user_id,ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         ContractUserIdDto contractUserIdDto = new ContractUserIdDto();
+        List<Tariff> tariffs = tariffService.findAllTariffs();
         model.addAttribute("user_id",user_id);
+        model.addAttribute("tariffs",tariffs);
         model.addAttribute("contractUserIdDto", contractUserIdDto);
         model.addAttribute("edit", false);
         return "addContractToUser";

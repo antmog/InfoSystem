@@ -1,9 +1,6 @@
 package com.websystique.springmvc.controller;
 
-import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
-import com.websystique.springmvc.dto.GetTarifAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
-import com.websystique.springmvc.model.Contract;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.TariffOption;
 import com.websystique.springmvc.service.ContractService;
@@ -12,14 +9,13 @@ import com.websystique.springmvc.service.TariffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.websystique.springmvc.service.UserService;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -49,6 +45,13 @@ public class DataController {
         }
         return "ok";
     }
+    @RequestMapping(value = "/adminPanel/addContract/tariffOptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody Set<TariffOption> addContractTariffOptions(@RequestBody String s, BindingResult result) {
+        Tariff tariff = tariffService.findById(Integer.valueOf(s));
+        System.out.println(tariff.getAvailableOptions());
+        return tariff.getAvailableOptions();
+    }
+
 
 
 

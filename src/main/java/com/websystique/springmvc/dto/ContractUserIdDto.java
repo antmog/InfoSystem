@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 public class ContractUserIdDto {
     private Integer user_id;
-
     private String phoneNumber;
 
     public ContractUserIdDto(Integer user_id, String phoneNumber) {

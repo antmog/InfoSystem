@@ -71,7 +71,7 @@
             <div class="col-md-4">
                 <div class="card mb-4">
                     <h5 class="card-header">
-                        <strong>Added options</strong>
+                        <strong>Selected options</strong>
                     </h5>
                     <div class="card-body">
                         <div class="container">
@@ -131,9 +131,6 @@
 
 </main>
 
-<script>
-
-</script>
 <script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
 <script src="/static/vendors/jquery/jquery.tabletojson.min.js" defer></script>
 <script src="/static/js/main.js" defer></script>

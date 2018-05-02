@@ -64,7 +64,6 @@
             url: "/adminPanel/addTariff",
             // The key needs to match your method's input parameter (case-sensitive).
             data: JSON.stringify({getOptionsAsJsonDtoList:part1, tariffDto:part2}) ,
-            contentType:  "application/json; charset=utf-8",
             dataType: "json"
         }).fail(function (xhr,a,error) {
             alert(error);
@@ -117,8 +116,7 @@
                 type: "POST",
                 url: "/adminPanel/tariff/addOptions",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), tariffId : tariff_id}),
-                contentType:  "application/json; charset=utf-8",
+                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), tariffId : tariff_id})
             }).done(function( msg ) {
                 if (msg === "ok") {
                     var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").remove().clone();
@@ -140,7 +138,70 @@
         });
     }
 
+    function addContractTableBehavior(){
+        $("#addContractAddedOptions").on("click","tbody tr", function () {
+            if ( $(this).hasClass('add-tariff-table-selected')) {
+                $(this).removeClass('add-tariff-table-selected');
+            } else {
+                $(this).addClass('add-tariff-table-selected');
+            }
+        });
+        $("#addContractAvailableOptions").on("click","tbody tr", function () {
+            if ( $(this).hasClass('add-tariff-table-selected')) {
+                $(this).removeClass('add-tariff-table-selected');
+            } else {
+                $(this).addClass('add-tariff-table-selected');
+            }
+        });
+        $("#addContractTariffs").on("click","tr.t-row", function () {
+            if ( !$(this).hasClass('add-tariff-table-selected')) {
+                $(this).addClass('add-tariff-table-selected').siblings().removeClass('add-tariff-table-selected');
+            }
+            console.log($(this).find('td:first').html());
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend:function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8',
+                },
+                type: "POST",
+                url: "/adminPanel/addContract/tariffOptions",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: $(this).find('td:first').html(),
+                dataType: "json"
+            }).done(function( json ) {
+                $("#addContractAvailableOptions tbody tr").remove();
+                var tbl_body = document.createElement("tbody");
+                var odd_even = false;
+                $.each(json, function() {
+                    var tbl_row = tbl_body.insertRow();
+                    tbl_row.className = odd_even ? "odd" : "even";
+                    $.each(this, function(k , v) {
+                        var cell = tbl_row.insertCell();
+                        cell.appendChild(document.createTextNode(v.toString()));
+                    });
+                    odd_even = !odd_even;
+                });
+                $("#addContractAvailableOptions").append(tbl_body);
+            }).fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+        });
 
+        $('#addContractAddOption').on('click', function () {
+            var tr = $("#addContractAvailableOptions tr.add-tariff-table-selected").clone();
+            tr.removeClass('add-tariff-table-selected');
+            $("#addContractAddedOptions").append(tr);
+        });
+        $('#addContractDelOption').on('click', function () {
+            $("#addContractAddedOptions tr.add-tariff-table-selected").remove();
+        });
+    }
+
+    addContractTableBehavior();
     addTariffTableBehavior();
     tariffTableBehavior();
 
