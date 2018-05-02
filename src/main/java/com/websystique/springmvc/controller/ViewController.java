@@ -2,6 +2,7 @@ package com.websystique.springmvc.controller;
 
 
 import com.websystique.springmvc.dto.ContractUserIdDto;
+import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDto;
 import com.websystique.springmvc.model.*;
 import com.websystique.springmvc.service.ContractService;
@@ -187,20 +188,27 @@ public class ViewController {
         return "addContractToUser";
     }
 
-    @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"}, method = RequestMethod.POST)
-    public String saveContract(@Valid ContractUserIdDto contractUserIdDto, BindingResult result,
+    @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"},consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            method = RequestMethod.POST)
+    public String saveContract(@RequestBody @Valid  ContractUserIdDto contractUserIdDto, BindingResult result,
                                ModelMap model) {
+
         if (result.hasErrors()) {
             return "addContract";
         }
-
         Contract contract = new Contract();
-        contract.setPhoneNumber(contractUserIdDto.getPhoneNumber());
-        contract.setUser(userService.findById(contractUserIdDto.getUser_id()));
+        contract.setPhoneNumber(contractUserIdDto.getContractDto().getPhoneNumber());
+        contract.setUser(userService.findById(contractUserIdDto.getContractDto().getUserId()));
+        contract.setTariff(tariffService.findById(contractUserIdDto.getContractDto().getTariffId()));
+        List<Integer> optionIdList = new ArrayList<>();
+        for( GetOptionsAsJsonDto getOptionsAsJsonDto : contractUserIdDto.getGetOptionsAsJsonDtoList()){
+            optionIdList.add(getOptionsAsJsonDto.getId());
+        }
+        Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
+        contract.setActiveOptions(tariffOptionList);
         contractService.saveContract(contract);
-
-        model.addAttribute("success", "Contract " + contract.getId() + "registered successfully");
         model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("success", "Contract " + contract.getId() + "registered successfully");
         //return "success";
         return "addSuccess";
     }

@@ -58,38 +58,12 @@
                     <h5 class="card-header">
                         <strong>Contract registration form</strong>
                     </h5>
-                    <form:form method="POST" modelAttribute="contractUserIdDto" class="form-horizontal">
-                        <div class="form-group col-md-12">
-                            <br/>
-                            <label class="control-lable" for="user_id">user_id</label>
-                            <div class="col-md-7">
-                                <form:input type="text" path="user_id" id="user_id" class="form-control input-sm"/>
-                                <div class="has-error">
-                                    <form:errors path="user_id" class="help-inline"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="control-lable" for="phoneNumber">phoneNumber</label>
-                            <div class="col-md-7">
-                                <form:input type="text" path="phoneNumber" id="phoneNumber"
-                                            class="form-control input-sm"/>
-                                <div class="has-error">
-                                    <form:errors path="phoneNumber" class="help-inline"/>
-                                </div>
-                            </div>
-                        </div>
-                        <c:choose>
-                            <c:when test="${edit}">
-                                <input type="submit" value="Update" class="btn btn-primary btn-sm"/> or <a
-                                    href="<c:url value='/adminPanel' />">Cancel</a>
-                            </c:when>
-                            <c:otherwise>
-                                <input type="submit" value="Register" class="btn btn-primary btn-sm"/> or <a
-                                    href="<c:url value='/adminPanel' />">Cancel</a>
-                            </c:otherwise>
-                        </c:choose>
-                    </form:form>
+                    <br/>
+                    <label class="control-lable" for="user_id">user_id</label>
+                    <input type="text" id="user_id" class="form-control input-sm"/>
+                    <label class="control-lable" for="phoneNumber">phoneNumber</label>
+                    <input type="text" id="phoneNumber" class="form-control input-sm"/>
+                    <button type="button" class="btn btn-success" id="addContract">Add selected option</button>
                 </div>
             </div>
             <div class="col-md-4">
@@ -109,14 +83,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${tariff.availableOptions}" var="option">
-                                    <tr class="move-row">
-                                        <td>${option.id}</td>
-                                        <td>${option.name}</td>
-                                        <td>${option.price}</td>
-                                        <td>${option.costOfAdd}</td>
-                                    </tr>
-                                </c:forEach>
+
                                 </tbody>
                             </table>
                         </div>

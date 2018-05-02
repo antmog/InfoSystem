@@ -46,6 +46,10 @@
         addOptions();
     });
 
+    $('#addContract').on('click', function () {
+        addContract();
+    });
+
 
     function addOptions(){
         var part1 = $('#addTariffAddedOptions').tableToJSON() ;
@@ -199,6 +203,31 @@
         $('#addContractDelOption').on('click', function () {
             $("#addContractAddedOptions tr.add-tariff-table-selected").remove();
         });
+    }
+
+    function addContract() {
+        var part1 = $('#addContractAddedOptions').tableToJSON() ;
+        var tariffId =  $("#addContractTariffs tr.add-tariff-table-selected").find('td:first').html();
+        console.log(tariffId);
+        var part2 = {userId: $('#user_id').val(), phoneNumber: $('#phoneNumber').val(), tariffId: tariffId};
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            beforeSend:function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'text/html; charset=utf-8'
+            },
+            type: "POST",
+            url: "/adminPanel/addContract",
+            // The key needs to match your method's input parameter (case-sensitive).
+            data: JSON.stringify({getOptionsAsJsonDtoList:part1, contractDto:part2}) ,
+            dataType: "json"
+        }).fail(function (xhr,a,error) {
+            alert(error);
+        })
     }
 
     addContractTableBehavior();
