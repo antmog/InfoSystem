@@ -56,8 +56,6 @@
                         Contract list
                     </h5>
                     <ul class="list-group list-group-flush">
-
-
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <table class="table table-hover contracts-table">
                                 <thead>
@@ -65,8 +63,9 @@
                                     <th>id</th>
                                     <th>user_id</th>
                                     <th>phoneNumber</th>
-                                    <th>tariff_id</th>
+                                    <th>tariff</th>
                                     <th>active options</th>
+                                    <th>status</th>
                                     <th width="100"></th>
                                     <th width="100"></th>
                                 </tr>
@@ -77,10 +76,11 @@
                                         <td>${contract.id}</td>
                                         <td>${contract.user.id}</td>
                                         <td>${contract.phoneNumber}</td>
-                                        <td>${contract.tariff.id}</td>
+                                        <td>${contract.tariff.name}</td>
                                         <td><c:forEach items="${contract.activeOptions}" var="option">
                                             ${option.id};
                                         </c:forEach></td>
+                                        <td>${contract.status}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

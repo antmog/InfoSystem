@@ -86,22 +86,24 @@
                                     <thead>
                                     <tr>
                                         <th>id</th>
-                                        <th>phone number</th>
-                                        <th>tariff_id</th>
+                                        <th>phoneNumber</th>
+                                        <th>tariff</th>
                                         <th>active options</th>
+                                        <th>status</th>
                                         <th width="100"></th>
                                         <th width="100"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach items="${user.userContracts}" var="userContract">
+                                    <c:forEach items="${user.userContracts}" var="usercontract">
                                         <tr class="contract-row">
-                                            <td>${userContract.id}</td>
-                                            <td>${userContract.phoneNumber}</td>
-                                            <td>${userContract.tariff.id}</td>
-                                            <td><c:forEach items="${userContract.activeOptions}" var="option">
+                                            <td>${usercontract.id}</td>
+                                            <td>${usercontract.phoneNumber}</td>
+                                            <td>${usercontract.tariff.name}</td>
+                                            <td><c:forEach items="${usercontract.activeOptions}" var="option">
                                                 ${option.id};
                                             </c:forEach></td>
+                                            <td>${usercontract.status}</td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
