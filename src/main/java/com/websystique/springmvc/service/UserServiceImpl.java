@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.websystique.springmvc.dto.EditUserDto;
 import com.websystique.springmvc.dto.NewStatusDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -76,6 +77,24 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void setStatus(NewStatusDto newStatusDto) {
 		dao.findById(newStatusDto.getEntityId()).setStatus(newStatusDto.getEntityStatus());
+	}
+
+	@Override
+	public void updateUser(EditUserDto editUserDto) {
+		User user = dao.findById(editUserDto.getUserId());
+		switch (editUserDto.getDataInstance()) {
+			case "address":
+				user.setAddress(editUserDto.getValue());
+				break;
+			case "passport":
+				user.setPassport(Integer.valueOf(editUserDto.getValue()));
+				break;
+			case "mail":
+				user.setMail(editUserDto.getValue());
+				break;
+			default:
+				break;
+		}
 	}
 
 }

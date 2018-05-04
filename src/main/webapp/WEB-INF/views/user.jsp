@@ -30,9 +30,9 @@
                         <strong> ${user.id} : ${user.firstName} ${user.lastName}</strong>
                     </h5>
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="userEditableTable">
                             <tbody>
-                            <tr>
+                            <tr class = "editable">
                                 <td>address</td>
                                 <td>${user.address}</td>
                             </tr>
@@ -40,12 +40,12 @@
                                 <td>birth date</td>
                                 <td>${user.birthDate}</td>
                             </tr>
-                            <tr>
+                            <tr class = "editable">
                                 <td>mail</td>
                                 <td>${user.mail}</td>
                             </tr>
-                            <tr>
-                                <td>passport number</td>
+                            <tr class = "editable">
+                                <td>passport</td>
                                 <td>${user.passport}</td>
                             </tr>
                             </tbody>
@@ -126,7 +126,7 @@
 </main>
 
 <script>
-    var user_id = ${user.id}
+    var user_id = ${user.id};
 </script>
 <script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
 <script src="/static/js/main.js" defer></script>

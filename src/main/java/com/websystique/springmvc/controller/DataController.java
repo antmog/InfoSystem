@@ -1,5 +1,6 @@
 package com.websystique.springmvc.controller;
 
+import com.websystique.springmvc.dto.EditUserDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
 import com.websystique.springmvc.dto.NewStatusDto;
 import com.websystique.springmvc.model.Tariff;
@@ -81,6 +82,17 @@ public class DataController {
         }
         return "ok";
     }
+
+    @RequestMapping(value = "/adminPanel/user/editUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String editUser(@RequestBody @Valid EditUserDto editUserDto, BindingResult result) {
+        userService.updateUser(editUserDto);
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
+    }
+
+
 
 
 
