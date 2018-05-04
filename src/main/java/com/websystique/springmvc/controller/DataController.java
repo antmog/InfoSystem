@@ -45,6 +45,16 @@ public class DataController {
         }
         return "ok";
     }
+
+    @RequestMapping(value = "/adminPanel/tariff/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String tariffDelOptions(@RequestBody @Valid GetTarifAsJsonDtoById getTarifAsJsonDtoById, BindingResult result) {
+        tariffService.delOptions(getTarifAsJsonDtoById);
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
+    }
+
     @RequestMapping(value = "/adminPanel/addContract/tariffOptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody Set<TariffOption> addContractTariffOptions(@RequestBody String s, BindingResult result) {
         Tariff tariff = tariffService.findById(Integer.valueOf(s));

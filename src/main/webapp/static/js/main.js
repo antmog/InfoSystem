@@ -136,9 +136,35 @@
         $('#tariffDelOption').on('click', function () {
             // OPTIONS RULES
 
-            // var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove().clone();
-            // tr.removeClass('add-tariff-table-selected');
-            // $("#tarifffAvailableOptions").append(tr);
+            var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").clone();
+            var table = $('#parseTable');
+            for (var i = 0; i < tr.length; i++) {
+                table.append(tr[i]);
+            }
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend:function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/adminPanel/tariff/delOptions",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), tariffId : tariff_id})
+            }).done(function( msg ) {
+                if (msg === "ok") {
+                    var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove().clone();
+                    tr.removeClass('add-tariff-table-selected');
+                    $("#tariffAvailableOptions").append(tr);
+                }
+            }).fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+            $('#parseTable tr.move-row').remove();
         });
     }
 

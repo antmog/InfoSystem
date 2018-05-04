@@ -90,5 +90,24 @@ public class TariffServiceImpl implements TariffService {
         return false;
     }
 
+    @Override
+    public boolean delOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById) {
+        List<Integer> optionIdList = new ArrayList<>();
+        for( GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDtoById.getGetOptionsAsJsonDtoList()){
+            optionIdList.add(getOptionsAsJsonDto.getId());
+        }
+        Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
+        Tariff tariff = dao.findById(getTarifAsJsonDtoById.getTariffId());
+
+        Set<TariffOption> newTariffOptionList = tariff.getAvailableOptions();
+        if(newTariffOptionList.removeAll(tariffOptionList)){
+            System.out.println("YES");
+        }
+        tariff.setAvailableOptions(newTariffOptionList);
+        dao.save(tariff);
+        // LOGIC RULES ETC
+        return false;
+    }
+
 
 }

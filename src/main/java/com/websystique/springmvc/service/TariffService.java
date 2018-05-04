@@ -25,4 +25,6 @@ public interface TariffService {
     List<Tariff> findFirstTariffs();
 
     boolean addOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById);
+
+    boolean delOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById);
 }
