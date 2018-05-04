@@ -74,7 +74,7 @@
         })
     }
 
-    $("#usersTable").on("click","tr.user-row", function () {
+    $(".users-table").on("click","tr.user-row", function () {
         document.location.href = "/adminPanel/user/"+$(this).find("td:first").html();
     });
     $(".contracts-table").on("click","tr.contract-row", function () {

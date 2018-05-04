@@ -16,26 +16,8 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Info-System</a>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/lk">
-                    LK
-                </a>
-            </li>
-            <sec:authorize access="isAuthenticated()">
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">
-                    <strong>${loggedinuser}</strong>, Log out
-                </a>
-            </li>
-            </sec:authorize>
-        </ul>
-    </div>
-</nav>
+<jsp:include page="navBar.jsp"/>
 
 <main role="main">
 
@@ -43,7 +25,7 @@
         <div class="container">
             <h1 class="display-4">Info-System</h1>
             <p>Cellular Carrier Information System</p>
-            <sec:authorize var="loggedIn" access="isAuthenticated()" />
+            <sec:authorize var="loggedIn" access="isAuthenticated()"/>
             <c:choose>
                 <c:when test="${loggedIn}">
                     <strong>WELCOME, dear ${loggedinuser}</strong>
