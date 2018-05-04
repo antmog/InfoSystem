@@ -6,6 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <!-- ... -->
     <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
 
@@ -19,6 +23,7 @@
 <main class="mt-4">
     <div class="container">
         <div class="row">
+
             <div class="col-md-4">
                 <div class="card mb-4 border-dark">
                     <h5 class="card-header">
@@ -46,9 +51,32 @@
                             </tbody>
                         </table>
                     </div>
+                    <c:choose>
+                        <c:when test="${user.status == 'BLOCKED'}">
+                            <label value="Inactive">Blocked
+                            </label>
+                            <button type="button" class="btn btn-success" id="unBlockUserButton">Unblock user
+                            </button>
+                        </c:when>
+                        <c:when test="${user.status == 'INACTIVE'}">
+                            <label value="Inactive">Inactive (deactivated)
+                            </label>
+                            <button type="button" class="btn btn-success" id="unBlockUserButton">Activate user
+                            </button>
+                        </c:when>
+                        <c:otherwise>
+                            <label value="Inactive">Active
+                            </label>
+                            <button type="button" class="btn btn-danger" id="blockUserButton">Block User
+                            </button>
+                            <button type="button" class="btn btn-warning" id="deactivateUserButton">Deactivate user
+                            </button>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                 <br/>
             </div>
+
             <div class="col-md-8">
                 <div class="card mb-4">
 

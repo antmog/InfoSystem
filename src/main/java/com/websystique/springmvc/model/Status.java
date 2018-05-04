@@ -1,5 +1,7 @@
 package com.websystique.springmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum Status {
     ACTIVE("ACTIVE"),
     INACTIVE("INACTIVE"),
@@ -14,4 +16,5 @@ public enum Status {
     public String getStatus() {
         return status;
     }
+
 }

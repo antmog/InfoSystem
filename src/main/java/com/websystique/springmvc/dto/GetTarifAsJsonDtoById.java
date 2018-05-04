@@ -1,8 +1,9 @@
 package com.websystique.springmvc.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GetTarifAsJsonDtoById {
+public class GetTarifAsJsonDtoById implements Serializable {
     private List<GetOptionsAsJsonDto> getOptionsAsJsonDtoList;
     private Integer tariffId;
 

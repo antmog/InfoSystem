@@ -3,10 +3,11 @@ package com.websystique.springmvc.dto;
 import com.websystique.springmvc.model.Contract;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class ContractUserIdDto {
+public class ContractUserIdDto implements Serializable {
     private ContractDto contractDto;
     private List<GetOptionsAsJsonDto> getOptionsAsJsonDtoList;
 

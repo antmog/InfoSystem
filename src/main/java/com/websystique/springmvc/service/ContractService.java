@@ -1,5 +1,6 @@
 package com.websystique.springmvc.service;
 
+import com.websystique.springmvc.dto.NewStatusDto;
 import com.websystique.springmvc.model.Contract;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface ContractService {
     List<Contract> findAllContracts();
 
     void deleteContractById(int id);
+
+    void setStatus(NewStatusDto newStatusDto);
 }

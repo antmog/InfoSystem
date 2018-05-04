@@ -1,6 +1,7 @@
 package com.websystique.springmvc.service;
 
 import com.websystique.springmvc.dao.ContractDao;
+import com.websystique.springmvc.dto.NewStatusDto;
 import com.websystique.springmvc.model.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,11 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void deleteContractById(int id) {
         dao.deleteById(id);
+    }
+
+    @Override
+    public void setStatus(NewStatusDto newStatusDto) {
+        dao.findById(newStatusDto.getEntityId()).setStatus(newStatusDto.getEntityStatus());
     }
 
 }

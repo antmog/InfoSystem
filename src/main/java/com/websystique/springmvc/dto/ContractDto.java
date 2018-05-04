@@ -2,8 +2,10 @@ package com.websystique.springmvc.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 
-public class ContractDto {
+
+public class ContractDto implements Serializable {
     private Integer userId;
     private String phoneNumber;
     private Integer tariffId;

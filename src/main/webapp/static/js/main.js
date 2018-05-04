@@ -12,6 +12,56 @@
         document.location.href = "/adminPanel/addContractToUser/"+user_id
     });
 
+    var newStatus;
+    $('#blockUserButton').click(function () {
+        newStatus = 'BLOCKED';
+        setNewStatus("user",newStatus,user_id);
+    });
+    $('#unBlockUserButton').click(function () {
+        newStatus = 'ACTIVE';
+        setNewStatus("user",newStatus,user_id);
+    });
+    $('#deactivateUserButton').click(function () {
+        newStatus = 'INACTIVE';
+        setNewStatus("user",newStatus,user_id);
+    });
+    $('#blockContractButton').click(function () {
+        newStatus = 'BLOCKED';
+        setNewStatus("contract",newStatus,contract_id);
+    });
+    $('#unBlockContractButton').click(function () {
+        newStatus = 'ACTIVE';
+        setNewStatus("contract",newStatus,contract_id);
+    });
+    $('#deactivateContractButton').click(function () {
+        newStatus = 'INACTIVE';
+        setNewStatus("contract",newStatus,contract_id);
+    });
+
+    function setNewStatus(entity,status,entity_id){
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            beforeSend:function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'text/html; charset=utf-8'
+            },
+            type: "POST",
+            url: "/adminPanel/" +entity+ "/setStatus",
+            // The key needs to match your method's input parameter (case-sensitive).
+            data: JSON.stringify({ entityId : entity_id, entityStatus : status})
+        }).done(function( msg ) {
+            if (msg === "ok") {
+                location.reload();
+            }
+        }).fail(function( jqXHR, textStatus ) {
+            alert( "Request failed: " + textStatus );
+        });
+    }
+
 
     function addTariffTableBehavior(){
         $("#addTariffAddedOptions").on("click","tr.move-row", function () {

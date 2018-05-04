@@ -1,6 +1,7 @@
 package com.websystique.springmvc.controller;
 
 import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
+import com.websystique.springmvc.dto.NewStatusDto;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.TariffOption;
 import com.websystique.springmvc.service.ContractService;
@@ -60,6 +61,25 @@ public class DataController {
         Tariff tariff = tariffService.findById(Integer.valueOf(s));
         System.out.println(tariff.getAvailableOptions());
         return tariff.getAvailableOptions();
+    }
+
+
+    @RequestMapping(value = "/adminPanel/contract/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String setUserStatus(@RequestBody @Valid NewStatusDto newStatusDto, BindingResult result) {
+        contractService.setStatus(newStatusDto);
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
+    }
+
+    @RequestMapping(value = "/adminPanel/user/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String setContractStatus(@RequestBody @Valid NewStatusDto newStatusDto, BindingResult result) {
+        userService.setStatus(newStatusDto);
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
     }
 
 
