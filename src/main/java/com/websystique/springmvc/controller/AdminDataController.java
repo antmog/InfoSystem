@@ -24,7 +24,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/")
-public class DataController {
+public class AdminDataController {
 
     @Autowired
     UserService userService;

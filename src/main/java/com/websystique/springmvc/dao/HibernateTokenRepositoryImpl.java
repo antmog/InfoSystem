@@ -16,8 +16,6 @@ import java.util.Date;
 public class HibernateTokenRepositoryImpl extends AbstractDao<String, PersistentLogin>
 		implements PersistentTokenRepository {
 
-
-
 	@Override
 	public void createNewToken(PersistentRememberMeToken token) {
 		PersistentLogin persistentLogin = new PersistentLogin();

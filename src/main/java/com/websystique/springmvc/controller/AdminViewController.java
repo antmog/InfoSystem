@@ -30,7 +30,9 @@ import java.util.*;
 @Controller
 @RequestMapping("/")
 @SessionAttributes("roles")
-public class ViewController {
+public class AdminViewController {
+
+    private String adminPath = "admin/";
 
     @Autowired
     UserService userService;
@@ -53,54 +55,6 @@ public class ViewController {
     @Autowired
     AuthenticationTrustResolver authenticationTrustResolver;
 
-    @RequestMapping("/")
-    public String startPage(ModelMap model) {
-        model.addAttribute("loggedinuser", getPrincipal());
-        return "index";
-    }
-
-    /**
-     * Mapping to login screen.
-     */
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String onLogin(@Valid User user, BindingResult result,
-                          ModelMap model) {
-        if (isCurrentAuthenticationAnonymous()) {
-            return "login";
-        } else {
-            return "redirect:/list";
-        }
-
-    }
-
-    /**
-     * This method handles logout requests.
-     * Toggle the handlers if you are RememberMe functionality is useless in your app.
-     */
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            persistentTokenBasedRememberMeServices.logout(request, response, auth);
-            SecurityContextHolder.getContext().setAuthentication(null);
-        }
-        return "redirect:/login?logout";
-    }
-
-    @RequestMapping("/lk")
-    public String lk(ModelMap model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("loggedinuser", getPrincipal());
-
-        if (isCurrentAuthenticationAnonymous()) {
-            return "login";
-        }
-        if (authentication.getAuthorities().stream()
-                .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
-            return "redirect:/adminPanel";
-        }
-        return "redirect:/customerPanel";
-    }
 
     @RequestMapping("/adminPanel")
     public String adminPanel(ModelMap model) {
@@ -109,7 +63,7 @@ public class ViewController {
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("users",users);
         model.addAttribute("tariffs",tariffs);
-        return "adminPanel";
+        return adminPath+"adminPanel";
     }
 
     @RequestMapping("/adminPanel/allUsers")
@@ -117,7 +71,7 @@ public class ViewController {
         List<User> users = userService.findAllUsers();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("users",users);
-        return "allUsers";
+        return adminPath+"allUsers";
     }
 
     @RequestMapping("/adminPanel/allContracts")
@@ -125,7 +79,7 @@ public class ViewController {
         List<Contract> contracts = contractService.findAllContracts();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("contracts",contracts);
-        return "allContracts";
+        return adminPath+"allContracts";
     }
 
     @RequestMapping("/adminPanel/allTariffs")
@@ -133,7 +87,7 @@ public class ViewController {
         List<Tariff> tariffs = tariffService.findAllTariffs();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffs",tariffs);
-        return "allTariffs";
+        return adminPath+"allTariffs";
     }
 
 
@@ -145,7 +99,7 @@ public class ViewController {
         model.addAttribute("edit", false);
         HashSet<String> roles = new HashSet<>(Arrays.asList(Role.CUSTOMER.getRole(), Role.ADMIN.getRole()));
         model.addAttribute("roles", roles);
-        return "addUser";
+        return adminPath+"addUser";
     }
 
 
@@ -154,7 +108,7 @@ public class ViewController {
                            ModelMap model) {
 
         if (result.hasErrors()) {
-            return "addUser";
+            return adminPath+"addUser";
         }
 
         userService.saveUser(user);
@@ -162,7 +116,7 @@ public class ViewController {
         model.addAttribute("success", "User " + user.getFirstName() + " " + user.getLastName() + " registered successfully");
         model.addAttribute("loggedinuser", getPrincipal());
         //return "success";
-        return "addSuccess";
+        return adminPath+"addSuccess";
     }
 
     @RequestMapping(value ="/adminPanel/addContract", method = RequestMethod.GET)
@@ -173,7 +127,7 @@ public class ViewController {
         model.addAttribute("tariffs",tariffs);
         model.addAttribute("contractUserIdDto", contractUserIdDto);
         model.addAttribute("edit", false);
-        return "addContract";
+        return adminPath+"addContract";
     }
 
     @RequestMapping(value ="/adminPanel/addContractToUser/{user_id}", method = RequestMethod.GET)
@@ -185,7 +139,7 @@ public class ViewController {
         model.addAttribute("tariffs",tariffs);
         model.addAttribute("contractUserIdDto", contractUserIdDto);
         model.addAttribute("edit", false);
-        return "addContract";
+        return adminPath+"addContract";
     }
 
     @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"},consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -194,7 +148,7 @@ public class ViewController {
                                ModelMap model) {
 
         if (result.hasErrors()) {
-            return "addContract";
+            return adminPath+"addContract";
         }
 
         Tariff tariff = tariffService.findById(contractUserIdDto.getContractDto().getTariffId());
@@ -219,7 +173,7 @@ public class ViewController {
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("success", "Contract " + contract.getId() + "registered successfully");
         //return "success";
-        return "addSuccess";
+        return adminPath+"addSuccess";
     }
 
     @RequestMapping(value = "/adminPanel/addTariff", method = RequestMethod.GET)
@@ -229,20 +183,20 @@ public class ViewController {
 
         model.addAttribute("options", options);
         model.addAttribute("edit", false);
-        return "addTariff";
+        return adminPath+"addTariff";
     }
 
     @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String saveTariffAjax(@RequestBody @Valid GetTarifAsJsonDto getTarifAsJsonDto, BindingResult result, ModelMap model) {
 
         if (result.hasErrors()) {
-            return "addTariff";
+            return adminPath+"addTariff";
         }
         tariffService.saveTariff(getTarifAsJsonDto);
         model.addAttribute("success", "Tariff " + getTarifAsJsonDto.getTariffDto().getName()
                 + " registered successfully");
         model.addAttribute("loggedinuser", getPrincipal());
-        return "addSuccess";
+        return adminPath+"addSuccess";
     }
 
     @RequestMapping(value = "/adminPanel/user/{user_id}")
@@ -250,7 +204,7 @@ public class ViewController {
         User user = userService.findById(user_id);
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("user", user);
-        return "user";
+        return adminPath+"user";
     }
 
     @RequestMapping(value = "/adminPanel/contract/{contract_id}")
@@ -258,7 +212,7 @@ public class ViewController {
         Contract contract = contractService.findById(contract_id);
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("contract", contract);
-        return "contract";
+        return adminPath+"contract";
     }
 
     @RequestMapping(value = "/adminPanel/tariff/{tariff_id}")
@@ -269,20 +223,8 @@ public class ViewController {
         model.addAttribute("options", options);
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariff", tariff);
-        return "tariff";
+        return adminPath+"tariff";
     }
-
-
-
-
-
-    @RequestMapping("/customerPanel")
-    public String customerPanel(ModelMap model) {
-        model.addAttribute("loggedinuser", getPrincipal());
-
-        return "customerPanel";
-    }
-
 
 
     /**

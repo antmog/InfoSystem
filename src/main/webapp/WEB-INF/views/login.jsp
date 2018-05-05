@@ -4,7 +4,7 @@
 
 <html lang="ru">
 <head>
-    <jsp:include page="header.jsp"/>
+    <jsp:include page="admin/header.jsp"/>
 </head>
 <body>
 

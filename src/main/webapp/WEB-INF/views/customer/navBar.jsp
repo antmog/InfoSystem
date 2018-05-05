@@ -21,16 +21,15 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="/lk">
-                    LK
+                    User Panel
                 </a>
             </li>
             <li class="nav-item mr-4">
                 <a class="nav-link" href="#">
-                    Busket
+                    Cart
                     <i class="fas fa-cart-arrow-down"></i>
                 </a>
             </li>
-
             <sec:authorize access="isAuthenticated()">
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">

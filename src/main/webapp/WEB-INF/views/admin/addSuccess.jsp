@@ -16,8 +16,8 @@
 </div>
 
 <span class="well floatRight">
-			Go to <a href="<c:url value='/adminPanel' />">Admin Panel</a>
-		</span>
+			Go to <a href="/adminPanel">Admin Panel</a>
+</span>
 
 </body>
 

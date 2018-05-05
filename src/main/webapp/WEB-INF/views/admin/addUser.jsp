@@ -108,11 +108,11 @@ User Registration Form
     <c:choose>
         <c:when test="${edit}">
             <input type="submit" value="Update" class="btn btn-primary btn-sm"/> or <a
-                href="<c:url value='/adminPanel' />">Cancel</a>
+                href="/adminPanel">Cancel</a>
         </c:when>
         <c:otherwise>
             <input type="submit" value="Register" class="btn btn-primary btn-sm"/> or <a
-                href="<c:url value='/adminPanel' />">Cancel</a>
+                href="/adminPanel">Cancel</a>
         </c:otherwise>
     </c:choose>
 </form:form>
