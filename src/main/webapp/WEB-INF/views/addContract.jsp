@@ -31,7 +31,7 @@
                     </c:choose>
                     <label class="control-lable" for="phoneNumber">phoneNumber</label>
                     <input type="text" id="phoneNumber" class="form-control input-sm"/>
-                    <button type="button" class="btn btn-success" id="addContract">Add selected option</button>
+                    <button type="button" class="btn btn-success" id="addContract">Add contract</button>
                 </div>
             </div>
             <div class="col-md-4">
