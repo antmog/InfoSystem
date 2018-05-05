@@ -82,7 +82,7 @@
         function updateUserInfo() {
             var input,td,button,editing,canselButton;
             var oldRow, oldValue = "";
-            $("#userEditableTable").on("click","tbody tr", function () {
+            $(".userEditableTable").on("click","tbody tr", function () {
                 if ( $(this).hasClass('editable')) {
                     oldValue = $(this).find("td:eq(1)").remove().clone();
                     input = document.createElement('input');
@@ -100,11 +100,11 @@
                     $(this).addClass('editing');
                 }
             });
-            $(document).on("focusout","#userEditableTable tr.editing", function(event) {
+            $(document).on("focusout",".userEditableTable tr.editing", function(event) {
                 if(button === event.relatedTarget){
                     var token = $("meta[name='_csrf']").attr("content");
                     var header = $("meta[name='_csrf_header']").attr("content");
-                    var editing = $("#userEditableTable tr.editing");
+                    var editing = $(".userEditableTable tr.editing");
                     var value = editing.find("input").val();
                     $.ajax({
                         beforeSend:function (xhr) {
@@ -130,7 +130,6 @@
                 $(this).find("input").remove();
                 $(this).find("button").remove();
                 $(this).append(oldValue);
-
             });
 
         }
@@ -422,6 +421,10 @@
         tariffTableBehavior();
     }
 
+    function customerPanel(){
+        // editing is same as for user (table selector .class)
+    }
+    customerPanel();
 
     adminPanel();
     userPanel();

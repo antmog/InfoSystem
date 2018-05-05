@@ -1,10 +1,16 @@
 package com.websystique.springmvc.controller;
 
+import com.websystique.springmvc.service.ContractService;
+import com.websystique.springmvc.service.TariffOptionService;
+import com.websystique.springmvc.service.TariffService;
+import com.websystique.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,10 +30,32 @@ public class CustomerViewController {
     @Autowired
     AuthenticationTrustResolver authenticationTrustResolver;
 
+    @Autowired
+    UserDetailsService customUserDetailsService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    ContractService contractService;
+
+    @Autowired
+    TariffOptionService tariffOptionService;
+
+    @Autowired
+    MessageSource messageSource;
+
+    @Autowired
+    TariffService tariffService;
+
+
+
+
     @RequestMapping("/customerPanel")
     public String customerPanel(ModelMap model) {
-        model.addAttribute("loggedinuser", getPrincipal());
-
+        String login =  getPrincipal();
+        model.addAttribute("loggedinuser", login);
+        model.addAttribute("user", userService.findByLogin(login));
         return customerPath+"customerPanel";
     }
 

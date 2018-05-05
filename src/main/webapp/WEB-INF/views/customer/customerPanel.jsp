@@ -11,14 +11,50 @@
 
 <main class="mt-4">
     <div class="container">
-        <div class="alert alert-danger" role="alert">
-           Ваш номер заблокирован
-        </div>
+        <c:if test="${user.status == 'BLOCKED'}">
+            <div class="alert alert-danger" role="alert">
+                Your number is blocked!
+            </div>
+        </c:if>
+        <c:if test="${user.status == 'INACTIVE'}">
+            <div class="alert alert-warning" role="alert">
+                Your number is inactive.
+            </div>
+        </c:if>
         <div class="row">
             <div class="col-md-4">
                 <div class="card mb-4 border-dark">
                     <h5 class="card-header">
-                        Ваш контракт
+                        Welcome, dear ${user.firstName} ${user.lastName}!
+                    </h5>
+                    <div class="card-body">
+                        <table class="table table-hover userEditableTable">
+                            <tbody>
+                            <tr class="editable">
+                                <td>address</td>
+                                <td>${user.address}</td>
+                            </tr>
+                            <tr>
+                                <td>birth date</td>
+                                <td>${user.birthDate}</td>
+                            </tr>
+                            <tr class="editable">
+                                <td>mail</td>
+                                <td>${user.mail}</td>
+                            </tr>
+                            <tr class="editable">
+                                <td>passport</td>
+                                <td>${user.passport}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 border-dark">
+                    <h5 class="card-header">
+                        Welcome, dear ${user.firstName} ${user.lastName}!
                     </h5>
                     <div class="card-body">
                         <p>+7 (981) 707 18 94</p>
@@ -69,8 +105,9 @@
     </div>
 
 </main>
-
-
+<script>
+    var user_id = ${user.id};
+</script>
 <script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
 <script src="/static/js/main.js" defer></script>
 </body>

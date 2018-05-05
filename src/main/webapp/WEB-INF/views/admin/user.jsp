@@ -19,7 +19,7 @@
                         <strong> ${user.id} : ${user.firstName} ${user.lastName}</strong>
                     </h5>
                     <div class="card-body">
-                        <table class="table table-hover" id="userEditableTable">
+                        <table class="table table-hover userEditableTable">
                             <tbody>
                             <tr class = "editable">
                                 <td>address</td>
