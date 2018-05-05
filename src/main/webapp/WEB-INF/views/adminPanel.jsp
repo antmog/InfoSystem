@@ -3,14 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/index.css">
-
-
-    <title>Info-System</title>
+    <jsp:include page="header.jsp"/>
 </head>
 <body>
 
@@ -70,9 +63,19 @@
             </div>
             <div class="col-md-8">
                 <div class="card mb-4">
-
                     <h5 class="card-header">
-                        Users list
+                        <div class="row">
+                            <div class="col-auto mr-auto">
+                                Users list
+                            </div>
+                            <div class="col-auto">
+                                <div class="input-group">
+                                    Search by number:
+                                    <input class="searchUserByNumberInput" type="text" height="3">
+                                    <i class="fas fa-search search-icon searchUserByNumber"></i>
+                                </div>
+                            </div>
+                        </div>
                     </h5>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">

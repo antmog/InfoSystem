@@ -53,4 +53,9 @@ public class ContractServiceImpl implements ContractService {
         dao.findById(newStatusDto.getEntityId()).setStatus(newStatusDto.getEntityStatus());
     }
 
+    @Override
+    public Contract findByPhoneNumber(String phoneNumber) {
+        return dao.findByPhoneNumber(phoneNumber);
+    }
+
 }

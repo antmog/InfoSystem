@@ -3,17 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <!-- default header name is X-CSRF-TOKEN -->
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <!-- ... -->
-    <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/index.css">
-
-
-    <title>Info-System</title>
+    <jsp:include page="header.jsp"/>
 </head>
 <body>
 

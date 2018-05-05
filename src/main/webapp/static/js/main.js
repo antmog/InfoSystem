@@ -362,6 +362,40 @@
 
     }
 
+
+    function updateUserTable(msg){
+        document.location.href = "/adminPanel/user/"+msg.id;
+    }
+    function searchUserByNumber() {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var phoneNumber =$('.searchUserByNumberInput').val();
+        $.ajax({
+            beforeSend:function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            type: "POST",
+            url: "/adminPanel/user/searchUserByNumber",
+            // The key needs to match your method's input parameter (case-sensitive).
+            data: JSON.stringify({ phoneNumber : phoneNumber }),
+            dataType: "json"
+        }).done(function( msg ) {
+            updateUserTable(msg);
+        }).fail(function( jqXHR, textStatus ) {
+            alert( "Request failed: " + textStatus );
+        });
+    }
+    $(".searchUserByNumber").on("click", function () {
+        if($('.searchUserByNumberInput').val() === ""){
+            alert("its null");
+        }else{
+            searchUserByNumber();
+        }
+    });
+
     updateUserInfo();
     addContractTableBehavior();
     addTariffTableBehavior();

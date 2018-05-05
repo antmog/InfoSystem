@@ -38,4 +38,17 @@ public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements C
                 .getSingleResult();
         delete(contract);
     }
+
+    @Override
+    public Contract findByPhoneNumber(String phoneNumber) {
+        System.out.println(phoneNumber);
+        Contract contract = (Contract) getSession()
+                .createQuery("SELECT c FROM Contract c WHERE c.phoneNumber LIKE :phoneNumber")
+                .setParameter("phoneNumber", phoneNumber)
+                .getSingleResult();
+
+        System.out.println(contract);
+        System.out.println(contract);
+        return contract;
+    }
 }

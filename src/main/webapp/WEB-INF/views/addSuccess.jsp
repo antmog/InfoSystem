@@ -4,11 +4,7 @@
 
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Registration Confirmation Page</title>
-    <link rel="stylesheet" href="/static/vendors/bootstrap-4.1.0/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/index.css">
-
+    <jsp:include page="header.jsp"/>
 </head>
 <body>
 

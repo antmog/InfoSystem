@@ -19,4 +19,6 @@ public interface ContractService {
     void deleteContractById(int id);
 
     void setStatus(NewStatusDto newStatusDto);
+
+    Contract findByPhoneNumber(String phoneNumber);
 }

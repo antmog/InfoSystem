@@ -3,8 +3,10 @@ package com.websystique.springmvc.controller;
 import com.websystique.springmvc.dto.EditUserDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
 import com.websystique.springmvc.dto.NewStatusDto;
+import com.websystique.springmvc.dto.SearchUserByNumber;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.TariffOption;
+import com.websystique.springmvc.model.User;
 import com.websystique.springmvc.service.ContractService;
 import com.websystique.springmvc.service.TariffOptionService;
 import com.websystique.springmvc.service.TariffService;
@@ -90,6 +92,13 @@ public class DataController {
             return "notok";
         }
         return "ok";
+    }
+
+    @RequestMapping(value = "/adminPanel/user/searchUserByNumber", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public @ResponseBody
+    User searchUserByNumber(@Valid @RequestBody  SearchUserByNumber searchUserByNumber, BindingResult result) {
+        return userService.findByPhoneNumber(searchUserByNumber);
     }
 
 

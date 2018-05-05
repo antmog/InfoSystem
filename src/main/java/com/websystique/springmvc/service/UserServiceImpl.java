@@ -1,11 +1,11 @@
 package com.websystique.springmvc.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.websystique.springmvc.dto.EditUserDto;
 import com.websystique.springmvc.dto.NewStatusDto;
+import com.websystique.springmvc.dto.SearchUserByNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,8 @@ public class UserServiceImpl implements UserService{
 	private UserDao dao;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+	private ContractService contractService;
 
 	public User findById(int id) {
 		return dao.findById(id);
@@ -95,6 +97,11 @@ public class UserServiceImpl implements UserService{
 			default:
 				break;
 		}
+	}
+
+	@Override
+	public User findByPhoneNumber(SearchUserByNumber searchUserByNumber) {
+		return contractService.findByPhoneNumber(searchUserByNumber.getPhoneNumber()).getUser();
 	}
 
 }

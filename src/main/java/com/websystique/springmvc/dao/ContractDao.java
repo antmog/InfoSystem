@@ -13,4 +13,6 @@ public interface ContractDao {
     List<Contract> findAllContracts();
 
     void deleteById(int id);
+
+    Contract findByPhoneNumber(String phoneNumber);
 }
