@@ -20,6 +20,9 @@ public class Contract implements Serializable {
     @Column(name = "PHONE_NUMBER", nullable = false, unique = true)
     private String phoneNumber;
 
+    @Column(name = "CONTRACT_PRICE", nullable = false)
+    private Double price;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "CONTRACT_STATUS", nullable = false)
     private Status status = Status.ACTIVE;

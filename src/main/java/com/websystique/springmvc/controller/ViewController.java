@@ -185,7 +185,7 @@ public class ViewController {
         model.addAttribute("tariffs",tariffs);
         model.addAttribute("contractUserIdDto", contractUserIdDto);
         model.addAttribute("edit", false);
-        return "addContractToUser";
+        return "addContract";
     }
 
     @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"},consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -196,15 +196,24 @@ public class ViewController {
         if (result.hasErrors()) {
             return "addContract";
         }
+
+        Tariff tariff = tariffService.findById(contractUserIdDto.getContractDto().getTariffId());
+        Double price = tariff.getPrice();
         Contract contract = new Contract();
         contract.setPhoneNumber(contractUserIdDto.getContractDto().getPhoneNumber());
         contract.setUser(userService.findById(contractUserIdDto.getContractDto().getUserId()));
-        contract.setTariff(tariffService.findById(contractUserIdDto.getContractDto().getTariffId()));
+        contract.setTariff(tariff);
         List<Integer> optionIdList = new ArrayList<>();
         for( GetOptionsAsJsonDto getOptionsAsJsonDto : contractUserIdDto.getGetOptionsAsJsonDtoList()){
             optionIdList.add(getOptionsAsJsonDto.getId());
         }
         Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
+        for(TariffOption tariffOption : tariffOptionList){
+            price+=tariffOption.getPrice();
+        }
+        // also add COST here later (cost of adding options)
+        // i mean just take funds from user :D
+        contract.setPrice(price);
         contract.setActiveOptions(tariffOptionList);
         contractService.saveContract(contract);
         model.addAttribute("loggedinuser", getPrincipal());

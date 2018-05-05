@@ -30,6 +30,10 @@
                                 <td>${contract.tariff.id}</td>
                             </tr>
                             <tr class="contract-row">
+                                <td>price</td>
+                                <td>${contract.price}</td>
+                            </tr>
+                            <tr class="contract-row">
                                 <td>active options</td>
                                 <td><c:forEach items="${contract.activeOptions}" var="option">
                                     ${option.id};

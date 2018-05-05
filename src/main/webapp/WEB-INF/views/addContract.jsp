@@ -20,8 +20,15 @@
                         <strong>Contract registration form</strong>
                     </h5>
                     <br/>
-                    <label class="control-lable" for="user_id">user_id</label>
-                    <input type="text" id="user_id" class="form-control input-sm"/>
+                    <c:choose>
+                        <c:when test="${empty user_id}">
+                            <label class="control-lable" for="user_id">user_id</label>
+                            <input type="text" id="user_id" class="form-control input-sm"/>
+                        </c:when>
+                        <c:otherwise>
+                            <form:input type="hidden" path="user_id" id="user_id" class="form-control input-sm" value="${user_id}"/>
+                        </c:otherwise>
+                    </c:choose>
                     <label class="control-lable" for="phoneNumber">phoneNumber</label>
                     <input type="text" id="phoneNumber" class="form-control input-sm"/>
                     <button type="button" class="btn btn-success" id="addContract">Add selected option</button>

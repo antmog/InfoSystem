@@ -27,6 +27,7 @@
                                     <th>user_id</th>
                                     <th>phoneNumber</th>
                                     <th>tariff</th>
+                                    <th>price</th>
                                     <th>active options</th>
                                     <th>status</th>
                                     <th width="100"></th>
@@ -40,6 +41,7 @@
                                         <td>${contract.user.id}</td>
                                         <td>${contract.phoneNumber}</td>
                                         <td>${contract.tariff.name}</td>
+                                        <td>${contract.price}</td>
                                         <td><c:forEach items="${contract.activeOptions}" var="option">
                                             ${option.id};
                                         </c:forEach></td>
