@@ -13,12 +13,12 @@
     <div class="container">
         <c:if test="${user.status == 'BLOCKED'}">
             <div class="alert alert-danger" role="alert">
-                Your number is blocked!
+                Your profile is blocked!
             </div>
         </c:if>
         <c:if test="${user.status == 'INACTIVE'}">
             <div class="alert alert-warning" role="alert">
-                Your number is inactive.
+                Your profile is inactive.
             </div>
         </c:if>
         <div class="row">
@@ -51,56 +51,51 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mb-4 border-dark">
+            <div class="col-md-8">
+                <div class="card mb-8">
                     <h5 class="card-header">
-                        Welcome, dear ${user.firstName} ${user.lastName}!
+                        My Contracts
                     </h5>
                     <div class="card-body">
-                        <p>+7 (981) 707 18 94</p>
-                        <p>Тариф: <a href="#">горячий</a></p>
-                        <a href="#" class="btn btn-sm btn-primary">Блокировка номера</a>
-                        <a href="#" class="btn btn-sm btn-primary">Сменить тариф</a>
+                        <table class="table table-hover contracts-table">
+                            <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>phoneNumber</th>
+                                <th>price</th>
+                                <th>active options</th>
+                                <th>tariff</th>
+                                <th>status</th>
+                                <th width="100"></th>
+                                <th width="100"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${user.userContracts}" var="contract">
+                                <tr class="contract-row">
+                                    <td>${contract.id}</td>
+                                    <td>${contract.phoneNumber}</td>
+                                    <td>${contract.price}</td>
+                                    <td><c:forEach items="${contract.activeOptions}" var="option">
+                                        ${option.id};
+                                    </c:forEach></td>
+                                    <td>${contract.tariff.name}</td>
+                                    <td>
+                                        <c:if test="${contract.status == 'ACTIVE'}"><span value="ACTIVE"
+                                                                                          class="badge badge-pill badge-success">ACTIVE</span></c:if>
+                                        <c:if test="${contract.status == 'BLOCKED'}"><span value="BLOCKED"
+                                                                                           class="badge badge-pill badge-danger">BLOCKED</span></c:if>
+                                        <c:if test="${contract.status == 'INACTIVE'}"><span value="INACTIVE"
+                                                                                            class="badge badge-pill badge-warning">INACTIVE</span></c:if>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                        <a href="#" class="card-link">All contracts</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        Мои услуги
-                    </h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Черный список
-                            <span class="badge badge-secondary badge-pill">
-                                *111*442#
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Черный список
-                            <span class="badge badge-secondary badge-pill">
-                                *111*442#
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Черный список
-                            <span class="badge badge-secondary badge-pill">
-                                *111*442#
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Черный список
-                            <span class="badge badge-secondary badge-pill">
-                                *111*442#
-                            </span>
-                        </li>
-                    </ul>
-                    <div class="card-body">
-                        <a href="#" class="card-link">Все услуги</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4"></div>
         </div>
     </div>
 
