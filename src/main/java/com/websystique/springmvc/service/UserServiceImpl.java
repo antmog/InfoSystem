@@ -74,11 +74,9 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public String deleteUserById(int id) {
 		if(dao.findById(id).getUserContracts().size()==0){
-			System.out.println(dao.findById(id).getUserContracts().size());
 			dao.deleteById(id);
 			return "ok";
 		}
-		System.out.println(dao.findById(id).getUserContracts().size());
 		return "User still have contracts";
 	}
 

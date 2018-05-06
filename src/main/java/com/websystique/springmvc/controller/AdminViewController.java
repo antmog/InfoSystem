@@ -21,6 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -142,20 +144,21 @@ public class AdminViewController {
         return adminPath+"addContract";
     }
 
-    @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"},consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            method = RequestMethod.POST)
-    public String saveContract(@RequestBody @Valid  ContractUserIdDto contractUserIdDto, BindingResult result,
-                               ModelMap model) {
+//    @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"},consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+//            method = RequestMethod.POST)
+//    public ModelAndView saveContract(@RequestBody @Valid  ContractUserIdDto contractUserIdDto, BindingResult result,
+//                               ModelMap model) {
+//
+//        if (result.hasErrors()) {
+//            return new ModelAndView(adminPath+"addContract");
+//        }
+//        contractService.newContract(contractUserIdDto);
+//        ModelAndView mav = new ModelAndView(adminPath+"addSuccess");
+//        mav.addObject("loggedinuser", getPrincipal());
+//        mav.addObject("success", "Contract registered successfully");
+//        return mav;
+//    }
 
-        if (result.hasErrors()) {
-            return adminPath+"addContract";
-        }
-        contractService.newContract(contractUserIdDto);
-        model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("success", "Contract registered successfully");
-        //return "success";
-        return adminPath+"addSuccess";
-    }
 
     @RequestMapping(value = "/adminPanel/addTariff", method = RequestMethod.GET)
     public String addTariff(ModelMap model) {
@@ -165,19 +168,6 @@ public class AdminViewController {
         model.addAttribute("options", options);
         model.addAttribute("edit", false);
         return adminPath+"addTariff";
-    }
-
-    @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String saveTariffAjax(@RequestBody @Valid GetTarifAsJsonDto getTarifAsJsonDto, BindingResult result, ModelMap model) {
-
-        if (result.hasErrors()) {
-            return adminPath+"addTariff";
-        }
-        tariffService.saveTariff(getTarifAsJsonDto);
-        model.addAttribute("success", "Tariff " + getTarifAsJsonDto.getTariffDto().getName()
-                + " registered successfully");
-        model.addAttribute("loggedinuser", getPrincipal());
-        return adminPath+"addSuccess";
     }
 
     @RequestMapping(value = "/adminPanel/user/{user_id}")

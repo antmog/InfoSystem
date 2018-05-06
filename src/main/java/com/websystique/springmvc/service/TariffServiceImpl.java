@@ -5,6 +5,7 @@ import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
 import com.websystique.springmvc.dto.NewStatusDto;
+import com.websystique.springmvc.model.Contract;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.TariffOption;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class TariffServiceImpl implements TariffService {
     @Autowired
     private TariffOptionService tariffOptionService;
 
+    @Autowired
+    private ContractService contractService;
+
     public Tariff findById(int id) {
         return dao.findById(id);
     }
@@ -38,12 +42,13 @@ public class TariffServiceImpl implements TariffService {
     public void setStatus(NewStatusDto newStatusDto) {
         dao.findById(newStatusDto.getEntityId()).setStatus(newStatusDto.getEntityStatus());
     }
+
     public void saveTariff(GetTarifAsJsonDto getTarifAsJsonDto) {
         Tariff newTariff = new Tariff();
         newTariff.setName(getTarifAsJsonDto.getTariffDto().getName());
         newTariff.setPrice(getTarifAsJsonDto.getTariffDto().getPrice());
         List<Integer> optionIdList = new ArrayList<>();
-        for( GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDto.getGetOptionsAsJsonDtoList()){
+        for (GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDto.getGetOptionsAsJsonDtoList()) {
             optionIdList.add(getOptionsAsJsonDto.getId());
         }
         Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
@@ -51,6 +56,7 @@ public class TariffServiceImpl implements TariffService {
         dao.save(newTariff);
 
     }
+
     /*
      * Since the method is running with Transaction, No need to call hibernate update explicitly.
      * Just fetch the entity from db and update it with proper values within transaction.
@@ -72,8 +78,15 @@ public class TariffServiceImpl implements TariffService {
         return dao.findAllActiveTariffs();
     }
 
-    public void deleteTariffById(int id) {
+    public String deleteTariffById(int id) {
+        Tariff tariff = dao.findById(id);
+        for (Contract contract : contractService.findAllContracts()) {
+            if (contract.getTariff().equals(tariff)) {
+                return "Tariff is still used by some contracts.";
+            }
+        }
         dao.deleteById(id);
+        return "ok";
     }
 
     @Override
@@ -84,7 +97,7 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public boolean addOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById) {
         List<Integer> optionIdList = new ArrayList<>();
-        for( GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDtoById.getGetOptionsAsJsonDtoList()){
+        for (GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDtoById.getGetOptionsAsJsonDtoList()) {
             optionIdList.add(getOptionsAsJsonDto.getId());
         }
         Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
@@ -100,14 +113,14 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public boolean delOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById) {
         List<Integer> optionIdList = new ArrayList<>();
-        for( GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDtoById.getGetOptionsAsJsonDtoList()){
+        for (GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDtoById.getGetOptionsAsJsonDtoList()) {
             optionIdList.add(getOptionsAsJsonDto.getId());
         }
         Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
         Tariff tariff = dao.findById(getTarifAsJsonDtoById.getTariffId());
 
         Set<TariffOption> newTariffOptionList = tariff.getAvailableOptions();
-        if(newTariffOptionList.removeAll(tariffOptionList)){
+        if (newTariffOptionList.removeAll(tariffOptionList)) {
             System.out.println("YES");
         }
         tariff.setAvailableOptions(newTariffOptionList);

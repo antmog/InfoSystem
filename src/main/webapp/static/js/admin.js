@@ -378,7 +378,12 @@
                 url: "/adminPanel/addTariff",
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({getOptionsAsJsonDtoList:part1, tariffDto:part2}) ,
-                dataType: "json"
+            }).done(function(msg) {
+                if(msg==="ok"){
+                    document.location.href = "/adminPanel"
+                }else{
+                    alert(msg);
+                }
             }).fail(function (xhr,a,error) {
                 alert(error);
             })
@@ -407,14 +412,19 @@
                     xhr.setRequestHeader(header, token);
                 },
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'text/html; charset=utf-8'
+                    'Content-Type': 'application/json'
+                   // 'Accept': 'text/html; charset=utf-8'
                 },
                 type: "POST",
                 url: "/adminPanel/addContract",
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({getOptionsAsJsonDtoList:part1, contractDto:part2}) ,
-                dataType: "json"
+            }).done(function(msg) {
+                if(msg==="ok"){
+                    document.location.href = "/adminPanel"
+                }else{
+                    alert(msg);
+                }
             }).fail(function (xhr,a,error) {
                 alert(error);
             })
@@ -494,6 +504,31 @@
             newStatus = 'ACTIVE';
             globalSetNewStatus("tariff",newStatus,tariff_id);
         });
+        $("#deleteTariff").on("click", function () {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/adminPanel/user/deleteTariff",
+                data: tariff_id.toString()
+            }).done(function (msg) {
+                if(msg==="ok"){
+                    document.location.href = "/adminPanel"
+                }else{
+                    alert("Can't delete tariff. It's still used in some contracts.");
+                }
+            }).fail(function (jqXHR, textStatus) {
+                alert("Request failed: " + textStatus);
+            });
+        });
+
         function tariffTableBehavior(){
             $("#tariffAddedOptions").on("click","tr.move-row", function () {
                 if ( $(this).hasClass('add-tariff-table-selected')) {

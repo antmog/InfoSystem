@@ -23,7 +23,7 @@ public interface TariffService {
 
     List<Tariff> findAllActiveTariffs();
 
-    void deleteTariffById(int id);
+    String deleteTariffById(int id);
 
     void setStatus(NewStatusDto newStatusDto);
 

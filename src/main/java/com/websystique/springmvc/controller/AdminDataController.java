@@ -10,10 +10,12 @@ import com.websystique.springmvc.service.TariffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.websystique.springmvc.service.UserService;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Set;
@@ -157,6 +159,36 @@ public class AdminDataController {
         return userService.deleteUserById(Integer.parseInt(user_id));
     }
 
+    @RequestMapping(value = "/adminPanel/user/deleteTariff", method = RequestMethod.POST)
+    public String deleteTariff(@RequestBody @Valid String tariff_id, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return tariffService.deleteTariffById(Integer.parseInt(tariff_id));
+    }
+
+    @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"},consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            method = RequestMethod.POST)
+    public String saveContract(@RequestBody @Valid  ContractUserIdDto contractUserIdDto, BindingResult result) {
+        //+check unique
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        contractService.newContract(contractUserIdDto);
+        return "ok";
+    }
+
+
+    @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String saveTariff(@RequestBody @Valid GetTarifAsJsonDto getTarifAsJsonDto, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        tariffService.saveTariff(getTarifAsJsonDto);
+        return "ok";
+    }
 
 }
 

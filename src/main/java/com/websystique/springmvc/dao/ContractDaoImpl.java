@@ -47,8 +47,6 @@ public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements C
                 .setParameter("phoneNumber", phoneNumber)
                 .getSingleResult();
 
-        System.out.println(contract);
-        System.out.println(contract);
         return contract;
     }
 }

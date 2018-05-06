@@ -34,6 +34,7 @@
                         <c:choose>
                             <c:when test="${tariff.status == 'INACTIVE'}">
                                 <button id="unArchiveTariff" type="button" class="btn btn-primary btn-sm btn-success">Unarchive tariff</button>
+                                <button id="deleteTariff" type="button" class="btn btn-primary btn-sm btn-danger">Delete tariff</button>
                             </c:when>
                             <c:when test="${tariff.status == 'ACTIVE'}">
                                 <button id="archiveTariff" type="button" class="btn btn-primary btn-sm btn-danger">Archive tariff</button>
