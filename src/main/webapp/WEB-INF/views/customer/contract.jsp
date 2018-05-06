@@ -11,12 +11,12 @@
 
 <main class="mt-4">
     <div class="container">
-        <c:if test="${user.status == 'BLOCKED'}">
+        <c:if test="${contract.status == 'BLOCKED'}">
             <div class="alert alert-danger" role="alert">
                 Contract is blocked!
             </div>
         </c:if>
-        <c:if test="${user.status == 'INACTIVE'}">
+        <c:if test="${contract.status == 'INACTIVE'}">
             <div class="alert alert-warning" role="alert">
                 Contract is inactive.
             </div>
