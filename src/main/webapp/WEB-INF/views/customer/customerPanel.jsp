@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html lang="ru">
 <head>
-    <jsp:include page="header.jsp"/>
+    <jsp:include page="../header.jsp"/>
 </head>
 <body>
 
@@ -49,6 +50,20 @@
                             </tbody>
                         </table>
                     </div>
+                    <c:choose>
+                        <c:when test="${user.status == 'INACTIVE'}">
+                            <label value="Inactive">Inactive (deactivated)
+                            </label>
+                            <button type="button" class="btn btn-success" id="unBlockUserButton">Activate
+                            </button>
+                        </c:when>
+                        <c:when test="${user.status == 'ACTIVE'}">
+                            <label value="Inactive">Active
+                            </label>
+                            <button type="button" class="btn btn-warning" id="deactivateUserButton">Deactivate
+                            </button>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
             <div class="col-md-8">
@@ -103,7 +118,6 @@
 <script>
     var user_id = ${user.id};
 </script>
-<script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
-<script src="/static/js/main.js" defer></script>
+<jsp:include page="../footer.jsp"/>
 </body>
 </html>

@@ -77,7 +77,6 @@ public class CommonViewController {
         return "index";
     }
 
-
     /**
      * This method returns the principal[user-name] of logged-in user.
      */

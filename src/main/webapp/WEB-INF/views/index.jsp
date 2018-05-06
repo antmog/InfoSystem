@@ -2,14 +2,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-
 <html lang="ru">
 <head>
-    <jsp:include page="admin/header.jsp"/>
+    <jsp:include page="header.jsp"/>
 </head>
 <body>
-
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/"><i class="fas fa-phone-square"></i> Info-System</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -92,7 +89,5 @@
     </div>
 
 </main>
-<script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
-<script src="/static/js/main.js" defer></script>
 </body>
 </html>

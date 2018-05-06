@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <jsp:include page="header.jsp"/>
+    <jsp:include page="../header.jsp"/>
 </head>
 
 <body>
@@ -117,10 +117,6 @@
     </div>
 
 </main>
-
-<script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
-<script src="/static/vendors/jquery/jquery.tabletojson.min.js" defer></script>
-<script src="/static/js/main.js" defer></script>
-
+<jsp:include page="../footer.jsp"/>
 </body>
 </html>

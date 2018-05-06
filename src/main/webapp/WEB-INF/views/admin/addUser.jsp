@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <jsp:include page="header.jsp"/>
+    <jsp:include page="../header.jsp"/>
 </head>
 <body>
 
@@ -116,6 +116,6 @@ User Registration Form
         </c:otherwise>
     </c:choose>
 </form:form>
-
+<jsp:include page="../footer.jsp"/>
 </body>
 </html>

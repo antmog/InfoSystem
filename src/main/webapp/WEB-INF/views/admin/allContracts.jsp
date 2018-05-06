@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ru">
 <head>
-    <jsp:include page="header.jsp"/>
+    <jsp:include page="../header.jsp"/>
 </head>
 <body>
 
@@ -60,9 +60,6 @@
     </div>
 
 </main>
-
-
-<script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
-<script src="/static/js/main.js" defer></script>
+<jsp:include page="../footer.jsp"/>
 </body>
 </html>

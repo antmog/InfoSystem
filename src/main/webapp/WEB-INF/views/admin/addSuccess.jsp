@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <jsp:include page="header.jsp"/>
+    <jsp:include page="../header.jsp"/>
 </head>
 <body>
 
@@ -18,7 +18,6 @@
 <span class="well floatRight">
 			Go to <a href="/adminPanel">Admin Panel</a>
 </span>
-
+<jsp:include page="../footer.jsp"/>
 </body>
-
 </html>

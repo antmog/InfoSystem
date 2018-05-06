@@ -53,9 +53,5 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit" value="Log in">Log in</button>
     </form>
 </div>
-
-    <script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
-    <script src="/static/js/main.js" defer></script>
-
 </body>
 </html>

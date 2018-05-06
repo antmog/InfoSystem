@@ -421,10 +421,6 @@
         tariffTableBehavior();
     }
 
-    function customerPanel(){
-        // editing is same as for user (table selector .class)
-    }
-    customerPanel();
 
     adminPanel();
     userPanel();

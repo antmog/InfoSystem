@@ -1,4 +1,12 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: antmog
+  Date: 06.05.2018
+  Time: 15:57
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
 </head>
@@ -13,5 +21,13 @@
 <link rel="stylesheet" type="text/css" href="/static/css/style.css">
 <link rel="stylesheet"
       href="/static/vendors/fontawesome-free-5.0.10/web-fonts-with-css/css/fontawesome-all.min.css">
+<sec:authorize access="isAuthenticated()">
+    <sec:authorize access="hasAnyRole('ADMIN')">
+
+    </sec:authorize>
+    <sec:authorize access="hasAnyRole('CUSTOMER')">
+
+    </sec:authorize>
+</sec:authorize>
 </body>
 </html>
