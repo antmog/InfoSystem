@@ -13,5 +13,7 @@ public interface TariffDao {
 
     List<Tariff> findAllTariffs();
 
+    List<Tariff> findAllActiveTariffs();
+
     void deleteById(int id);
 }

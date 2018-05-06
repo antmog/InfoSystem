@@ -21,6 +21,10 @@ public class Tariff implements Serializable {
     @Column(name="NAME", unique=true, nullable=false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TARIFF_STATUS", nullable = false)
+    private Status status = Status.ACTIVE;
+
     /**
      * per month
      * Allows to use the tariff -> allows to use the options (options have its own cost/price)

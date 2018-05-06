@@ -4,6 +4,7 @@ import com.websystique.springmvc.dao.TariffDao;
 import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
+import com.websystique.springmvc.dto.NewStatusDto;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.TariffOption;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,9 @@ public class TariffServiceImpl implements TariffService {
         dao.save(tariff);
     }
 
-
+    public void setStatus(NewStatusDto newStatusDto) {
+        dao.findById(newStatusDto.getEntityId()).setStatus(newStatusDto.getEntityStatus());
+    }
     public void saveTariff(GetTarifAsJsonDto getTarifAsJsonDto) {
         Tariff newTariff = new Tariff();
         newTariff.setName(getTarifAsJsonDto.getTariffDto().getName());
@@ -63,6 +66,10 @@ public class TariffServiceImpl implements TariffService {
 
     public List<Tariff> findAllTariffs() {
         return dao.findAllTariffs();
+    }
+
+    public List<Tariff> findAllActiveTariffs() {
+        return dao.findAllActiveTariffs();
     }
 
     public void deleteTariffById(int id) {

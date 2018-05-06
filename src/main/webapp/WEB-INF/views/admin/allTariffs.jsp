@@ -27,6 +27,7 @@
                                     <th>name</th>
                                     <th>price</th>
                                     <th>available options id</th>
+                                    <th>status</th>
                                     <th width="100"></th>
                                     <th width="100"></th>
                                 </tr>
@@ -40,6 +41,7 @@
                                         <td><c:forEach items="${tariff.availableOptions}" var="option">
                                             ${option.id};
                                         </c:forEach></td>
+                                        <td>${tariff.status}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

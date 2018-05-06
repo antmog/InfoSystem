@@ -3,6 +3,7 @@ package com.websystique.springmvc.service;
 import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDto;
 import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
+import com.websystique.springmvc.dto.NewStatusDto;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.User;
 
@@ -20,7 +21,11 @@ public interface TariffService {
 
     List<Tariff> findAllTariffs();
 
+    List<Tariff> findAllActiveTariffs();
+
     void deleteTariffById(int id);
+
+    void setStatus(NewStatusDto newStatusDto);
 
     List<Tariff> findFirstTariffs();
 

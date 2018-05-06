@@ -22,7 +22,7 @@ public interface UserService {
 
 	List<User> findFirstUsers();
 
-	void deleteUserById(int id);
+	String deleteUserById(int id);
 
     void setStatus(NewStatusDto newStatusDto);
 

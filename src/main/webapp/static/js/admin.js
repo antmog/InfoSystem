@@ -61,6 +61,30 @@
 
 
     function userPanel(){
+        $("#deleteUser").on("click", function () {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/adminPanel/user/deleteUser",
+                data: user_id.toString()
+            }).done(function (msg) {
+                if(msg==="ok"){
+                    document.location.href = "/adminPanel"
+                }else{
+                    alert("Can't delete this user. Try to delete his contracts.");
+                }
+            }).fail(function (jqXHR, textStatus) {
+                alert("Request failed: " + textStatus);
+            });
+        });
         var newStatus;
         $('#addContractToUserButton').click(function () {
             document.location.href = "/adminPanel/addContractToUser/"+user_id
@@ -138,6 +162,26 @@
     }
 
     function contractPanel(){
+        $("#deleteContract").on("click", function () {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/adminPanel/contract/deleteContract",
+                data: contract_id.toString()
+            }).done(function (msg) {
+                document.location.href = "/adminPanel"
+            }).fail(function (jqXHR, textStatus) {
+                alert("Request failed: " + textStatus);
+            });
+        });
         $("#contractCurrentOptions").on("click","tr.move-row", function () {
             if ( $(this).hasClass('add-tariff-table-selected')) {
                 $(this).removeClass('add-tariff-table-selected');
@@ -167,6 +211,7 @@
             globalSetNewStatus("contract",newStatus,contract_id);
         });
 
+        // + logic in addContract page - same class items
         $('#switchTariff').on('click',function () {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -401,7 +446,7 @@
                         xhr.setRequestHeader(header, token);
                     },
                     headers: {
-                        'Content-Type': 'text/html; charset=utf-8',
+                        'Content-Type': 'text/html; charset=utf-8'
                     },
                     type: "POST",
                     url: "/adminPanel/addContract/tariffOptions",
@@ -441,6 +486,14 @@
     }
 
     function tariffPanel() {
+        $("#archiveTariff").on("click", function () {
+            newStatus = 'INACTIVE';
+            globalSetNewStatus("tariff",newStatus,tariff_id);
+        });
+        $("#unArchiveTariff").on("click", function () {
+            newStatus = 'ACTIVE';
+            globalSetNewStatus("tariff",newStatus,tariff_id);
+        });
         function tariffTableBehavior(){
             $("#tariffAddedOptions").on("click","tr.move-row", function () {
                 if ( $(this).hasClass('add-tariff-table-selected')) {

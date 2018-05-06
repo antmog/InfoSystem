@@ -24,8 +24,6 @@ public class HibernateConfiguration {
     @Autowired
     private Environment environment;
 
-
-
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -53,7 +51,6 @@ public class HibernateConfiguration {
         properties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
         return properties;        
     }
-
 
     @Bean
     @Autowired

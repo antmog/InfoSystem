@@ -39,6 +39,7 @@
                             </tr>
                             </tbody>
                         </table>
+                        <button id="deleteUser" type="button" class="btn btn-primary btn-sm btn-danger">Delete user</button>
                     </div>
                     <c:choose>
                         <c:when test="${user.status == 'BLOCKED'}">

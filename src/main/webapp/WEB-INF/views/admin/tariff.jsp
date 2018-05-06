@@ -11,6 +11,11 @@
 
 <main class="mt-4">
     <div class="container">
+        <c:if test="${tariff.status == 'INACTIVE'}">
+            <div class="alert alert-warning" role="alert">
+                Tariff is inactive (archived).
+            </div>
+        </c:if>
         <div class="row">
             <div class="col-md-4">
                 <div class="card mb-4">
@@ -26,6 +31,14 @@
                             </tr>
                             </tbody>
                         </table>
+                        <c:choose>
+                            <c:when test="${tariff.status == 'INACTIVE'}">
+                                <button id="unArchiveTariff" type="button" class="btn btn-primary btn-sm btn-success">Unarchive tariff</button>
+                            </c:when>
+                            <c:when test="${tariff.status == 'ACTIVE'}">
+                                <button id="archiveTariff" type="button" class="btn btn-primary btn-sm btn-danger">Archive tariff</button>
+                            </c:when>
+                        </c:choose>
                     </div>
                 </div>
             </div>

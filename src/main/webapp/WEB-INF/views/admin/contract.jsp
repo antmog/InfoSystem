@@ -41,7 +41,7 @@
                             </tr>
                             </tbody>
                         </table>
-                        <button type="button" class="btn btn-primary btn-sm">Delete contract</button>
+                        <button id="deleteContract" type="button" class="btn btn-primary btn-sm btn-danger">Delete contract</button>
                     </div>
                     <c:choose>
                         <c:when test="${contract.status == 'BLOCKED'}">

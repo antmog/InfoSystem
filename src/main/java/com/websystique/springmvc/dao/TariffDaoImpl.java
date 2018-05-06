@@ -29,6 +29,15 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
         return tariff;
     }
 
+    @SuppressWarnings("unchecked")
+    public List<Tariff> findAllActiveTariffs() {
+        List<Tariff> tariff = getSession()
+                .createQuery("SELECT t FROM Tariff t WHERE t.status LIKE :status")
+                .setParameter("status", "ACTIVE")
+                .getResultList();
+        return tariff;
+    }
+
     public void save(Tariff tariff) {
         persist(tariff);
     }

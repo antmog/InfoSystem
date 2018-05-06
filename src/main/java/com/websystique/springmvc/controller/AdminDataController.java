@@ -75,7 +75,8 @@ public class AdminDataController {
     }
 
     @RequestMapping(value = "/adminPanel/addContract/tariffOptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody Set<TariffOption> addContractTariffOptions(@RequestBody String s, BindingResult result) {
+    public @ResponseBody
+    Set<TariffOption> addContractTariffOptions(@RequestBody String s, BindingResult result) {
         Tariff tariff = tariffService.findById(Integer.valueOf(s));
         System.out.println(tariff.getAvailableOptions());
         return tariff.getAvailableOptions();
@@ -102,6 +103,16 @@ public class AdminDataController {
         return "ok";
     }
 
+    @RequestMapping(value = "/adminPanel/tariff/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String setTariffStatus(@RequestBody @Valid NewStatusDto newStatusDto, BindingResult result) {
+        //check if user auth is admin if unblock
+        tariffService.setStatus(newStatusDto);
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
+    }
+
     @RequestMapping(value = "/adminPanel/user/editUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String editUser(@RequestBody @Valid EditUserDto editUserDto, BindingResult result) {
         userService.updateUser(editUserDto);
@@ -114,13 +125,13 @@ public class AdminDataController {
     @RequestMapping(value = "/adminPanel/user/searchUserByNumber", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public @ResponseBody
-    User searchUserByNumber(@Valid @RequestBody  SearchUserByNumber searchUserByNumber, BindingResult result) {
+    User searchUserByNumber(@Valid @RequestBody SearchUserByNumber searchUserByNumber, BindingResult result) {
         return userService.findByPhoneNumber(searchUserByNumber);
     }
 
     @RequestMapping(value = "/adminPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) {
-        //check if user auth is admin if unblock
+        //check if user auth is admin if unblock (protection agaisnt HACKERS!!!11 (direct requests) )
         contractService.switchTariff(switchTariffDto);
         if (result.hasErrors()) {
             return "notok";
@@ -128,13 +139,23 @@ public class AdminDataController {
         return "ok";
     }
 
+    @RequestMapping(value = "/adminPanel/contract/deleteContract", method = RequestMethod.POST)
+    public String deleteContract(@RequestBody @Valid String contract_id, BindingResult result) {
+        contractService.deleteContractById(Integer.parseInt(contract_id));
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
+    }
 
+    @RequestMapping(value = "/adminPanel/user/deleteUser", method = RequestMethod.POST)
+    public String deleteUser(@RequestBody @Valid String user_id, BindingResult result) {
 
-
-
-
-
-
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return userService.deleteUserById(Integer.parseInt(user_id));
+    }
 
 
 }
