@@ -83,6 +83,42 @@
             newStatus = 'INACTIVE';
             globalSetNewStatus("contract",newStatus,contract_id);
         });
+        $("#addContractTariffs").on("click","tr.t-row", function () {
+            if ( !$(this).hasClass('add-tariff-table-selected')) {
+                $(this).addClass('add-tariff-table-selected').siblings().removeClass('add-tariff-table-selected');
+            }
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend:function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8',
+                },
+                type: "POST",
+                url: "/adminPanel/addContract/tariffOptions",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: $(this).find('td:first').html(),
+                dataType: "json"
+            }).done(function( json ) {
+                $("#addContractAvailableOptions tbody tr").remove();
+                var tbl_body = document.createElement("tbody");
+                var odd_even = false;
+                $.each(json, function() {
+                    var tbl_row = tbl_body.insertRow();
+                    tbl_row.className = odd_even ? "odd" : "even";
+                    $.each(this, function(k , v) {
+                        var cell = tbl_row.insertCell();
+                        cell.appendChild(document.createTextNode(v.toString()));
+                    });
+                    odd_even = !odd_even;
+                });
+                $("#addContractAvailableOptions").append(tbl_body);
+            }).fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+        });
     }
 
     function globalSetNewStatus(entity,status,entity_id){

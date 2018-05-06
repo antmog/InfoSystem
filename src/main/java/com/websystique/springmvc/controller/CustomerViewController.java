@@ -1,5 +1,6 @@
 package com.websystique.springmvc.controller;
 
+import com.websystique.springmvc.model.Contract;
 import com.websystique.springmvc.service.ContractService;
 import com.websystique.springmvc.service.TariffOptionService;
 import com.websystique.springmvc.service.TariffService;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -59,6 +61,14 @@ public class CustomerViewController {
         return customerPath+"customerPanel";
     }
 
+
+    @RequestMapping(value = "/customerPanel/contract/{contract_id}")
+    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) {
+        Contract contract = contractService.findById(contract_id);
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("contract", contract);
+        return customerPath+"contract";
+    }
 
     /**
      * This method returns the principal[user-name] of logged-in user.

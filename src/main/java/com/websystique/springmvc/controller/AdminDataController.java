@@ -1,9 +1,6 @@
 package com.websystique.springmvc.controller;
 
-import com.websystique.springmvc.dto.EditUserDto;
-import com.websystique.springmvc.dto.GetTarifAsJsonDtoById;
-import com.websystique.springmvc.dto.NewStatusDto;
-import com.websystique.springmvc.dto.SearchUserByNumber;
+import com.websystique.springmvc.dto.*;
 import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.model.TariffOption;
 import com.websystique.springmvc.model.User;
@@ -59,6 +56,24 @@ public class AdminDataController {
         return "ok";
     }
 
+    @RequestMapping(value = "/adminPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String contractAddOptions(@RequestBody @Valid GetContractAsJsonDtoById getContractAsJsonDtoById, BindingResult result) {
+        contractService.addOptions(getContractAsJsonDtoById);
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
+    }
+
+    @RequestMapping(value = "/adminPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String contractDelOptions(@RequestBody @Valid GetContractAsJsonDtoById getContractAsJsonDtoById, BindingResult result) {
+        contractService.delOptions(getContractAsJsonDtoById);
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
+    }
+
     @RequestMapping(value = "/adminPanel/addContract/tariffOptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody Set<TariffOption> addContractTariffOptions(@RequestBody String s, BindingResult result) {
         Tariff tariff = tariffService.findById(Integer.valueOf(s));
@@ -69,6 +84,7 @@ public class AdminDataController {
 
     @RequestMapping(value = "/adminPanel/contract/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String setUserStatus(@RequestBody @Valid NewStatusDto newStatusDto, BindingResult result) {
+        //check if user auth is admin if unblock
         contractService.setStatus(newStatusDto);
         if (result.hasErrors()) {
             return "notok";
@@ -78,6 +94,7 @@ public class AdminDataController {
 
     @RequestMapping(value = "/adminPanel/user/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String setContractStatus(@RequestBody @Valid NewStatusDto newStatusDto, BindingResult result) {
+        //check if user auth is admin if unblock
         userService.setStatus(newStatusDto);
         if (result.hasErrors()) {
             return "notok";
@@ -99,6 +116,16 @@ public class AdminDataController {
     public @ResponseBody
     User searchUserByNumber(@Valid @RequestBody  SearchUserByNumber searchUserByNumber, BindingResult result) {
         return userService.findByPhoneNumber(searchUserByNumber);
+    }
+
+    @RequestMapping(value = "/adminPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) {
+        //check if user auth is admin if unblock
+        contractService.switchTariff(switchTariffDto);
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return "ok";
     }
 
 

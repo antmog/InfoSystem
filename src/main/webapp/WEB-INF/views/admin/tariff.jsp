@@ -61,6 +61,7 @@
                     <button type="button" class="btn btn-success" id="tariffDelOption">Delete selected option</button>
                 </div>
             </div>
+
             <div class="col-md-4">
                 <div class="card mb-4">
                     <h5 class="card-header">

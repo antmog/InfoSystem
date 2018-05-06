@@ -1,13 +1,17 @@
 package com.websystique.springmvc.service;
 
 import com.websystique.springmvc.dao.ContractDao;
-import com.websystique.springmvc.dto.NewStatusDto;
+import com.websystique.springmvc.dto.*;
 import com.websystique.springmvc.model.Contract;
+import com.websystique.springmvc.model.Tariff;
+import com.websystique.springmvc.model.TariffOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service("contractService")
 @Transactional
@@ -15,6 +19,15 @@ public class ContractServiceImpl implements ContractService {
 
     @Autowired
     private ContractDao dao;
+
+    @Autowired
+    private TariffOptionService tariffOptionService;
+
+    @Autowired
+    private TariffService tariffService;
+
+    @Autowired
+    private UserService userService;
 
     public Contract findById(int id) {
         return dao.findById(id);
@@ -56,6 +69,81 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Contract findByPhoneNumber(String phoneNumber) {
         return dao.findByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public boolean addOptions(GetContractAsJsonDtoById getContractAsJsonDtoById) {
+        List<Integer> optionIdList = new ArrayList<>();
+        for( GetOptionsAsJsonDto getOptionsAsJsonDto : getContractAsJsonDtoById.getGetOptionsAsJsonDtoList()){
+            optionIdList.add(getOptionsAsJsonDto.getId());
+        }
+        Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
+        Contract contract = dao.findById(getContractAsJsonDtoById.getContractId());
+        contractOptionList.addAll(contract.getActiveOptions());
+        contract.setActiveOptions(contractOptionList);
+
+        Double price = contract.getTariff().getPrice();
+        for(TariffOption tariffOption : contractOptionList){
+            price+=tariffOption.getPrice();
+        }
+        contract.setPrice(price);
+        // LOGIC RULES ETC
+        return false;
+    }
+
+    @Override
+    public boolean delOptions(GetContractAsJsonDtoById getContractAsJsonDtoById) {
+        List<Integer> optionIdList = new ArrayList<>();
+        for( GetOptionsAsJsonDto getOptionsAsJsonDto : getContractAsJsonDtoById.getGetOptionsAsJsonDtoList()){
+            optionIdList.add(getOptionsAsJsonDto.getId());
+        }
+        Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
+        Contract contract = dao.findById(getContractAsJsonDtoById.getContractId());
+
+        Set<TariffOption> newTariffOptionList = contract.getActiveOptions();
+        if(newTariffOptionList.removeAll(contractOptionList)){
+            System.out.println("YES");
+        }
+        contract.setActiveOptions(newTariffOptionList);
+        Double price = contract.getTariff().getPrice();
+        for(TariffOption tariffOption : newTariffOptionList){
+            price+=tariffOption.getPrice();
+        }
+        contract.setPrice(price);
+        // LOGIC RULES ETC
+        return false;
+    }
+
+    @Override
+    public void switchTariff(SwitchTariffDto switchTariffDto) {
+        Contract contract = dao.findById(switchTariffDto.getContractId());
+        Tariff newTariff = tariffService.findById(switchTariffDto.getTariffId());
+        Double newPrice = contract.getPrice() - contract.getTariff().getPrice() + newTariff.getPrice();
+        contract.setTariff(newTariff);
+        contract.setPrice(newPrice);
+    }
+
+    @Override
+    public void newContract(ContractUserIdDto contractUserIdDto) {
+        Tariff tariff = tariffService.findById(contractUserIdDto.getContractDto().getTariffId());
+        Double price = tariff.getPrice();
+        Contract contract = new Contract();
+        contract.setPhoneNumber(contractUserIdDto.getContractDto().getPhoneNumber());
+        contract.setUser(userService.findById(contractUserIdDto.getContractDto().getUserId()));
+        contract.setTariff(tariff);
+        List<Integer> optionIdList = new ArrayList<>();
+        for( GetOptionsAsJsonDto getOptionsAsJsonDto : contractUserIdDto.getGetOptionsAsJsonDtoList()){
+            optionIdList.add(getOptionsAsJsonDto.getId());
+        }
+        Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
+        for(TariffOption tariffOption : tariffOptionList){
+            price+=tariffOption.getPrice();
+        }
+        // also add COST here later (cost of adding options)
+        // i mean just take funds from user :D
+        contract.setPrice(price);
+        contract.setActiveOptions(tariffOptionList);
+        dao.save(contract);
     }
 
 }

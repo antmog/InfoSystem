@@ -150,28 +150,9 @@ public class AdminViewController {
         if (result.hasErrors()) {
             return adminPath+"addContract";
         }
-
-        Tariff tariff = tariffService.findById(contractUserIdDto.getContractDto().getTariffId());
-        Double price = tariff.getPrice();
-        Contract contract = new Contract();
-        contract.setPhoneNumber(contractUserIdDto.getContractDto().getPhoneNumber());
-        contract.setUser(userService.findById(contractUserIdDto.getContractDto().getUserId()));
-        contract.setTariff(tariff);
-        List<Integer> optionIdList = new ArrayList<>();
-        for( GetOptionsAsJsonDto getOptionsAsJsonDto : contractUserIdDto.getGetOptionsAsJsonDtoList()){
-            optionIdList.add(getOptionsAsJsonDto.getId());
-        }
-        Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        for(TariffOption tariffOption : tariffOptionList){
-            price+=tariffOption.getPrice();
-        }
-        // also add COST here later (cost of adding options)
-        // i mean just take funds from user :D
-        contract.setPrice(price);
-        contract.setActiveOptions(tariffOptionList);
-        contractService.saveContract(contract);
+        contractService.newContract(contractUserIdDto);
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("success", "Contract " + contract.getId() + "registered successfully");
+        model.addAttribute("success", "Contract registered successfully");
         //return "success";
         return adminPath+"addSuccess";
     }
@@ -210,6 +191,8 @@ public class AdminViewController {
     @RequestMapping(value = "/adminPanel/contract/{contract_id}")
     public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) {
         Contract contract = contractService.findById(contract_id);
+        List<Tariff> tariffs = tariffService.findAllTariffs();
+        model.addAttribute("tariffs", tariffs);
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("contract", contract);
         return adminPath+"contract";

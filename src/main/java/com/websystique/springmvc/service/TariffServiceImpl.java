@@ -84,7 +84,7 @@ public class TariffServiceImpl implements TariffService {
         Tariff tariff = dao.findById(getTarifAsJsonDtoById.getTariffId());
         tariffOptionList.addAll(tariff.getAvailableOptions());
         tariff.setAvailableOptions(tariffOptionList);
-        dao.save(tariff);
+
 
         // LOGIC RULES ETC
         return false;
@@ -104,7 +104,7 @@ public class TariffServiceImpl implements TariffService {
             System.out.println("YES");
         }
         tariff.setAvailableOptions(newTariffOptionList);
-        dao.save(tariff);
+
         // LOGIC RULES ETC
         return false;
     }

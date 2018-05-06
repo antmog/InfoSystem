@@ -49,6 +49,8 @@
                             </tr>
                             </tbody>
                         </table>
+                        <button type="button" class="btn btn-primary btn-sm">Change first/last name</button>
+                        <button type="button" class="btn btn-primary btn-sm">Change password</button>
                     </div>
                     <c:choose>
                         <c:when test="${user.status == 'INACTIVE'}">
