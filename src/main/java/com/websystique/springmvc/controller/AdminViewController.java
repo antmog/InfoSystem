@@ -62,8 +62,10 @@ public class AdminViewController {
     public String adminPanel(ModelMap model) {
         List<User> users = userService.findFirstUsers();
         List<Tariff> tariffs =tariffService.findFirstTariffs();
+        List<TariffOption> options = tariffOptionService.findFirstTariffOptions();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("users",users);
+        model.addAttribute("options",options);
         model.addAttribute("tariffs",tariffs);
         return adminPath+"adminPanel";
     }
@@ -90,6 +92,14 @@ public class AdminViewController {
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffs",tariffs);
         return adminPath+"allTariffs";
+    }
+
+    @RequestMapping("/adminPanel/allOptions")
+    public String adminPanelAllOptions(ModelMap model) {
+        List<TariffOption> options = tariffOptionService.findAllTariffOptions();
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("options",options);
+        return adminPath+"allOptions";
     }
 
 
@@ -125,7 +135,7 @@ public class AdminViewController {
     public String addContract(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         ContractUserIdDto contractUserIdDto = new ContractUserIdDto();
-        List<Tariff> tariffs = tariffService.findAllTariffs();
+        List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("tariffs",tariffs);
         model.addAttribute("contractUserIdDto", contractUserIdDto);
         model.addAttribute("edit", false);
@@ -136,12 +146,39 @@ public class AdminViewController {
     public String addContractToUser(@PathVariable(value = "user_id") Integer user_id,ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         ContractUserIdDto contractUserIdDto = new ContractUserIdDto();
-        List<Tariff> tariffs = tariffService.findAllTariffs();
+        List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("user_id",user_id);
         model.addAttribute("tariffs",tariffs);
         model.addAttribute("contractUserIdDto", contractUserIdDto);
         model.addAttribute("edit", false);
         return adminPath+"addContract";
+    }
+
+
+    @RequestMapping(value = "/adminPanel/addOption", method = RequestMethod.GET)
+    public String addOption(ModelMap model) {
+        model.addAttribute("loggedinuser", getPrincipal());
+        TariffOption tariffOption = new TariffOption();
+        model.addAttribute("tariffOption", tariffOption);
+        model.addAttribute("edit", false);
+        return adminPath+"addOption";
+    }
+
+
+    @RequestMapping(value = "/adminPanel/addOption", method = RequestMethod.POST)
+    public String saveOption( @Valid TariffOption tariffOption, BindingResult result,
+                            ModelMap model) {
+
+        if (result.hasErrors()) {
+            return adminPath+"addOption";
+        }
+
+        tariffOptionService.saveTariffOption(tariffOption);
+
+        model.addAttribute("success", "User " + tariffOption.getName() + " registered successfully");
+        model.addAttribute("loggedinuser", getPrincipal());
+        //return "success";
+        return adminPath+"addSuccess";
     }
 
 //    @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"},consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -181,7 +218,7 @@ public class AdminViewController {
     @RequestMapping(value = "/adminPanel/contract/{contract_id}")
     public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) {
         Contract contract = contractService.findById(contract_id);
-        List<Tariff> tariffs = tariffService.findAllTariffs();
+        List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("tariffs", tariffs);
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("contract", contract);
@@ -197,6 +234,14 @@ public class AdminViewController {
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariff", tariff);
         return adminPath+"tariff";
+    }
+
+    @RequestMapping(value = "/adminPanel/option/{option_id}")
+    public String option(@PathVariable(value = "option_id") Integer option_id, ModelMap model) {
+        TariffOption tariffOption = tariffOptionService.findById(option_id);
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("tariffOption", tariffOption);
+        return adminPath+"option";
     }
 
 

@@ -116,9 +116,45 @@
                 </div>
             </div>
 
+            <div class="card mb-4">
+                <h5 class="card-header">
+                    <div class="row">
+                        <div class="col-auto mr-auto">
+                            Options list
+                        </div>
+                    </div>
+                </h5>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <table class="table table-hover options-table">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>name</th>
+                                    <th>price</th>
+                                    <th>costofadd</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach items="${options}" var="option">
+                                    <tr class="option-row">
+                                        <td>${option.id}</td>
+                                        <td>${option.name}</td>
+                                        <td>${option.price}</td>
+                                        <td>${option.costOfAdd}</td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </li>
+                    </ul>
+                </div>
+                <a href="/adminPanel/allOptions" class="card-link">All Options</a>
+                <button type="button" class="btn btn-success" id="addOptionButton">Add option</button>
+            </div>
         </div>
     </div>
-
 </main>
 <jsp:include page="../footer.jsp"/>
 </body>

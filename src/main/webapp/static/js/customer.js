@@ -51,7 +51,7 @@
                             'Accept': 'text/html; charset=utf-8'
                         },
                         type: "POST",
-                        url: "/adminPanel/user/editUser",
+                        url: "/user/editUser",
                         // The key needs to match your method's input parameter (case-sensitive).
                         data: JSON.stringify({ dataInstance:editing.find("td:first").html() , value : value, userId: user_id })
                     }).done(function( msg ) {
@@ -74,6 +74,113 @@
     }
 
     function contractPanel(){
+        $("#contractCurrentOptions").on("click","tr.move-row", function () {
+            if ( $(this).hasClass('add-tariff-table-selected')) {
+                $(this).removeClass('add-tariff-table-selected');
+            } else {
+                $(this).addClass('add-tariff-table-selected');
+            }
+        });
+        $("#contractAvailableOptions").on("click","tr.move-row", function () {
+            if ( $(this).hasClass('add-tariff-table-selected')) {
+                $(this).removeClass('add-tariff-table-selected');
+            } else {
+                $(this).addClass('add-tariff-table-selected');
+            }
+        });
+
+        $('#switchTariff').on('click',function () {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend:function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/customerPanel/contract/switchTariff",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({tariffId:$('#addContractTariffs tr.add-tariff-table-selected').find('td:first').html() , contractId : contract_id})
+            }).done(function( msg ) {
+                if (msg === "ok") {
+                    alert(msg);
+                }
+            }).fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+        });
+
+        $('#contractAddOption').on('click', function () {
+            // OPTIONS RULES
+            var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
+            var table = $('#parseTable');
+            for (var i = 0; i < tr.length; i++) {
+                table.append(tr[i]);
+            }
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend:function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/customerPanel/contract/addOptions",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), contractId : contract_id})
+            }).done(function( msg ) {
+                if (msg === "ok") {
+                    var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
+                    tr.removeClass('add-tariff-table-selected');
+                    $("#contractCurrentOptions").append(tr);
+                }
+            }).fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+            $('#parseTable tr.move-row').remove();
+        });
+
+        $('#contractDelOption').on('click', function () {
+            // OPTIONS RULES
+
+            var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").clone();
+            var table = $('#parseTable');
+            for (var i = 0; i < tr.length; i++) {
+                table.append(tr[i]);
+            }
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend:function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/customerPanel/contract/delOptions",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), contractId : contract_id})
+            }).done(function( msg ) {
+                if (msg === "ok") {
+                    var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove().clone();
+                    tr.removeClass('add-tariff-table-selected');
+                    $("#contractAvailableOptions").append(tr);
+                }
+            }).fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+            $('#parseTable tr.move-row').remove();
+        });
+
+
         var newStatus;
         $('#unBlockContractButton').click(function () {
             newStatus = 'ACTIVE';
@@ -97,7 +204,7 @@
                     'Content-Type': 'text/html; charset=utf-8',
                 },
                 type: "POST",
-                url: "/adminPanel/addContract/tariffOptions",
+                url: "/tariffOptions",
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: $(this).find('td:first').html(),
                 dataType: "json"
@@ -133,7 +240,7 @@
                 'Accept': 'text/html; charset=utf-8'
             },
             type: "POST",
-            url: "/adminPanel/" +entity+ "/setStatus",
+            url: "/" +entity+ "/setStatus",
             // The key needs to match your method's input parameter (case-sensitive).
             data: JSON.stringify({ entityId : entity_id, entityStatus : status})
         }).done(function( msg ) {

@@ -17,5 +17,8 @@ public interface TariffOptionService {
 
     Set<TariffOption> selectListByIdList(List<Integer> optionIdList);
 
-    void deleteTariffOptionById(int id);
+    String deleteTariffOptionById(int id);
+
+    List<TariffOption> findFirstTariffOptions();
+
 }

@@ -9,6 +9,9 @@
     $(".tariffs-table").on("click","tr.tariff-row", function () {
         document.location.href = "/adminPanel/tariff/"+$(this).find("td:first").html();
     });
+    $(".options-table").on("click","tr.option-row", function () {
+        document.location.href = "/adminPanel/option/"+$(this).find("td:first").html();
+    });
 
 
     function adminPanel(){
@@ -56,6 +59,9 @@
         });
         $('#addTariffButton').click(function () {
             document.location.href = "/adminPanel/addTariff"
+        });
+        $('#addOptionButton').click(function () {
+            document.location.href = "/adminPanel/addOption"
         });
     }
 
@@ -139,7 +145,7 @@
                             'Accept': 'text/html; charset=utf-8'
                         },
                         type: "POST",
-                        url: "/adminPanel/user/editUser",
+                        url: "/user/editUser",
                         // The key needs to match your method's input parameter (case-sensitive).
                         data: JSON.stringify({ dataInstance:editing.find("td:first").html() , value : value, userId: user_id })
                     }).done(function( msg ) {
@@ -259,7 +265,7 @@
                 data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), contractId : contract_id})
             }).done(function( msg ) {
                 if (msg === "ok") {
-                    var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").remove().clone();
+                    var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
                     tr.removeClass('add-tariff-table-selected');
                     $("#contractCurrentOptions").append(tr);
                 }
@@ -316,7 +322,7 @@
                 'Accept': 'text/html; charset=utf-8'
             },
             type: "POST",
-            url: "/adminPanel/" +entity+ "/setStatus",
+            url: "/" +entity+ "/setStatus",
             // The key needs to match your method's input parameter (case-sensitive).
             data: JSON.stringify({ entityId : entity_id, entityStatus : status})
         }).done(function( msg ) {
@@ -459,7 +465,7 @@
                         'Content-Type': 'text/html; charset=utf-8'
                     },
                     type: "POST",
-                    url: "/adminPanel/addContract/tariffOptions",
+                    url: "/tariffOptions",
                     // The key needs to match your method's input parameter (case-sensitive).
                     data: $(this).find('td:first').html(),
                     dataType: "json"
@@ -615,7 +621,34 @@
         tariffTableBehavior();
     }
 
+    function optionPanel(){
+        $("#deleteOption").on("click", function () {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/adminPanel/option/deleteOption",
+                data: option_id.toString()
+            }).done(function (msg) {
+                if(msg==="ok"){
+                    document.location.href = "/adminPanel"
+                }else{
+                    alert("Can't delete tariff. It's still used in some contracts.");
+                }
+            }).fail(function (jqXHR, textStatus) {
+                alert("Request failed: " + textStatus);
+            });
+        });
+    }
 
+    optionPanel();
     adminPanel();
     userPanel();
     contractPanel();

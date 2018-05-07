@@ -207,7 +207,7 @@
     </table>
 </main>
 <script>
-    var contract_id = ${contract.id}
+    var contract_id = ${contract.id};
 </script>
 <jsp:include page="../footer.jsp"/>
 </body>

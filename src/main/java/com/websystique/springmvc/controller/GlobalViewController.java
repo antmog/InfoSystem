@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/")
 @SessionAttributes("roles")
-public class CommonViewController {
+public class GlobalViewController {
 
     @Autowired
     PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;

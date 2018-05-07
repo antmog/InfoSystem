@@ -1,6 +1,7 @@
 package com.websystique.springmvc.controller;
 
 import com.websystique.springmvc.model.Contract;
+import com.websystique.springmvc.model.Tariff;
 import com.websystique.springmvc.service.ContractService;
 import com.websystique.springmvc.service.TariffOptionService;
 import com.websystique.springmvc.service.TariffService;
@@ -18,6 +19,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -65,8 +68,10 @@ public class CustomerViewController {
     @RequestMapping(value = "/customerPanel/contract/{contract_id}")
     public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) {
         Contract contract = contractService.findById(contract_id);
+        List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("contract", contract);
+        model.addAttribute("tariffs", tariffs);
         return customerPath+"contract";
     }
 

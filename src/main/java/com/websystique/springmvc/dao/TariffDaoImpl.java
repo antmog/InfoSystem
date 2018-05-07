@@ -1,6 +1,7 @@
 package com.websystique.springmvc.dao;
 
 import com.websystique.springmvc.dto.GetOptionsAsJsonDto;
+import com.websystique.springmvc.model.Status;
 import com.websystique.springmvc.model.Tariff;
 
 import org.hibernate.Criteria;
@@ -33,7 +34,7 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
     public List<Tariff> findAllActiveTariffs() {
         List<Tariff> tariff = getSession()
                 .createQuery("SELECT t FROM Tariff t WHERE t.status LIKE :status")
-                .setParameter("status", "ACTIVE")
+                .setParameter("status", Status.ACTIVE)
                 .getResultList();
         return tariff;
     }

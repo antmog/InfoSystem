@@ -26,10 +26,16 @@ public interface ContractService {
     Contract findByPhoneNumber(String phoneNumber);
 
     boolean addOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
+    boolean adminAddOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
+    boolean customerAddOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
 
     boolean delOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
+    boolean adminDelOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
+    boolean customerDelOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
 
     void switchTariff(SwitchTariffDto switchTariffDto);
+    void adminSwitchTariff(SwitchTariffDto switchTariffDto);
+    void customerSwitchTariff(SwitchTariffDto switchTariffDto);
 
     void newContract(ContractUserIdDto contractUserIdDto);
 }
