@@ -4,16 +4,16 @@ import com.infosystem.springmvc.model.Status;
 
 import java.io.Serializable;
 
-public class NewStatusDto implements Serializable {
+public class SetNewStatusDto implements Serializable {
     private int entityId;
     private Status entityStatus;
 
-    public NewStatusDto(int entityId, Status entityStatus) {
+    public SetNewStatusDto(int entityId, Status entityStatus) {
         this.entityId = entityId;
         this.entityStatus = entityStatus;
     }
 
-    public NewStatusDto() {
+    public SetNewStatusDto() {
     }
 
     public int getEntityId() {

@@ -20,33 +20,102 @@ import javax.validation.Valid;
 @RequestMapping("/")
 public class AdminDataController {
 
-    @Autowired
-    UserService userService;
+    private UserService userService;
+    private ContractService contractService;
+    private TariffOptionService tariffOptionService;
+    private MessageSource messageSource;
+    private TariffService tariffService;
 
     @Autowired
-    ContractService contractService;
+    public AdminDataController(UserService userService, ContractService contractService,
+                               TariffOptionService tariffOptionService, MessageSource messageSource,
+                               TariffService tariffService) {
+        this.userService = userService;
+        this.contractService = contractService;
+        this.tariffOptionService = tariffOptionService;
+        this.messageSource = messageSource;
+        this.tariffService = tariffService;
+    }
 
-    @Autowired
-    TariffOptionService tariffOptionService;
+    /**
+     * This method is called on submit of adding contract from allContracts page and user page.
+     */
+    @RequestMapping(value = {"/adminPanel/addContract", "/adminPanel/addContractToUser/{user_id}"}, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            method = RequestMethod.POST)
+    public String saveContract(@RequestBody @Valid AddContractDto addContractDto, BindingResult result) {
+        //+check unique
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        contractService.newContract(addContractDto);
+        return "ok";
+    }
 
-    @Autowired
-    MessageSource messageSource;
+    /**
+     * This method is called on adding tariff from adminPanel and allTariffs pages.
+     */
+    @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String saveTariff(@RequestBody @Valid AddTariffDto addTariffDto, BindingResult result) {
 
-    @Autowired
-    TariffService tariffService;
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        tariffService.saveTariff(addTariffDto);
+        return "ok";
+    }
 
+    /**
+     * This method is called while searching user by number from adminPanel and allUsers pages.
+     */
+    @RequestMapping(value = "/adminPanel/user/searchUserByNumber", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public @ResponseBody
+    User searchUserByNumber(@Valid @RequestBody SearchByNumber searchByNumber, BindingResult result) {
+        return userService.findByPhoneNumber(searchByNumber);
+    }
+
+    /**
+     * This method is called on deleting user from user page.
+     */
+    @RequestMapping(value = "/adminPanel/user/deleteUser", method = RequestMethod.POST)
+    public String deleteUser(@RequestBody @Valid String user_id, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return userService.deleteUserById(Integer.parseInt(user_id));
+    }
+
+    /**
+     * This method is called on deleting tariff from tariff page.
+     */
+    @RequestMapping(value = "/adminPanel/tariff/deleteTariff", method = RequestMethod.POST)
+    public String deleteTariff(@RequestBody @Valid String tariff_id, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "notok";
+        }
+        return tariffService.deleteTariffById(Integer.parseInt(tariff_id));
+    }
+
+    /**
+     * This method is adding selected options to the tariff.
+     */
     @RequestMapping(value = "/adminPanel/tariff/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String tariffAddOptions(@RequestBody @Valid GetTarifAsJsonDtoById getTarifAsJsonDtoById, BindingResult result) {
-        tariffService.addOptions(getTarifAsJsonDtoById);
+    public String tariffAddOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) {
+        tariffService.addOptions(editTariffDto);
         if (result.hasErrors()) {
             return "notok";
         }
         return "ok";
     }
 
+    /**
+     * This method is deleting selected options from the tariff.
+     */
     @RequestMapping(value = "/adminPanel/tariff/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String tariffDelOptions(@RequestBody @Valid GetTarifAsJsonDtoById getTarifAsJsonDtoById, BindingResult result) {
-        tariffService.delOptions(getTarifAsJsonDtoById);
+    public String tariffDelOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) {
+        tariffService.delOptions(editTariffDto);
         if (result.hasErrors()) {
             return "notok";
         }
@@ -54,8 +123,8 @@ public class AdminDataController {
     }
 
     @RequestMapping(value = "/adminPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractAddOptions(@RequestBody @Valid GetContractAsJsonDtoById getContractAsJsonDtoById, BindingResult result) {
-        contractService.adminAddOptions(getContractAsJsonDtoById);
+    public String contractAddOptions(@RequestBody @Valid ContractOptionsDto contractOptionsDto, BindingResult result) {
+        contractService.adminAddOptions(contractOptionsDto);
         if (result.hasErrors()) {
             return "notok";
         }
@@ -63,8 +132,8 @@ public class AdminDataController {
     }
 
     @RequestMapping(value = "/adminPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractDelOptions(@RequestBody @Valid GetContractAsJsonDtoById getContractAsJsonDtoById, BindingResult result) {
-        contractService.adminDelOptions(getContractAsJsonDtoById);
+    public String contractDelOptions(@RequestBody @Valid ContractOptionsDto contractOptionsDto, BindingResult result) {
+        contractService.adminDelOptions(contractOptionsDto);
         if (result.hasErrors()) {
             return "notok";
         }
@@ -73,15 +142,6 @@ public class AdminDataController {
 
 
 
-
-
-
-    @RequestMapping(value = "/adminPanel/user/searchUserByNumber", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public @ResponseBody
-    User searchUserByNumber(@Valid @RequestBody SearchUserByNumber searchUserByNumber, BindingResult result) {
-        return userService.findByPhoneNumber(searchUserByNumber);
-    }
 
     @RequestMapping(value = "/adminPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) {
@@ -102,23 +162,7 @@ public class AdminDataController {
         return "ok";
     }
 
-    @RequestMapping(value = "/adminPanel/user/deleteUser", method = RequestMethod.POST)
-    public String deleteUser(@RequestBody @Valid String user_id, BindingResult result) {
 
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        return userService.deleteUserById(Integer.parseInt(user_id));
-    }
-
-    @RequestMapping(value = "/adminPanel/user/deleteTariff", method = RequestMethod.POST)
-    public String deleteTariff(@RequestBody @Valid String tariff_id, BindingResult result) {
-
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        return tariffService.deleteTariffById(Integer.parseInt(tariff_id));
-    }
 
     @RequestMapping(value = "/adminPanel/option/deleteOption", method = RequestMethod.POST)
     public String deleteOption(@RequestBody @Valid String option_id, BindingResult result) {
@@ -129,27 +173,10 @@ public class AdminDataController {
         return tariffOptionService.deleteTariffOptionById(Integer.parseInt(option_id));
     }
 
-    @RequestMapping(value = {"/adminPanel/addContract","/adminPanel/addContractToUser/{user_id}"},consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            method = RequestMethod.POST)
-    public String saveContract(@RequestBody @Valid  ContractUserIdDto contractUserIdDto, BindingResult result) {
-        //+check unique
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        contractService.newContract(contractUserIdDto);
-        return "ok";
-    }
 
 
-    @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String saveTariff(@RequestBody @Valid GetTarifAsJsonDto getTarifAsJsonDto, BindingResult result) {
 
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        tariffService.saveTariff(getTarifAsJsonDto);
-        return "ok";
-    }
+
 
 }
 

@@ -522,7 +522,7 @@
                     'Accept': 'text/html; charset=utf-8'
                 },
                 type: "POST",
-                url: "/adminPanel/user/deleteTariff",
+                url: "/adminPanel/tariff/deleteTariff",
                 data: tariff_id.toString()
             }).done(function (msg) {
                 if(msg==="ok"){

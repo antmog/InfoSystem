@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.infosystem.springmvc.dto.EditUserDto;
-import com.infosystem.springmvc.dto.NewStatusDto;
-import com.infosystem.springmvc.dto.SearchUserByNumber;
+import com.infosystem.springmvc.dto.SearchByNumber;
+import com.infosystem.springmvc.dto.SetNewStatusDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -81,8 +81,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void setStatus(NewStatusDto newStatusDto) {
-		dao.findById(newStatusDto.getEntityId()).setStatus(newStatusDto.getEntityStatus());
+	public void setStatus(SetNewStatusDto setNewStatusDto) {
+		dao.findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
 	}
 
 	@Override
@@ -104,8 +104,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User findByPhoneNumber(SearchUserByNumber searchUserByNumber) {
-		return contractService.findByPhoneNumber(searchUserByNumber.getPhoneNumber()).getUser();
+	public User findByPhoneNumber(SearchByNumber searchByNumber) {
+		return contractService.findByPhoneNumber(searchByNumber.getPhoneNumber()).getUser();
 	}
 
 }

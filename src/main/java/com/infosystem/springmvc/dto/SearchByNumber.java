@@ -1,13 +1,13 @@
 package com.infosystem.springmvc.dto;
 
-public class SearchUserByNumber {
+public class SearchByNumber {
     private String phoneNumber;
 
-    public SearchUserByNumber(String phoneNumber) {
+    public SearchByNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public SearchUserByNumber() {
+    public SearchByNumber() {
     }
 
     public String getPhoneNumber() {

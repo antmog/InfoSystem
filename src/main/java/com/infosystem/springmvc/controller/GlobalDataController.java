@@ -1,7 +1,7 @@
 package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.EditUserDto;
-import com.infosystem.springmvc.dto.NewStatusDto;
+import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
 import com.infosystem.springmvc.service.ContractService;
@@ -47,9 +47,9 @@ public class GlobalDataController {
 
 
     @RequestMapping(value = "/contract/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String setUserStatus(@RequestBody @Valid NewStatusDto newStatusDto, BindingResult result) {
+    public String setUserStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) {
         //check if user auth is admin if unblock
-        contractService.setStatus(newStatusDto);
+        contractService.setStatus(setNewStatusDto);
         if (result.hasErrors()) {
             return "notok";
         }
@@ -57,9 +57,9 @@ public class GlobalDataController {
     }
 
     @RequestMapping(value = "/user/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String setContractStatus(@RequestBody @Valid NewStatusDto newStatusDto, BindingResult result) {
+    public String setContractStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) {
         //check if user auth is admin if unblock
-        userService.setStatus(newStatusDto);
+        userService.setStatus(setNewStatusDto);
         if (result.hasErrors()) {
             return "notok";
         }
@@ -67,9 +67,9 @@ public class GlobalDataController {
     }
 
     @RequestMapping(value = "/tariff/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String setTariffStatus(@RequestBody @Valid NewStatusDto newStatusDto, BindingResult result) {
+    public String setTariffStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) {
         //check if user auth is admin if unblock
-        tariffService.setStatus(newStatusDto);
+        tariffService.setStatus(setNewStatusDto);
         if (result.hasErrors()) {
             return "notok";
         }

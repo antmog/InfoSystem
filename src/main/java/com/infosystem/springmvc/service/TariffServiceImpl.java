@@ -1,10 +1,10 @@
 package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.TariffDao;
-import com.infosystem.springmvc.dto.GetOptionsAsJsonDto;
-import com.infosystem.springmvc.dto.GetTarifAsJsonDto;
-import com.infosystem.springmvc.dto.GetTarifAsJsonDtoById;
-import com.infosystem.springmvc.dto.NewStatusDto;
+import com.infosystem.springmvc.dto.TariffOptionDto;
+import com.infosystem.springmvc.dto.AddTariffDto;
+import com.infosystem.springmvc.dto.EditTariffDto;
+import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.model.Contract;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
@@ -39,17 +39,17 @@ public class TariffServiceImpl implements TariffService {
         dao.save(tariff);
     }
 
-    public void setStatus(NewStatusDto newStatusDto) {
-        dao.findById(newStatusDto.getEntityId()).setStatus(newStatusDto.getEntityStatus());
+    public void setStatus(SetNewStatusDto setNewStatusDto) {
+        dao.findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
     }
 
-    public void saveTariff(GetTarifAsJsonDto getTarifAsJsonDto) {
+    public void saveTariff(AddTariffDto addTariffDto) {
         Tariff newTariff = new Tariff();
-        newTariff.setName(getTarifAsJsonDto.getTariffDto().getName());
-        newTariff.setPrice(getTarifAsJsonDto.getTariffDto().getPrice());
+        newTariff.setName(addTariffDto.getTariffDto().getName());
+        newTariff.setPrice(addTariffDto.getTariffDto().getPrice());
         List<Integer> optionIdList = new ArrayList<>();
-        for (GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDto.getGetOptionsAsJsonDtoList()) {
-            optionIdList.add(getOptionsAsJsonDto.getId());
+        for (TariffOptionDto tariffOptionDto : addTariffDto.getTariffOptionDtoList()) {
+            optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
         newTariff.setAvailableOptions(tariffOptionList);
@@ -95,13 +95,13 @@ public class TariffServiceImpl implements TariffService {
     }
 
     @Override
-    public boolean addOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById) {
+    public boolean addOptions(EditTariffDto editTariffDto) {
         List<Integer> optionIdList = new ArrayList<>();
-        for (GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDtoById.getGetOptionsAsJsonDtoList()) {
-            optionIdList.add(getOptionsAsJsonDto.getId());
+        for (TariffOptionDto tariffOptionDto : editTariffDto.getTariffOptionDtoList()) {
+            optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        Tariff tariff = dao.findById(getTarifAsJsonDtoById.getTariffId());
+        Tariff tariff = dao.findById(editTariffDto.getTariffId());
         tariffOptionList.addAll(tariff.getAvailableOptions());
         tariff.setAvailableOptions(tariffOptionList);
 
@@ -111,13 +111,13 @@ public class TariffServiceImpl implements TariffService {
     }
 
     @Override
-    public boolean delOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById) {
+    public boolean delOptions(EditTariffDto editTariffDto) {
         List<Integer> optionIdList = new ArrayList<>();
-        for (GetOptionsAsJsonDto getOptionsAsJsonDto : getTarifAsJsonDtoById.getGetOptionsAsJsonDtoList()) {
-            optionIdList.add(getOptionsAsJsonDto.getId());
+        for (TariffOptionDto tariffOptionDto : editTariffDto.getTariffOptionDtoList()) {
+            optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        Tariff tariff = dao.findById(getTarifAsJsonDtoById.getTariffId());
+        Tariff tariff = dao.findById(editTariffDto.getTariffId());
 
         Set<TariffOption> newTariffOptionList = tariff.getAvailableOptions();
         if (newTariffOptionList.removeAll(tariffOptionList)) {

@@ -1,8 +1,8 @@
 package com.infosystem.springmvc.service;
 
-import com.infosystem.springmvc.dto.GetTarifAsJsonDto;
-import com.infosystem.springmvc.dto.GetTarifAsJsonDtoById;
-import com.infosystem.springmvc.dto.NewStatusDto;
+import com.infosystem.springmvc.dto.AddTariffDto;
+import com.infosystem.springmvc.dto.EditTariffDto;
+import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.model.Tariff;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public interface TariffService {
 
     void saveTariff(Tariff tariff);
 
-    void saveTariff(GetTarifAsJsonDto tariff);
+    void saveTariff(AddTariffDto tariff);
 
     void updateTariff(Tariff tariff);
 
@@ -23,11 +23,11 @@ public interface TariffService {
 
     String deleteTariffById(int id);
 
-    void setStatus(NewStatusDto newStatusDto);
+    void setStatus(SetNewStatusDto setNewStatusDto);
 
     List<Tariff> findFirstTariffs();
 
-    boolean addOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById);
+    boolean addOptions(EditTariffDto editTariffDto);
 
-    boolean delOptions(GetTarifAsJsonDtoById getTarifAsJsonDtoById);
+    boolean delOptions(EditTariffDto editTariffDto);
 }

@@ -16,7 +16,18 @@
             <div class="col-md-8">
                 <div class="card mb-4">
                     <h5 class="card-header">
-                        Users list
+                        <div class="row">
+                            <div class="col-auto mr-auto">
+                                Users list
+                            </div>
+                            <div class="col-auto">
+                                <div class="input-group">
+                                    Search by number:
+                                    <input class="searchUserByNumberInput" type="text" height="3">
+                                    <i class="fas fa-search search-icon searchByNumber"></i>
+                                </div>
+                            </div>
+                        </div>
                     </h5>
                     <ul class="list-group list-group-flush">
 
@@ -58,7 +69,7 @@
 
 
                     </ul>
-                    <button type="button" class="btn btn-success" id = "addUserButton">Add user</button>
+                    <button type="button" class="btn btn-success" id="addUserButton">Add user</button>
                 </div>
             </div>
 

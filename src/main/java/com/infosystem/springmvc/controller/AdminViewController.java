@@ -1,7 +1,7 @@
 package com.infosystem.springmvc.controller;
 
 
-import com.infosystem.springmvc.dto.ContractUserIdDto;
+import com.infosystem.springmvc.dto.AddContractDto;
 import com.infosystem.springmvc.model.*;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
@@ -127,10 +127,10 @@ public class AdminViewController {
     @RequestMapping(value ="/adminPanel/addContract", method = RequestMethod.GET)
     public String addContract(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
-        ContractUserIdDto contractUserIdDto = new ContractUserIdDto();
+        AddContractDto addContractDto = new AddContractDto();
         List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("tariffs",tariffs);
-        model.addAttribute("contractUserIdDto", contractUserIdDto);
+        model.addAttribute("contractUserIdDto", addContractDto);
         model.addAttribute("edit", false);
         return adminPath+"addContract";
     }
@@ -138,11 +138,11 @@ public class AdminViewController {
     @RequestMapping(value ="/adminPanel/addContractToUser/{user_id}", method = RequestMethod.GET)
     public String addContractToUser(@PathVariable(value = "user_id") Integer user_id,ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
-        ContractUserIdDto contractUserIdDto = new ContractUserIdDto();
+        AddContractDto addContractDto = new AddContractDto();
         List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("user_id",user_id);
         model.addAttribute("tariffs",tariffs);
-        model.addAttribute("contractUserIdDto", contractUserIdDto);
+        model.addAttribute("contractUserIdDto", addContractDto);
         model.addAttribute("edit", false);
         return adminPath+"addContract";
     }

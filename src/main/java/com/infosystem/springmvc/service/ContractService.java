@@ -1,8 +1,8 @@
 package com.infosystem.springmvc.service;
 
-import com.infosystem.springmvc.dto.ContractUserIdDto;
-import com.infosystem.springmvc.dto.GetContractAsJsonDtoById;
-import com.infosystem.springmvc.dto.NewStatusDto;
+import com.infosystem.springmvc.dto.AddContractDto;
+import com.infosystem.springmvc.dto.ContractOptionsDto;
+import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.dto.SwitchTariffDto;
 import com.infosystem.springmvc.model.Contract;
 
@@ -21,21 +21,21 @@ public interface ContractService {
 
     void deleteContractById(int id);
 
-    void setStatus(NewStatusDto newStatusDto);
+    void setStatus(SetNewStatusDto setNewStatusDto);
 
     Contract findByPhoneNumber(String phoneNumber);
 
-    boolean addOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
-    boolean adminAddOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
-    boolean customerAddOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
+    boolean addOptions(ContractOptionsDto contractOptionsDto);
+    boolean adminAddOptions(ContractOptionsDto contractOptionsDto);
+    boolean customerAddOptions(ContractOptionsDto contractOptionsDto);
 
-    boolean delOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
-    boolean adminDelOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
-    boolean customerDelOptions(GetContractAsJsonDtoById getContractAsJsonDtoById);
+    boolean delOptions(ContractOptionsDto contractOptionsDto);
+    boolean adminDelOptions(ContractOptionsDto contractOptionsDto);
+    boolean customerDelOptions(ContractOptionsDto contractOptionsDto);
 
     void switchTariff(SwitchTariffDto switchTariffDto);
     void adminSwitchTariff(SwitchTariffDto switchTariffDto);
     void customerSwitchTariff(SwitchTariffDto switchTariffDto);
 
-    void newContract(ContractUserIdDto contractUserIdDto);
+    void newContract(AddContractDto addContractDto);
 }

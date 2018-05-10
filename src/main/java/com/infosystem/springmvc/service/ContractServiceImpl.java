@@ -63,8 +63,8 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void setStatus(NewStatusDto newStatusDto) {
-        dao.findById(newStatusDto.getEntityId()).setStatus(newStatusDto.getEntityStatus());
+    public void setStatus(SetNewStatusDto setNewStatusDto) {
+        dao.findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
     }
 
     @Override
@@ -73,13 +73,13 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public boolean addOptions(GetContractAsJsonDtoById getContractAsJsonDtoById) {
+    public boolean addOptions(ContractOptionsDto contractOptionsDto) {
         List<Integer> optionIdList = new ArrayList<>();
-        for( GetOptionsAsJsonDto getOptionsAsJsonDto : getContractAsJsonDtoById.getGetOptionsAsJsonDtoList()){
-            optionIdList.add(getOptionsAsJsonDto.getId());
+        for( TariffOptionDto tariffOptionDto : contractOptionsDto.getTariffOptionDtoList()){
+            optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        Contract contract = dao.findById(getContractAsJsonDtoById.getContractId());
+        Contract contract = dao.findById(contractOptionsDto.getContractId());
         contractOptionList.addAll(contract.getActiveOptions());
         contract.setActiveOptions(contractOptionList);
 
@@ -93,27 +93,27 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public boolean adminAddOptions(GetContractAsJsonDtoById getContractAsJsonDtoById) {
-        addOptions(getContractAsJsonDtoById);
+    public boolean adminAddOptions(ContractOptionsDto contractOptionsDto) {
+        addOptions(contractOptionsDto);
         return false;
     }
 
     @Override
-    public boolean customerAddOptions(GetContractAsJsonDtoById getContractAsJsonDtoById) {
-        if(dao.findById(getContractAsJsonDtoById.getContractId()).getStatus().equals(Status.ACTIVE)){
-            addOptions(getContractAsJsonDtoById);
+    public boolean customerAddOptions(ContractOptionsDto contractOptionsDto) {
+        if(dao.findById(contractOptionsDto.getContractId()).getStatus().equals(Status.ACTIVE)){
+            addOptions(contractOptionsDto);
         }
         return false;
     }
 
     @Override
-    public boolean delOptions(GetContractAsJsonDtoById getContractAsJsonDtoById) {
+    public boolean delOptions(ContractOptionsDto contractOptionsDto) {
         List<Integer> optionIdList = new ArrayList<>();
-        for( GetOptionsAsJsonDto getOptionsAsJsonDto : getContractAsJsonDtoById.getGetOptionsAsJsonDtoList()){
-            optionIdList.add(getOptionsAsJsonDto.getId());
+        for( TariffOptionDto tariffOptionDto : contractOptionsDto.getTariffOptionDtoList()){
+            optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        Contract contract = dao.findById(getContractAsJsonDtoById.getContractId());
+        Contract contract = dao.findById(contractOptionsDto.getContractId());
 
         Set<TariffOption> newTariffOptionList = contract.getActiveOptions();
         if(newTariffOptionList.removeAll(contractOptionList)){
@@ -130,15 +130,15 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public boolean adminDelOptions(GetContractAsJsonDtoById getContractAsJsonDtoById) {
-        delOptions(getContractAsJsonDtoById);
+    public boolean adminDelOptions(ContractOptionsDto contractOptionsDto) {
+        delOptions(contractOptionsDto);
         return false;
     }
 
     @Override
-    public boolean customerDelOptions(GetContractAsJsonDtoById getContractAsJsonDtoById) {
-        if(dao.findById(getContractAsJsonDtoById.getContractId()).getStatus().equals(Status.ACTIVE)){
-            delOptions(getContractAsJsonDtoById);
+    public boolean customerDelOptions(ContractOptionsDto contractOptionsDto) {
+        if(dao.findById(contractOptionsDto.getContractId()).getStatus().equals(Status.ACTIVE)){
+            delOptions(contractOptionsDto);
         }
         return false;
     }
@@ -165,16 +165,16 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void newContract(ContractUserIdDto contractUserIdDto) {
-        Tariff tariff = tariffService.findById(contractUserIdDto.getContractDto().getTariffId());
+    public void newContract(AddContractDto addContractDto) {
+        Tariff tariff = tariffService.findById(addContractDto.getContractDto().getTariffId());
         Double price = tariff.getPrice();
         Contract contract = new Contract();
-        contract.setPhoneNumber(contractUserIdDto.getContractDto().getPhoneNumber());
-        contract.setUser(userService.findById(contractUserIdDto.getContractDto().getUserId()));
+        contract.setPhoneNumber(addContractDto.getContractDto().getPhoneNumber());
+        contract.setUser(userService.findById(addContractDto.getContractDto().getUserId()));
         contract.setTariff(tariff);
         List<Integer> optionIdList = new ArrayList<>();
-        for( GetOptionsAsJsonDto getOptionsAsJsonDto : contractUserIdDto.getGetOptionsAsJsonDtoList()){
-            optionIdList.add(getOptionsAsJsonDto.getId());
+        for( TariffOptionDto tariffOptionDto : addContractDto.getTariffOptionDtoList()){
+            optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
         for(TariffOption tariffOption : tariffOptionList){

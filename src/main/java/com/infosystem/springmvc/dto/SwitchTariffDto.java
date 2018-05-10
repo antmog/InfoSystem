@@ -1,11 +1,11 @@
 package com.infosystem.springmvc.dto;
 
 public class SwitchTariffDto {
-    private Integer ContractId;
+    private Integer contractId;
     private Integer tariffId;
 
     public SwitchTariffDto(Integer contractId, Integer tariffId) {
-        ContractId = contractId;
+        this.contractId = contractId;
         this.tariffId = tariffId;
     }
 
@@ -13,11 +13,11 @@ public class SwitchTariffDto {
     }
 
     public Integer getContractId() {
-        return ContractId;
+        return contractId;
     }
 
     public void setContractId(Integer contractId) {
-        ContractId = contractId;
+        this.contractId = contractId;
     }
 
     public Integer getTariffId() {

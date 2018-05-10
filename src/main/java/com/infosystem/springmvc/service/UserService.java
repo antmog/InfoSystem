@@ -3,8 +3,8 @@ package com.infosystem.springmvc.service;
 import java.util.List;
 
 import com.infosystem.springmvc.dto.EditUserDto;
-import com.infosystem.springmvc.dto.NewStatusDto;
-import com.infosystem.springmvc.dto.SearchUserByNumber;
+import com.infosystem.springmvc.dto.SearchByNumber;
+import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.model.User;
 
 
@@ -24,9 +24,9 @@ public interface UserService {
 
 	String deleteUserById(int id);
 
-    void setStatus(NewStatusDto newStatusDto);
+    void setStatus(SetNewStatusDto setNewStatusDto);
 
     void updateUser(EditUserDto editUserDto);
 
-    User findByPhoneNumber(SearchUserByNumber searchUserByNumber);
+    User findByPhoneNumber(SearchByNumber searchByNumber);
 }

@@ -4,13 +4,13 @@ package com.infosystem.springmvc.dto;
 import java.io.Serializable;
 
 
-public class GetOptionsAsJsonDto implements Serializable {
+public class TariffOptionDto implements Serializable {
     private Integer id;
     private String name;
     private Double price;
     private Double costofadd;
 
-    public GetOptionsAsJsonDto(Integer id, String name, Double price, Double costOfAdd) {
+    public TariffOptionDto(Integer id, String name, Double price, Double costOfAdd) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -49,7 +49,7 @@ public class GetOptionsAsJsonDto implements Serializable {
         this.costofadd = costOfAdd;
     }
 
-    public GetOptionsAsJsonDto(){
+    public TariffOptionDto(){
 
     }
 
