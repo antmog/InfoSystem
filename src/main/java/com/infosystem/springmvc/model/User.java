@@ -29,7 +29,6 @@ public class User implements Serializable {
     @Column(name = "ADRESS", nullable = false)
     private String address;
 
-
     @Column(name = "BIRTH_DATE", nullable = false)
     private Date birthDate;
 
@@ -46,6 +45,9 @@ public class User implements Serializable {
 
     @Column(name = "PASSWORD", nullable = false)
     private String password;
+
+    @Column(name = "BALANCE")
+    private Double balance;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE", nullable = false)
