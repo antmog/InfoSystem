@@ -32,8 +32,9 @@
             </li>
             <sec:authorize access="isAuthenticated()">
                 <li class="nav-item">
+                    <strong>${loggedinuser}</strong>,
                     <a class="nav-link" href="/logout">
-                        <strong>${loggedinuser}</strong>, Log out
+                         Log out
                     </a>
                 </li>
             </sec:authorize>

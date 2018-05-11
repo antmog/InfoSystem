@@ -25,7 +25,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
-@SessionAttributes("roles")
+//@SessionAttributes("roles")
 public class CustomerViewController {
 
     private String customerPath = "customer/";

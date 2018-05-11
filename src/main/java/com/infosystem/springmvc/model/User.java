@@ -1,7 +1,7 @@
 package com.infosystem.springmvc.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @Entity
@@ -29,9 +30,9 @@ public class User implements Serializable {
     @Column(name = "ADRESS", nullable = false)
     private String address;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "BIRTH_DATE", nullable = false)
     private Date birthDate;
-
 
     @Column(name = "PASSPORT_ID", nullable = false, unique = true)
     private Integer passport;

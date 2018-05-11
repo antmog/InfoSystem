@@ -137,7 +137,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${options}" var="option">
+                                <c:forEach items="${tariffOptions}" var="option">
                                     <tr class="option-row">
                                         <td>${option.id}</td>
                                         <td>${option.name}</td>

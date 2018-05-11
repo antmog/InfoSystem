@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/")
-@SessionAttributes("roles")
+//@SessionAttributes("roles")
 public class GlobalViewController {
 
     @Autowired

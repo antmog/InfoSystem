@@ -3,6 +3,7 @@ package com.infosystem.springmvc.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.infosystem.springmvc.dto.AddUserDto;
 import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
@@ -10,6 +11,7 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.Contract;
+import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ContractService contractService;
+
+    @Autowired
+    CustomModelMapper modelMapperWrapper;
 
     public User findById(int id) throws DatabaseException {
         User user = dao.findById(id);
@@ -79,7 +84,6 @@ public class UserServiceImpl implements UserService {
     public List<User> findFirstUsers() {
         return dao.findAllUsers().stream().limit(5).collect(Collectors.toList());
     }
-
 
     /**
      * Deletes user if he has no contracts.
@@ -148,6 +152,12 @@ public class UserServiceImpl implements UserService {
             throw new LogicException("No such number.");
         }
         return contractService.findByPhoneNumber(searchByNumber.getPhoneNumber()).getUser();
+    }
+
+    public void addUser(AddUserDto addUserDto){
+        User user = modelMapperWrapper.mapToUser(addUserDto);
+        user.setBalance(0.0);
+        saveUser(user);
     }
 
 }

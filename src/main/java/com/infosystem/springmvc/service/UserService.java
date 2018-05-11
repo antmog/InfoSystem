@@ -2,6 +2,7 @@ package com.infosystem.springmvc.service;
 
 import java.util.List;
 
+import com.infosystem.springmvc.dto.AddUserDto;
 import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
@@ -32,4 +33,6 @@ public interface UserService {
     void updateUser(EditUserDto editUserDto) throws DatabaseException, ValidationException;
 
     User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException;
+
+    void addUser(AddUserDto addUserDto);
 }

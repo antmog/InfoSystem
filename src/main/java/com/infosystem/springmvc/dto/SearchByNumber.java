@@ -1,9 +1,10 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class SearchByNumber {
-    // how about @Pattern?
+    @Pattern(regexp = "\\d*")
     @Size(min = 6, max = 32)
     private String phoneNumber;
 

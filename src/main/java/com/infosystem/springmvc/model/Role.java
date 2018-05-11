@@ -1,5 +1,8 @@
 package com.infosystem.springmvc.model;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 public enum Role {
     ADMIN("ADMIN"),
     CUSTOMER("CUSTOMER");
@@ -12,5 +15,9 @@ public enum Role {
 
     public String getRole() {
         return role;
+    }
+
+    public static HashSet<Role> getAllRoles(){
+        return new HashSet<>(Arrays.asList(Role.values()));
     }
 }

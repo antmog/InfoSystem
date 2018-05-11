@@ -2,9 +2,12 @@ package com.infosystem.springmvc.controller;
 
 
 import com.infosystem.springmvc.dto.AddContractDto;
+import com.infosystem.springmvc.dto.AddUserDto;
+import com.infosystem.springmvc.dto.AdminPanelDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.*;
 import com.infosystem.springmvc.service.ContractService;
+import com.infosystem.springmvc.service.DataService.DataService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
 import com.infosystem.springmvc.service.UserService;
@@ -34,6 +37,9 @@ public class AdminViewController {
     UserService userService;
 
     @Autowired
+    DataService dataService;
+
+    @Autowired
     ContractService contractService;
 
     @Autowired
@@ -52,18 +58,26 @@ public class AdminViewController {
     AuthenticationTrustResolver authenticationTrustResolver;
 
 
+    /**
+     * Returns view of main admin panel.
+     * @param model
+     * @return view of main admin panel
+     */
     @RequestMapping("/adminPanel")
     public String adminPanel(ModelMap model) {
-        List<User> users = userService.findFirstUsers();
-        List<Tariff> tariffs =tariffService.findFirstTariffs();
-        List<TariffOption> options = tariffOptionService.findFirstTariffOptions();
+        AdminPanelDto adminPanelDto = dataService.getAdminPanelData();
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("users",users);
-        model.addAttribute("options",options);
-        model.addAttribute("tariffs",tariffs);
+        model.addAttribute("users",adminPanelDto.getUsers());
+        model.addAttribute("tariffOptions",adminPanelDto.getTariffOptions());
+        model.addAttribute("tariffs",adminPanelDto.getTariffs());
         return adminPath+"adminPanel";
     }
 
+    /**
+     * Returns view with list of all users.
+     * @param model
+     * @return view with list of all users
+     */
     @RequestMapping("/adminPanel/allUsers")
     public String adminPanelAllUsers(ModelMap model) {
         List<User> users = userService.findAllUsers();
@@ -72,6 +86,11 @@ public class AdminViewController {
         return adminPath+"allUsers";
     }
 
+    /**
+     * Returns view of all contracts.
+     * @param model
+     * @return view of all contracts
+     */
     @RequestMapping("/adminPanel/allContracts")
     public String adminPanelAllContracts(ModelMap model) {
         List<Contract> contracts = contractService.findAllContracts();
@@ -80,6 +99,11 @@ public class AdminViewController {
         return adminPath+"allContracts";
     }
 
+    /**
+     * Returns view with all tariffs.
+     * @param model
+     * @return
+     */
     @RequestMapping("/adminPanel/allTariffs")
     public String adminPanelAllTariffs(ModelMap model) {
         List<Tariff> tariffs = tariffService.findAllTariffs();
@@ -88,40 +112,44 @@ public class AdminViewController {
         return adminPath+"allTariffs";
     }
 
+    /**
+     * Returns view with all tariffOptions.
+     * @param model
+     * @return
+     */
     @RequestMapping("/adminPanel/allOptions")
     public String adminPanelAllOptions(ModelMap model) {
-        List<TariffOption> options = tariffOptionService.findAllTariffOptions();
+        List<TariffOption> tariffOptions = tariffOptionService.findAllTariffOptions();
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("options",options);
+        model.addAttribute("options",tariffOptions);
         return adminPath+"allOptions";
     }
 
 
+    /**
+     * Returns view with addUser submit form.
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/adminPanel/addUser", method = RequestMethod.GET)
     public String addUser(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
-        User user = new User();
-        model.addAttribute("user", user);
-        model.addAttribute("edit", false);
-        HashSet<String> roles = new HashSet<>(Arrays.asList(Role.CUSTOMER.getRole(), Role.ADMIN.getRole()));
-        model.addAttribute("roles", roles);
+        AddUserDto addUserDto = new AddUserDto();
+        model.addAttribute("addUserDto", addUserDto);
+        model.addAttribute("roles", Role.getAllRoles());
         return adminPath+"addUser";
     }
 
 
     @RequestMapping(value = "/adminPanel/addUser", method = RequestMethod.POST)
-    public String saveUser( @Valid User user, BindingResult result,
-                           ModelMap model) {
-
+    public String saveUser(@Valid AddUserDto addUserDto, BindingResult result, ModelMap model) {
         if (result.hasErrors()) {
             return adminPath+"addUser";
         }
-
-        userService.saveUser(user);
-
-        model.addAttribute("success", "User " + user.getFirstName() + " " + user.getLastName() + " registered successfully");
+        userService.addUser(addUserDto);
+        model.addAttribute("success", "User " + addUserDto.getFirstName() + " " +
+                addUserDto.getLastName() + " registered successfully");
         model.addAttribute("loggedinuser", getPrincipal());
-        //return "success";
         return adminPath+"addSuccess";
     }
 
