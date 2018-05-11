@@ -19,7 +19,7 @@
                         <strong> ${contract.id} : ${contract.phoneNumber}</strong>
                     </h5>
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="tariffTable">
                             <tbody>
                             <tr class="contract-row">
                                 <td>owner id</td>

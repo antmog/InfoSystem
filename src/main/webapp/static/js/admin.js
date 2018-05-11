@@ -222,6 +222,7 @@
         $('#switchTariff').on('click', function () {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
+            var newTariffId = $('#addContractTariffs tr.add-tariff-table-selected').find('td:first').html();
             $.ajax({
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
@@ -234,11 +235,12 @@
                 url: "/adminPanel/contract/switchTariff",
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({
-                    tariffId: $('#addContractTariffs tr.add-tariff-table-selected').find('td:first').html(),
+                    tariffId: newTariffId,
                     contractId: contract_id
                 })
             }).done(function (msg) {
                 alert(msg);
+                $('#tariffTable').find('tr:eq(1)').find('td:eq(1)').html(newTariffId);
             }).fail(function (jqXHR, textStatus) {
                 alert("Request failed: " + textStatus);
             });

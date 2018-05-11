@@ -1,7 +1,11 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class SwitchTariffDto {
+    @NotNull
     private Integer contractId;
+    @NotNull
     private Integer tariffId;
 
     public SwitchTariffDto(Integer contractId, Integer tariffId) {

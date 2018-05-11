@@ -111,8 +111,8 @@ public class AdminDataController {
      */
     @RequestMapping(value = "/adminPanel/tariff/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String tariffAddOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException {
-        if(result.hasErrors()){
-            throw new ValidationException("Select options to add");
+        if (result.hasErrors()) {
+            throw new ValidationException("Select options to add.");
         }
         tariffService.addOptions(editTariffDto);
         return "Options added.";
@@ -123,8 +123,8 @@ public class AdminDataController {
      */
     @RequestMapping(value = "/adminPanel/tariff/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String tariffDelOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException {
-        if(result.hasErrors()){
-            throw new ValidationException("Select options to delete");
+        if (result.hasErrors()) {
+            throw new ValidationException("Select options to delete.");
         }
         tariffService.delOptions(editTariffDto);
         return "Options deleted.";
@@ -133,8 +133,8 @@ public class AdminDataController {
 
     @RequestMapping(value = "/adminPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException {
-        if(result.hasErrors()){
-            throw new ValidationException("Select options to add");
+        if (result.hasErrors()) {
+            throw new ValidationException("Select options to add.");
         }
         contractService.adminAddOptions(editContractDto);
         return "Options added.";
@@ -142,8 +142,8 @@ public class AdminDataController {
 
     @RequestMapping(value = "/adminPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException {
-        if(result.hasErrors()){
-            throw new ValidationException("Select options to delete");
+        if (result.hasErrors()) {
+            throw new ValidationException("Select options to delete.");
         }
         contractService.adminDelOptions(editContractDto);
         return "Options deleted.";
@@ -151,16 +151,13 @@ public class AdminDataController {
 
 
     @RequestMapping(value = "/adminPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) {
-        //check if user auth is admin if unblock (protection agaisnt HACKERS!!!11 (direct requests) )
-        contractService.adminSwitchTariff(switchTariffDto);
+    public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) throws ValidationException {
         if (result.hasErrors()) {
-            return "notok";
+            throw new ValidationException("Select tariff.");
         }
-        return "ok";
+        contractService.adminSwitchTariff(switchTariffDto);
+        return "Switched to tariff (id:" + switchTariffDto.getTariffId() + ").";
     }
-
-
 
 
     @RequestMapping(value = "/adminPanel/option/deleteOption", method = RequestMethod.POST)
