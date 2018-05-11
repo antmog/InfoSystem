@@ -262,7 +262,7 @@
                 type: "POST",
                 url: "/adminPanel/contract/addOptions",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), contractId : contract_id})
+                data: JSON.stringify({tariffOptionDtoList:table.tableToJSON(), contractId : contract_id})
             }).done(function( msg ) {
                 if (msg === "ok") {
                     var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
@@ -296,7 +296,7 @@
                 type: "POST",
                 url: "/adminPanel/contract/delOptions",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), contractId : contract_id})
+                data: JSON.stringify({tariffOptionDtoList:table.tableToJSON(), contractId : contract_id})
             }).done(function( msg ) {
                 if (msg === "ok") {
                     var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove().clone();
@@ -337,7 +337,7 @@
 
     function addTariffPanel() {
         $('#addTariff').on('click', function () {
-            addOptions();
+            addTariff();
         });
         function addTariffTableBehavior(){
             $("#addTariffAddedOptions").on("click","tr.move-row", function () {
@@ -367,7 +367,7 @@
             });
         }
 
-        function addOptions(){
+        function addTariff(){
             var part1 = $('#addTariffAddedOptions').tableToJSON() ;
             var part2 = {name: $('#name').val(), price: $('#price').val()};
             var token = $("meta[name='_csrf']").attr("content");
@@ -383,7 +383,7 @@
                 type: "POST",
                 url: "/adminPanel/addTariff",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({getOptionsAsJsonDtoList:part1, tariffDto:part2}) ,
+                data: JSON.stringify({tariffOptionDtoList:part1, tariffDto:part2}) ,
             }).done(function(msg) {
                 if(msg==="ok"){
                     document.location.href = "/adminPanel"
@@ -409,7 +409,6 @@
         function addContract() {
             var part1 = $('#addContractAddedOptions').tableToJSON() ;
             var tariffId =  $("#addContractTariffs tr.add-tariff-table-selected").find('td:first').html();
-            console.log(tariffId);
             var part2 = {userId: $('#user_id').val(), phoneNumber: $('#phoneNumber').val(), tariffId: tariffId};
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -424,7 +423,7 @@
                 type: "POST",
                 url: "/adminPanel/addContract",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({getOptionsAsJsonDtoList:part1, contractDto:part2}) ,
+                data: JSON.stringify({tariffOptionDtoList:part1, contractDto:part2}) ,
             }).done(function(msg) {
                 if(msg==="ok"){
                     document.location.href = "/adminPanel"
@@ -571,7 +570,7 @@
                     type: "POST",
                     url: "/adminPanel/tariff/addOptions",
                     // The key needs to match your method's input parameter (case-sensitive).
-                    data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), tariffId : tariff_id})
+                    data: JSON.stringify({tariffOptionDtoList:table.tableToJSON(), tariffId : tariff_id})
                 }).done(function( msg ) {
                     if (msg === "ok") {
                         var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").remove().clone();
@@ -605,7 +604,7 @@
                     type: "POST",
                     url: "/adminPanel/tariff/delOptions",
                     // The key needs to match your method's input parameter (case-sensitive).
-                    data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), tariffId : tariff_id})
+                    data: JSON.stringify({tariffOptionDtoList:table.tableToJSON(), tariffId : tariff_id})
                 }).done(function( msg ) {
                     if (msg === "ok") {
                         var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove().clone();

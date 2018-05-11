@@ -133,7 +133,7 @@
                 type: "POST",
                 url: "/customerPanel/contract/addOptions",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), contractId : contract_id})
+                data: JSON.stringify({tariffOptionDtoList:table.tableToJSON(), contractId : contract_id})
             }).done(function( msg ) {
                 if (msg === "ok") {
                     var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
@@ -167,7 +167,7 @@
                 type: "POST",
                 url: "/customerPanel/contract/delOptions",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({getOptionsAsJsonDtoList:table.tableToJSON(), contractId : contract_id})
+                data: JSON.stringify({tariffOptionDtoList:table.tableToJSON(), contractId : contract_id})
             }).done(function( msg ) {
                 if (msg === "ok") {
                     var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove().clone();
