@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 public class TariffDto implements Serializable {
-    @Size(min = 6, max = 32)
+    @Size(min = 2, max = 32)
     private String name;
     @Min(1)
     @NotNull

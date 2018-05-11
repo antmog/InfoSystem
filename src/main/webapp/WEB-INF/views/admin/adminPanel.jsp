@@ -67,7 +67,7 @@
                             <div class="col-auto">
                                 <div class="input-group">
                                     Search by number:
-                                    <input class="searchUserByNumberInput" type="text" height="3">
+                                    <input class="searchUserByNumberInput" type="number" height="3">
                                     <i class="fas fa-search search-icon searchUserByNumber"></i>
                                 </div>
                             </div>

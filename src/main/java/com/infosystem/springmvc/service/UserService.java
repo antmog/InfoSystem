@@ -5,6 +5,7 @@ import java.util.List;
 import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.User;
 
 
@@ -28,5 +29,5 @@ public interface UserService {
 
     void updateUser(EditUserDto editUserDto);
 
-    User findByPhoneNumber(SearchByNumber searchByNumber);
+    User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException;
 }

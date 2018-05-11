@@ -18,7 +18,7 @@
 
         $(".searchUserByNumber").on("click", function () {
             if ($('.searchUserByNumberInput').val() === "") {
-                alert("its null");
+                alert("Enter phone number.");
             } else {
                 searchUserByNumber();
             }
