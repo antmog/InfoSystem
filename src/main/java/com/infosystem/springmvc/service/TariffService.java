@@ -3,6 +3,7 @@ package com.infosystem.springmvc.service;
 import com.infosystem.springmvc.dto.AddTariffDto;
 import com.infosystem.springmvc.dto.EditTariffDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Tariff;
 
 import java.util.List;
@@ -11,9 +12,11 @@ public interface TariffService {
 
     Tariff findById(int id);
 
-    void saveTariff(Tariff tariff);
+    Tariff findByName(String name);
 
-    void saveTariff(AddTariffDto tariff);
+    void addTariff(Tariff tariff);
+
+    void addTariff(AddTariffDto tariff) throws LogicException;
 
     void updateTariff(Tariff tariff);
 

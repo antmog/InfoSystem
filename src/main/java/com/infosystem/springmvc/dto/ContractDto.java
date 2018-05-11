@@ -2,12 +2,13 @@ package com.infosystem.springmvc.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
 public class ContractDto implements Serializable {
     private Integer userId;
-    @NotEmpty
+    @Size(min = 6, max = 32)
     private String phoneNumber;
     @NotNull
     private Integer tariffId;

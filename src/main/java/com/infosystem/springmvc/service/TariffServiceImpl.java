@@ -5,9 +5,11 @@ import com.infosystem.springmvc.dto.TariffOptionDto;
 import com.infosystem.springmvc.dto.AddTariffDto;
 import com.infosystem.springmvc.dto.EditTariffDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Contract;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
+import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,30 +33,34 @@ public class TariffServiceImpl implements TariffService {
     @Autowired
     private ContractService contractService;
 
+    @Autowired
+    CustomModelMapper modelMapperWrapper;
+
     public Tariff findById(int id) {
         return dao.findById(id);
     }
 
-    public void saveTariff(Tariff tariff) {
+    public Tariff findByName(String name) {return dao.findByName(name);}
+
+    public void addTariff(Tariff tariff) {
         dao.save(tariff);
     }
 
-    public void setStatus(SetNewStatusDto setNewStatusDto) {
-        dao.findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
-    }
 
-    public void saveTariff(AddTariffDto addTariffDto) {
-        Tariff newTariff = new Tariff();
-        newTariff.setName(addTariffDto.getTariffDto().getName());
-        newTariff.setPrice(addTariffDto.getTariffDto().getPrice());
-        List<Integer> optionIdList = new ArrayList<>();
-        for (TariffOptionDto tariffOptionDto : addTariffDto.getTariffOptionDtoList()) {
-            optionIdList.add(tariffOptionDto.getId());
+    /**
+     * Creates new tariff with data from DTO
+     * @param addTariffDto
+     */
+    public void addTariff(AddTariffDto addTariffDto) throws LogicException {
+        if (!isNameUnique(addTariffDto.getTariffDto().getName())){
+            throw new LogicException("Chose another name for tariff.");
         }
-        Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        newTariff.setAvailableOptions(tariffOptionList);
-        dao.save(newTariff);
-
+        Tariff tariff = modelMapperWrapper.mapToTariff(addTariffDto);
+        if (!addTariffDto.getTariffOptionDtoList().isEmpty()) {
+            Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(addTariffDto.getTariffOptionDtoList());
+            tariff.setAvailableOptions(tariffOptionList);
+        }
+        dao.save(tariff);
     }
 
     /*
@@ -129,5 +135,13 @@ public class TariffServiceImpl implements TariffService {
         return false;
     }
 
+    public void setStatus(SetNewStatusDto setNewStatusDto) {
+        dao.findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
+    }
+
+    private boolean isNameUnique(String tariffName) {
+        Tariff tariff = findByName(tariffName);
+        return (tariff == null);
+    }
 
 }

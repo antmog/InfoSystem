@@ -19,6 +19,18 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
         return tariff;
     }
 
+    @Override
+    public Tariff findByName(String name) {
+        List tariffList = getSession()
+                .createQuery("SELECT t FROM Tariff t WHERE t.name LIKE :name")
+                .setParameter("name",name)
+                .getResultList();
+        if(!tariffList.isEmpty()){
+            return (Tariff) tariffList.get(0);
+        }
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
     public List<Tariff> findAllTariffs() {
         List<Tariff> tariff = getSession()

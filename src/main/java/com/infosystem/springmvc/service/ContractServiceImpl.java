@@ -172,7 +172,12 @@ public class ContractServiceImpl implements ContractService {
         }
     }
 
-    @Override
+
+    /**
+     * Adds new contract with data from DTO.
+     * @param addContractDto data for new contract
+     * @throws LogicException if number already exists
+     */
     public void newContract(AddContractDto addContractDto) throws LogicException {
         if(doesPhoneNumberExist(addContractDto.getContractDto().getPhoneNumber())){
             throw new LogicException("Contract with that phone number already exists.");

@@ -1,9 +1,15 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 public class TariffDto implements Serializable {
+    @Size(min = 6, max = 32)
     private String name;
+    @Min(1)
     private Double price;
 
     public TariffDto(String name, Double price) {

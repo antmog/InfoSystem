@@ -2,6 +2,7 @@ package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.User;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
@@ -13,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.infosystem.springmvc.service.UserService;
-import sun.rmi.runtime.Log;
 
 import javax.validation.Valid;
 
@@ -48,9 +48,9 @@ public class AdminDataController {
      */
     @RequestMapping(value = {"/adminPanel/addContract", "/adminPanel/addContractToUser/{user_id}"}, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = RequestMethod.POST)
-    public String addContract(@Valid @RequestBody AddContractDto addContractDto, BindingResult result) throws LogicException {
+    public String addContract(@Valid @RequestBody AddContractDto addContractDto, BindingResult result) throws LogicException, ValidationException {
         if(result.hasErrors()){
-            throw new LogicException("Enter phone number and chose tariff please.");
+            throw new ValidationException("Enter correct phone number and chose tariff please.");
         }
         contractService.newContract(addContractDto);
         return "Contract added successfully.";
@@ -60,9 +60,12 @@ public class AdminDataController {
      * This method is called on adding tariff from adminPanel and allTariffs pages.
      */
     @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String saveTariff(@RequestBody AddTariffDto addTariffDto) {
-        tariffService.saveTariff(addTariffDto);
-        return "ok";
+    public String saveTariff(@Valid @RequestBody AddTariffDto addTariffDto, BindingResult result) throws LogicException, ValidationException {
+        if(result.hasErrors()){
+            throw new ValidationException("Enter correct name and price for new tariff please.");
+        }
+        tariffService.addTariff(addTariffDto);
+        return "Tariff added successfully.";
     }
 
     /**

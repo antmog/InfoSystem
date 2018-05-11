@@ -37,7 +37,7 @@
                                 <button id="deleteTariff" type="button" class="btn btn-primary btn-sm btn-danger">Delete tariff</button>
                             </c:when>
                             <c:when test="${tariff.status == 'ACTIVE'}">
-                                <button id="archiveTariff" type="button" class="btn btn-primary btn-sm btn-danger">Archive tariff</button>
+                                <button id="archiveTariff" type="button" class="btn btn-primary btn-sm btn-warning">Archive tariff</button>
                             </c:when>
                         </c:choose>
                     </div>

@@ -1,11 +1,14 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
 
 public class AddTariffDto implements Serializable {
-    private List<TariffOptionDto> tariffOptionDtoList;
+    @Valid
     private TariffDto tariffDto;
+    private List<TariffOptionDto> tariffOptionDtoList;
+
 
     public AddTariffDto(List<TariffOptionDto> tariffOptionDtoList, TariffDto tariffDto) {
         this.tariffOptionDtoList = tariffOptionDtoList;

@@ -394,13 +394,9 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: part1, tariffDto: part2}),
             }).done(function (msg) {
-                if (msg === "ok") {
-                    document.location.href = "/adminPanel"
-                } else {
-                    alert(msg);
-                }
+                alert(msg);
             }).fail(function (xhr, a, error) {
-                alert(error);
+                alert(xhr.responseText);
             })
         }
 
@@ -431,9 +427,11 @@
                 url: "/adminPanel/addContract",
                 data: JSON.stringify({tariffOptionDtoList: part1, contractDto: part2})
             }).done(function (msg) {
-                document.location.href = "/adminPanel"
+                alert(msg);
             }).fail(function (xhr, a, error) {
                 alert(xhr.responseText);
+                //415 warning validation
+                //400 error wrong param
             })
         }
 

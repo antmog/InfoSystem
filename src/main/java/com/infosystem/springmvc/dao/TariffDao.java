@@ -8,6 +8,8 @@ public interface TariffDao {
 
     Tariff findById(int id);
 
+    Tariff findByName(String name);
+
     void save(Tariff tariff);
 
     List<Tariff> findAllTariffs();
