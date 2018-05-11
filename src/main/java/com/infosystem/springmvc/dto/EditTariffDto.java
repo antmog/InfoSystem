@@ -1,9 +1,11 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
 public class EditTariffDto implements Serializable {
+    @NotEmpty
     private List<TariffOptionDto> tariffOptionDtoList;
     private Integer tariffId;
 

@@ -1,9 +1,12 @@
 package com.infosystem.springmvc.dao;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.Contract;
+import com.sun.corba.se.impl.orb.DataCollectorBase;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 
 @Repository("contractDao")
@@ -29,12 +32,19 @@ public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements C
         persist(contract);
     }
 
-    public void deleteById(int id) {
-        Contract contract = (Contract) getSession()
+    /**
+     * @param id
+     * @throws DatabaseException if entity doesnt exist
+     */
+    public void deleteById(int id) throws DatabaseException {
+        List contracts = getSession()
                 .createQuery("SELECT c FROM Contract c WHERE c.id LIKE :Id")
                 .setParameter("Id", id)
-                .getSingleResult();
-        delete(contract);
+                .getResultList();
+        if(contracts.isEmpty()){
+            throw new DatabaseException("Contract alrdy doesn't exist.");
+        }
+        delete((Contract)contracts.get(0));
     }
 
 

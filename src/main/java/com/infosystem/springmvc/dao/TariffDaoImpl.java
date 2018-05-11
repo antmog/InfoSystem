@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.dao;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.Status;
 import com.infosystem.springmvc.model.Tariff;
 
@@ -52,12 +53,19 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
         persist(tariff);
     }
 
-    public void deleteById(int id) {
-        Tariff tariff = (Tariff) getSession()
+    /**
+     * @param id
+     * @throws DatabaseException if entity doesnt exist
+     */
+    public void deleteById(int id) throws DatabaseException {
+        List tariffs = getSession()
                 .createQuery("SELECT t FROM Tariff t WHERE t.id LIKE :Id")
                 .setParameter("Id", id)
-                .getSingleResult();
-        delete(tariff);
+                .getResultList();
+        if(tariffs.isEmpty()){
+            throw new DatabaseException("Tariff alrdy doesn't exist.");
+        }
+        delete((Tariff)tariffs.get(0));
     }
 
 }

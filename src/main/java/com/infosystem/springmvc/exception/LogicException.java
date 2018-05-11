@@ -1,6 +1,6 @@
 package com.infosystem.springmvc.exception;
 
-public class LogicException extends Exception {
+public class LogicException extends MyBusinessException {
 
     public LogicException(String message, Throwable cause) {
         super(message, cause);

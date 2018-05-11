@@ -1,6 +1,7 @@
 package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.*;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.User;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.infosystem.springmvc.service.UserService;
+import sun.rmi.runtime.Log;
 
 import javax.validation.Valid;
 
@@ -85,7 +87,7 @@ public class AdminDataController {
      * This method is called on deleting user from user page.
      */
     @RequestMapping(value = "/adminPanel/user/deleteUser", method = RequestMethod.POST)
-    public String deleteUser(@RequestBody String user_id) throws LogicException {
+    public String deleteUser(@RequestBody String user_id) throws LogicException, DatabaseException {
         userService.deleteUserById(Integer.parseInt(user_id));
         return "User(id:" + user_id + ") successfully deleted.";
     }
@@ -94,45 +96,46 @@ public class AdminDataController {
      * This method is called on deleting tariff from tariff page.
      */
     @RequestMapping(value = "/adminPanel/tariff/deleteTariff", method = RequestMethod.POST)
-    public String deleteTariff(@RequestBody @Valid String tariff_id, BindingResult result) {
+    public String deleteTariff(@RequestBody @Valid String tariff_id) throws DatabaseException, LogicException {
+        tariffService.deleteTariffById(Integer.parseInt(tariff_id));
+        return "Tariff(id:" + tariff_id + ") successfully deleted.";
+    }
 
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        return tariffService.deleteTariffById(Integer.parseInt(tariff_id));
+    @RequestMapping(value = "/adminPanel/contract/deleteContract", method = RequestMethod.POST)
+    public String deleteContract(@RequestBody String contract_id) throws DatabaseException {
+        contractService.deleteContractById(Integer.parseInt(contract_id));
+        return "Contract(id:" + contract_id + ") successfully deleted.";
     }
 
     /**
      * This method is adding selected options to the tariff.
      */
     @RequestMapping(value = "/adminPanel/tariff/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String tariffAddOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) {
-        tariffService.addOptions(editTariffDto);
-        if (result.hasErrors()) {
-            return "notok";
+    public String tariffAddOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException {
+        if(result.hasErrors()){
+            throw new ValidationException("Select options to add");
         }
-        return "ok";
+        tariffService.addOptions(editTariffDto);
+        return "Options added.";
     }
 
     /**
      * This method is deleting selected options from the tariff.
      */
     @RequestMapping(value = "/adminPanel/tariff/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String tariffDelOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) {
-        tariffService.delOptions(editTariffDto);
-        if (result.hasErrors()) {
-            return "notok";
+    public String tariffDelOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException {
+        if(result.hasErrors()){
+            throw new ValidationException("Select options to delete");
         }
-        return "ok";
+        tariffService.delOptions(editTariffDto);
+        return "Options deleted.";
+
     }
 
     @RequestMapping(value = "/adminPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String contractAddOptions(@RequestBody @Valid ContractOptionsDto contractOptionsDto, BindingResult result) {
         contractService.adminAddOptions(contractOptionsDto);
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        return "ok";
+        return "Options added.";
     }
 
     @RequestMapping(value = "/adminPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
@@ -155,14 +158,7 @@ public class AdminDataController {
         return "ok";
     }
 
-    @RequestMapping(value = "/adminPanel/contract/deleteContract", method = RequestMethod.POST)
-    public String deleteContract(@RequestBody @Valid String contract_id, BindingResult result) {
-        contractService.deleteContractById(Integer.parseInt(contract_id));
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        return "ok";
-    }
+
 
 
     @RequestMapping(value = "/adminPanel/option/deleteOption", method = RequestMethod.POST)

@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.dao;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.Contract;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface ContractDao {
 
     List<Contract> findAllContracts();
 
-    void deleteById(int id);
+    void deleteById(int id) throws DatabaseException;
 
     Contract findByPhoneNumber(String phoneNumber);
 }

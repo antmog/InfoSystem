@@ -4,6 +4,7 @@ import com.infosystem.springmvc.dto.AddContractDto;
 import com.infosystem.springmvc.dto.ContractOptionsDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.dto.SwitchTariffDto;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Contract;
 
@@ -20,7 +21,7 @@ public interface ContractService {
 
     List<Contract> findAllContracts();
 
-    void deleteContractById(int id);
+    void deleteContractById(int id) throws DatabaseException;
 
     void setStatus(SetNewStatusDto setNewStatusDto);
 

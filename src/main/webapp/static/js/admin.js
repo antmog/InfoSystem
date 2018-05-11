@@ -520,11 +520,7 @@
                 url: "/adminPanel/tariff/deleteTariff",
                 data: tariff_id.toString()
             }).done(function (msg) {
-                if (msg === "ok") {
-                    document.location.href = "/adminPanel"
-                } else {
-                    alert("Can't delete tariff. It's still used in some contracts.");
-                }
+                alert(msg);
             }).fail(function (jqXHR, textStatus) {
                 alert("Request failed: " + textStatus);
             });
@@ -568,11 +564,10 @@
                     // The key needs to match your method's input parameter (case-sensitive).
                     data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id})
                 }).done(function (msg) {
-                    if (msg === "ok") {
-                        var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").remove().clone();
-                        tr.removeClass('add-tariff-table-selected');
-                        $("#tariffAddedOptions").append(tr);
-                    }
+                    alert(msg);
+                    var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").remove().clone();
+                    tr.removeClass('add-tariff-table-selected');
+                    $("#tariffAddedOptions").append(tr);
                 }).fail(function (jqXHR, textStatus) {
                     alert("Request failed: " + textStatus);
                 });
@@ -602,11 +597,10 @@
                     // The key needs to match your method's input parameter (case-sensitive).
                     data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id})
                 }).done(function (msg) {
-                    if (msg === "ok") {
-                        var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove().clone();
-                        tr.removeClass('add-tariff-table-selected');
-                        $("#tariffAvailableOptions").append(tr);
-                    }
+                    alert(msg);
+                    var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove().clone();
+                    tr.removeClass('add-tariff-table-selected');
+                    $("#tariffAvailableOptions").append(tr);
                 }).fail(function (jqXHR, textStatus) {
                     alert("Request failed: " + textStatus);
                 });

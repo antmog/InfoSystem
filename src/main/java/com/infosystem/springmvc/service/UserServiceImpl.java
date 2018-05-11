@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +75,14 @@ public class UserServiceImpl implements UserService {
         return dao.findAllUsers().stream().limit(5).collect(Collectors.toList());
     }
 
+
+    /**
+     * Deletes user if he has no contracts
+     * @param id
+     * @throws LogicException if user still has contracts
+     */
     @Override
-    public void deleteUserById(int id) throws LogicException {
+    public void deleteUserById(int id) throws LogicException, DatabaseException {
         if (!dao.findById(id).getUserContracts().isEmpty()) {
             throw new LogicException("User still have contracts!");
         }
@@ -105,6 +112,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * @param searchByNumber
+     * @return user (related with contract that has phoneNumber)
+     * @throws LogicException if there is no contract (user) with such phone number
+     */
     @Override
     public User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException {
         Contract contract = contractService.findByPhoneNumber(searchByNumber.getPhoneNumber());

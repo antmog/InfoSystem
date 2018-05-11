@@ -2,6 +2,7 @@ package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.ContractDao;
 import com.infosystem.springmvc.dto.*;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Contract;
 import com.infosystem.springmvc.model.Status;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +67,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void deleteContractById(int id) {
+    public void deleteContractById(int id) throws DatabaseException {
         dao.deleteById(id);
     }
 
@@ -74,10 +76,13 @@ public class ContractServiceImpl implements ContractService {
         dao.findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
     }
 
+    /**
+     * @param phoneNumber
+     * @return contract
+     */
     @Override
     public Contract findByPhoneNumber(String phoneNumber) {
-        Contract contract = dao.findByPhoneNumber(phoneNumber);
-        return contract;
+        return dao.findByPhoneNumber(phoneNumber);
     }
 
     @Override
@@ -200,6 +205,10 @@ public class ContractServiceImpl implements ContractService {
         dao.save(contract);
     }
 
+    /**
+     * @param phoneNumber
+     * @return true is exist
+     */
     private boolean doesPhoneNumberExist(String phoneNumber){
         Contract contract = findByPhoneNumber(phoneNumber);
         return (contract!=null);

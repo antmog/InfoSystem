@@ -2,6 +2,7 @@ package com.infosystem.springmvc.dao;
 
 import java.util.List;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
@@ -43,12 +44,19 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
         persist(user);
     }
 
-    public void deleteById(int id) {
-        User user = (User) getSession()
+    /**
+     * @param id
+     * @throws DatabaseException if entity doesnt exist
+     */
+    public void deleteById(int id) throws DatabaseException {
+        List users =  getSession()
                 .createQuery("SELECT u FROM User u WHERE u.id LIKE :Id")
                 .setParameter("Id", id)
-                .getSingleResult();
-        delete(user);
+                .getResultList();
+        if(users.isEmpty()){
+            throw new DatabaseException("User alrdy doesn't exist.");
+        }
+        delete((User) users.get(0));
     }
 
 

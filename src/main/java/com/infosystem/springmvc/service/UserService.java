@@ -5,6 +5,7 @@ import java.util.List;
 import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.User;
 
@@ -23,7 +24,7 @@ public interface UserService {
 
 	List<User> findFirstUsers();
 
-	void deleteUserById(int id) throws LogicException;
+	void deleteUserById(int id) throws LogicException, DatabaseException;
 
     void setStatus(SetNewStatusDto setNewStatusDto);
 

@@ -2,6 +2,7 @@ package com.infosystem.springmvc.dao;
 
 import java.util.List;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.User;
 
 
@@ -15,7 +16,7 @@ public interface UserDao {
 	
 	List<User> findAllUsers();
 
-	void deleteById(int id);
+	void deleteById(int id) throws DatabaseException;
 
 }
 

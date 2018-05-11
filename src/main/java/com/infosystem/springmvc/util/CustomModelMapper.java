@@ -73,6 +73,10 @@ public class CustomModelMapper {
         return tariffOptionService.selectListByIdList(optionIdList);
     }
 
+    /**
+     * @param addTariffDto
+     * @return tariff with name and price from addTariffDto
+     */
     public Tariff mapToTariff(AddTariffDto addTariffDto){
         Tariff tariff = new Tariff();
         tariff.setName(addTariffDto.getTariffDto().getName());

@@ -3,6 +3,7 @@ package com.infosystem.springmvc.service;
 import com.infosystem.springmvc.dto.AddTariffDto;
 import com.infosystem.springmvc.dto.EditTariffDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Tariff;
 
@@ -24,13 +25,13 @@ public interface TariffService {
 
     List<Tariff> findAllActiveTariffs();
 
-    String deleteTariffById(int id);
+    void deleteTariffById(int id) throws LogicException, DatabaseException;
 
     void setStatus(SetNewStatusDto setNewStatusDto);
 
     List<Tariff> findFirstTariffs();
 
-    boolean addOptions(EditTariffDto editTariffDto);
+    void addOptions(EditTariffDto editTariffDto);
 
-    boolean delOptions(EditTariffDto editTariffDto);
+    void delOptions(EditTariffDto editTariffDto);
 }
