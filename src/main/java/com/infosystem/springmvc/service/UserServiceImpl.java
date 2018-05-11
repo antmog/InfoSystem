@@ -8,6 +8,7 @@ import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -111,17 +112,24 @@ public class UserServiceImpl implements UserService {
      * @throws DatabaseException if user doesn't exist
      */
     @Override
-    public void updateUser(EditUserDto editUserDto) throws DatabaseException {
+    public void updateUser(EditUserDto editUserDto) throws DatabaseException, ValidationException {
         User user = findById(editUserDto.getUserId());
+        String newValue = editUserDto.getValue();
         switch (editUserDto.getDataInstance()) {
             case "address":
-                user.setAddress(editUserDto.getValue());
+                if(newValue.length()<6){
+                    throw new ValidationException("Too short adress.");
+                }
+                user.setAddress(newValue);
                 break;
             case "passport":
-                user.setPassport(Integer.valueOf(editUserDto.getValue()));
+                if(!newValue.matches("\\d*")){
+                    throw new ValidationException("Passport contains only numbers.");
+                }
+                user.setPassport(Integer.valueOf(newValue));
                 break;
             case "mail":
-                user.setMail(editUserDto.getValue());
+                user.setMail(newValue);
                 break;
             default:
                 break;

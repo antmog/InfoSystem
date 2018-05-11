@@ -3,6 +3,8 @@ package com.infosystem.springmvc.controller;
 import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
 import com.infosystem.springmvc.service.ContractService;
@@ -16,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 
@@ -38,56 +41,93 @@ public class GlobalDataController {
     @Autowired
     TariffService tariffService;
 
+    /**
+     * Returns options available for tariff.
+     * @param tariff_id
+     * @param result validation result
+     * @return message
+     * @throws DatabaseException   if tariff doesn't exist
+     * @throws ValidationException if input is wrong
+     */
     @RequestMapping(value = "/tariffOptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    Set<TariffOption> addContractTariffOptions(@RequestBody String s, BindingResult result) throws DatabaseException {
-        Tariff tariff = tariffService.findById(Integer.valueOf(s));
-        System.out.println(tariff.getAvailableOptions());
-        return tariff.getAvailableOptions();
+    Set<TariffOption> tariffOptions(@RequestBody @NotNull String tariff_id, BindingResult result) throws DatabaseException, ValidationException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Wrong tariff ID!");
+        }
+        return tariffService.getAvailableOptionsForTariff(Integer.parseInt(tariff_id));
     }
 
+    // Careful. Status setters are NOT protected from "hackers" :D (you still can generate request with valid header etc
+    // and do smth like unBan user if you are not admin. In application customer just don't have button to set status
+    // if account/contract is banned.
 
+    /**
+     * Set new status for contract.
+     * @param setNewStatusDto
+     * @param result validation result
+     * @return message
+     * @throws DatabaseException if contract doesn't exist
+     * @throws ValidationException if input is wrong
+     */
     @RequestMapping(value = "/contract/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String setUserStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException {
-        //check if user auth is admin if unblock
+    public String setContractStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException, ValidationException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Wrong contract id or status!");
+        }
         contractService.setStatus(setNewStatusDto);
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        return "ok";
+        return "Contract is now " + setNewStatusDto.getEntityStatus().getStatus() + ".";
     }
 
+    /**
+     * Set new status for user.
+     * @param setNewStatusDto
+     * @param result validation result
+     * @return message
+     * @throws DatabaseException if user doesn't exist
+     * @throws ValidationException if input is wrong
+     */
     @RequestMapping(value = "/user/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String setContractStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException {
-        //check if user auth is admin if unblock
+    public String setUserStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException, ValidationException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Wrong contract id or status!");
+        }
         userService.setStatus(setNewStatusDto);
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        return "ok";
+        return "User is now " + setNewStatusDto.getEntityStatus().getStatus() + ".";
     }
 
+    /**
+     * Set new status for tariff.
+     * @param setNewStatusDto
+     * @param result validation result
+     * @return message
+     * @throws DatabaseException if tariff doesn't exist
+     * @throws ValidationException if input is wrong
+     */
     @RequestMapping(value = "/tariff/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String setTariffStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) {
-        //check if user auth is admin if unblock
-        try {
-            tariffService.setStatus(setNewStatusDto);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
+    public String setTariffStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            return "notok";
+            throw new ValidationException("Wrong contract id or status!");
         }
-        return "ok";
+        tariffService.setStatus(setNewStatusDto);
+        return "User is now " + setNewStatusDto.getEntityStatus().getStatus() + ".";
     }
 
+    /**
+     * Modifies selected values of user.
+     * @param editUserDto
+     * @param result validation result
+     * @return message
+     * @throws DatabaseException if user doesn't exist
+     * @throws ValidationException if input is wrong or if passport is not numeric
+     */
     @RequestMapping(value = "/user/editUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String editUser(@RequestBody @Valid EditUserDto editUserDto, BindingResult result) throws DatabaseException {
-        userService.updateUser(editUserDto);
-        if (result.hasErrors()) {
-            return "notok";
+    public String editUser(@RequestBody @Valid EditUserDto editUserDto, BindingResult result) throws DatabaseException, ValidationException {
+        if(result.hasErrors()){
+            throw new ValidationException("Wrong input!");
         }
-        return "ok";
+        userService.updateUser(editUserDto);
+        return editUserDto.getDataInstance() + " modified successfully.";
     }
 
 

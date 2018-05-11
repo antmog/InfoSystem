@@ -59,9 +59,8 @@
                             userId: user_id
                         })
                     }).done(function (msg) {
-                        if (msg === "ok") {
-                            oldValue.html(value);
-                        }
+                        alert(msg);
+                        oldValue.html(value);
                     }).fail(function (jqXHR, textStatus) {
                         alert("Request failed: " + textStatus);
                     });
@@ -246,11 +245,10 @@
             // The key needs to match your method's input parameter (case-sensitive).
             data: JSON.stringify({entityId: entity_id, entityStatus: status})
         }).done(function (msg) {
-            if (msg === "ok") {
-                location.reload();
-            }
+            alert(msg);
+            location.reload();
         }).fail(function (jqXHR, textStatus) {
-            alert("Request failed: " + textStatus);
+            alert("Request failed: " + jqXHR.responseText);
         });
     }
 

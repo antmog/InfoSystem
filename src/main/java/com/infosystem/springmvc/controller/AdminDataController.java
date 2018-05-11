@@ -91,7 +91,7 @@ public class AdminDataController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public @ResponseBody
     User searchUserByNumber(@Valid @RequestBody SearchByNumber searchByNumber, BindingResult result) throws ValidationException, LogicException {
-        if (result.hasErrors()) {
+        if (result.hasErrors()||!searchByNumber.getPhoneNumber().matches("\\d*")) {
             throw new ValidationException("Incorrect input!");
         }
         return userService.findByPhoneNumber(searchByNumber);

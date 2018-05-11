@@ -2,9 +2,11 @@ package com.infosystem.springmvc.dto;
 
 import com.infosystem.springmvc.model.Status;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class SetNewStatusDto implements Serializable {
+    @NotNull
     private int entityId;
     private Status entityStatus;
 

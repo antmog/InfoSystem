@@ -7,6 +7,7 @@ import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.User;
 
 
@@ -28,7 +29,7 @@ public interface UserService {
 
     void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException;
 
-    void updateUser(EditUserDto editUserDto) throws DatabaseException;
+    void updateUser(EditUserDto editUserDto) throws DatabaseException, ValidationException;
 
     User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException;
 }

@@ -222,10 +222,8 @@ public class ContractServiceImpl implements ContractService {
         }
     }
 
-
     /**
      * Adds new contract with data from DTO.
-     *
      * @param addContractDto data for new contract
      * @throws LogicException if number already exists
      */

@@ -1,10 +1,13 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class EditUserDto implements Serializable {
     private Integer userId;
+    @NotNull
     private String dataInstance;
+    @NotNull
     private String value;
 
     public Integer getUserId() {

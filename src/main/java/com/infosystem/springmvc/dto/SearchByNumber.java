@@ -3,6 +3,7 @@ package com.infosystem.springmvc.dto;
 import javax.validation.constraints.Size;
 
 public class SearchByNumber {
+    // how about @Pattern?
     @Size(min = 6, max = 32)
     private String phoneNumber;
 

@@ -130,6 +130,11 @@ public class TariffServiceImpl implements TariffService {
         tariff.setAvailableOptions(newTariffOptionList);
     }
 
+    @Override
+    public Set<TariffOption> getAvailableOptionsForTariff(int tariffId) throws DatabaseException {
+        return findById(tariffId).getAvailableOptions();
+    }
+
     /**
      * Set status of selected tariff to selected status.
      * @param setNewStatusDto
