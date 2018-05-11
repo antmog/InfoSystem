@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.infosystem.springmvc.service.UserService;
+import sun.rmi.runtime.Log;
 
 import javax.validation.Valid;
 
@@ -47,25 +48,19 @@ public class AdminDataController {
      */
     @RequestMapping(value = {"/adminPanel/addContract", "/adminPanel/addContractToUser/{user_id}"}, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = RequestMethod.POST)
-    public String addContract(@RequestBody AddContractDto addContractDto) throws LogicException {
-        System.out.println("sss");
-        System.out.println("sss");
-        System.out.println("sss");
+    public String addContract(@Valid @RequestBody AddContractDto addContractDto, BindingResult result) throws LogicException {
+        if(result.hasErrors()){
+            throw new LogicException("Enter phone number and chose tariff please.");
+        }
         contractService.newContract(addContractDto);
-        System.out.println("sss");
-        System.out.println("sss");
-        return "ok";
+        return "Contract added successfully.";
     }
 
     /**
      * This method is called on adding tariff from adminPanel and allTariffs pages.
      */
     @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String saveTariff(@RequestBody @Valid AddTariffDto addTariffDto, BindingResult result) {
-
-        if (result.hasErrors()) {
-            return "notok";
-        }
+    public String saveTariff(@RequestBody AddTariffDto addTariffDto) {
         tariffService.saveTariff(addTariffDto);
         return "ok";
     }

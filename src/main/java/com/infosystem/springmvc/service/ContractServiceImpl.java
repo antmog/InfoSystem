@@ -180,14 +180,14 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = modelMapperWrapper.mapToContract(addContractDto);
 
         Double price = contract.getTariff().getPrice();
-        Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(addContractDto.getTariffOptionDtoList());
-        for (TariffOption tariffOption : tariffOptionList) {
-            price += tariffOption.getPrice();
+        if(!addContractDto.getTariffOptionDtoList().isEmpty()){
+            Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(addContractDto.getTariffOptionDtoList());
+            for (TariffOption tariffOption : tariffOptionList) {
+                price += tariffOption.getPrice();
+            }
+            contract.setActiveOptions(tariffOptionList);
         }
-
         contract.setPrice(price);
-        contract.setActiveOptions(tariffOptionList);
-
 
             // also add COST here later (cost of adding options)
             // i mean just take funds from user :D

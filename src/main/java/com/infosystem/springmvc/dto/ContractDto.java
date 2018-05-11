@@ -1,11 +1,15 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 
 public class ContractDto implements Serializable {
     private Integer userId;
+    @NotEmpty
     private String phoneNumber;
+    @NotNull
     private Integer tariffId;
 
     public ContractDto(Integer userId, String phoneNumber,Integer tariffId) {
