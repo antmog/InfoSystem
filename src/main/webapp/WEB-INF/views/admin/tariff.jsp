@@ -11,7 +11,7 @@
 
 <main class="mt-4">
     <div class="container">
-        <c:if test="${tariff.status == 'INACTIVE'}">
+        <c:if test="${tariffPageDto.tariff.status == 'INACTIVE'}">
             <div class="alert alert-warning" role="alert">
                 Tariff is inactive (archived).
             </div>
@@ -20,23 +20,23 @@
             <div class="col-md-4">
                 <div class="card mb-4">
                     <h5 class="card-header">
-                        <strong> ${tariff.id} : ${tariff.name}</strong>
+                        <strong> ${tariffPageDto.tariff.id} : ${tariffPageDto.tariff.name}</strong>
                     </h5>
                     <div class="card-body">
                         <table class="table table-hover">
                             <tbody>
                             <tr>
                                 <td>price</td>
-                                <td>${tariff.price}</td>
+                                <td>${tariffPageDto.tariff.price}</td>
                             </tr>
                             </tbody>
                         </table>
                         <c:choose>
-                            <c:when test="${tariff.status == 'INACTIVE'}">
+                            <c:when test="${tariffPageDto.tariff.status == 'INACTIVE'}">
                                 <button id="unArchiveTariff" type="button" class="btn btn-primary btn-sm btn-success">Unarchive tariff</button>
                                 <button id="deleteTariff" type="button" class="btn btn-primary btn-sm btn-danger">Delete tariff</button>
                             </c:when>
-                            <c:when test="${tariff.status == 'ACTIVE'}">
+                            <c:when test="${tariffPageDto.tariff.status == 'ACTIVE'}">
                                 <button id="archiveTariff" type="button" class="btn btn-primary btn-sm btn-warning">Archive tariff</button>
                             </c:when>
                         </c:choose>
@@ -60,7 +60,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${tariff.availableOptions}" var="availableOption">
+                                <c:forEach items="${tariffPageDto.tariff.availableOptions}" var="availableOption">
                                     <tr class="move-row">
                                         <td>${availableOption.id}</td>
                                         <td>${availableOption.name}</td>
@@ -93,7 +93,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${options}" var="option">
+                                <c:forEach items="${tariffPageDto.options}" var="option">
                                     <tr class="move-row">
                                         <td>${option.id}</td>
                                         <td>${option.name}</td>
@@ -127,7 +127,7 @@
     </table>
 </main>
 <script>
-    var tariff_id = ${tariff.id};
+    var tariff_id = ${tariffPageDto.tariff.id};
 </script>
 <jsp:include page="../footer.jsp"/>
 </body>

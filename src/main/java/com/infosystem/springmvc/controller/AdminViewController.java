@@ -1,12 +1,10 @@
 package com.infosystem.springmvc.controller;
 
 
-import com.infosystem.springmvc.dto.AddContractDto;
-import com.infosystem.springmvc.dto.AddTariffOptionDto;
-import com.infosystem.springmvc.dto.AddUserDto;
-import com.infosystem.springmvc.dto.AdminPanelDto;
+import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.MyBusinessException;
 import com.infosystem.springmvc.model.*;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.DataService.DataService;
@@ -213,7 +211,7 @@ public class AdminViewController {
     }
 
     /**
-     * Returns view with addOption custom form with selected userId
+     * Returns view with addOption custom form with selected userId.
      *
      * @param model
      * @return view
@@ -227,7 +225,7 @@ public class AdminViewController {
     }
 
     /**
-     * Validates and saves tariffOption if data is correct
+     * Validates and saves tariffOption if data is correct.
      *
      * @param addTariffOptionDto
      * @param result
@@ -246,50 +244,93 @@ public class AdminViewController {
         return adminPath + "addSuccess";
     }
 
-
+    /**
+     * Returns view with addTariff custom form.
+     *
+     * @param model
+     * @return view
+     */
     @RequestMapping(value = "/adminPanel/addTariff", method = RequestMethod.GET)
     public String addTariff(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
-        List<TariffOption> options = tariffOptionService.findAllTariffOptions();
-
-        model.addAttribute("options", options);
-        model.addAttribute("edit", false);
+        List<TariffOption> tariffOptions = tariffOptionService.findAllTariffOptions();
+        model.addAttribute("options", tariffOptions);
         return adminPath + "addTariff";
     }
 
+    /**
+     * Returns user page view.
+     * @param user_id
+     * @param model
+     * @return error page view if user doesn't exist
+     */
     @RequestMapping(value = "/adminPanel/user/{user_id}")
-    public String user(@PathVariable(value = "user_id") Integer user_id, ModelMap model) throws DatabaseException {
-        User user = userService.findById(user_id);
+    public String user(@PathVariable(value = "user_id") Integer user_id, ModelMap model)  {
+        User user = null;
+        try {
+            user = userService.findById(user_id);
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model,e);
+        }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("user", user);
         return adminPath + "user";
     }
 
+
+    /**
+     * Returns contract page view.
+     * @param contract_id
+     * @param model
+     * @return error page view if contract doesn't exist
+     */
     @RequestMapping(value = "/adminPanel/contract/{contract_id}")
-    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) throws DatabaseException {
-        Contract contract = contractService.findById(contract_id);
-        List<Tariff> tariffs = tariffService.findAllActiveTariffs();
-        model.addAttribute("tariffs", tariffs);
+    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model)  {
+        ContractPageDto contractPageDto;
+        try {
+            contractPageDto = dataService.getContractPageData(contract_id);
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model,e);
+        }
+        model.addAttribute("contractPageDto", contractPageDto);
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("contract", contract);
         return adminPath + "contract";
     }
 
+    /**
+     * Returns tariff page view.
+     * @param tariff_id
+     * @param model
+     * @return error page view if tariff doesn't exist
+     */
     @RequestMapping(value = "/adminPanel/tariff/{tariff_id}")
-    public String tariff(@PathVariable(value = "tariff_id") Integer tariff_id, ModelMap model) throws DatabaseException {
-        Tariff tariff;
-        tariff = tariffService.findById(tariff_id);
-        List<TariffOption> options = tariffOptionService.findAllTariffOptions();
-
-        model.addAttribute("options", options);
+    public String tariff(@PathVariable(value = "tariff_id") Integer tariff_id, ModelMap model){
+        TariffPageDto tariffPageDto;
+        try {
+            tariffPageDto = dataService.getTariffPageData(tariff_id);
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model,e);
+        }
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("tariff", tariff);
+        model.addAttribute("tariffPageDto", tariffPageDto);
         return adminPath + "tariff";
     }
 
+
+    /**
+     * Returns option page view.
+     * @param option_id
+     * @param model
+     * @return error page view if option doesn't exist
+     */
     @RequestMapping(value = "/adminPanel/option/{option_id}")
-    public String option(@PathVariable(value = "option_id") Integer option_id, ModelMap model) throws DatabaseException {
-        TariffOption tariffOption = tariffOptionService.findById(option_id);
+    public String option(@PathVariable(value = "option_id") Integer option_id, ModelMap model) {
+        TariffOption tariffOption;
+        try {
+            tariffOption = tariffOptionService.findById(option_id);
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model,e);
+        }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffOption", tariffOption);
         return adminPath + "option";
@@ -319,5 +360,10 @@ public class AdminViewController {
         return authenticationTrustResolver.isAnonymous(authentication);
     }
 
+    String prepareErrorPage(ModelMap model, MyBusinessException e){
+        model.addAttribute("error", e.getMessage());
+        model.addAttribute("loggedinuser", getPrincipal());
+        return adminPath + "errorPage";
+    }
 
 }

@@ -16,26 +16,26 @@
             <div class="col-md-4">
                 <div class="card mb-4">
                     <h5 class="card-header">
-                        <strong> ${contract.id} : ${contract.phoneNumber}</strong>
+                        <strong> ${contractPageDto.contract.id} : ${contractPageDto.contract.phoneNumber}</strong>
                     </h5>
                     <div class="card-body">
                         <table class="table table-hover" id="tariffTable">
                             <tbody>
                             <tr class="contract-row">
                                 <td>owner id</td>
-                                <td>${contract.user.id}</td>
+                                <td>${contractPageDto.contract.user.id}</td>
                             </tr>
                             <tr class="contract-row">
                                 <td>tariff_id</td>
-                                <td>${contract.tariff.id}</td>
+                                <td>${contractPageDto.contract.tariff.id}</td>
                             </tr>
                             <tr class="contract-row">
                                 <td>price</td>
-                                <td>${contract.price}</td>
+                                <td>${contractPageDto.contract.price}</td>
                             </tr>
                             <tr class="contract-row">
                                 <td>active options</td>
-                                <td><c:forEach items="${contract.activeOptions}" var="option">
+                                <td><c:forEach items="${contractPageDto.contract.activeOptions}" var="option">
                                     ${option.id};
                                 </c:forEach></td>
                             </tr>
@@ -44,13 +44,13 @@
                         <button id="deleteContract" type="button" class="btn btn-primary btn-sm btn-danger">Delete contract</button>
                     </div>
                     <c:choose>
-                        <c:when test="${contract.status == 'BLOCKED'}">
+                        <c:when test="${contractPageDto.contract.status == 'BLOCKED'}">
                             <label value="Inactive">Blocked
                             </label>
                             <button type="button" class="btn btn-success" id="unBlockContractButton">Unblock contract
                             </button>
                         </c:when>
-                        <c:when test="${contract.status == 'INACTIVE'}">
+                        <c:when test="${contractPageDto.contract.status == 'INACTIVE'}">
                             <label value="Inactive">Inactive (deactivated)
                             </label>
                             <button type="button" class="btn btn-success" id="unBlockContractButton">Activate contract
@@ -87,7 +87,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${contract.activeOptions}" var="option">
+                                <c:forEach items="${contractPageDto.contract.activeOptions}" var="option">
                                     <tr class="move-row">
                                         <td>${option.id}</td>
                                         <td>${option.name}</td>
@@ -120,7 +120,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${contract.tariff.availableOptions}" var="availableOption">
+                                <c:forEach items="${contractPageDto.contract.tariff.availableOptions}" var="availableOption">
                                     <tr class="move-row">
                                         <td>${availableOption.id}</td>
                                         <td>${availableOption.name}</td>
@@ -153,7 +153,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach items="${tariffs}" var="tariff">
+                                    <c:forEach items="${contractPageDto.tariffs}" var="tariff">
                                         <tr class="t-row">
                                             <td>${tariff.id}</td>
                                             <td>${tariff.name}</td>
@@ -207,7 +207,7 @@
     </table>
 </main>
 <script>
-    var contract_id = ${contract.id};
+    var contract_id = ${contractPageDto.contract.id};
 </script>
 <jsp:include page="../footer.jsp"/>
 </body>

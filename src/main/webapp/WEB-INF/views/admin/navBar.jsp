@@ -26,10 +26,7 @@
             </li>
             <sec:authorize access="isAuthenticated()">
                 <li class="nav-item">
-                    <strong>${loggedinuser}</strong>,
-                    <a class="nav-link" href="/logout">
-                        Log out
-                    </a>
+                    <strong>${loggedinuser}</strong>,<a class="nav-link" href="/logout">Log out</a>
                 </li>
             </sec:authorize>
         </ul>

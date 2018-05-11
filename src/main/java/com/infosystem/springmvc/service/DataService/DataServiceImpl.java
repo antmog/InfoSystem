@@ -1,6 +1,10 @@
 package com.infosystem.springmvc.service.DataService;
 
 import com.infosystem.springmvc.dto.AdminPanelDto;
+import com.infosystem.springmvc.dto.ContractPageDto;
+import com.infosystem.springmvc.dto.TariffPageDto;
+import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
 import com.infosystem.springmvc.service.UserService;
@@ -18,10 +22,22 @@ public class DataServiceImpl implements DataService {
     TariffService tariffService;
     @Autowired
     UserService userService;
+    @Autowired
+    ContractService contractService;
 
     @Override
     public AdminPanelDto getAdminPanelData() {
         return new AdminPanelDto(userService.findFirstUsers(),
                 tariffService.findFirstTariffs(),tariffOptionService.findFirstTariffOptions());
+    }
+
+    @Override
+    public TariffPageDto getTariffPageData(Integer tariff_id) throws DatabaseException {
+        return new TariffPageDto(tariffService.findById(tariff_id),tariffOptionService.findAllTariffOptions());
+    }
+
+    @Override
+    public ContractPageDto getContractPageData(Integer contractId) throws DatabaseException {
+        return new ContractPageDto(contractService.findById(contractId),tariffService.findAllActiveTariffs());
     }
 }
