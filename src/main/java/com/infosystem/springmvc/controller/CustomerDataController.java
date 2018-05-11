@@ -1,7 +1,7 @@
 package com.infosystem.springmvc.controller;
 
 
-import com.infosystem.springmvc.dto.ContractOptionsDto;
+import com.infosystem.springmvc.dto.EditContractDto;
 import com.infosystem.springmvc.dto.SwitchTariffDto;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
@@ -49,8 +49,8 @@ public class CustomerDataController {
 
 
     @RequestMapping(value = "/customerPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractAddOptions(@RequestBody @Valid ContractOptionsDto contractOptionsDto, BindingResult result) {
-        contractService.customerAddOptions(contractOptionsDto);
+    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) {
+        contractService.customerAddOptions(editContractDto);
         if (result.hasErrors()) {
             return "notok";
         }
@@ -58,8 +58,8 @@ public class CustomerDataController {
     }
 
     @RequestMapping(value = "/customerPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractDelOptions(@RequestBody @Valid ContractOptionsDto contractOptionsDto, BindingResult result) {
-        contractService.customerDelOptions(contractOptionsDto);
+    public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) {
+        contractService.customerDelOptions(editContractDto);
         if (result.hasErrors()) {
             return "notok";
         }

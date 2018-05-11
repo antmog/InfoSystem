@@ -238,9 +238,7 @@
                     contractId: contract_id
                 })
             }).done(function (msg) {
-                if (msg === "ok") {
-                    alert(msg);
-                }
+                alert(msg);
             }).fail(function (jqXHR, textStatus) {
                 alert("Request failed: " + textStatus);
             });
@@ -268,11 +266,10 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
-                if (msg === "ok") {
-                    var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
-                    tr.removeClass('add-tariff-table-selected');
-                    $("#contractCurrentOptions").append(tr);
-                }
+                alert(msg);
+                var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
+                tr.removeClass('add-tariff-table-selected');
+                $("#contractCurrentOptions").append(tr);
             }).fail(function (jqXHR, textStatus) {
                 alert("Request failed: " + textStatus);
             });
@@ -302,11 +299,8 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
-                if (msg === "ok") {
-                    var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove().clone();
-                    tr.removeClass('add-tariff-table-selected');
-                    $("#contractAvailableOptions").append(tr);
-                }
+                alert(msg);
+                var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove();
             }).fail(function (jqXHR, textStatus) {
                 alert("Request failed: " + textStatus);
             });
@@ -598,9 +592,7 @@
                     data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id})
                 }).done(function (msg) {
                     alert(msg);
-                    var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove().clone();
-                    tr.removeClass('add-tariff-table-selected');
-                    $("#tariffAvailableOptions").append(tr);
+                    var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove();
                 }).fail(function (jqXHR, textStatus) {
                     alert("Request failed: " + textStatus);
                 });

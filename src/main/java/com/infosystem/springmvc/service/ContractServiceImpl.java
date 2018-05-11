@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -86,13 +85,13 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public boolean addOptions(ContractOptionsDto contractOptionsDto) {
+    public boolean addOptions(EditContractDto editContractDto) {
         List<Integer> optionIdList = new ArrayList<>();
-        for (TariffOptionDto tariffOptionDto : contractOptionsDto.getTariffOptionDtoList()) {
+        for (TariffOptionDto tariffOptionDto : editContractDto.getTariffOptionDtoList()) {
             optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        Contract contract = dao.findById(contractOptionsDto.getContractId());
+        Contract contract = dao.findById(editContractDto.getContractId());
         contractOptionList.addAll(contract.getActiveOptions());
         contract.setActiveOptions(contractOptionList);
 
@@ -106,27 +105,27 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public boolean adminAddOptions(ContractOptionsDto contractOptionsDto) {
-        addOptions(contractOptionsDto);
+    public boolean adminAddOptions(EditContractDto editContractDto) {
+        addOptions(editContractDto);
         return false;
     }
 
     @Override
-    public boolean customerAddOptions(ContractOptionsDto contractOptionsDto) {
-        if (dao.findById(contractOptionsDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
-            addOptions(contractOptionsDto);
+    public boolean customerAddOptions(EditContractDto editContractDto) {
+        if (dao.findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
+            addOptions(editContractDto);
         }
         return false;
     }
 
     @Override
-    public boolean delOptions(ContractOptionsDto contractOptionsDto) {
+    public boolean delOptions(EditContractDto editContractDto) {
         List<Integer> optionIdList = new ArrayList<>();
-        for (TariffOptionDto tariffOptionDto : contractOptionsDto.getTariffOptionDtoList()) {
+        for (TariffOptionDto tariffOptionDto : editContractDto.getTariffOptionDtoList()) {
             optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        Contract contract = dao.findById(contractOptionsDto.getContractId());
+        Contract contract = dao.findById(editContractDto.getContractId());
 
         Set<TariffOption> newTariffOptionList = contract.getActiveOptions();
         if (newTariffOptionList.removeAll(contractOptionList)) {
@@ -143,15 +142,15 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public boolean adminDelOptions(ContractOptionsDto contractOptionsDto) {
-        delOptions(contractOptionsDto);
+    public boolean adminDelOptions(EditContractDto editContractDto) {
+        delOptions(editContractDto);
         return false;
     }
 
     @Override
-    public boolean customerDelOptions(ContractOptionsDto contractOptionsDto) {
-        if (dao.findById(contractOptionsDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
-            delOptions(contractOptionsDto);
+    public boolean customerDelOptions(EditContractDto editContractDto) {
+        if (dao.findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
+            delOptions(editContractDto);
         }
         return false;
     }

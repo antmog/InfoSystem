@@ -1,17 +1,19 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-public class ContractOptionsDto {
+public class EditContractDto {
+    @NotEmpty
     private List<TariffOptionDto> tariffOptionDtoList;
     private Integer contractId;
 
-    public ContractOptionsDto(List<TariffOptionDto> tariffOptionDtoList, Integer contractId) {
+    public EditContractDto(List<TariffOptionDto> tariffOptionDtoList, Integer contractId) {
         this.tariffOptionDtoList = tariffOptionDtoList;
         this.contractId = contractId;
     }
 
-    public ContractOptionsDto() {
+    public EditContractDto() {
     }
 
     public List<TariffOptionDto> getTariffOptionDtoList() {

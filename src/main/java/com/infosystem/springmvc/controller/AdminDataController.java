@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.infosystem.springmvc.service.UserService;
-import sun.rmi.runtime.Log;
 
 import javax.validation.Valid;
 
@@ -133,18 +132,21 @@ public class AdminDataController {
     }
 
     @RequestMapping(value = "/adminPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractAddOptions(@RequestBody @Valid ContractOptionsDto contractOptionsDto, BindingResult result) {
-        contractService.adminAddOptions(contractOptionsDto);
+    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException {
+        if(result.hasErrors()){
+            throw new ValidationException("Select options to add");
+        }
+        contractService.adminAddOptions(editContractDto);
         return "Options added.";
     }
 
     @RequestMapping(value = "/adminPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractDelOptions(@RequestBody @Valid ContractOptionsDto contractOptionsDto, BindingResult result) {
-        contractService.adminDelOptions(contractOptionsDto);
-        if (result.hasErrors()) {
-            return "notok";
+    public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException {
+        if(result.hasErrors()){
+            throw new ValidationException("Select options to delete");
         }
-        return "ok";
+        contractService.adminDelOptions(editContractDto);
+        return "Options deleted.";
     }
 
 

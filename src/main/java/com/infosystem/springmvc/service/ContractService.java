@@ -1,7 +1,7 @@
 package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dto.AddContractDto;
-import com.infosystem.springmvc.dto.ContractOptionsDto;
+import com.infosystem.springmvc.dto.EditContractDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.dto.SwitchTariffDto;
 import com.infosystem.springmvc.exception.DatabaseException;
@@ -27,13 +27,13 @@ public interface ContractService {
 
     Contract findByPhoneNumber(String phoneNumber);
 
-    boolean addOptions(ContractOptionsDto contractOptionsDto);
-    boolean adminAddOptions(ContractOptionsDto contractOptionsDto);
-    boolean customerAddOptions(ContractOptionsDto contractOptionsDto);
+    boolean addOptions(EditContractDto editContractDto);
+    boolean adminAddOptions(EditContractDto editContractDto);
+    boolean customerAddOptions(EditContractDto editContractDto);
 
-    boolean delOptions(ContractOptionsDto contractOptionsDto);
-    boolean adminDelOptions(ContractOptionsDto contractOptionsDto);
-    boolean customerDelOptions(ContractOptionsDto contractOptionsDto);
+    boolean delOptions(EditContractDto editContractDto);
+    boolean adminDelOptions(EditContractDto editContractDto);
+    boolean customerDelOptions(EditContractDto editContractDto);
 
     void switchTariff(SwitchTariffDto switchTariffDto);
     void adminSwitchTariff(SwitchTariffDto switchTariffDto);
