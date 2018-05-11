@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository("tokenRepositoryDao")
 @Transactional
@@ -44,11 +45,13 @@ public class HibernateTokenRepositoryImpl extends AbstractDao<String, Persistent
 
     @Override
     public void removeUserTokens(String username) {
-        PersistentLogin persistentLogin = (PersistentLogin) getSession()
+        List persistentLogin = getSession()
                 .createQuery("SELECT p FROM PersistentLogin p WHERE p.username LIKE :username")
                 .setParameter("username", username)
-                .getSingleResult();
-        delete(persistentLogin);
+                .getResultList();
+        if (!persistentLogin.isEmpty()) {
+            delete((PersistentLogin) persistentLogin.get(0));
+        }
     }
 
     @Override

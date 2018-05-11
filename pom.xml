@@ -151,7 +151,24 @@
             <artifactId>h2</artifactId>
             <version>1.4.191</version>
         </dependency>
+
+        <!-- MODELMAPPER -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
+        <!-- SLF4J/Logback -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.7</version>
+        </dependency>
     </dependencies>
+
+
+
 
     <build>
         <pluginManagement>

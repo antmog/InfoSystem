@@ -26,7 +26,7 @@
                             <input type="text" id="user_id" class="form-control input-sm"/>
                         </c:when>
                         <c:otherwise>
-                            <form:input type="hidden" path="user_id" id="user_id" class="form-control input-sm" value="${user_id}"/>
+                            <input type="hidden" path="user_id" id="user_id" class="form-control input-sm" value="${user_id}"/>
                         </c:otherwise>
                     </c:choose>
                     <label class="control-lable" for="phoneNumber">phoneNumber</label>

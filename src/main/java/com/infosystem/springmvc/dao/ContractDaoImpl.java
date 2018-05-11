@@ -37,14 +37,21 @@ public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements C
         delete(contract);
     }
 
+
+    /**
+     * Searching for contract in DB with selected phoneNumber.
+     * @param phoneNumber
+     * @return contract with phoneNumber or null if there is no contract with that number.
+     */
     @Override
     public Contract findByPhoneNumber(String phoneNumber) {
-        System.out.println(phoneNumber);
-        Contract contract = (Contract) getSession()
+        List contractList = getSession()
                 .createQuery("SELECT c FROM Contract c WHERE c.phoneNumber LIKE :phoneNumber")
                 .setParameter("phoneNumber", phoneNumber)
-                .getSingleResult();
-
-        return contract;
+                .getResultList();
+        if (!contractList.isEmpty()) {
+            return (Contract)contractList.get(0);
+        }
+        return null;
     }
 }

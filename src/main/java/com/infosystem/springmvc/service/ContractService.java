@@ -4,6 +4,7 @@ import com.infosystem.springmvc.dto.AddContractDto;
 import com.infosystem.springmvc.dto.ContractOptionsDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.dto.SwitchTariffDto;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Contract;
 
 import java.util.List;
@@ -37,5 +38,5 @@ public interface ContractService {
     void adminSwitchTariff(SwitchTariffDto switchTariffDto);
     void customerSwitchTariff(SwitchTariffDto switchTariffDto);
 
-    void newContract(AddContractDto addContractDto);
+    void newContract(AddContractDto addContractDto) throws LogicException;
 }

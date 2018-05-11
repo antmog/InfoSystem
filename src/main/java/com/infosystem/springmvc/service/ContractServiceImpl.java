@@ -2,10 +2,12 @@ package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.ContractDao;
 import com.infosystem.springmvc.dto.*;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Contract;
 import com.infosystem.springmvc.model.Status;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
+import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,18 +19,26 @@ import java.util.Set;
 @Service("contractService")
 @Transactional
 public class ContractServiceImpl implements ContractService {
-
     @Autowired
-    private ContractDao dao;
-
+     ContractDao dao;
     @Autowired
-    private TariffOptionService tariffOptionService;
-
+     TariffOptionService tariffOptionService;
     @Autowired
-    private TariffService tariffService;
-
+     TariffService tariffService;
     @Autowired
-    private UserService userService;
+     UserService userService;
+    @Autowired
+     CustomModelMapper modelMapperWrapper;
+
+//    @Autowired
+//    public ContractServiceImpl(ContractDao dao, TariffOptionService tariffOptionService, TariffService tariffService,
+//                               UserService userService, CustomModelMapper modelMapperWrapper) {
+//        this.dao = dao;
+//        this.tariffOptionService = tariffOptionService;
+//        this.tariffService = tariffService;
+//        this.userService = userService;
+//        this.modelMapperWrapper = modelMapperWrapper;
+//    }
 
     public Contract findById(int id) {
         return dao.findById(id);
@@ -38,20 +48,17 @@ public class ContractServiceImpl implements ContractService {
         dao.save(contract);
     }
 
-
-
-    /*
-     * Since the method is running with Transaction, No need to call hibernate update explicitly.
-     * Just fetch the entity from db and update it with proper values within transaction.
-     * It will be updated in db once transaction ends.
-     */
     public void updateContract(Contract contract) {
         Contract entity = dao.findById(contract.getId());
-        if(entity!=null){
-
+        if (entity != null) {
+            entity.setActiveOptions(contract.getActiveOptions());
+            entity.setUser(contract.getUser());
+            entity.setTariff(contract.getTariff());
+            entity.setPhoneNumber(contract.getPhoneNumber());
+            entity.setPrice(contract.getPrice());
+            entity.setStatus(contract.getStatus());
         }
     }
-
 
     public List<Contract> findAllContracts() {
         return dao.findAllContracts();
@@ -75,7 +82,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public boolean addOptions(ContractOptionsDto contractOptionsDto) {
         List<Integer> optionIdList = new ArrayList<>();
-        for( TariffOptionDto tariffOptionDto : contractOptionsDto.getTariffOptionDtoList()){
+        for (TariffOptionDto tariffOptionDto : contractOptionsDto.getTariffOptionDtoList()) {
             optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
@@ -84,8 +91,8 @@ public class ContractServiceImpl implements ContractService {
         contract.setActiveOptions(contractOptionList);
 
         Double price = contract.getTariff().getPrice();
-        for(TariffOption tariffOption : contractOptionList){
-            price+=tariffOption.getPrice();
+        for (TariffOption tariffOption : contractOptionList) {
+            price += tariffOption.getPrice();
         }
         contract.setPrice(price);
         // LOGIC RULES ETC
@@ -100,7 +107,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public boolean customerAddOptions(ContractOptionsDto contractOptionsDto) {
-        if(dao.findById(contractOptionsDto.getContractId()).getStatus().equals(Status.ACTIVE)){
+        if (dao.findById(contractOptionsDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
             addOptions(contractOptionsDto);
         }
         return false;
@@ -109,20 +116,20 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public boolean delOptions(ContractOptionsDto contractOptionsDto) {
         List<Integer> optionIdList = new ArrayList<>();
-        for( TariffOptionDto tariffOptionDto : contractOptionsDto.getTariffOptionDtoList()){
+        for (TariffOptionDto tariffOptionDto : contractOptionsDto.getTariffOptionDtoList()) {
             optionIdList.add(tariffOptionDto.getId());
         }
         Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
         Contract contract = dao.findById(contractOptionsDto.getContractId());
 
         Set<TariffOption> newTariffOptionList = contract.getActiveOptions();
-        if(newTariffOptionList.removeAll(contractOptionList)){
+        if (newTariffOptionList.removeAll(contractOptionList)) {
             System.out.println("YES");
         }
         contract.setActiveOptions(newTariffOptionList);
         Double price = contract.getTariff().getPrice();
-        for(TariffOption tariffOption : newTariffOptionList){
-            price+=tariffOption.getPrice();
+        for (TariffOption tariffOption : newTariffOptionList) {
+            price += tariffOption.getPrice();
         }
         contract.setPrice(price);
         // LOGIC RULES ETC
@@ -137,7 +144,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public boolean customerDelOptions(ContractOptionsDto contractOptionsDto) {
-        if(dao.findById(contractOptionsDto.getContractId()).getStatus().equals(Status.ACTIVE)){
+        if (dao.findById(contractOptionsDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
             delOptions(contractOptionsDto);
         }
         return false;
@@ -156,35 +163,40 @@ public class ContractServiceImpl implements ContractService {
     public void adminSwitchTariff(SwitchTariffDto switchTariffDto) {
         switchTariff(switchTariffDto);
     }
+
     @Override
     public void customerSwitchTariff(SwitchTariffDto switchTariffDto) {
         Contract contract = dao.findById(switchTariffDto.getContractId());
-        if(contract.getStatus().equals(Status.ACTIVE)){
+        if (contract.getStatus().equals(Status.ACTIVE)) {
             switchTariff(switchTariffDto);
         }
     }
 
     @Override
-    public void newContract(AddContractDto addContractDto) {
-        Tariff tariff = tariffService.findById(addContractDto.getContractDto().getTariffId());
-        Double price = tariff.getPrice();
-        Contract contract = new Contract();
-        contract.setPhoneNumber(addContractDto.getContractDto().getPhoneNumber());
-        contract.setUser(userService.findById(addContractDto.getContractDto().getUserId()));
-        contract.setTariff(tariff);
-        List<Integer> optionIdList = new ArrayList<>();
-        for( TariffOptionDto tariffOptionDto : addContractDto.getTariffOptionDtoList()){
-            optionIdList.add(tariffOptionDto.getId());
+    public void newContract(AddContractDto addContractDto) throws LogicException {
+        if(doesPhoneNumberExist(addContractDto.getContractDto().getPhoneNumber())){
+            throw new LogicException("Contract with that phone number already exists.");
         }
-        Set<TariffOption> tariffOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        for(TariffOption tariffOption : tariffOptionList){
-            price+=tariffOption.getPrice();
+        Contract contract = modelMapperWrapper.mapToContract(addContractDto);
+
+        Double price = contract.getTariff().getPrice();
+        Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(addContractDto.getTariffOptionDtoList());
+        for (TariffOption tariffOption : tariffOptionList) {
+            price += tariffOption.getPrice();
         }
-        // also add COST here later (cost of adding options)
-        // i mean just take funds from user :D
+
         contract.setPrice(price);
         contract.setActiveOptions(tariffOptionList);
+
+
+            // also add COST here later (cost of adding options)
+            // i mean just take funds from user :D
         dao.save(contract);
+    }
+
+    private boolean doesPhoneNumberExist(String phoneNumber){
+        Contract contract = findByPhoneNumber(phoneNumber);
+        return (contract!=null);
     }
 
 }

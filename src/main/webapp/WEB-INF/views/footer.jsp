@@ -22,5 +22,6 @@
         <script src="/static/js/customer.js" defer></script>
     </sec:authorize>
 </sec:authorize>
+<script src="/static/vendors/bootstrap-notify/bootstrap-notify.min.js" defer></script>
 </body>
 </html>

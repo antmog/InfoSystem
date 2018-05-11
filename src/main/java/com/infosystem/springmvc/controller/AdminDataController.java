@@ -1,6 +1,7 @@
 package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.*;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.User;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
@@ -19,35 +20,40 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/")
 public class AdminDataController {
-
-    private UserService userService;
-    private ContractService contractService;
-    private TariffOptionService tariffOptionService;
-    private MessageSource messageSource;
-    private TariffService tariffService;
-
     @Autowired
-    public AdminDataController(UserService userService, ContractService contractService,
-                               TariffOptionService tariffOptionService, MessageSource messageSource,
-                               TariffService tariffService) {
-        this.userService = userService;
-        this.contractService = contractService;
-        this.tariffOptionService = tariffOptionService;
-        this.messageSource = messageSource;
-        this.tariffService = tariffService;
-    }
+     UserService userService;
+    @Autowired
+     ContractService contractService;
+    @Autowired
+     TariffOptionService tariffOptionService;
+    @Autowired
+     MessageSource messageSource;
+    @Autowired
+     TariffService tariffService;
+//
+//    @Autowired
+//    public AdminDataController(UserService userService, ContractService contractService,
+//                               TariffOptionService tariffOptionService, MessageSource messageSource,
+//                               TariffService tariffService) {
+//        this.userService = userService;
+//        this.contractService = contractService;
+//        this.tariffOptionService = tariffOptionService;
+//        this.messageSource = messageSource;
+//        this.tariffService = tariffService;
+//    }
 
     /**
      * This method is called on submit of adding contract from allContracts page and user page.
      */
     @RequestMapping(value = {"/adminPanel/addContract", "/adminPanel/addContractToUser/{user_id}"}, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = RequestMethod.POST)
-    public String saveContract(@RequestBody @Valid AddContractDto addContractDto, BindingResult result) {
-        //+check unique
-        if (result.hasErrors()) {
-            return "notok";
-        }
+    public String addContract(@RequestBody AddContractDto addContractDto) throws LogicException {
+        System.out.println("sss");
+        System.out.println("sss");
+        System.out.println("sss");
         contractService.newContract(addContractDto);
+        System.out.println("sss");
+        System.out.println("sss");
         return "ok";
     }
 
