@@ -36,14 +36,11 @@ public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements C
      * @param id
      * @throws DatabaseException if entity doesnt exist
      */
-    public void deleteById(int id) throws DatabaseException {
+    public void deleteById(int id) {
         List contracts = getSession()
                 .createQuery("SELECT c FROM Contract c WHERE c.id LIKE :Id")
                 .setParameter("Id", id)
                 .getResultList();
-        if(contracts.isEmpty()){
-            throw new DatabaseException("Contract alrdy doesn't exist.");
-        }
         delete((Contract)contracts.get(0));
     }
 

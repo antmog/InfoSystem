@@ -57,14 +57,11 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
      * @param id
      * @throws DatabaseException if entity doesnt exist
      */
-    public void deleteById(int id) throws DatabaseException {
+    public void deleteById(int id){
         List tariffs = getSession()
                 .createQuery("SELECT t FROM Tariff t WHERE t.id LIKE :Id")
                 .setParameter("Id", id)
                 .getResultList();
-        if(tariffs.isEmpty()){
-            throw new DatabaseException("Tariff alrdy doesn't exist.");
-        }
         delete((Tariff)tariffs.get(0));
     }
 

@@ -14,7 +14,6 @@ public class ExceptionController {
 
     /**
      * Sends bad request to the page with selected message.
-     *
      * @param e Logic exception
      * @return message
      */
@@ -27,7 +26,6 @@ public class ExceptionController {
 
     /**
      * Sends unsupported media type request with selected message.
-     *
      * @param e Validation exception
      * @return message
      */

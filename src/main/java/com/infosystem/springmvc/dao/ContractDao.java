@@ -13,7 +13,7 @@ public interface ContractDao {
 
     List<Contract> findAllContracts();
 
-    void deleteById(int id) throws DatabaseException;
+    void deleteById(int id);
 
     Contract findByPhoneNumber(String phoneNumber);
 }

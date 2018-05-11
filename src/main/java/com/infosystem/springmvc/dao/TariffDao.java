@@ -17,5 +17,5 @@ public interface TariffDao {
 
     List<Tariff> findAllActiveTariffs();
 
-    void deleteById(int id) throws DatabaseException;
+    void deleteById(int id);
 }

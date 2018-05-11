@@ -1,6 +1,8 @@
 package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.TariffOptionDao;
+import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Contract;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service("tariffOptionService")
 @Transactional
-public class TariffOptionServiceImpl implements TariffOptionService{
+public class TariffOptionServiceImpl implements TariffOptionService {
 
     @Autowired
     private ContractService contractService;
@@ -39,7 +41,7 @@ public class TariffOptionServiceImpl implements TariffOptionService{
      */
     public void updateTariffOption(TariffOption tariffOption) {
         TariffOption entity = dao.findById(tariffOption.getId());
-        if(entity!=null){
+        if (entity != null) {
             // logic
         }
     }
@@ -58,24 +60,31 @@ public class TariffOptionServiceImpl implements TariffOptionService{
         return dao.selectListByIdList(optionIdList);
     }
 
-    public String deleteTariffOptionById(int id) {
+    /**
+     * Deletes tariffOption if its not used.
+     * @param id
+     * @throws DatabaseException if tariffOption doesn't exist
+     * @throws LogicException if tariffOption is still used
+     */
+    public void deleteTariffOptionById(int id) throws DatabaseException, LogicException {
         TariffOption tariffOption = dao.findById(id);
+        if (tariffOption == null) {
+            throw new DatabaseException("TariffOption doesn't exist.");
+        }
         for (Contract contract : contractService.findAllContracts()) {
-            for(TariffOption option : contract.getActiveOptions()){
-                if(tariffOption.equals(option)){
-                    return "This option is still used.";
+            for (TariffOption option : contract.getActiveOptions()) {
+                if (tariffOption.equals(option)) {
+                    throw new LogicException("This option is still used.");
                 }
             }
         }
-        for(Tariff tariff: tariffService.findAllTariffs()){
-            for(TariffOption option : tariff.getAvailableOptions()){
-                if(tariffOption.equals(option)){
-                    return "This option is still used.";
+        for (Tariff tariff : tariffService.findAllTariffs()) {
+            for (TariffOption option : tariff.getAvailableOptions()) {
+                if (tariffOption.equals(option)) {
+                    throw new LogicException("This option is still used.");
                 }
             }
         }
-        // TBD: delete from RULES table ALSO
         dao.deleteById(id);
-        return "ok";
     }
 }

@@ -16,7 +16,7 @@ public interface UserDao {
 	
 	List<User> findAllUsers();
 
-	void deleteById(int id) throws DatabaseException;
+	void deleteById(int id);
 
 }
 

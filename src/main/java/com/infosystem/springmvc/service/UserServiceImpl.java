@@ -77,12 +77,16 @@ public class UserServiceImpl implements UserService {
 
 
     /**
-     * Deletes user if he has no contracts
+     * Deletes user if he has no contracts.
      * @param id
      * @throws LogicException if user still has contracts
+     * @throws DatabaseException if user doesn't exist
      */
     @Override
     public void deleteUserById(int id) throws LogicException, DatabaseException {
+        if (dao.findById(id) == null) {
+            throw new DatabaseException("User doesn't exist.");
+        }
         if (!dao.findById(id).getUserContracts().isEmpty()) {
             throw new LogicException("User still have contracts!");
         }
@@ -120,7 +124,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException {
         Contract contract = contractService.findByPhoneNumber(searchByNumber.getPhoneNumber());
-        if(contract == null){
+        if (contract == null) {
             throw new LogicException("No such number.");
         }
         return contractService.findByPhoneNumber(searchByNumber.getPhoneNumber()).getUser();

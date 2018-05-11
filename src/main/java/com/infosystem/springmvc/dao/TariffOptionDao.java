@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.dao;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.TariffOption;
 
 import java.util.List;

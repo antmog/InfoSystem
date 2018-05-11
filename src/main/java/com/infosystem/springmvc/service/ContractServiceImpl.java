@@ -21,15 +21,15 @@ import java.util.Set;
 @Transactional
 public class ContractServiceImpl implements ContractService {
     @Autowired
-     ContractDao dao;
+    ContractDao dao;
     @Autowired
-     TariffOptionService tariffOptionService;
+    TariffOptionService tariffOptionService;
     @Autowired
-     TariffService tariffService;
+    TariffService tariffService;
     @Autowired
-     UserService userService;
+    UserService userService;
     @Autowired
-     CustomModelMapper modelMapperWrapper;
+    CustomModelMapper modelMapperWrapper;
 
 //    @Autowired
 //    public ContractServiceImpl(ContractDao dao, TariffOptionService tariffOptionService, TariffService tariffService,
@@ -65,8 +65,16 @@ public class ContractServiceImpl implements ContractService {
         return dao.findAllContracts();
     }
 
+    /**
+     * Deletes contract.
+     * @param id
+     * @throws DatabaseException if contract doesn't exist
+     */
     @Override
     public void deleteContractById(int id) throws DatabaseException {
+        if (dao.findById(id) == null) {
+            throw new DatabaseException("Contract doesn't exist.");
+        }
         dao.deleteById(id);
     }
 
@@ -180,17 +188,18 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Adds new contract with data from DTO.
+     *
      * @param addContractDto data for new contract
      * @throws LogicException if number already exists
      */
     public void newContract(AddContractDto addContractDto) throws LogicException {
-        if(doesPhoneNumberExist(addContractDto.getContractDto().getPhoneNumber())){
+        if (doesPhoneNumberExist(addContractDto.getContractDto().getPhoneNumber())) {
             throw new LogicException("Contract with that phone number already exists.");
         }
         Contract contract = modelMapperWrapper.mapToContract(addContractDto);
 
         Double price = contract.getTariff().getPrice();
-        if(!addContractDto.getTariffOptionDtoList().isEmpty()){
+        if (!addContractDto.getTariffOptionDtoList().isEmpty()) {
             Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(addContractDto.getTariffOptionDtoList());
             for (TariffOption tariffOption : tariffOptionList) {
                 price += tariffOption.getPrice();
@@ -199,8 +208,8 @@ public class ContractServiceImpl implements ContractService {
         }
         contract.setPrice(price);
 
-            // also add COST here later (cost of adding options)
-            // i mean just take funds from user :D
+        // also add COST here later (cost of adding options)
+        // i mean just take funds from user :D
         dao.save(contract);
     }
 
@@ -208,9 +217,9 @@ public class ContractServiceImpl implements ContractService {
      * @param phoneNumber
      * @return true is exist
      */
-    private boolean doesPhoneNumberExist(String phoneNumber){
+    private boolean doesPhoneNumberExist(String phoneNumber) {
         Contract contract = findByPhoneNumber(phoneNumber);
-        return (contract!=null);
+        return (contract != null);
     }
 
 }

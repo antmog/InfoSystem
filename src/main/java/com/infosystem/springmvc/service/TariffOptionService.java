@@ -1,5 +1,7 @@
 package com.infosystem.springmvc.service;
 
+import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.TariffOption;
 
 import java.util.List;
@@ -17,7 +19,7 @@ public interface TariffOptionService {
 
     Set<TariffOption> selectListByIdList(List<Integer> optionIdList);
 
-    String deleteTariffOptionById(int id);
+    void deleteTariffOptionById(int id) throws DatabaseException, LogicException;
 
     List<TariffOption> findFirstTariffOptions();
 

@@ -621,12 +621,9 @@
                 url: "/adminPanel/option/deleteOption",
                 data: option_id.toString()
             }).done(function (msg) {
-                if (msg === "ok") {
-                    document.location.href = "/adminPanel"
-                } else {
-                    alert("Can't delete tariff. It's still used in some contracts.");
-                }
+                alert(msg);
             }).fail(function (jqXHR, textStatus) {
+                alert(jqXHR.responseText);
                 alert("Request failed: " + textStatus);
             });
         });

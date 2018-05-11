@@ -86,11 +86,16 @@ public class TariffServiceImpl implements TariffService {
     }
 
     /**
+     * Deletes tariff if its not used.
      * @param id
      * @throws LogicException if tariff is still used in any contracts
+     * @throws DatabaseException if tariff doesn't exist
      */
     public void deleteTariffById(int id) throws LogicException, DatabaseException {
         Tariff tariff = dao.findById(id);
+        if(tariff == null){
+            throw new DatabaseException("Tariff doesn't exist.");
+        }
         for (Contract contract : contractService.findAllContracts()) {
             if (contract.getTariff().equals(tariff)) {
                 throw new LogicException("Tariff is still used.");

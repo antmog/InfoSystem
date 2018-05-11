@@ -48,14 +48,11 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
      * @param id
      * @throws DatabaseException if entity doesnt exist
      */
-    public void deleteById(int id) throws DatabaseException {
+    public void deleteById(int id){
         List users =  getSession()
                 .createQuery("SELECT u FROM User u WHERE u.id LIKE :Id")
                 .setParameter("Id", id)
                 .getResultList();
-        if(users.isEmpty()){
-            throw new DatabaseException("User alrdy doesn't exist.");
-        }
         delete((User) users.get(0));
     }
 

@@ -1,6 +1,7 @@
 package com.infosystem.springmvc.dao;
 
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.TariffOption;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
@@ -42,12 +43,12 @@ public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> impl
         persist(tariffOption);
     }
 
-    public void deleteById(int id) {
-        TariffOption tariffOption = (TariffOption) getSession()
+    public void deleteById(int id){
+        List tariffOptions = getSession()
                 .createQuery("SELECT t FROM TariffOption t WHERE t.id LIKE :Id")
                 .setParameter("Id", id)
-                .getSingleResult();
-        delete(tariffOption);
+                .getResultList();
+        delete((TariffOption)tariffOptions.get(0));
     }
 
 
