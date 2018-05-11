@@ -77,7 +77,6 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Contract findByPhoneNumber(String phoneNumber) {
         Contract contract = dao.findByPhoneNumber(phoneNumber);
-        System.out.println(contract);
         return contract;
     }
 

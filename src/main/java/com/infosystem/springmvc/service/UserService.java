@@ -23,7 +23,7 @@ public interface UserService {
 
 	List<User> findFirstUsers();
 
-	String deleteUserById(int id);
+	void deleteUserById(int id) throws LogicException;
 
     void setStatus(SetNewStatusDto setNewStatusDto);
 

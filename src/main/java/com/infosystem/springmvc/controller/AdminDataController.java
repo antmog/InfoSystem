@@ -22,15 +22,15 @@ import javax.validation.Valid;
 @RequestMapping("/")
 public class AdminDataController {
     @Autowired
-     UserService userService;
+    UserService userService;
     @Autowired
-     ContractService contractService;
+    ContractService contractService;
     @Autowired
-     TariffOptionService tariffOptionService;
+    TariffOptionService tariffOptionService;
     @Autowired
-     MessageSource messageSource;
+    MessageSource messageSource;
     @Autowired
-     TariffService tariffService;
+    TariffService tariffService;
 //
 //    @Autowired
 //    public AdminDataController(UserService userService, ContractService contractService,
@@ -49,7 +49,7 @@ public class AdminDataController {
     @RequestMapping(value = {"/adminPanel/addContract", "/adminPanel/addContractToUser/{user_id}"}, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = RequestMethod.POST)
     public String addContract(@Valid @RequestBody AddContractDto addContractDto, BindingResult result) throws LogicException, ValidationException {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ValidationException("Enter correct phone number and chose tariff please.");
         }
         contractService.newContract(addContractDto);
@@ -61,7 +61,7 @@ public class AdminDataController {
      */
     @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String saveTariff(@Valid @RequestBody AddTariffDto addTariffDto, BindingResult result) throws LogicException, ValidationException {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ValidationException("Enter correct name and price for new tariff please.");
         }
         tariffService.addTariff(addTariffDto);
@@ -75,7 +75,7 @@ public class AdminDataController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public @ResponseBody
     User searchUserByNumber(@Valid @RequestBody SearchByNumber searchByNumber, BindingResult result) throws ValidationException, LogicException {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ValidationException("Incorrect input!");
         }
         return userService.findByPhoneNumber(searchByNumber);
@@ -85,12 +85,9 @@ public class AdminDataController {
      * This method is called on deleting user from user page.
      */
     @RequestMapping(value = "/adminPanel/user/deleteUser", method = RequestMethod.POST)
-    public String deleteUser(@RequestBody @Valid String user_id, BindingResult result) {
-
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        return userService.deleteUserById(Integer.parseInt(user_id));
+    public String deleteUser(@RequestBody String user_id) throws LogicException {
+        userService.deleteUserById(Integer.parseInt(user_id));
+        return "User(id:" + user_id + ") successfully deleted.";
     }
 
     /**
@@ -148,8 +145,6 @@ public class AdminDataController {
     }
 
 
-
-
     @RequestMapping(value = "/adminPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) {
         //check if user auth is admin if unblock (protection agaisnt HACKERS!!!11 (direct requests) )
@@ -170,7 +165,6 @@ public class AdminDataController {
     }
 
 
-
     @RequestMapping(value = "/adminPanel/option/deleteOption", method = RequestMethod.POST)
     public String deleteOption(@RequestBody @Valid String option_id, BindingResult result) {
 
@@ -179,10 +173,6 @@ public class AdminDataController {
         }
         return tariffOptionService.deleteTariffOptionById(Integer.parseInt(option_id));
     }
-
-
-
-
 
 
 }

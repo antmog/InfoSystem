@@ -83,11 +83,7 @@
                 url: "/adminPanel/user/deleteUser",
                 data: user_id.toString()
             }).done(function (msg) {
-                if (msg === "ok") {
-                    document.location.href = "/adminPanel"
-                } else {
-                    alert("Can't delete this user. Try to delete his contracts.");
-                }
+                alert(msg);
             }).fail(function (jqXHR, textStatus) {
                 alert("Request failed: " + textStatus);
             });

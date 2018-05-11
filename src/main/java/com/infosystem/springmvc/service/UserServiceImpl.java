@@ -75,12 +75,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String deleteUserById(int id) {
-        if (dao.findById(id).getUserContracts().size() == 0) {
-            dao.deleteById(id);
-            return "ok";
+    public void deleteUserById(int id) throws LogicException {
+        if (!dao.findById(id).getUserContracts().isEmpty()) {
+            throw new LogicException("User still have contracts!");
         }
-        return "User still have contracts";
+        dao.deleteById(id);
     }
 
     @Override
