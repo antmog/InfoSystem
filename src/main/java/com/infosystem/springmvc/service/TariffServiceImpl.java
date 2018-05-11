@@ -40,7 +40,7 @@ public class TariffServiceImpl implements TariffService {
     public Tariff findById(int id) throws DatabaseException {
         Tariff tariff = dao.findById(id);
         if (tariff == null) {
-            throw new DatabaseException("TariffOption doesn't exist.");
+            throw new DatabaseException("Tariff doesn't exist.");
         }
         return tariff;
     }

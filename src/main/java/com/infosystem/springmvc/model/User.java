@@ -37,7 +37,6 @@ public class User implements Serializable {
     @Column(name = "PASSPORT_ID", nullable = false, unique = true)
     private Integer passport;
 
-
     @Column(name = "MAIL", nullable = false, unique = true)
     private String mail;
 

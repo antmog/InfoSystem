@@ -24,7 +24,7 @@ public class AddUserDto {
     private Date birthDate;
 
     @Pattern(regexp = "\\d*")
-    @Size(min = 6, max = 32)
+    @Size(min = 6, max = 9)
     private String passport;
 
     @Email

@@ -17,6 +17,8 @@ public interface UserService {
 	User findById(int id) throws DatabaseException;
 
 	User findByLogin(String login);
+	User findByEmail(String mail);
+	User findByPassport(Integer passport);
 
 	void saveUser(User user);
 	
@@ -35,4 +37,8 @@ public interface UserService {
     User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException;
 
     void addUser(AddUserDto addUserDto);
+
+    boolean doesLoginExist(String login);
+    boolean doesEmailExist(String mail);
+    boolean doesPassportExist(String passport);
 }

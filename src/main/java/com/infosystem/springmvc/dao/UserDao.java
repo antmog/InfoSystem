@@ -11,6 +11,8 @@ public interface UserDao {
 	User findById(int id);
 
 	User findByLogin(String login);
+	User findByEmail(String mail);
+	User findByPassport(Integer passport);
 
 	void save(User user);
 	

@@ -41,13 +41,19 @@ public class UserServiceImpl implements UserService {
     public User findById(int id) throws DatabaseException {
         User user = dao.findById(id);
         if (user == null) {
-            throw new DatabaseException("TariffOption doesn't exist.");
+            throw new DatabaseException("User doesn't exist.");
         }
         return user;
     }
 
-    public User findByLogin(String login) {
+    public User findByLogin(String login){
         return dao.findByLogin(login);
+    }
+    public User findByEmail(String mail){
+        return dao.findByEmail(mail);
+    }
+    public User findByPassport(Integer passport){
+        return dao.findByPassport(passport);
     }
 
     public void saveUser(User user) {
@@ -158,6 +164,21 @@ public class UserServiceImpl implements UserService {
         User user = modelMapperWrapper.mapToUser(addUserDto);
         user.setBalance(0.0);
         saveUser(user);
+    }
+
+    public boolean doesLoginExist(String login) {
+        User user = findByLogin(login);
+        return (user != null);
+    }
+
+    public boolean doesEmailExist(String mail) {
+        User user = findByEmail(mail);
+        return (user != null);
+    }
+
+    public boolean doesPassportExist(String passport) {
+        User user = findByPassport(Integer.valueOf(passport));
+        return (user != null);
     }
 
 }

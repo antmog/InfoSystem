@@ -1,11 +1,13 @@
 package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.TariffOptionDao;
+import com.infosystem.springmvc.dto.AddTariffOptionDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.Contract;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
+import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,9 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     private TariffService tariffService;
     @Autowired
     private TariffOptionDao dao;
+
+    @Autowired
+    CustomModelMapper modelMapperWrapper;
 
     public TariffOption findById(int id) throws DatabaseException {
         TariffOption tariffOption = dao.findById(id);
@@ -57,6 +62,12 @@ public class TariffOptionServiceImpl implements TariffOptionService {
 
     public List<TariffOption> findFirstTariffOptions() {
         return dao.findAllTariffOptions().stream().limit(5).collect(Collectors.toList());
+    }
+
+    @Override
+    public void addTariffOption(AddTariffOptionDto addTariffOptionDto) {
+        TariffOption tariffOption = modelMapperWrapper.mapToTariffOption(addTariffOptionDto);
+        saveTariffOption(tariffOption);
     }
 
     @Override

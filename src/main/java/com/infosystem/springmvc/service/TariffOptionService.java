@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.service;
 
+import com.infosystem.springmvc.dto.AddTariffOptionDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.TariffOption;
@@ -23,4 +24,5 @@ public interface TariffOptionService {
 
     List<TariffOption> findFirstTariffOptions();
 
+    void addTariffOption(AddTariffOptionDto addTariffOptionDto);
 }

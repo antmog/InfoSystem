@@ -4,10 +4,7 @@ import com.infosystem.springmvc.dao.ContractDao;
 import com.infosystem.springmvc.dao.TariffDao;
 import com.infosystem.springmvc.dao.TariffOptionDao;
 import com.infosystem.springmvc.dao.UserDao;
-import com.infosystem.springmvc.dto.AddContractDto;
-import com.infosystem.springmvc.dto.AddTariffDto;
-import com.infosystem.springmvc.dto.AddUserDto;
-import com.infosystem.springmvc.dto.TariffOptionDto;
+import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.model.Contract;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
@@ -85,7 +82,19 @@ public class CustomModelMapper {
         return tariff;
     }
 
+    /**
+     * @param addUserDto
+     * @return user
+     */
     public User mapToUser(AddUserDto addUserDto){
         return modelMapper.map(addUserDto,User.class);
+    }
+
+    /**
+     * @param addTariffOptionDto
+     * @return TariffOption
+     */
+    public TariffOption mapToTariffOption(AddTariffOptionDto addTariffOptionDto){
+        return modelMapper.map(addTariffOptionDto,TariffOption.class);
     }
 }

@@ -22,14 +22,38 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 
     @Override
     public User findByLogin(String login) {
-        User user = (User) getSession()
+        List users = getSession()
                 .createQuery("SELECT u FROM User u WHERE u.login LIKE :Login")
                 .setParameter("Login", login)
-                .getSingleResult();
-        if (user != null) {
-            Hibernate.initialize(user);
+                .getResultList();
+        if(users.isEmpty()){
+            return null;
         }
-        return user;
+        return (User) users.get(0);
+    }
+
+    @Override
+    public User findByEmail(String mail) {
+        List users = getSession()
+                .createQuery("SELECT u FROM User u WHERE u.mail LIKE :mail")
+                .setParameter("mail", mail)
+                .getResultList();
+        if(users.isEmpty()){
+            return null;
+        }
+        return (User) users.get(0);
+    }
+
+    @Override
+    public User findByPassport(Integer passport) {
+        List users = getSession()
+                .createQuery("SELECT u FROM User u WHERE u.passport LIKE :passport")
+                .setParameter("passport", passport)
+                .getResultList();
+        if(users.isEmpty()){
+            return null;
+        }
+        return (User) users.get(0);
     }
 
     @SuppressWarnings("unchecked")

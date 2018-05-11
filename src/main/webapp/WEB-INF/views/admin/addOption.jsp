@@ -14,7 +14,7 @@
 
 Adding option
 <br/>
-<form:form method="POST" modelAttribute="tariffOption" class="form-horizontal">
+<form:form method="POST" modelAttribute="addTariffOptionDto" class="form-horizontal">
 
     <div class="row">
         <div class="form-group col-md-12">
