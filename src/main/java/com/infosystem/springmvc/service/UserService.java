@@ -12,13 +12,13 @@ import com.infosystem.springmvc.model.User;
 
 public interface UserService {
 	
-	User findById(int id);
+	User findById(int id) throws DatabaseException;
 
 	User findByLogin(String login);
 
 	void saveUser(User user);
 	
-	void updateUser(User user);
+	void updateUser(User user) throws DatabaseException;
 
 	List<User> findAllUsers();
 
@@ -26,9 +26,9 @@ public interface UserService {
 
 	void deleteUserById(int id) throws LogicException, DatabaseException;
 
-    void setStatus(SetNewStatusDto setNewStatusDto);
+    void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException;
 
-    void updateUser(EditUserDto editUserDto);
+    void updateUser(EditUserDto editUserDto) throws DatabaseException;
 
     User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException;
 }

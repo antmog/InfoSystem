@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,16 +40,20 @@ public class ContractServiceImpl implements ContractService {
 //        this.modelMapperWrapper = modelMapperWrapper;
 //    }
 
-    public Contract findById(int id) {
-        return dao.findById(id);
+    public Contract findById(int id) throws DatabaseException {
+        Contract contract = dao.findById(id);
+        if (contract == null) {
+            throw new DatabaseException("Contract doesn't exist.");
+        }
+        return contract;
     }
 
     public void saveContract(Contract contract) {
         dao.save(contract);
     }
 
-    public void updateContract(Contract contract) {
-        Contract entity = dao.findById(contract.getId());
+    public void updateContract(Contract contract) throws DatabaseException {
+        Contract entity = findById(contract.getId());
         if (entity != null) {
             entity.setActiveOptions(contract.getActiveOptions());
             entity.setUser(contract.getUser());
@@ -72,15 +75,18 @@ public class ContractServiceImpl implements ContractService {
      */
     @Override
     public void deleteContractById(int id) throws DatabaseException {
-        if (dao.findById(id) == null) {
-            throw new DatabaseException("Contract doesn't exist.");
-        }
+        findById(id);
         dao.deleteById(id);
     }
 
+    /**
+     * Set selected status to contract with selected id.
+     * @param setNewStatusDto
+     * @throws DatabaseException if contract doesn't exist
+     */
     @Override
-    public void setStatus(SetNewStatusDto setNewStatusDto) {
-        dao.findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
+    public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
+        findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
     }
 
     /**
@@ -92,14 +98,16 @@ public class ContractServiceImpl implements ContractService {
         return dao.findByPhoneNumber(phoneNumber);
     }
 
+    /**
+     * Add selected options to selected contract.
+     * @param editContractDto
+     * @return
+     * @throws DatabaseException if contract doesn't exist
+     */
     @Override
-    public boolean addOptions(EditContractDto editContractDto) {
-        List<Integer> optionIdList = new ArrayList<>();
-        for (TariffOptionDto tariffOptionDto : editContractDto.getTariffOptionDtoList()) {
-            optionIdList.add(tariffOptionDto.getId());
-        }
-        Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        Contract contract = dao.findById(editContractDto.getContractId());
+    public void addOptions(EditContractDto editContractDto) throws DatabaseException {
+        Contract contract = findById(editContractDto.getContractId());
+        Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
         contractOptionList.addAll(contract.getActiveOptions());
         contract.setActiveOptions(contractOptionList);
 
@@ -109,77 +117,106 @@ public class ContractServiceImpl implements ContractService {
         }
         contract.setPrice(price);
         // LOGIC RULES ETC
-        return false;
     }
 
+    /**
+     * Add options to any contract.
+     * @param editContractDto
+     * @throws DatabaseException if contract doesn't exist
+     */
     @Override
-    public boolean adminAddOptions(EditContractDto editContractDto) {
+    public void adminAddOptions(EditContractDto editContractDto) throws DatabaseException {
         addOptions(editContractDto);
-        return false;
     }
 
+    /**
+     * Add options only to active contracts.
+     * @param editContractDto
+     * @throws DatabaseException
+     */
     @Override
-    public boolean customerAddOptions(EditContractDto editContractDto) {
-        if (dao.findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
+    public void customerAddOptions(EditContractDto editContractDto) throws DatabaseException {
+        if (findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
             addOptions(editContractDto);
         }
-        return false;
     }
 
+    /**
+     * Delete selected options from selected contract.
+     * @param editContractDto
+     * @return
+     * @throws DatabaseException if contract doesn't exist
+     */
     @Override
-    public boolean delOptions(EditContractDto editContractDto) {
-        List<Integer> optionIdList = new ArrayList<>();
-        for (TariffOptionDto tariffOptionDto : editContractDto.getTariffOptionDtoList()) {
-            optionIdList.add(tariffOptionDto.getId());
-        }
-        Set<TariffOption> contractOptionList = tariffOptionService.selectListByIdList(optionIdList);
-        Contract contract = dao.findById(editContractDto.getContractId());
-
+    public void delOptions(EditContractDto editContractDto) throws DatabaseException {
+        Contract contract = findById(editContractDto.getContractId());
+        Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
         Set<TariffOption> newTariffOptionList = contract.getActiveOptions();
-        if (newTariffOptionList.removeAll(contractOptionList)) {
-            System.out.println("YES");
-        }
+        newTariffOptionList.removeAll(contractOptionList);
         contract.setActiveOptions(newTariffOptionList);
+
         Double price = contract.getTariff().getPrice();
         for (TariffOption tariffOption : newTariffOptionList) {
             price += tariffOption.getPrice();
         }
         contract.setPrice(price);
         // LOGIC RULES ETC
-        return false;
     }
 
+    /**
+     * Delete options from any contract.
+     * @param editContractDto
+     * @throws DatabaseException if contract doesn't exist
+     */
     @Override
-    public boolean adminDelOptions(EditContractDto editContractDto) {
+    public void adminDelOptions(EditContractDto editContractDto) throws DatabaseException {
         delOptions(editContractDto);
-        return false;
     }
 
+    /**
+     * Delete options from active contract.
+     * @param editContractDto
+     * @throws DatabaseException if contract doesn't exist
+     */
     @Override
-    public boolean customerDelOptions(EditContractDto editContractDto) {
-        if (dao.findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
+    public void customerDelOptions(EditContractDto editContractDto) throws DatabaseException {
+        if (findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
             delOptions(editContractDto);
         }
-        return false;
     }
 
+    /**
+     * Set contract's tariff to selected.
+     * @param switchTariffDto
+     * @throws DatabaseException if tariff/contract doesn't exist
+     */
     @Override
-    public void switchTariff(SwitchTariffDto switchTariffDto) {
-        Contract contract = dao.findById(switchTariffDto.getContractId());
+    public void switchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException {
+        Contract contract = findById(switchTariffDto.getContractId());
         Tariff newTariff = tariffService.findById(switchTariffDto.getTariffId());
         Double newPrice = contract.getPrice() - contract.getTariff().getPrice() + newTariff.getPrice();
         contract.setTariff(newTariff);
         contract.setPrice(newPrice);
     }
 
+    /**
+     * Set any contract's tariff to selected.
+     * @param switchTariffDto
+     * @throws DatabaseException
+     */
     @Override
-    public void adminSwitchTariff(SwitchTariffDto switchTariffDto) {
+    public void adminSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException {
         switchTariff(switchTariffDto);
     }
 
+    /**
+     * Set active contract's tariff to selected.
+     * @param switchTariffDto
+     * @throws DatabaseException
+     */
     @Override
-    public void customerSwitchTariff(SwitchTariffDto switchTariffDto) {
-        Contract contract = dao.findById(switchTariffDto.getContractId());
+    public void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException {
+        Contract contract = findById(switchTariffDto.getContractId());
         if (contract.getStatus().equals(Status.ACTIVE)) {
             switchTariff(switchTariffDto);
         }
@@ -221,5 +258,4 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = findByPhoneNumber(phoneNumber);
         return (contract != null);
     }
-
 }

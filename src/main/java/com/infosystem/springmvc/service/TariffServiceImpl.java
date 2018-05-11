@@ -37,8 +37,12 @@ public class TariffServiceImpl implements TariffService {
     @Autowired
     CustomModelMapper modelMapperWrapper;
 
-    public Tariff findById(int id) {
-        return dao.findById(id);
+    public Tariff findById(int id) throws DatabaseException {
+        Tariff tariff = dao.findById(id);
+        if (tariff == null) {
+            throw new DatabaseException("TariffOption doesn't exist.");
+        }
+        return tariff;
     }
 
     public Tariff findByName(String name) {return dao.findByName(name);}
@@ -47,6 +51,25 @@ public class TariffServiceImpl implements TariffService {
         dao.save(tariff);
     }
 
+    public void updateTariff(Tariff tariff) throws DatabaseException {
+        Tariff entity = findById(tariff.getId());
+        if (entity != null) {
+
+        }
+    }
+
+
+    public List<Tariff> findAllTariffs() {
+        return dao.findAllTariffs();
+    }
+
+    public List<Tariff> findAllActiveTariffs() {
+        return dao.findAllActiveTariffs();
+    }
+
+    public List<Tariff> findFirstTariffs() {
+        return dao.findAllTariffs().stream().limit(5).collect(Collectors.toList());
+    }
 
     /**
      * Creates new tariff with data from DTO
@@ -64,27 +87,6 @@ public class TariffServiceImpl implements TariffService {
         dao.save(tariff);
     }
 
-    /*
-     * Since the method is running with Transaction, No need to call hibernate update explicitly.
-     * Just fetch the entity from db and update it with proper values within transaction.
-     * It will be updated in db once transaction ends.
-     */
-    public void updateTariff(Tariff tariff) {
-        Tariff entity = dao.findById(tariff.getId());
-        if (entity != null) {
-
-        }
-    }
-
-
-    public List<Tariff> findAllTariffs() {
-        return dao.findAllTariffs();
-    }
-
-    public List<Tariff> findAllActiveTariffs() {
-        return dao.findAllActiveTariffs();
-    }
-
     /**
      * Deletes tariff if its not used.
      * @param id
@@ -92,10 +94,7 @@ public class TariffServiceImpl implements TariffService {
      * @throws DatabaseException if tariff doesn't exist
      */
     public void deleteTariffById(int id) throws LogicException, DatabaseException {
-        Tariff tariff = dao.findById(id);
-        if(tariff == null){
-            throw new DatabaseException("Tariff doesn't exist.");
-        }
+        Tariff tariff = findById(id);
         for (Contract contract : contractService.findAllContracts()) {
             if (contract.getTariff().equals(tariff)) {
                 throw new LogicException("Tariff is still used.");
@@ -104,30 +103,40 @@ public class TariffServiceImpl implements TariffService {
         dao.deleteById(id);
     }
 
+    /**
+     * Add selected options to selected tariff.
+     * @param editTariffDto
+     * @throws DatabaseException if tariff doesn't exist
+     */
     @Override
-    public List<Tariff> findFirstTariffs() {
-        return dao.findAllTariffs().stream().limit(5).collect(Collectors.toList());
-    }
-
-    @Override
-    public void addOptions(EditTariffDto editTariffDto) {
-        Tariff tariff = dao.findById(editTariffDto.getTariffId());
+    public void addOptions(EditTariffDto editTariffDto) throws DatabaseException {
+        Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
         tariffOptionList.addAll(tariff.getAvailableOptions());
         tariff.setAvailableOptions(tariffOptionList);
     }
 
+    /**
+     * Delete selected options from selected tariff.
+     * @param editTariffDto
+     * @throws DatabaseException if tariff doesn't exist
+     */
     @Override
-    public void delOptions(EditTariffDto editTariffDto) {
-        Tariff tariff = dao.findById(editTariffDto.getTariffId());
+    public void delOptions(EditTariffDto editTariffDto) throws DatabaseException {
+        Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
         Set<TariffOption> newTariffOptionList = tariff.getAvailableOptions();
         newTariffOptionList.removeAll(tariffOptionList);
         tariff.setAvailableOptions(newTariffOptionList);
     }
 
-    public void setStatus(SetNewStatusDto setNewStatusDto) {
-        dao.findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
+    /**
+     * Set status of selected tariff to selected status.
+     * @param setNewStatusDto
+     * @throws DatabaseException if tariff doesn't exist
+     */
+    public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
+        findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
     }
 
     private boolean isNameUnique(String tariffName) {

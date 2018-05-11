@@ -155,9 +155,10 @@ public class AdminDataController {
      * @param result validation result
      * @return message
      * @throws ValidationException if no options selected
+     * @throws DatabaseException if tariff doesn't exist
      */
     @RequestMapping(value = "/adminPanel/tariff/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String tariffAddOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException {
+    public String tariffAddOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException, DatabaseException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }
@@ -171,9 +172,10 @@ public class AdminDataController {
      * @param result validation result
      * @return message
      * @throws ValidationException if no options selected
+     * @throws ValidationException if tariff doesn't exist
      */
     @RequestMapping(value = "/adminPanel/tariff/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String tariffDelOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException {
+    public String tariffDelOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException, DatabaseException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to delete.");
         }
@@ -188,9 +190,10 @@ public class AdminDataController {
      * @param result validation result
      * @return message
      * @throws ValidationException if no options selected
+     * @throws DatabaseException if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException {
+    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException, DatabaseException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }
@@ -204,9 +207,10 @@ public class AdminDataController {
      * @param result validation result
      * @return message
      * @throws ValidationException if no options selected
+     * @throws DatabaseException if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException {
+    public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException, DatabaseException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to delete.");
         }
@@ -214,16 +218,16 @@ public class AdminDataController {
         return "Options deleted.";
     }
 
-
     /**
      * Changes tariff of current contract to selected.
      * @param switchTariffDto
      * @param result validation result
      * @return message
      * @throws ValidationException if tariff is not selected
+     * @throws DatabaseException if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) throws ValidationException {
+    public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) throws ValidationException, DatabaseException {
         if (result.hasErrors()) {
             throw new ValidationException("Select tariff.");
         }

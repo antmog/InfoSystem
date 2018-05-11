@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.controller;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.Contract;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.service.ContractService;
@@ -66,7 +67,7 @@ public class CustomerViewController {
 
 
     @RequestMapping(value = "/customerPanel/contract/{contract_id}")
-    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) {
+    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) throws DatabaseException {
         Contract contract = contractService.findById(contract_id);
         List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("loggedinuser", getPrincipal());

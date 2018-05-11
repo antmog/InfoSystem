@@ -2,6 +2,7 @@ package com.infosystem.springmvc.controller;
 
 
 import com.infosystem.springmvc.dto.AddContractDto;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.*;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
@@ -186,7 +187,7 @@ public class AdminViewController {
     }
 
     @RequestMapping(value = "/adminPanel/user/{user_id}")
-    public String user(@PathVariable(value = "user_id") Integer user_id, ModelMap model) {
+    public String user(@PathVariable(value = "user_id") Integer user_id, ModelMap model) throws DatabaseException {
         User user = userService.findById(user_id);
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("user", user);
@@ -194,7 +195,7 @@ public class AdminViewController {
     }
 
     @RequestMapping(value = "/adminPanel/contract/{contract_id}")
-    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) {
+    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) throws DatabaseException {
         Contract contract = contractService.findById(contract_id);
         List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("tariffs", tariffs);
@@ -204,8 +205,9 @@ public class AdminViewController {
     }
 
     @RequestMapping(value = "/adminPanel/tariff/{tariff_id}")
-    public String tariff(@PathVariable(value = "tariff_id") Integer tariff_id, ModelMap model) {
-        Tariff tariff = tariffService.findById(tariff_id);
+    public String tariff(@PathVariable(value = "tariff_id") Integer tariff_id, ModelMap model) throws DatabaseException {
+        Tariff tariff;
+        tariff = tariffService.findById(tariff_id);
         List<TariffOption> options = tariffOptionService.findAllTariffOptions();
 
         model.addAttribute("options", options);
@@ -215,7 +217,7 @@ public class AdminViewController {
     }
 
     @RequestMapping(value = "/adminPanel/option/{option_id}")
-    public String option(@PathVariable(value = "option_id") Integer option_id, ModelMap model) {
+    public String option(@PathVariable(value = "option_id") Integer option_id, ModelMap model) throws DatabaseException {
         TariffOption tariffOption = tariffOptionService.findById(option_id);
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffOption", tariffOption);

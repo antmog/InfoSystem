@@ -1,8 +1,9 @@
 package com.infosystem.springmvc.controller;
 
-
 import com.infosystem.springmvc.dto.EditContractDto;
 import com.infosystem.springmvc.dto.SwitchTariffDto;
+import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
@@ -37,32 +38,54 @@ public class CustomerDataController {
     @Autowired
     TariffService tariffService;
 
+    /**
+     * Changes tariff of current contract to selected.
+     * @param switchTariffDto
+     * @param result validation result
+     * @return message
+     * @throws ValidationException if tariff is not selected
+     * @throws DatabaseException if contract doesn't exist
+     */
     @RequestMapping(value = "/customerPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) {
-        //check if user auth is admin if unblock (protection agaisnt HACKERS!!!11 (direct requests) )
+    public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) throws DatabaseException, ValidationException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Select tariff.");
+        }
         contractService.customerSwitchTariff(switchTariffDto);
-        if (result.hasErrors()) {
-            return "notok";
-        }
-        return "ok";
+        return "Switched to tariff (id:" + switchTariffDto.getTariffId() + ").";
     }
 
-
+    /**
+     * Deleting selected options from the contract.
+     * @param editContractDto
+     * @param result validation result
+     * @return message
+     * @throws ValidationException if no options selected
+     * @throws DatabaseException if contract doesn't exist
+     */
     @RequestMapping(value = "/customerPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) {
-        contractService.customerAddOptions(editContractDto);
+    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            return "notok";
+            throw new ValidationException("Select options to add.");
         }
-        return "ok";
+        contractService.customerAddOptions(editContractDto);
+        return "Options added.";
     }
 
+    /**
+     * Adding selected options to the contract.
+     * @param editContractDto
+     * @param result validation result
+     * @return message
+     * @throws ValidationException if no options selected
+     * @throws DatabaseException if contract doesn't exist
+     */
     @RequestMapping(value = "/customerPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) {
-        contractService.customerDelOptions(editContractDto);
+    public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            return "notok";
+            throw new ValidationException("Select options to delete.");
         }
-        return "ok";
+        contractService.customerDelOptions(editContractDto);
+        return "Options deleted.";
     }
 }

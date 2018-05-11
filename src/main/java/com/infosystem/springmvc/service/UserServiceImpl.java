@@ -32,8 +32,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ContractService contractService;
 
-    public User findById(int id) {
-        return dao.findById(id);
+    public User findById(int id) throws DatabaseException {
+        User user = dao.findById(id);
+        if (user == null) {
+            throw new DatabaseException("TariffOption doesn't exist.");
+        }
+        return user;
     }
 
     public User findByLogin(String login) {
@@ -50,8 +54,8 @@ public class UserServiceImpl implements UserService {
      * Just fetch the entity from db and update it with proper values within transaction.
      * It will be updated in db once transaction ends.
      */
-    public void updateUser(User user) {
-        User entity = dao.findById(user.getId());
+    public void updateUser(User user) throws DatabaseException {
+        User entity = findById(user.getId());
         if (entity != null) {
             entity.setFirstName(user.getFirstName());
             entity.setLastName(user.getLastName());
@@ -84,23 +88,31 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void deleteUserById(int id) throws LogicException, DatabaseException {
-        if (dao.findById(id) == null) {
-            throw new DatabaseException("User doesn't exist.");
-        }
+       findById(id);
         if (!dao.findById(id).getUserContracts().isEmpty()) {
             throw new LogicException("User still have contracts!");
         }
         dao.deleteById(id);
     }
 
+    /**
+     * Set user status to selected status.
+     * @param setNewStatusDto
+     * @throws DatabaseException if user doesn't exist
+     */
     @Override
-    public void setStatus(SetNewStatusDto setNewStatusDto) {
-        dao.findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
+    public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
+        findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
     }
 
+    /**
+     * Updates selected user fields.
+     * @param editUserDto
+     * @throws DatabaseException if user doesn't exist
+     */
     @Override
-    public void updateUser(EditUserDto editUserDto) {
-        User user = dao.findById(editUserDto.getUserId());
+    public void updateUser(EditUserDto editUserDto) throws DatabaseException {
+        User user = findById(editUserDto.getUserId());
         switch (editUserDto.getDataInstance()) {
             case "address":
                 user.setAddress(editUserDto.getValue());

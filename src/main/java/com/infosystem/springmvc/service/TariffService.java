@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TariffService {
 
-    Tariff findById(int id);
+    Tariff findById(int id) throws DatabaseException;
 
     Tariff findByName(String name);
 
@@ -19,7 +19,7 @@ public interface TariffService {
 
     void addTariff(AddTariffDto tariff) throws LogicException;
 
-    void updateTariff(Tariff tariff);
+    void updateTariff(Tariff tariff) throws DatabaseException;
 
     List<Tariff> findAllTariffs();
 
@@ -27,11 +27,11 @@ public interface TariffService {
 
     void deleteTariffById(int id) throws LogicException, DatabaseException;
 
-    void setStatus(SetNewStatusDto setNewStatusDto);
+    void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException;
 
     List<Tariff> findFirstTariffs();
 
-    void addOptions(EditTariffDto editTariffDto);
+    void addOptions(EditTariffDto editTariffDto) throws DatabaseException;
 
-    void delOptions(EditTariffDto editTariffDto);
+    void delOptions(EditTariffDto editTariffDto) throws DatabaseException;
 }

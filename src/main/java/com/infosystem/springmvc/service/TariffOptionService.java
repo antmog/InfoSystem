@@ -9,11 +9,11 @@ import java.util.Set;
 
 public interface TariffOptionService {
 
-    TariffOption findById(int id);
+    TariffOption findById(int id) throws DatabaseException;
 
     void saveTariffOption(TariffOption tariffOption);
 
-    void updateTariffOption(TariffOption tariffOption);
+    void updateTariffOption(TariffOption tariffOption) throws DatabaseException;
 
     List<TariffOption> findAllTariffOptions();
 

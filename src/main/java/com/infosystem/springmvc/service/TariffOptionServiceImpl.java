@@ -26,8 +26,12 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     @Autowired
     private TariffOptionDao dao;
 
-    public TariffOption findById(int id) {
-        return dao.findById(id);
+    public TariffOption findById(int id) throws DatabaseException {
+        TariffOption tariffOption = dao.findById(id);
+        if (tariffOption == null) {
+            throw new DatabaseException("TariffOption doesn't exist.");
+        }
+        return tariffOption;
     }
 
     public void saveTariffOption(TariffOption tariffOption) {
@@ -39,8 +43,8 @@ public class TariffOptionServiceImpl implements TariffOptionService {
      * Just fetch the entity from db and update it with proper values within transaction.
      * It will be updated in db once transaction ends.
      */
-    public void updateTariffOption(TariffOption tariffOption) {
-        TariffOption entity = dao.findById(tariffOption.getId());
+    public void updateTariffOption(TariffOption tariffOption) throws DatabaseException {
+        TariffOption entity = findById(tariffOption.getId());
         if (entity != null) {
             // logic
         }
@@ -67,10 +71,7 @@ public class TariffOptionServiceImpl implements TariffOptionService {
      * @throws LogicException if tariffOption is still used
      */
     public void deleteTariffOptionById(int id) throws DatabaseException, LogicException {
-        TariffOption tariffOption = dao.findById(id);
-        if (tariffOption == null) {
-            throw new DatabaseException("TariffOption doesn't exist.");
-        }
+        TariffOption tariffOption = findById(id);
         for (Contract contract : contractService.findAllContracts()) {
             for (TariffOption option : contract.getActiveOptions()) {
                 if (tariffOption.equals(option)) {

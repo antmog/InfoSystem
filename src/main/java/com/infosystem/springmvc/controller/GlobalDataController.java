@@ -2,6 +2,7 @@ package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
 import com.infosystem.springmvc.service.ContractService;
@@ -39,7 +40,7 @@ public class GlobalDataController {
 
     @RequestMapping(value = "/tariffOptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    Set<TariffOption> addContractTariffOptions(@RequestBody String s, BindingResult result) {
+    Set<TariffOption> addContractTariffOptions(@RequestBody String s, BindingResult result) throws DatabaseException {
         Tariff tariff = tariffService.findById(Integer.valueOf(s));
         System.out.println(tariff.getAvailableOptions());
         return tariff.getAvailableOptions();
@@ -47,7 +48,7 @@ public class GlobalDataController {
 
 
     @RequestMapping(value = "/contract/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String setUserStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) {
+    public String setUserStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException {
         //check if user auth is admin if unblock
         contractService.setStatus(setNewStatusDto);
         if (result.hasErrors()) {
@@ -57,7 +58,7 @@ public class GlobalDataController {
     }
 
     @RequestMapping(value = "/user/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String setContractStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) {
+    public String setContractStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException {
         //check if user auth is admin if unblock
         userService.setStatus(setNewStatusDto);
         if (result.hasErrors()) {
@@ -69,7 +70,11 @@ public class GlobalDataController {
     @RequestMapping(value = "/tariff/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String setTariffStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) {
         //check if user auth is admin if unblock
-        tariffService.setStatus(setNewStatusDto);
+        try {
+            tariffService.setStatus(setNewStatusDto);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
         if (result.hasErrors()) {
             return "notok";
         }
@@ -77,7 +82,7 @@ public class GlobalDataController {
     }
 
     @RequestMapping(value = "/user/editUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String editUser(@RequestBody @Valid EditUserDto editUserDto, BindingResult result) {
+    public String editUser(@RequestBody @Valid EditUserDto editUserDto, BindingResult result) throws DatabaseException {
         userService.updateUser(editUserDto);
         if (result.hasErrors()) {
             return "notok";

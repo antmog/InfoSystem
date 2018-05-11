@@ -12,32 +12,32 @@ import java.util.List;
 
 public interface ContractService {
 
-    Contract findById(int id);
+    Contract findById(int id) throws DatabaseException;
 
     void saveContract(Contract contract);
 
-    void updateContract(Contract contract);
+    void updateContract(Contract contract) throws DatabaseException;
 
 
     List<Contract> findAllContracts();
 
     void deleteContractById(int id) throws DatabaseException;
 
-    void setStatus(SetNewStatusDto setNewStatusDto);
+    void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException;
 
     Contract findByPhoneNumber(String phoneNumber);
 
-    boolean addOptions(EditContractDto editContractDto);
-    boolean adminAddOptions(EditContractDto editContractDto);
-    boolean customerAddOptions(EditContractDto editContractDto);
+    void addOptions(EditContractDto editContractDto) throws DatabaseException;
+    void adminAddOptions(EditContractDto editContractDto) throws DatabaseException;
+    void customerAddOptions(EditContractDto editContractDto) throws DatabaseException;
 
-    boolean delOptions(EditContractDto editContractDto);
-    boolean adminDelOptions(EditContractDto editContractDto);
-    boolean customerDelOptions(EditContractDto editContractDto);
+    void delOptions(EditContractDto editContractDto) throws DatabaseException;
+    void adminDelOptions(EditContractDto editContractDto) throws DatabaseException;
+    void customerDelOptions(EditContractDto editContractDto) throws DatabaseException;
 
-    void switchTariff(SwitchTariffDto switchTariffDto);
-    void adminSwitchTariff(SwitchTariffDto switchTariffDto);
-    void customerSwitchTariff(SwitchTariffDto switchTariffDto);
+    void switchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException;
+    void adminSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException;
+    void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException;
 
     void newContract(AddContractDto addContractDto) throws LogicException;
 }
