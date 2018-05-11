@@ -2,6 +2,7 @@ package com.infosystem.springmvc.dao;
 
 
 import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.model.Tariff;
 import com.infosystem.springmvc.model.TariffOption;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,18 @@ public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> impl
             Hibernate.initialize(tariffOption);
         }
         return tariffOption;
+    }
+
+    @Override
+    public TariffOption findByName(String name) {
+        List tariffOptionList = getSession()
+                .createQuery("SELECT t FROM TariffOption t WHERE t.name LIKE :name")
+                .setParameter("name",name)
+                .getResultList();
+        if(!tariffOptionList.isEmpty()){
+            return (TariffOption) tariffOptionList.get(0);
+        }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -50,6 +63,7 @@ public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> impl
                 .getResultList();
         delete((TariffOption)tariffOptions.get(0));
     }
+
 
 
 

@@ -13,6 +13,7 @@ import com.infosystem.springmvc.service.DataService.DataService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
 import com.infosystem.springmvc.service.UserService;
+import com.infosystem.springmvc.validators.TariffOptionFormValidator;
 import com.infosystem.springmvc.validators.UserFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -38,6 +39,9 @@ public class AdminViewController {
 
     @Autowired
     UserFormValidator userFormValidator;
+
+    @Autowired
+    TariffOptionFormValidator tariffOptionFormValidator;
 
     @Autowired
     UserService userService;
@@ -163,7 +167,7 @@ public class AdminViewController {
         if (result.hasErrors()) {
             return adminPath + "addUser";
         }
-        userFormValidator.validate(addUserDto,result);
+        userFormValidator.validate(addUserDto, result);
         if (result.hasErrors()) {
             return adminPath + "addUser";
         }
@@ -218,7 +222,7 @@ public class AdminViewController {
     public String addOption(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         AddTariffOptionDto addTariffOptionDto = new AddTariffOptionDto();
-        model.addAttribute("tariffOption", addTariffOptionDto);
+        model.addAttribute("addTariffOptionDto", addTariffOptionDto);
         return adminPath + "addOption";
     }
 
@@ -232,6 +236,7 @@ public class AdminViewController {
      */
     @RequestMapping(value = "/adminPanel/addOption", method = RequestMethod.POST)
     public String saveOption(@Valid AddTariffOptionDto addTariffOptionDto, BindingResult result, ModelMap model) {
+        tariffOptionFormValidator.validate(addTariffOptionDto, result);
         if (result.hasErrors()) {
             return adminPath + "addOption";
         }

@@ -44,9 +44,9 @@ Adding option
         <div class="form-group col-md-12">
             <label class="col-md-3 control-lable">cost of add</label>
             <div class="col-md-7">
-                <form:input type="text" path="costOfAdd" id="costOfAdd" class="form-control input-sm"/>
+                <form:input type="text" path="costofadd" id="costofadd" class="form-control input-sm"/>
                 <div class="has-error">
-                    <form:errors path="costOfAdd" class="help-inline"/>
+                    <form:errors path="costofadd" class="help-inline"/>
                 </div>
             </div>
         </div>

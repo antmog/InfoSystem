@@ -39,6 +39,8 @@ public class TariffOptionServiceImpl implements TariffOptionService {
         return tariffOption;
     }
 
+    public TariffOption findByName(String name) {return dao.findByName(name);}
+
     public void saveTariffOption(TariffOption tariffOption) {
         dao.save(tariffOption);
     }
@@ -65,7 +67,7 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     }
 
     @Override
-    public void addTariffOption(AddTariffOptionDto addTariffOptionDto) {
+    public void addTariffOption(AddTariffOptionDto addTariffOptionDto){
         TariffOption tariffOption = modelMapperWrapper.mapToTariffOption(addTariffOptionDto);
         saveTariffOption(tariffOption);
     }
@@ -98,5 +100,10 @@ public class TariffOptionServiceImpl implements TariffOptionService {
             }
         }
         dao.deleteById(id);
+    }
+
+    public boolean isTariffOptionUnique(String tariffOptionName) {
+        TariffOption tariffOption = findByName(tariffOptionName);
+        return (tariffOption == null);
     }
 }

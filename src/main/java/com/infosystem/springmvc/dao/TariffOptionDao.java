@@ -9,6 +9,8 @@ import java.util.Set;
 public interface TariffOptionDao {
     TariffOption findById(int id);
 
+    TariffOption findByName(String name);
+
     void save(TariffOption tariffOption);
 
     void deleteById(int id);

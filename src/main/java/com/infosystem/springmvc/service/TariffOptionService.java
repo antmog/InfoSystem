@@ -12,6 +12,8 @@ public interface TariffOptionService {
 
     TariffOption findById(int id) throws DatabaseException;
 
+    TariffOption findByName(String name);
+
     void saveTariffOption(TariffOption tariffOption);
 
     void updateTariffOption(TariffOption tariffOption) throws DatabaseException;
@@ -25,4 +27,6 @@ public interface TariffOptionService {
     List<TariffOption> findFirstTariffOptions();
 
     void addTariffOption(AddTariffOptionDto addTariffOptionDto);
+
+    boolean isTariffOptionUnique(String tariffOptionName);
 }

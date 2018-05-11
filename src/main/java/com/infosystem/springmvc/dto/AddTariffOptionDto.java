@@ -1,8 +1,14 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class AddTariffOptionDto {
+    @Size(min = 6, max = 32)
     private String name;
+    @NotNull
     private Double price;
+    @NotNull
     private Double costofadd;
 
     public AddTariffOptionDto(String name, Double price, Double costofadd) {
