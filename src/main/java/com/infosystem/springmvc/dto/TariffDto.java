@@ -10,6 +10,7 @@ public class TariffDto implements Serializable {
     @Size(min = 6, max = 32)
     private String name;
     @Min(1)
+    @NotNull
     private Double price;
 
     public TariffDto(String name, Double price) {

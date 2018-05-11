@@ -1,6 +1,9 @@
 package com.infosystem.springmvc.dto;
 
+import javax.validation.constraints.Size;
+
 public class SearchByNumber {
+    @Size(min = 6, max = 32)
     private String phoneNumber;
 
     public SearchByNumber(String phoneNumber) {

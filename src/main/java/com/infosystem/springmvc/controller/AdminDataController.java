@@ -74,7 +74,10 @@ public class AdminDataController {
     @RequestMapping(value = "/adminPanel/user/searchUserByNumber", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public @ResponseBody
-    User searchUserByNumber(@Valid @RequestBody SearchByNumber searchByNumber, BindingResult result) {
+    User searchUserByNumber(@Valid @RequestBody SearchByNumber searchByNumber, BindingResult result) throws ValidationException {
+        if(result.hasErrors()){
+            throw new ValidationException("Incorrect input!");
+        }
         return userService.findByPhoneNumber(searchByNumber);
     }
 

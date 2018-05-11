@@ -30,7 +30,7 @@
                         </c:otherwise>
                     </c:choose>
                     <label class="control-lable" for="phoneNumber">phoneNumber</label>
-                    <input type="text" id="phoneNumber" class="form-control input-sm"/>
+                    <input type="number" id="phoneNumber" class="form-control input-sm"/>
                     <button type="button" class="btn btn-success" id="addContract">Add contract</button>
                 </div>
             </div>
