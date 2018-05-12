@@ -136,7 +136,7 @@ public class AdminViewController extends ViewControllerTemplate{
     public String addUser(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         AddUserDto addUserDto = new AddUserDto();
-        model.addAttribute("user", addUserDto);
+        model.addAttribute("addUserDto", addUserDto);
         model.addAttribute("roles", Role.getAllRoles());
         return path + "addUser";
     }

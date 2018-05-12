@@ -37,9 +37,9 @@ public class Tariff implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> availableOptions = new HashSet<TariffOption>();
 
-    @Override
-    public String toString() {
-        return "Tariff [id=" + id + ", name=" + name + ", price=" + price +"]";
-    }
+//    @Override
+//    public String toString() {
+//        return "Tariff [id=" + id + ", name=" + name + ", price=" + price +"]";
+//    }
 
 }

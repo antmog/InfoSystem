@@ -40,8 +40,8 @@ public class Contract implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> activeOptions = new HashSet<TariffOption>();
 
-    @Override
-    public String toString() {
-        return "Contract [id=" + id + ", user=" + user + ", phoneNumber=" + phoneNumber + ", tariff=" +  ", status=" + status + "]";
-    }
+//    @Override
+//    public String toString() {
+//        return "Contract [id=" + id + ", user=" + user + ", phoneNumber=" + phoneNumber + ", tariff=" +  ", status=" + status + "]";
+//    }
 }
