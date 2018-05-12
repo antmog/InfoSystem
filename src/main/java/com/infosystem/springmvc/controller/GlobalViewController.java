@@ -23,12 +23,6 @@ import javax.validation.Valid;
 //@SessionAttributes("roles")
 public class GlobalViewController extends ViewControllerTemplate {
 
-    @Autowired
-    PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
-
-    @Autowired
-    AuthenticationTrustResolver authenticationTrustResolver;
-
     /**
      * Mapping to login screen.
      */
@@ -56,6 +50,11 @@ public class GlobalViewController extends ViewControllerTemplate {
         return "redirect:/login?logout";
     }
 
+    /**
+     * Redirects to LK(main menu of account interface) admin/customer.
+     * @param model
+     * @return adminPanel if current user is ADMIN, customerPanel if CUSTOMER
+     */
     @RequestMapping("/lk")
     public String lk(ModelMap model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -71,6 +70,11 @@ public class GlobalViewController extends ViewControllerTemplate {
         return "redirect:/customerPanel";
     }
 
+    /**
+     * Index page.
+     * @param model
+     * @return startPage
+     */
     @RequestMapping("/")
     public String startPage(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());

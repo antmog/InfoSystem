@@ -30,11 +30,6 @@ public class CustomerViewController extends ViewControllerTemplate {
         super("customer/");
     }
 
-    @Autowired
-    PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
-
-    @Autowired
-    AuthenticationTrustResolver authenticationTrustResolver;
 
     @Autowired
     UserDetailsService customUserDetailsService;
