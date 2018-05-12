@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/")
 //@SessionAttributes("roles")
-public class GlobalViewController {
+public class GlobalViewController extends ViewControllerTemplate {
 
     @Autowired
     PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
@@ -75,29 +75,6 @@ public class GlobalViewController {
     public String startPage(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         return "index";
-    }
-
-    /**
-     * This method returns the principal[user-name] of logged-in user.
-     */
-    private String getPrincipal() {
-        String userName = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof UserDetails) {
-            userName = ((UserDetails) principal).getUsername();
-        } else {
-            userName = principal.toString();
-        }
-        return userName;
-    }
-
-    /**
-     * This method returns true if users is already authenticated [logged-in], else false.
-     */
-    private boolean isCurrentAuthenticationAnonymous() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authenticationTrustResolver.isAnonymous(authentication);
     }
 
 }

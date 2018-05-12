@@ -14,7 +14,7 @@
 
 User Registration Form
 <br/>
-<form:form method="POST" modelAttribute="addUserDto" class="form-horizontal">
+<form:form method="POST" modelAttribute="user" class="form-horizontal">
 
     <div class="row">
         <div class="form-group col-md-12">

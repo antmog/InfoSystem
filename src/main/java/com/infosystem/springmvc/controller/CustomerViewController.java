@@ -1,9 +1,10 @@
 package com.infosystem.springmvc.controller;
 
+import com.infosystem.springmvc.dto.ContractPageDto;
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.Contract;
-import com.infosystem.springmvc.model.Tariff;
+import com.infosystem.springmvc.model.User;
 import com.infosystem.springmvc.service.ContractService;
+import com.infosystem.springmvc.service.DataService.DataService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
 import com.infosystem.springmvc.service.UserService;
@@ -19,16 +20,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/")
 //@SessionAttributes("roles")
-public class CustomerViewController {
+public class CustomerViewController extends ViewControllerTemplate {
 
-    private String customerPath = "customer/";
+    public CustomerViewController(){
+        super("customer/");
+    }
 
     @Autowired
     PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
@@ -54,48 +54,41 @@ public class CustomerViewController {
     @Autowired
     TariffService tariffService;
 
+    @Autowired
+    DataService dataService;
 
-
-
+    /**
+     * Returns customer panel view with user info.
+     * @param model
+     * @return view
+     */
     @RequestMapping("/customerPanel")
     public String customerPanel(ModelMap model) {
         String login =  getPrincipal();
+        User user = userService.findByLogin(login);
         model.addAttribute("loggedinuser", login);
-        model.addAttribute("user", userService.findByLogin(login));
-        return customerPath+"customerPanel";
+        model.addAttribute("user", user);
+        return path +"customerPanel";
     }
 
-
+    /**
+     * Returns view with contract page.
+     * @param contract_id
+     * @param model
+     * @return view
+     * @throws DatabaseException
+     */
     @RequestMapping(value = "/customerPanel/contract/{contract_id}")
-    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model) throws DatabaseException {
-        Contract contract = contractService.findById(contract_id);
-        List<Tariff> tariffs = tariffService.findAllActiveTariffs();
-        model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("contract", contract);
-        model.addAttribute("tariffs", tariffs);
-        return customerPath+"contract";
-    }
-
-    /**
-     * This method returns the principal[user-name] of logged-in user.
-     */
-    private String getPrincipal() {
-        String userName = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof UserDetails) {
-            userName = ((UserDetails) principal).getUsername();
-        } else {
-            userName = principal.toString();
+    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model){
+        ContractPageDto contractPageDto = null;
+        try {
+            contractPageDto = dataService.getContractPageData(contract_id);
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model,e);
         }
-        return userName;
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("contractPageDto", contractPageDto);
+        return path +"contract";
     }
 
-    /**
-     * This method returns true if users is already authenticated [logged-in], else false.
-     */
-    private boolean isCurrentAuthenticationAnonymous() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authenticationTrustResolver.isAnonymous(authentication);
-    }
 }

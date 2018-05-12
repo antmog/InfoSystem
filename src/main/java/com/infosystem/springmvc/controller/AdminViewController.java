@@ -3,8 +3,6 @@ package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.exception.LogicException;
-import com.infosystem.springmvc.exception.MyBusinessException;
 import com.infosystem.springmvc.model.*;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.DataService.DataService;
@@ -15,11 +13,6 @@ import com.infosystem.springmvc.validators.TariffOptionFormValidator;
 import com.infosystem.springmvc.validators.UserFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -31,9 +24,11 @@ import java.util.*;
 @Controller
 @RequestMapping("/")
 @SessionAttributes("roles")
-public class AdminViewController {
+public class AdminViewController extends ViewControllerTemplate{
 
-    private String adminPath = "admin/";
+    public AdminViewController(){
+        super("admin/");
+    }
 
     @Autowired
     UserFormValidator userFormValidator;
@@ -59,12 +54,6 @@ public class AdminViewController {
     @Autowired
     TariffService tariffService;
 
-    @Autowired
-    PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
-
-    @Autowired
-    AuthenticationTrustResolver authenticationTrustResolver;
-
     /**
      * Returns view of main admin panel.
      *
@@ -78,7 +67,7 @@ public class AdminViewController {
         model.addAttribute("users", adminPanelDto.getUsers());
         model.addAttribute("tariffOptions", adminPanelDto.getTariffOptions());
         model.addAttribute("tariffs", adminPanelDto.getTariffs());
-        return adminPath + "adminPanel";
+        return path + "adminPanel";
     }
 
     /**
@@ -92,7 +81,7 @@ public class AdminViewController {
         List<User> users = userService.findAllUsers();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("users", users);
-        return adminPath + "allUsers";
+        return path + "allUsers";
     }
 
     /**
@@ -106,7 +95,7 @@ public class AdminViewController {
         List<Contract> contracts = contractService.findAllContracts();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("contracts", contracts);
-        return adminPath + "allContracts";
+        return path + "allContracts";
     }
 
     /**
@@ -120,7 +109,7 @@ public class AdminViewController {
         List<Tariff> tariffs = tariffService.findAllTariffs();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffs", tariffs);
-        return adminPath + "allTariffs";
+        return path + "allTariffs";
     }
 
     /**
@@ -134,7 +123,7 @@ public class AdminViewController {
         List<TariffOption> tariffOptions = tariffOptionService.findAllTariffOptions();
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("options", tariffOptions);
-        return adminPath + "allOptions";
+        return path + "allOptions";
     }
 
     /**
@@ -147,9 +136,9 @@ public class AdminViewController {
     public String addUser(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         AddUserDto addUserDto = new AddUserDto();
-        model.addAttribute("addUserDto", addUserDto);
+        model.addAttribute("user", addUserDto);
         model.addAttribute("roles", Role.getAllRoles());
-        return adminPath + "addUser";
+        return path + "addUser";
     }
 
     /**
@@ -163,17 +152,17 @@ public class AdminViewController {
     @RequestMapping(value = "/adminPanel/addUser", method = RequestMethod.POST)
     public String saveUser(@Valid AddUserDto addUserDto, BindingResult result, ModelMap model) {
         if (result.hasErrors()) {
-            return adminPath + "addUser";
+            return path + "addUser";
         }
         userFormValidator.validate(addUserDto, result);
         if (result.hasErrors()) {
-            return adminPath + "addUser";
+            return path + "addUser";
         }
         userService.addUser(addUserDto);
         model.addAttribute("success", "User " + addUserDto.getFirstName() + " " +
                 addUserDto.getLastName() + " registered successfully");
         model.addAttribute("loggedinuser", getPrincipal());
-        return adminPath + "addSuccess";
+        return path + "addSuccess";
     }
 
     /**
@@ -185,11 +174,9 @@ public class AdminViewController {
     @RequestMapping(value = "/adminPanel/addContract", method = RequestMethod.GET)
     public String addContract(ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
-        AddContractDto addContractDto = new AddContractDto();
         List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("tariffs", tariffs);
-        model.addAttribute("contractUserIdDto", addContractDto);
-        return adminPath + "addContract";
+        return path + "addContract";
     }
 
     /**
@@ -202,12 +189,10 @@ public class AdminViewController {
     @RequestMapping(value = "/adminPanel/addContractToUser/{user_id}", method = RequestMethod.GET)
     public String addContractToUser(@PathVariable(value = "user_id") Integer user_id, ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
-        AddContractDto addContractDto = new AddContractDto();
         List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("user_id", user_id);
         model.addAttribute("tariffs", tariffs);
-        model.addAttribute("contractUserIdDto", addContractDto);
-        return adminPath + "addContract";
+        return path + "addContract";
     }
 
     /**
@@ -221,7 +206,7 @@ public class AdminViewController {
         model.addAttribute("loggedinuser", getPrincipal());
         AddTariffOptionDto addTariffOptionDto = new AddTariffOptionDto();
         model.addAttribute("addTariffOptionDto", addTariffOptionDto);
-        return adminPath + "addOption";
+        return path + "addOption";
     }
 
     /**
@@ -236,12 +221,12 @@ public class AdminViewController {
     public String saveOption(@Valid AddTariffOptionDto addTariffOptionDto, BindingResult result, ModelMap model) {
         tariffOptionFormValidator.validate(addTariffOptionDto, result);
         if (result.hasErrors()) {
-            return adminPath + "addOption";
+            return path + "addOption";
         }
         tariffOptionService.addTariffOption(addTariffOptionDto);
         model.addAttribute("success", "Option " + addTariffOptionDto.getName() + " registered successfully");
         model.addAttribute("loggedinuser", getPrincipal());
-        return adminPath + "addSuccess";
+        return path + "addSuccess";
     }
 
     /**
@@ -255,7 +240,7 @@ public class AdminViewController {
         model.addAttribute("loggedinuser", getPrincipal());
         List<TariffOption> tariffOptions = tariffOptionService.findAllTariffOptions();
         model.addAttribute("options", tariffOptions);
-        return adminPath + "addTariff";
+        return path + "addTariff";
     }
 
     /**
@@ -274,9 +259,8 @@ public class AdminViewController {
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("user", user);
-        return adminPath + "user";
+        return path + "user";
     }
-
 
     /**
      * Returns contract page view.
@@ -294,7 +278,7 @@ public class AdminViewController {
         }
         model.addAttribute("contractPageDto", contractPageDto);
         model.addAttribute("loggedinuser", getPrincipal());
-        return adminPath + "contract";
+        return path + "contract";
     }
 
     /**
@@ -313,9 +297,8 @@ public class AdminViewController {
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffPageDto", tariffPageDto);
-        return adminPath + "tariff";
+        return path + "tariff";
     }
-
 
     /**
      * Returns option page view.
@@ -333,37 +316,10 @@ public class AdminViewController {
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffOption", tariffOption);
-        return adminPath + "option";
+        return path + "option";
     }
 
 
-    /**
-     * This method returns the principal[user-name] of logged-in user.
-     */
-    private String getPrincipal() {
-        String userName = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (principal instanceof UserDetails) {
-            userName = ((UserDetails) principal).getUsername();
-        } else {
-            userName = principal.toString();
-        }
-        return userName;
-    }
-
-    /**
-     * This method returns true if users is already authenticated [logged-in], else false.
-     */
-    private boolean isCurrentAuthenticationAnonymous() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authenticationTrustResolver.isAnonymous(authentication);
-    }
-
-    String prepareErrorPage(ModelMap model, MyBusinessException e){
-        model.addAttribute("error", e.getMessage());
-        model.addAttribute("loggedinuser", getPrincipal());
-        return adminPath + "errorPage";
-    }
 
 }
