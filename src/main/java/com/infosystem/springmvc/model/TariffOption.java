@@ -47,7 +47,7 @@ public class TariffOption implements Serializable {
             joinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")},
             inverseJoinColumns = {@JoinColumn(name = "EXCLUDING_OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> excludingTariffOptions = new HashSet<TariffOption>();
-    
+
 //    @Override
 //    public String toString() {
 //        return "TariffOption [id=" + id + ", name=" + name + ", price=" + price

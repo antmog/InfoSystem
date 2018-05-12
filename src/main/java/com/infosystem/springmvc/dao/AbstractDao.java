@@ -1,6 +1,5 @@
 package com.infosystem.springmvc.dao;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
