@@ -38,7 +38,6 @@
                 </div>
                 <br/>
             </div>
-
         </div>
     </div>
 </main>
