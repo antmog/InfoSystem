@@ -303,8 +303,22 @@ public class ContractServiceImpl implements ContractService {
                 }
                 throw new LogicException(sb.toString());
             }
-            //todo
 
+            //todo
+            Set<TariffOption> optionExcludingOptions;
+            for(TariffOption toBeAddedTariffOption : toBeAddedOptionsList){
+                optionExcludingOptions = new HashSet<>(toBeAddedTariffOption.getExcludingTariffOptions());
+                optionExcludingOptions.retainAll(toBeAddedOptionsList);
+                if (!optionExcludingOptions.isEmpty()) {
+                    StringBuilder sb = new StringBuilder();
+                    for (TariffOption tariffOption : optionExcludingOptions) {
+                        sb.append(toBeAddedTariffOption.getName()).append(" excludes ").append(tariffOption.getName()).append(".\n");
+                    }
+                    throw new LogicException(sb.toString());
+                }
+            }
+
+            //todo
 
             contract.setActiveOptions(toBeAddedOptionsList);
         }
