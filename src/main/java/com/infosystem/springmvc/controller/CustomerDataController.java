@@ -3,6 +3,7 @@ package com.infosystem.springmvc.controller;
 import com.infosystem.springmvc.dto.EditContractDto;
 import com.infosystem.springmvc.dto.SwitchTariffDto;
 import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
@@ -47,7 +48,7 @@ public class CustomerDataController {
      * @throws DatabaseException if contract doesn't exist
      */
     @RequestMapping(value = "/customerPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) throws DatabaseException, ValidationException {
+    public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
         if (result.hasErrors()) {
             throw new ValidationException("Select tariff.");
         }

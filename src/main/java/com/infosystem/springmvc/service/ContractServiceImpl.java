@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -178,9 +180,18 @@ public class ContractServiceImpl implements ContractService {
      * @throws DatabaseException if tariff/contract doesn't exist
      */
     @Override
-    public void switchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException {
+    public void switchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException {
         Contract contract = findById(switchTariffDto.getContractId());
         Tariff newTariff = tariffService.findById(switchTariffDto.getTariffId());
+        if(!newTariff.getAvailableOptions().containsAll(contract.getActiveOptions())){
+            List<TariffOption> contractOptions = new ArrayList<>(contract.getActiveOptions());
+            contractOptions.removeAll(newTariff.getAvailableOptions());
+            StringBuffer sb = new StringBuffer("New tariff doesn't include all current options. To switch remove options:\n");
+            for(TariffOption tariffOption:contractOptions){
+                sb.append(tariffOption.getName() + "\n");
+            }
+            throw new LogicException(sb.toString());
+        }
         contract.setTariff(newTariff);
         contract.setPrice(contract.countPrice());
     }
@@ -191,7 +202,7 @@ public class ContractServiceImpl implements ContractService {
      * @throws DatabaseException
      */
     @Override
-    public void adminSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException {
+    public void adminSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException {
         switchTariff(switchTariffDto);
     }
 
@@ -201,7 +212,7 @@ public class ContractServiceImpl implements ContractService {
      * @throws DatabaseException
      */
     @Override
-    public void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException {
+    public void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException {
         Contract contract = findById(switchTariffDto.getContractId());
         if (contract.getStatus().equals(Status.ACTIVE)) {
             switchTariff(switchTariffDto);

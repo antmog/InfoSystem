@@ -252,7 +252,7 @@
                 alert(msg);
                 $('#tariffTable').find('tr:eq(1)').find('td:eq(1)').html(newTariffId);
             }).fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
+                alert(jqXHR.responseText);
             });
         });
 
