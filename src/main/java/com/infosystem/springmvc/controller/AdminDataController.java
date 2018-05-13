@@ -47,10 +47,11 @@ public class AdminDataController {
 
     /**
      * Called on submit of adding contract (allContracts page and user page).
+     *
      * @param addContractDto
-     * @param result validation result
+     * @param result         validation result
      * @return message
-     * @throws LogicException if pohne number already exists
+     * @throws LogicException      if pohne number already exists
      * @throws ValidationException if data in fields is not valid (phone number length(min = 6, max = 32))
      */
     @RequestMapping(value = {"/adminPanel/addContract", "/adminPanel/addContractToUser/{user_id}"}, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -65,10 +66,11 @@ public class AdminDataController {
 
     /**
      * Called on adding tariff (adminPanel and allTariffs pages).
+     *
      * @param addTariffDto
-     * @param result validation result
+     * @param result       validation result
      * @return message
-     * @throws LogicException if tariff with selected name alrdy exists
+     * @throws LogicException      if tariff with selected name alrdy exists
      * @throws ValidationException if data in fields is not valid (tariff name length(min = 2, max = 32), min price = 1)
      */
     @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
@@ -82,10 +84,11 @@ public class AdminDataController {
 
     /**
      * Called while searching user by number (adminPanel and allUsers pages).
+     *
      * @param searchByNumber
-     * @param result validation result
+     * @param result         validation result
      * @return message
-     * @throws LogicException if no such number
+     * @throws LogicException      if no such number
      * @throws ValidationException if data in fields is not valid (phone number length(min = 6, max = 32))
      */
     @RequestMapping(value = "/adminPanel/user/searchUserByNumber", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -100,9 +103,10 @@ public class AdminDataController {
 
     /**
      * Called on deleting user (user page).
+     *
      * @param user_id
      * @return message
-     * @throws LogicException if user still have contracts
+     * @throws LogicException    if user still have contracts
      * @throws DatabaseException if user with @user_id doesn't exist
      */
     @RequestMapping(value = "/adminPanel/user/deleteUser", method = RequestMethod.POST)
@@ -113,9 +117,10 @@ public class AdminDataController {
 
     /**
      * Called on deleting tariff (tariff page).
+     *
      * @param tariff_id
      * @return message
-     * @throws LogicException if tariff is still used
+     * @throws LogicException    if tariff is still used
      * @throws DatabaseException if tariff with @tariff_id doesn't exist
      */
     @RequestMapping(value = "/adminPanel/tariff/deleteTariff", method = RequestMethod.POST)
@@ -126,6 +131,7 @@ public class AdminDataController {
 
     /**
      * Called on deleting contract (tariff page).
+     *
      * @param contract_id
      * @return message
      * @throws DatabaseException if contract with @contract_id doesn't exist
@@ -139,10 +145,11 @@ public class AdminDataController {
 
     /**
      * Deleting option.
+     *
      * @param option_id
      * @return message
      * @throws DatabaseException if option with @option_id doesn't exist
-     * @throws LogicException if options is still used somewhere.
+     * @throws LogicException    if options is still used somewhere.
      */
     @RequestMapping(value = "/adminPanel/option/deleteOption", method = RequestMethod.POST)
     public String deleteOption(@RequestBody String option_id) throws DatabaseException, LogicException {
@@ -152,11 +159,12 @@ public class AdminDataController {
 
     /**
      * Adding selected options to the tariff.
+     *
      * @param editTariffDto
-     * @param result validation result
+     * @param result        validation result
      * @return message
      * @throws ValidationException if no options selected
-     * @throws DatabaseException if tariff doesn't exist
+     * @throws DatabaseException   if tariff doesn't exist
      */
     @RequestMapping(value = "/adminPanel/tariff/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String tariffAddOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException, DatabaseException {
@@ -169,8 +177,9 @@ public class AdminDataController {
 
     /**
      * Deleting selected options from the tariff.
+     *
      * @param editTariffDto
-     * @param result validation result
+     * @param result        validation result
      * @return message
      * @throws ValidationException if no options selected
      * @throws ValidationException if tariff doesn't exist
@@ -187,11 +196,12 @@ public class AdminDataController {
 
     /**
      * Deleting selected options from the contract.
+     *
      * @param editContractDto
-     * @param result validation result
+     * @param result          validation result
      * @return message
      * @throws ValidationException if no options selected
-     * @throws DatabaseException if contract doesn't exist
+     * @throws DatabaseException   if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException, DatabaseException {
@@ -204,11 +214,12 @@ public class AdminDataController {
 
     /**
      * Adding selected options to the contract.
+     *
      * @param editContractDto
-     * @param result validation result
+     * @param result          validation result
      * @return message
      * @throws ValidationException if no options selected
-     * @throws DatabaseException if contract doesn't exist
+     * @throws DatabaseException   if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException, DatabaseException {
@@ -221,11 +232,12 @@ public class AdminDataController {
 
     /**
      * Changes tariff of current contract to selected.
+     *
      * @param switchTariffDto
-     * @param result validation result
+     * @param result          validation result
      * @return message
      * @throws ValidationException if tariff is not selected
-     * @throws DatabaseException if contract doesn't exist
+     * @throws DatabaseException   if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) throws ValidationException, DatabaseException {
@@ -237,32 +249,32 @@ public class AdminDataController {
     }
 
 
-
     /**
      * Adding selected options to the tariff.
+     *
      * @param tariffOptionRulesDto
-     * @param result validation result
+     * @param result               validation result
      * @return message
      * @throws ValidationException if no options selected
-     * @throws DatabaseException if tariff doesn't exist
+     * @throws DatabaseException   if tariff doesn't exist
      */
     @RequestMapping(value = "/adminPanel/option/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String optionAddOptions(@RequestBody @Valid TariffOptionRulesDto tariffOptionRulesDto, BindingResult result) throws ValidationException, DatabaseException, LogicException {
+        System.out.println(tariffOptionRulesDto);
+        System.out.println(tariffOptionRulesDto);
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }
-        if(tariffOptionRulesDto.getRule().equals(TariffOptionRule.RELATED.getRole())){
-            tariffOptionService.addRelatedTariffOptions(tariffOptionRulesDto.getTariffOptionId(),tariffOptionRulesDto.getTariffOptionDtoList());
-        }
-        if(tariffOptionRulesDto.getRule().equals(TariffOptionRule.EXCLUDING.getRole())){
-        }
+        tariffOptionService.addRuleTariffOptions(tariffOptionRulesDto.getTariffOptionId(),
+                tariffOptionRulesDto.getTariffOptionDtoList(), TariffOptionRule.valueOf(tariffOptionRulesDto.getRule()));
         return "Options added.";
     }
 
     /**
      * Deleting selected options from the tariff.
+     *
      * @param tariffOptionRulesDto
-     * @param result validation result
+     * @param result               validation result
      * @return message
      * @throws ValidationException if no options selected
      * @throws ValidationException if tariff doesn't exist
@@ -272,11 +284,8 @@ public class AdminDataController {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to delete.");
         }
-        if(tariffOptionRulesDto.getRule().equals(TariffOptionRule.RELATED.getRole())){
-            tariffOptionService.delRelatedTariffOptions(tariffOptionRulesDto.getTariffOptionId(),tariffOptionRulesDto.getTariffOptionDtoList());
-        }
-        if(tariffOptionRulesDto.getRule().equals(TariffOptionRule.EXCLUDING.getRole())){
-        }
+        tariffOptionService.delRuleTariffOptions(tariffOptionRulesDto.getTariffOptionId(),
+                tariffOptionRulesDto.getTariffOptionDtoList(),TariffOptionRule.valueOf(tariffOptionRulesDto.getRule()));
         return "Options deleted.";
 
     }

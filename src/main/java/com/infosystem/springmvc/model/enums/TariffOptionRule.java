@@ -13,11 +13,11 @@ public enum TariffOptionRule {
         this.tariffOptionRule = tariffOptionRule;
     }
 
-    public String getRole() {
+    public String getRule() {
         return tariffOptionRule;
     }
 
-    public static HashSet<Role> getAllRoles(){
-        return new HashSet<>(Arrays.asList(Role.values()));
+    public static HashSet<TariffOptionRule> getAllRules(){
+        return new HashSet<>(Arrays.asList(TariffOptionRule.values()));
     }
 }

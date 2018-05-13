@@ -45,6 +45,7 @@ public class Tariff implements Serializable {
     public void addAvailableOptions(Set<TariffOption> tariffOptionSet){
         availableOptions.addAll(tariffOptionSet);
     }
+
 //    @Override
 //    public String toString() {
 //        return "Tariff [id=" + id + ", name=" + name + ", price=" + price +"]";

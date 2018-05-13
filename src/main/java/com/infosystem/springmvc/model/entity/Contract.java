@@ -41,6 +41,22 @@ public class Contract implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> activeOptions = new HashSet<TariffOption>();
 
+    public void delActiveOptions(Set<TariffOption> tariffOptionSet){
+        activeOptions.removeAll(tariffOptionSet);
+    }
+
+    public void addActiveOptions(Set<TariffOption> tariffOptionSet){
+        activeOptions.addAll(tariffOptionSet);
+    }
+
+    public Double countPrice(){
+        Double price = tariff.getPrice();
+        for (TariffOption tariffOption : activeOptions) {
+            price += tariffOption.getPrice();
+        }
+        return price;
+    }
+
 //    @Override
 //    public String toString() {
 //        return "Contract [id=" + id + ", user=" + user + ", phoneNumber=" + phoneNumber + ", tariff=" +  ", status=" + status + "]";

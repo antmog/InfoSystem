@@ -13,6 +13,17 @@
         document.location.href = "/adminPanel/option/" + $(this).find("td:first").html();
     });
 
+    function tableSelectionRules() {
+        for (var i = 0; i < arguments.length; i++) {
+            arguments[i].on("click", "tr.move-row", function () {
+                if ($(this).hasClass('add-tariff-table-selected')) {
+                    $(this).removeClass('add-tariff-table-selected');
+                } else {
+                    $(this).addClass('add-tariff-table-selected');
+                }
+            });
+        }
+    }
 
     function adminPanel() {
 
@@ -627,72 +638,110 @@
         });
 
         function optionRules() {
-            var rule;
+            var rule, addButton, delButton, availableOptionsTable, addedOptionsTable;
+
+            function optionTablesSelectionBehavior() {
+                tableSelectionRules($("#optionAvailableOptionsRelated"), $("#optionAddedOptionsRelated"),
+                    $("#optionAvailableOptionsExcluding"), $("#optionAddedOptionsExcluding"));
+            }
+
             // selecting table rows processed in tariff page function
-            rule = "RELATED";
-            $('#optionAddOption').on('click', function () {
-                // OPTIONS RULES\
-                var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").clone();
-                var table = $('#parseTable');
-                for (var i = 0; i < tr.length; i++) {
-                    table.append(tr[i]);
-                }
-                var token = $("meta[name='_csrf']").attr("content");
-                var header = $("meta[name='_csrf_header']").attr("content");
-                $.ajax({
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader(header, token);
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'text/html; charset=utf-8'
-                    },
-                    type: "POST",
-                    url: "/adminPanel/option/addOptions",
-                    // The key needs to match your method's input parameter (case-sensitive).
-                    data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffOptionId: option_id, rule: rule})
-                }).done(function (msg) {
-                    alert(msg);
-                    var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").clone();
-                    tr.removeClass('add-tariff-table-selected');
-                    $("#tariffAddedOptions").append(tr);
-                }).fail(function (jqXHR, textStatus) {
-                    alert("Request failed: " + textStatus);
+            function editOptions(rule, addButton, delButton, availableOptionsTable, addedOptionsTable) {
+                addButton.on('click', function () {
+                    // OPTIONS RULES\
+                    var tr = availableOptionsTable.find("tr.add-tariff-table-selected").clone();
+                    var table = $('#parseTable');
+                    for (var i = 0; i < tr.length; i++) {
+                        table.append(tr[i]);
+                    }
+                    var token = $("meta[name='_csrf']").attr("content");
+                    var header = $("meta[name='_csrf_header']").attr("content");
+                    $.ajax({
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader(header, token);
+                        },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'text/html; charset=utf-8'
+                        },
+                        type: "POST",
+                        url: "/adminPanel/option/addOptions",
+                        // The key needs to match your method's input parameter (case-sensitive).
+                        data: JSON.stringify({
+                            tariffOptionDtoList: table.tableToJSON(),
+                            tariffOptionId: option_id,
+                            rule: rule
+                        })
+                    }).done(function (msg) {
+                        alert(msg);
+                        var tr = availableOptionsTable.find("tr.add-tariff-table-selected").clone();
+                        tr.removeClass('add-tariff-table-selected');
+                        addedOptionsTable.append(tr);
+                    }).fail(function (jqXHR, textStatus) {
+                        alert("Request failed: " + textStatus);
+                    });
+                    $('#parseTable tr.move-row').remove();
                 });
-                $('#parseTable tr.move-row').remove();
-            });
 
-            $('#optionDelOption').on('click', function () {
-                // OPTIONS RULES
+                delButton.on('click', function () {
+                    // OPTIONS RULES
 
-                var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").clone();
-                var table = $('#parseTable');
-                for (var i = 0; i < tr.length; i++) {
-                    table.append(tr[i]);
-                }
-                var token = $("meta[name='_csrf']").attr("content");
-                var header = $("meta[name='_csrf_header']").attr("content");
-                $.ajax({
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader(header, token);
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'text/html; charset=utf-8'
-                    },
-                    type: "POST",
-                    url: "/adminPanel/option/delOptions",
-                    // The key needs to match your method's input parameter (case-sensitive).
-                    data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffOptionId: option_id, rule: rule})
-                }).done(function (msg) {
-                    alert(msg);
-                    var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove();
-                }).fail(function (jqXHR, textStatus) {
-                    alert("Request failed: " + textStatus);
+                    var tr = addedOptionsTable.find("tr.add-tariff-table-selected").clone();
+                    var table = $('#parseTable');
+                    for (var i = 0; i < tr.length; i++) {
+                        table.append(tr[i]);
+                    }
+                    var token = $("meta[name='_csrf']").attr("content");
+                    var header = $("meta[name='_csrf_header']").attr("content");
+                    $.ajax({
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader(header, token);
+                        },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'text/html; charset=utf-8'
+                        },
+                        type: "POST",
+                        url: "/adminPanel/option/delOptions",
+                        // The key needs to match your method's input parameter (case-sensitive).
+                        data: JSON.stringify({
+                            tariffOptionDtoList: table.tableToJSON(),
+                            tariffOptionId: option_id,
+                            rule: rule
+                        })
+                    }).done(function (msg) {
+                        alert(msg);
+                        var tr = addedOptionsTable.find("tr.add-tariff-table-selected").remove();
+                    }).fail(function (jqXHR, textStatus) {
+                        alert("Request failed: " + textStatus);
+                    });
+                    $('#parseTable tr.move-row').remove();
                 });
-                $('#parseTable tr.move-row').remove();
-            });
+            }
+
+            function relatedOptions() {
+                rule = "RELATED";
+                addButton = $("#optionAddOptionRelated");
+                delButton = $("#optionDelOptionRelated");
+                availableOptionsTable = $("#optionAvailableOptionsRelated");
+                addedOptionsTable = $("#optionAddedOptionsRelated");
+                editOptions(rule, addButton, delButton,availableOptionsTable,addedOptionsTable);
+            }
+
+            function excludingOptions() {
+                rule = "EXCLUDING";
+                addButton = $("#optionAddOptionExcluding");
+                delButton = $("#optionDelOptionExcluding");
+                availableOptionsTable = $("#optionAvailableOptionsExcluding");
+                addedOptionsTable = $("#optionAddedOptionsExcluding");
+                editOptions(rule, addButton, delButton,availableOptionsTable,addedOptionsTable);
+            }
+
+            optionTablesSelectionBehavior();
+            excludingOptions();
+            relatedOptions();
         }
+
         optionRules();
 
     }

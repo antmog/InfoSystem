@@ -8,6 +8,7 @@ import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
+import com.infosystem.springmvc.model.enums.TariffOptionRule;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,11 +113,11 @@ public class TariffOptionServiceImpl implements TariffOptionService {
      * @throws LogicException if trying to make rule for itself
      */
     @Override
-    public void addRelatedTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList) throws DatabaseException, LogicException {
+    public void addRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws DatabaseException, LogicException {
         Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionList(tariffOptionDtoList);
         TariffOption tariffOption = findById(tariffOptionId);
         isWrongRule(tariffOption,optionList);
-        //todo
+        tariffOption.addTariffOptionRules(optionList,rule);
     }
 
     /**
@@ -127,11 +128,11 @@ public class TariffOptionServiceImpl implements TariffOptionService {
      * @throws LogicException if trying to make rule for itself
      */
     @Override
-    public void delRelatedTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList) throws LogicException, DatabaseException {
+    public void delRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws LogicException, DatabaseException {
         Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionList(tariffOptionDtoList);
         TariffOption tariffOption = findById(tariffOptionId);
         isWrongRule(tariffOption,optionList);
-        //todo
+        tariffOption.delTariffOptionRules(optionList,rule);
     }
 
 

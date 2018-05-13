@@ -108,14 +108,8 @@ public class ContractServiceImpl implements ContractService {
     public void addOptions(EditContractDto editContractDto) throws DatabaseException {
         Contract contract = findById(editContractDto.getContractId());
         Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
-        contractOptionList.addAll(contract.getActiveOptions());
-        contract.setActiveOptions(contractOptionList);
-
-        Double price = contract.getTariff().getPrice();
-        for (TariffOption tariffOption : contractOptionList) {
-            price += tariffOption.getPrice();
-        }
-        contract.setPrice(price);
+        contract.addActiveOptions(contractOptionList);
+        contract.setPrice(contract.countPrice());
         // LOGIC RULES ETC
     }
 
@@ -151,15 +145,8 @@ public class ContractServiceImpl implements ContractService {
     public void delOptions(EditContractDto editContractDto) throws DatabaseException {
         Contract contract = findById(editContractDto.getContractId());
         Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
-        Set<TariffOption> newTariffOptionList = contract.getActiveOptions();
-        newTariffOptionList.removeAll(contractOptionList);
-        contract.setActiveOptions(newTariffOptionList);
-
-        Double price = contract.getTariff().getPrice();
-        for (TariffOption tariffOption : newTariffOptionList) {
-            price += tariffOption.getPrice();
-        }
-        contract.setPrice(price);
+        contract.delActiveOptions(contractOptionList);
+        contract.setPrice(contract.countPrice());
         // LOGIC RULES ETC
     }
 
@@ -194,9 +181,8 @@ public class ContractServiceImpl implements ContractService {
     public void switchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException {
         Contract contract = findById(switchTariffDto.getContractId());
         Tariff newTariff = tariffService.findById(switchTariffDto.getTariffId());
-        Double newPrice = contract.getPrice() - contract.getTariff().getPrice() + newTariff.getPrice();
         contract.setTariff(newTariff);
-        contract.setPrice(newPrice);
+        contract.setPrice(contract.countPrice());
     }
 
     /**
