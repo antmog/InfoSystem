@@ -1,4 +1,4 @@
-package com.infosystem.springmvc.model;
+package com.infosystem.springmvc.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -63,4 +63,17 @@ public class TariffOption implements Serializable {
 //        return result;
 //    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof TariffOption))
+            return false;
+        TariffOption other = (TariffOption) obj;
+        if (this.id == null) {
+            return other.id == null;
+        } else return id.equals(other.id);
+    }
 }

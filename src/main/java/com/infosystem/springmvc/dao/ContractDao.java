@@ -1,7 +1,6 @@
 package com.infosystem.springmvc.dao;
 
-import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.Contract;
+import com.infosystem.springmvc.model.entity.Contract;
 
 import java.util.List;
 

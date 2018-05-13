@@ -1,7 +1,7 @@
 package com.infosystem.springmvc.dto;
 
-import com.infosystem.springmvc.model.Contract;
-import com.infosystem.springmvc.model.Tariff;
+import com.infosystem.springmvc.model.entity.Contract;
+import com.infosystem.springmvc.model.entity.Tariff;
 
 import java.util.List;
 

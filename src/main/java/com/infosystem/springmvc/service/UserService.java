@@ -9,7 +9,7 @@ import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.model.User;
+import com.infosystem.springmvc.model.entity.User;
 
 
 public interface UserService {

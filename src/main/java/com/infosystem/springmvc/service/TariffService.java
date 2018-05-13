@@ -5,8 +5,8 @@ import com.infosystem.springmvc.dto.EditTariffDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
-import com.infosystem.springmvc.model.Tariff;
-import com.infosystem.springmvc.model.TariffOption;
+import com.infosystem.springmvc.model.entity.Tariff;
+import com.infosystem.springmvc.model.entity.TariffOption;
 
 import java.util.List;
 import java.util.Set;

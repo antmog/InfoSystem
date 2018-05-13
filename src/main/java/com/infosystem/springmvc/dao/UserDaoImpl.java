@@ -6,7 +6,7 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
-import com.infosystem.springmvc.model.User;
+import com.infosystem.springmvc.model.entity.User;
 
 
 @Repository("userDao")

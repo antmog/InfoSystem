@@ -1,8 +1,6 @@
 package com.infosystem.springmvc.dao;
 
-import com.infosystem.springmvc.model.PersistentLogin;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
+import com.infosystem.springmvc.model.entity.PersistentLogin;
 
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;

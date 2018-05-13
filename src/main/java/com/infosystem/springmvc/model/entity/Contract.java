@@ -1,5 +1,6 @@
-package com.infosystem.springmvc.model;
+package com.infosystem.springmvc.model.entity;
 
+import com.infosystem.springmvc.model.enums.Status;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -44,4 +45,18 @@ public class Contract implements Serializable {
 //    public String toString() {
 //        return "Contract [id=" + id + ", user=" + user + ", phoneNumber=" + phoneNumber + ", tariff=" +  ", status=" + status + "]";
 //    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Contract))
+            return false;
+        Contract other = (Contract) obj;
+        if (this.id == null) {
+            return other.id == null;
+        } else return id.equals(other.id);
+    }
 }

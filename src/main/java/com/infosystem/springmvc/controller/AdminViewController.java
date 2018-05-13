@@ -3,7 +3,11 @@ package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.*;
+import com.infosystem.springmvc.model.entity.Contract;
+import com.infosystem.springmvc.model.entity.Tariff;
+import com.infosystem.springmvc.model.entity.TariffOption;
+import com.infosystem.springmvc.model.entity.User;
+import com.infosystem.springmvc.model.enums.Role;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.DataService.DataService;
 import com.infosystem.springmvc.service.TariffOptionService;
@@ -308,14 +312,14 @@ public class AdminViewController extends ViewControllerTemplate{
      */
     @RequestMapping(value = "/adminPanel/option/{option_id}")
     public String option(@PathVariable(value = "option_id") Integer option_id, ModelMap model) {
-        TariffOption tariffOption;
+        TariffOptionPageDto tariffOptionPageDto;
         try {
-            tariffOption = tariffOptionService.findById(option_id);
+            tariffOptionPageDto = dataService.getTariffOptionPageData(option_id);
         } catch (DatabaseException e) {
             return prepareErrorPage(model,e);
         }
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("tariffOption", tariffOption);
+        model.addAttribute("tariffOptionPageDto", tariffOptionPageDto);
         return path + "option";
     }
 

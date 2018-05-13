@@ -1,8 +1,10 @@
 package com.infosystem.springmvc.dto;
 
-import com.infosystem.springmvc.model.Role;
+import com.infosystem.springmvc.model.enums.Role;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -37,6 +39,7 @@ public class AddUserDto {
     @Size(min = 6, max = 32)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
     private Role role;
 

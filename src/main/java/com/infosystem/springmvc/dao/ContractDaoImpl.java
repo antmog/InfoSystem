@@ -1,12 +1,10 @@
 package com.infosystem.springmvc.dao;
 
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.Contract;
-import com.sun.corba.se.impl.orb.DataCollectorBase;
+import com.infosystem.springmvc.model.entity.Contract;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
 @Repository("contractDao")

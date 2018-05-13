@@ -1,8 +1,8 @@
 package com.infosystem.springmvc.dao;
 
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.Status;
-import com.infosystem.springmvc.model.Tariff;
+import com.infosystem.springmvc.model.enums.Status;
+import com.infosystem.springmvc.model.entity.Tariff;
 
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;

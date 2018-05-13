@@ -4,7 +4,8 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.model.User;
+import com.infosystem.springmvc.model.entity.User;
+import com.infosystem.springmvc.model.enums.TariffOptionRule;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
@@ -234,5 +235,52 @@ public class AdminDataController {
         contractService.adminSwitchTariff(switchTariffDto);
         return "Switched to tariff (id:" + switchTariffDto.getTariffId() + ").";
     }
+
+
+
+    /**
+     * Adding selected options to the tariff.
+     * @param tariffOptionRulesDto
+     * @param result validation result
+     * @return message
+     * @throws ValidationException if no options selected
+     * @throws DatabaseException if tariff doesn't exist
+     */
+    @RequestMapping(value = "/adminPanel/option/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String optionAddOptions(@RequestBody @Valid TariffOptionRulesDto tariffOptionRulesDto, BindingResult result) throws ValidationException, DatabaseException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Select options to add.");
+        }
+        if(tariffOptionRulesDto.getRule().equals(TariffOptionRule.RELATED.getRole())){
+            tariffOptionService.addRelatedTariffOptions(tariffOptionRulesDto.getTariffOptionId(),tariffOptionRulesDto.getTariffOptionDtoList());
+        }
+        if(tariffOptionRulesDto.getRule().equals(TariffOptionRule.EXCLUDING.getRole())){
+        }
+        return "Options added.";
+    }
+
+    /**
+     * Deleting selected options from the tariff.
+     * @param tariffOptionRulesDto
+     * @param result validation result
+     * @return message
+     * @throws ValidationException if no options selected
+     * @throws ValidationException if tariff doesn't exist
+     */
+    @RequestMapping(value = "/adminPanel/option/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String optionDelOptions(@RequestBody @Valid TariffOptionRulesDto tariffOptionRulesDto, BindingResult result) throws ValidationException, DatabaseException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Select options to delete.");
+        }
+        if(tariffOptionRulesDto.getRule().equals(TariffOptionRule.RELATED.getRole())){
+            tariffOptionService.delRelatedTariffOptions(tariffOptionRulesDto.getTariffOptionId(),tariffOptionRulesDto.getTariffOptionDtoList());
+        }
+        if(tariffOptionRulesDto.getRule().equals(TariffOptionRule.EXCLUDING.getRole())){
+        }
+        return "Options deleted.";
+
+    }
 }
+
+
 

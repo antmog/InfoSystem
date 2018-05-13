@@ -10,7 +10,7 @@ import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.model.Contract;
+import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,8 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.infosystem.springmvc.dao.UserDao;
-import com.infosystem.springmvc.model.User;
-import sun.rmi.runtime.Log;
+import com.infosystem.springmvc.model.entity.User;
 
 import static java.util.Arrays.stream;
 

@@ -1,5 +1,6 @@
-package com.infosystem.springmvc.model;
+package com.infosystem.springmvc.model.entity;
 
+import com.infosystem.springmvc.model.enums.Status;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -37,9 +38,30 @@ public class Tariff implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> availableOptions = new HashSet<TariffOption>();
 
+    public void delAvailableOptions(Set<TariffOption> tariffOptionSet){
+        availableOptions.removeAll(tariffOptionSet);
+    }
+
+    public void addAvailableOptions(Set<TariffOption> tariffOptionSet){
+        availableOptions.addAll(tariffOptionSet);
+    }
 //    @Override
 //    public String toString() {
 //        return "Tariff [id=" + id + ", name=" + name + ", price=" + price +"]";
 //    }
+@Override
+public boolean equals(Object obj) {
+    if (this == obj)
+        return true;
+    if (obj == null)
+        return false;
+    if (!(obj instanceof Tariff))
+        return false;
+    Tariff other = (Tariff) obj;
+    if (this.id == null) {
+        return other.id == null;
+    } else return id.equals(other.id);
+}
+
 
 }

@@ -1,4 +1,4 @@
-package com.infosystem.springmvc.model;
+package com.infosystem.springmvc.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.infosystem.springmvc.model.enums.Role;
+import com.infosystem.springmvc.model.enums.Status;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -88,12 +90,7 @@ public class User implements Serializable {
             return false;
         User other = (User) obj;
         if (this.id == null) {
-            if (other.id != null){
-                return false;
-            }
-        } else if (!id.equals(other.id))
-            return false;
-
-        return true;
+            return other.id == null;
+        } else return id.equals(other.id);
     }
 }

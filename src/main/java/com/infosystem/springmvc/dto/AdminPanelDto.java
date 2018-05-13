@@ -1,13 +1,8 @@
 package com.infosystem.springmvc.dto;
 
-import com.infosystem.springmvc.model.Tariff;
-import com.infosystem.springmvc.model.TariffOption;
-import com.infosystem.springmvc.model.User;
-import com.infosystem.springmvc.service.TariffOptionService;
-import com.infosystem.springmvc.service.TariffService;
-import com.infosystem.springmvc.service.UserService;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.infosystem.springmvc.model.entity.Tariff;
+import com.infosystem.springmvc.model.entity.TariffOption;
+import com.infosystem.springmvc.model.entity.User;
 
 import java.util.List;
 

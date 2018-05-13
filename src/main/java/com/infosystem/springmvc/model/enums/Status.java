@@ -1,4 +1,4 @@
-package com.infosystem.springmvc.model;
+package com.infosystem.springmvc.model.enums;
 
 public enum Status {
     ACTIVE("ACTIVE"),

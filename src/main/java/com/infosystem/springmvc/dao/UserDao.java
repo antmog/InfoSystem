@@ -2,8 +2,7 @@ package com.infosystem.springmvc.dao;
 
 import java.util.List;
 
-import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.User;
+import com.infosystem.springmvc.model.entity.User;
 
 
 public interface UserDao {

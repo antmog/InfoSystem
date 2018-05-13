@@ -1,4 +1,4 @@
-package com.infosystem.springmvc.model;
+package com.infosystem.springmvc.model.enums;
 
 import java.util.Arrays;
 import java.util.HashSet;

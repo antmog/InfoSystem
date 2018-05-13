@@ -1,4 +1,4 @@
-package com.infosystem.springmvc.model;
+package com.infosystem.springmvc.model.entity;
 
 import lombok.Data;
 

@@ -1,7 +1,6 @@
 package com.infosystem.springmvc.dao;
 
-import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.Tariff;
+import com.infosystem.springmvc.model.entity.Tariff;
 
 import java.util.List;
 

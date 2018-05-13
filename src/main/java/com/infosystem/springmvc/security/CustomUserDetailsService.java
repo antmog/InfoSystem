@@ -1,6 +1,6 @@
 package com.infosystem.springmvc.security;
 
-import com.infosystem.springmvc.model.User;
+import com.infosystem.springmvc.model.entity.User;
 
 import com.infosystem.springmvc.service.UserService;
 import org.slf4j.Logger;
