@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import sun.rmi.runtime.Log;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service("contractService")
 @Transactional
@@ -133,7 +135,18 @@ public class ContractServiceImpl implements ContractService {
             }
         }
 
-
+        Set<TariffOption> optionRelatedOptions;
+        Set<TariffOption> expectedOptionsList = Stream.of(contractActiveOptions, toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());
+        for (TariffOption toBeAddedOption : toBeAddedOptionsList) {
+            optionRelatedOptions = toBeAddedOption.getRelatedTariffOptions();
+            if (!expectedOptionsList.containsAll(optionRelatedOptions)) {
+                StringBuilder sb = new StringBuilder();
+                for (TariffOption tariffOption : optionRelatedOptions) {
+                    sb.append(toBeAddedOption.getName()).append(" related with ").append(tariffOption.getName()).append(".\n");
+                }
+                throw new LogicException(sb.toString());
+            }
+        }
         contract.getActiveOptions().addAll(toBeAddedOptionsList);
         contract.setPrice(contract.countPrice());
     }
@@ -169,11 +182,26 @@ public class ContractServiceImpl implements ContractService {
      * @return
      * @throws DatabaseException if contract doesn't exist
      */
-    public void delOptions(EditContractDto editContractDto) throws DatabaseException {
+    public void delOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         Contract contract = findById(editContractDto.getContractId());
-        Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
+        Set<TariffOption> contractActiveOptions = contract.getActiveOptions();
+        Set<TariffOption> toBeDeletedOptionsList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
 
-        contract.getActiveOptions().removeAll(contractOptionList);
+        Set<TariffOption> expectedOptionsList = new HashSet<>(contractActiveOptions);
+        expectedOptionsList.removeAll(toBeDeletedOptionsList);
+        Set<TariffOption> optionRelatedOptions;
+        for (TariffOption expectedActiveTariffOption : expectedOptionsList) {
+            optionRelatedOptions = new HashSet<>(expectedActiveTariffOption.getRelatedTariffOptions());
+            optionRelatedOptions.retainAll(toBeDeletedOptionsList);
+            if (!optionRelatedOptions.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (TariffOption tariffOption : expectedActiveTariffOption.getRelatedTariffOptions()) {
+                    sb.append(expectedActiveTariffOption.getName()).append(" related with ").append(tariffOption.getName()).append(".\n");
+                }
+                throw new LogicException(sb.toString());
+            }
+        }
+        contract.getActiveOptions().removeAll(toBeDeletedOptionsList);
         contract.setPrice(contract.countPrice());
     }
 
@@ -184,7 +212,7 @@ public class ContractServiceImpl implements ContractService {
      * @throws DatabaseException if contract doesn't exist
      */
     @Override
-    public void adminDelOptions(EditContractDto editContractDto) throws DatabaseException {
+    public void adminDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         delOptions(editContractDto);
     }
 
@@ -195,7 +223,7 @@ public class ContractServiceImpl implements ContractService {
      * @throws DatabaseException if contract doesn't exist
      */
     @Override
-    public void customerDelOptions(EditContractDto editContractDto) throws DatabaseException {
+    public void customerDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         if (findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
             delOptions(editContractDto);
         }

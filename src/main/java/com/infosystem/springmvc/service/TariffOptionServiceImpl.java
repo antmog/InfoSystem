@@ -127,8 +127,6 @@ public class TariffOptionServiceImpl implements TariffOptionService {
                 throw new LogicException("One or more of chosen options are already in exclude list.");
             }
             tariffOption.getRelatedTariffOptions().addAll(optionList);
-            optionList.forEach(excludingTariffOption -> excludingTariffOption.getRelatedTariffOptions().add(tariffOption));
-
         }
         if (rule.equals(TariffOptionRule.EXCLUDING)) {
             if (!Collections.disjoint(tariffOption.getRelatedTariffOptions(), optionList)) {
@@ -154,7 +152,6 @@ public class TariffOptionServiceImpl implements TariffOptionService {
         isWrongRule(tariffOption, optionList);
         if (rule.equals(TariffOptionRule.RELATED)) {
             tariffOption.getRelatedTariffOptions().removeAll(optionList);
-            optionList.forEach(excludingTariffOption -> excludingTariffOption.getExcludingTariffOptions().remove(tariffOption));
         }
         if (rule.equals(TariffOptionRule.EXCLUDING)) {
             tariffOption.getExcludingTariffOptions().removeAll(optionList);

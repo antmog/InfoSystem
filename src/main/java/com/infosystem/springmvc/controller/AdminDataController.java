@@ -222,7 +222,7 @@ public class AdminDataController {
      * @throws DatabaseException   if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException, DatabaseException {
+    public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException, DatabaseException, LogicException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to delete.");
         }
