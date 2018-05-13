@@ -108,7 +108,7 @@ public class ContractServiceImpl implements ContractService {
     public void addOptions(EditContractDto editContractDto) throws DatabaseException {
         Contract contract = findById(editContractDto.getContractId());
         Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
-        contract.addActiveOptions(contractOptionList);
+        contract.getActiveOptions().addAll(contractOptionList);
         contract.setPrice(contract.countPrice());
         // LOGIC RULES ETC
     }
@@ -145,7 +145,7 @@ public class ContractServiceImpl implements ContractService {
     public void delOptions(EditContractDto editContractDto) throws DatabaseException {
         Contract contract = findById(editContractDto.getContractId());
         Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
-        contract.delActiveOptions(contractOptionList);
+        contract.getActiveOptions().removeAll(contractOptionList);
         contract.setPrice(contract.countPrice());
         // LOGIC RULES ETC
     }

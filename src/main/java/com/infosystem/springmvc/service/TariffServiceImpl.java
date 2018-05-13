@@ -110,7 +110,7 @@ public class TariffServiceImpl implements TariffService {
     public void addOptions(EditTariffDto editTariffDto) throws DatabaseException {
         Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
-        tariff.addAvailableOptions(tariffOptionList);
+        tariff.getAvailableOptions().addAll(tariffOptionList);
     }
 
     /**
@@ -122,7 +122,7 @@ public class TariffServiceImpl implements TariffService {
     public void delOptions(EditTariffDto editTariffDto) throws DatabaseException {
         Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
-        tariff.delAvailableOptions(tariffOptionList);
+        tariff.getAvailableOptions().removeAll(tariffOptionList);
     }
 
     @Override

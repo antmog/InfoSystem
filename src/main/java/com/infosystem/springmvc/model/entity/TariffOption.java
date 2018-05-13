@@ -49,24 +49,6 @@ public class TariffOption implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "EXCLUDING_OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> excludingTariffOptions = new HashSet<TariffOption>();
 
-
-    public void delTariffOptionRules(Set<TariffOption> tariffOptionSet, TariffOptionRule tariffOptionRule){
-        if(tariffOptionRule.equals(TariffOptionRule.RELATED)){
-            relatedTariffOptions.removeAll(tariffOptionSet);
-        }
-        if(tariffOptionRule.equals(TariffOptionRule.EXCLUDING)){
-            excludingTariffOptions.removeAll(tariffOptionSet);
-        }
-    }
-
-    public void addTariffOptionRules(Set<TariffOption> tariffOptionSet, TariffOptionRule tariffOptionRule){
-        if(tariffOptionRule.equals(TariffOptionRule.RELATED)){
-            relatedTariffOptions.addAll(tariffOptionSet);
-        }
-        if(tariffOptionRule.equals(TariffOptionRule.EXCLUDING)){
-            excludingTariffOptions.addAll(tariffOptionSet);
-        }
-    }
 //    @Override
 //    public String toString() {
 //        return "TariffOption [id=" + id + ", name=" + name + ", price=" + price

@@ -13,8 +13,10 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.rmi.runtime.Log;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,7 +43,9 @@ public class TariffOptionServiceImpl implements TariffOptionService {
         return tariffOption;
     }
 
-    public TariffOption findByName(String name) {return dao.findByName(name);}
+    public TariffOption findByName(String name) {
+        return dao.findByName(name);
+    }
 
     public void saveTariffOption(TariffOption tariffOption) {
         dao.save(tariffOption);
@@ -69,7 +73,7 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     }
 
     @Override
-    public void addTariffOption(AddTariffOptionDto addTariffOptionDto){
+    public void addTariffOption(AddTariffOptionDto addTariffOptionDto) {
         TariffOption tariffOption = modelMapperWrapper.mapToTariffOption(addTariffOptionDto);
         saveTariffOption(tariffOption);
     }
@@ -81,9 +85,10 @@ public class TariffOptionServiceImpl implements TariffOptionService {
 
     /**
      * Deletes tariffOption if its not used.
+     *
      * @param id
      * @throws DatabaseException if tariffOption doesn't exist
-     * @throws LogicException if tariffOption is still used
+     * @throws LogicException    if tariffOption is still used
      */
     public void deleteTariffOptionById(int id) throws DatabaseException, LogicException {
         TariffOption tariffOption = findById(id);
@@ -104,46 +109,63 @@ public class TariffOptionServiceImpl implements TariffOptionService {
         dao.deleteById(id);
     }
 
-
     /**
      * Adding rule to option depending on input.
+     *
      * @param tariffOptionId
      * @param tariffOptionDtoList
      * @throws DatabaseException if option doesn't exist
-     * @throws LogicException if trying to make rule for itself
+     * @throws LogicException    if trying to make rule for itself
      */
     @Override
     public void addRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws DatabaseException, LogicException {
         Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionList(tariffOptionDtoList);
         TariffOption tariffOption = findById(tariffOptionId);
-        isWrongRule(tariffOption,optionList);
-        tariffOption.addTariffOptionRules(optionList,rule);
+        isWrongRule(tariffOption, optionList);
+        if (rule.equals(TariffOptionRule.RELATED)) {
+            if (!Collections.disjoint(tariffOption.getExcludingTariffOptions(), optionList)) {
+                throw new LogicException("One or more of chosen options are already in exclude list.");
+            }
+            tariffOption.getRelatedTariffOptions().addAll(optionList);
+        }
+        if (rule.equals(TariffOptionRule.EXCLUDING)) {
+            if (!Collections.disjoint(tariffOption.getRelatedTariffOptions(), optionList)) {
+                throw new LogicException("One or more of chosen options are already in related list.");
+            }
+            tariffOption.getExcludingTariffOptions().addAll(optionList);
+        }
     }
 
     /**
      * Deleting rule to option depending on input.
+     *
      * @param tariffOptionId
      * @param tariffOptionDtoList
      * @throws DatabaseException if option doesn't exist
-     * @throws LogicException if trying to make rule for itself
+     * @throws LogicException    if trying to make rule for itself
      */
     @Override
     public void delRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws LogicException, DatabaseException {
         Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionList(tariffOptionDtoList);
         TariffOption tariffOption = findById(tariffOptionId);
-        isWrongRule(tariffOption,optionList);
-        tariffOption.delTariffOptionRules(optionList,rule);
+        isWrongRule(tariffOption, optionList);
+        if (rule.equals(TariffOptionRule.RELATED)) {
+            tariffOption.getRelatedTariffOptions().removeAll(optionList);
+        }
+        if (rule.equals(TariffOptionRule.EXCLUDING)) {
+            tariffOption.getExcludingTariffOptions().removeAll(optionList);
+        }
     }
-
 
     /**
      * Check if trying to make rule for itself (tariffOption).
+     *
      * @param tariffOption
      * @param tariffOptions
      * @return
      */
-    private void isWrongRule(TariffOption tariffOption,Set<TariffOption> tariffOptions) throws LogicException {
-        if(tariffOptions.remove(tariffOption)){
+    private void isWrongRule(TariffOption tariffOption, Set<TariffOption> tariffOptions) throws LogicException {
+        if (tariffOptions.remove(tariffOption)) {
             throw new LogicException("Oh, cmon, hacker)00)0");
         }
     }

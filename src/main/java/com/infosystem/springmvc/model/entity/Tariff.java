@@ -38,14 +38,6 @@ public class Tariff implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> availableOptions = new HashSet<TariffOption>();
 
-    public void delAvailableOptions(Set<TariffOption> tariffOptionSet){
-        availableOptions.removeAll(tariffOptionSet);
-    }
-
-    public void addAvailableOptions(Set<TariffOption> tariffOptionSet){
-        availableOptions.addAll(tariffOptionSet);
-    }
-
 //    @Override
 //    public String toString() {
 //        return "Tariff [id=" + id + ", name=" + name + ", price=" + price +"]";
