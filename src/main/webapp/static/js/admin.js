@@ -471,6 +471,7 @@
                     data: $(this).find('td:first').html(),
                     dataType: "json"
                 }).done(function (json) {
+                    $("#addContractAddedOptions tbody tr").remove();
                     $("#addContractAvailableOptions tbody tr").remove();
                     var tbl_body = document.createElement("tbody");
                     var odd_even = false;
