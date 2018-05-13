@@ -27,15 +27,12 @@ public interface ContractService {
 
     Contract findByPhoneNumber(String phoneNumber);
 
-    void addOptions(EditContractDto editContractDto) throws DatabaseException;
-    void adminAddOptions(EditContractDto editContractDto) throws DatabaseException;
-    void customerAddOptions(EditContractDto editContractDto) throws DatabaseException;
+    void adminAddOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
+    void customerAddOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
 
-    void delOptions(EditContractDto editContractDto) throws DatabaseException;
     void adminDelOptions(EditContractDto editContractDto) throws DatabaseException;
     void customerDelOptions(EditContractDto editContractDto) throws DatabaseException;
 
-    void switchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException;
     void adminSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException;
     void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException;
 

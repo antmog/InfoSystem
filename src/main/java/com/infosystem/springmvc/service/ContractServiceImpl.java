@@ -12,6 +12,7 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -106,13 +107,19 @@ public class ContractServiceImpl implements ContractService {
      * @return
      * @throws DatabaseException if contract doesn't exist
      */
-    @Override
-    public void addOptions(EditContractDto editContractDto) throws DatabaseException {
+    public void addOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         Contract contract = findById(editContractDto.getContractId());
         Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
+        if(!contract.getTariff().getAvailableOptions().containsAll(contractOptionList)){
+            contractOptionList.removeAll(contract.getTariff().getAvailableOptions());
+            StringBuffer sb = new StringBuffer("Current tariff doesn't allow these options:\n");
+            for(TariffOption tariffOption:contractOptionList){
+                sb.append(tariffOption.getName() + "\n");
+            }
+            throw new LogicException(sb.toString());
+        }
         contract.getActiveOptions().addAll(contractOptionList);
         contract.setPrice(contract.countPrice());
-        // LOGIC RULES ETC
     }
 
     /**
@@ -121,7 +128,7 @@ public class ContractServiceImpl implements ContractService {
      * @throws DatabaseException if contract doesn't exist
      */
     @Override
-    public void adminAddOptions(EditContractDto editContractDto) throws DatabaseException {
+    public void adminAddOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         addOptions(editContractDto);
     }
 
@@ -131,7 +138,7 @@ public class ContractServiceImpl implements ContractService {
      * @throws DatabaseException
      */
     @Override
-    public void customerAddOptions(EditContractDto editContractDto) throws DatabaseException {
+    public void customerAddOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         if (findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
             addOptions(editContractDto);
         }
@@ -143,13 +150,12 @@ public class ContractServiceImpl implements ContractService {
      * @return
      * @throws DatabaseException if contract doesn't exist
      */
-    @Override
     public void delOptions(EditContractDto editContractDto) throws DatabaseException {
         Contract contract = findById(editContractDto.getContractId());
         Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
+
         contract.getActiveOptions().removeAll(contractOptionList);
         contract.setPrice(contract.countPrice());
-        // LOGIC RULES ETC
     }
 
     /**
@@ -179,7 +185,6 @@ public class ContractServiceImpl implements ContractService {
      * @param switchTariffDto
      * @throws DatabaseException if tariff/contract doesn't exist
      */
-    @Override
     public void switchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException {
         Contract contract = findById(switchTariffDto.getContractId());
         Tariff newTariff = tariffService.findById(switchTariffDto.getTariffId());

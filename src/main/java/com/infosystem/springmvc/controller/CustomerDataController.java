@@ -65,7 +65,7 @@ public class CustomerDataController {
      * @throws DatabaseException if contract doesn't exist
      */
     @RequestMapping(value = "/customerPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException {
+    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }

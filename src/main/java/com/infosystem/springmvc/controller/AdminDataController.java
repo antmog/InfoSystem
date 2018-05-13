@@ -204,7 +204,7 @@ public class AdminDataController {
      * @throws DatabaseException   if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException, DatabaseException {
+    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws ValidationException, DatabaseException, LogicException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }
@@ -260,8 +260,6 @@ public class AdminDataController {
      */
     @RequestMapping(value = "/adminPanel/option/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String optionAddOptions(@RequestBody @Valid TariffOptionRulesDto tariffOptionRulesDto, BindingResult result) throws ValidationException, DatabaseException, LogicException {
-        System.out.println(tariffOptionRulesDto);
-        System.out.println(tariffOptionRulesDto);
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }

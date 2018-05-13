@@ -251,6 +251,7 @@
             }).done(function (msg) {
                 alert(msg);
                 $('#tariffTable').find('tr:eq(1)').find('td:eq(1)').html(newTariffId);
+                getOptionsForTariff(newTariffId, header, token);
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
             });
@@ -283,7 +284,7 @@
                 tr.removeClass('add-tariff-table-selected');
                 $("#contractCurrentOptions").append(tr);
             }).fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
+                alert(jqXHR.responseText);
             });
             $('#parseTable tr.move-row').remove();
         });
@@ -314,7 +315,7 @@
                 alert(msg);
                 var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove();
             }).fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
+                alert(jqXHR.responseText);
             });
             $('#parseTable tr.move-row').remove();
         });
@@ -725,7 +726,7 @@
                 delButton = $("#optionDelOptionRelated");
                 availableOptionsTable = $("#optionAvailableOptionsRelated");
                 addedOptionsTable = $("#optionAddedOptionsRelated");
-                editOptions(rule, addButton, delButton,availableOptionsTable,addedOptionsTable);
+                editOptions(rule, addButton, delButton, availableOptionsTable, addedOptionsTable);
             }
 
             function excludingOptions() {
@@ -734,7 +735,7 @@
                 delButton = $("#optionDelOptionExcluding");
                 availableOptionsTable = $("#optionAvailableOptionsExcluding");
                 addedOptionsTable = $("#optionAddedOptionsExcluding");
-                editOptions(rule, addButton, delButton,availableOptionsTable,addedOptionsTable);
+                editOptions(rule, addButton, delButton, availableOptionsTable, addedOptionsTable);
             }
 
             optionTablesSelectionBehavior();
@@ -792,6 +793,38 @@
             '</div>' +
             '<a href="{3}" target="{4}" data-notify="url"></a>' +
             '</div>'
+        });
+    }
+
+    function getOptionsForTariff(newTariffId, header, token) {
+        $.ajax({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            headers: {
+                'Content-Type': 'text/html; charset=utf-8'
+            },
+            type: "POST",
+            url: "/tariffOptions",
+            // The key needs to match your method's input parameter (case-sensitive).
+            data: newTariffId,
+            dataType: "json"
+        }).done(function (json) {
+            $("#contractAvailableOptions tbody").remove();
+            var tbl_body = document.createElement("tbody");
+            var odd_even = false;
+            $.each(json, function () {
+                var tbl_row = tbl_body.insertRow();
+                tbl_row.className = odd_even ? "odd" : "even";
+                $.each(this, function (k, v) {
+                    var cell = tbl_row.insertCell();
+                    cell.appendChild(document.createTextNode(v.toString()));
+                });
+                odd_even = !odd_even;
+            });
+            $("#contractAvailableOptions").append(tbl_body);
+        }).fail(function (jqXHR, textStatus) {
+            alert("Request failed: " + textStatus);
         });
     }
 
