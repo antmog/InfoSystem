@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sun.rmi.runtime.Log;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service("contractService")
 @Transactional
@@ -73,6 +70,7 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Deletes contract.
+     *
      * @param id
      * @throws DatabaseException if contract doesn't exist
      */
@@ -84,6 +82,7 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Set selected status to contract with selected id.
+     *
      * @param setNewStatusDto
      * @throws DatabaseException if contract doesn't exist
      */
@@ -103,27 +102,45 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Add selected options to selected contract.
+     *
      * @param editContractDto
      * @return
      * @throws DatabaseException if contract doesn't exist
      */
     public void addOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         Contract contract = findById(editContractDto.getContractId());
-        Set<TariffOption> contractOptionList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
-        if(!contract.getTariff().getAvailableOptions().containsAll(contractOptionList)){
-            contractOptionList.removeAll(contract.getTariff().getAvailableOptions());
-            StringBuffer sb = new StringBuffer("Current tariff doesn't allow these options:\n");
-            for(TariffOption tariffOption:contractOptionList){
-                sb.append(tariffOption.getName() + "\n");
+        Set<TariffOption> contractAvailableOptions = contract.getTariff().getAvailableOptions();
+        Set<TariffOption> contractActiveOptions = contract.getActiveOptions();
+        Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
+        if (!contractAvailableOptions.containsAll(toBeAddedOptionsList)) {
+            toBeAddedOptionsList.removeAll(contractAvailableOptions);
+            StringBuilder sb = new StringBuilder("Current tariff doesn't allow these options:\n");
+            for (TariffOption tariffOption : toBeAddedOptionsList) {
+                sb.append(tariffOption.getName()).append("\n");
             }
             throw new LogicException(sb.toString());
         }
-        contract.getActiveOptions().addAll(contractOptionList);
+        Set<TariffOption> optionExcludingOptions;
+        for (TariffOption activeTariffOption : contractActiveOptions) {
+            optionExcludingOptions = new HashSet<>(activeTariffOption.getExcludingTariffOptions());
+            optionExcludingOptions.retainAll(toBeAddedOptionsList);
+            if (!optionExcludingOptions.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (TariffOption tariffOption : optionExcludingOptions) {
+                    sb.append(activeTariffOption.getName()).append(" excludes ").append(tariffOption.getName()).append(".\n");
+                }
+                throw new LogicException(sb.toString());
+            }
+        }
+
+
+        contract.getActiveOptions().addAll(toBeAddedOptionsList);
         contract.setPrice(contract.countPrice());
     }
 
     /**
      * Add options to any contract.
+     *
      * @param editContractDto
      * @throws DatabaseException if contract doesn't exist
      */
@@ -134,6 +151,7 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Add options only to active contracts.
+     *
      * @param editContractDto
      * @throws DatabaseException
      */
@@ -146,6 +164,7 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Delete selected options from selected contract.
+     *
      * @param editContractDto
      * @return
      * @throws DatabaseException if contract doesn't exist
@@ -160,6 +179,7 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Delete options from any contract.
+     *
      * @param editContractDto
      * @throws DatabaseException if contract doesn't exist
      */
@@ -170,6 +190,7 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Delete options from active contract.
+     *
      * @param editContractDto
      * @throws DatabaseException if contract doesn't exist
      */
@@ -182,18 +203,19 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Set contract's tariff to selected.
+     *
      * @param switchTariffDto
      * @throws DatabaseException if tariff/contract doesn't exist
      */
     public void switchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException {
         Contract contract = findById(switchTariffDto.getContractId());
         Tariff newTariff = tariffService.findById(switchTariffDto.getTariffId());
-        if(!newTariff.getAvailableOptions().containsAll(contract.getActiveOptions())){
+        if (!newTariff.getAvailableOptions().containsAll(contract.getActiveOptions())) {
             List<TariffOption> contractOptions = new ArrayList<>(contract.getActiveOptions());
             contractOptions.removeAll(newTariff.getAvailableOptions());
-            StringBuffer sb = new StringBuffer("New tariff doesn't include all current options. To switch remove options:\n");
-            for(TariffOption tariffOption:contractOptions){
-                sb.append(tariffOption.getName() + "\n");
+            StringBuilder sb = new StringBuilder("New tariff doesn't include all current options. To switch remove options:\n");
+            for (TariffOption tariffOption : contractOptions) {
+                sb.append(tariffOption.getName()).append("\n");
             }
             throw new LogicException(sb.toString());
         }
@@ -203,6 +225,7 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Set any contract's tariff to selected.
+     *
      * @param switchTariffDto
      * @throws DatabaseException
      */
@@ -213,6 +236,7 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Set active contract's tariff to selected.
+     *
      * @param switchTariffDto
      * @throws DatabaseException
      */
@@ -226,6 +250,7 @@ public class ContractServiceImpl implements ContractService {
 
     /**
      * Adds new contract with data from DTO.
+     *
      * @param addContractDto data for new contract
      * @throws LogicException if number already exists
      */

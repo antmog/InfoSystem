@@ -199,14 +199,14 @@
                 alert("Request failed: " + textStatus);
             });
         });
-        $("#contractCurrentOptions").on("click", "tr.move-row", function () {
+        $("#contractCurrentOptions").on("click", "tr", function () {
             if ($(this).hasClass('add-tariff-table-selected')) {
                 $(this).removeClass('add-tariff-table-selected');
             } else {
                 $(this).addClass('add-tariff-table-selected');
             }
         });
-        $("#contractAvailableOptions").on("click", "tr.move-row", function () {
+        $("#contractAvailableOptions").on("click", "tr", function () {
             if ($(this).hasClass('add-tariff-table-selected')) {
                 $(this).removeClass('add-tariff-table-selected');
             } else {
