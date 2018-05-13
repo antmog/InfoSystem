@@ -114,6 +114,8 @@ public class ContractServiceImpl implements ContractService {
         Set<TariffOption> contractAvailableOptions = contract.getTariff().getAvailableOptions();
         Set<TariffOption> contractActiveOptions = contract.getActiveOptions();
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
+        Set<TariffOption> expectedOptionsList = Stream.of(contractActiveOptions, toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());
+
         if (!contractAvailableOptions.containsAll(toBeAddedOptionsList)) {
             toBeAddedOptionsList.removeAll(contractAvailableOptions);
             StringBuilder sb = new StringBuilder("Current tariff doesn't allow these options:\n");
@@ -122,21 +124,21 @@ public class ContractServiceImpl implements ContractService {
             }
             throw new LogicException(sb.toString());
         }
+
         Set<TariffOption> optionExcludingOptions;
-        for (TariffOption activeTariffOption : contractActiveOptions) {
-            optionExcludingOptions = new HashSet<>(activeTariffOption.getExcludingTariffOptions());
+        for (TariffOption expectedActiveTariffOption : expectedOptionsList) {
+            optionExcludingOptions = new HashSet<>(expectedActiveTariffOption.getExcludingTariffOptions());
             optionExcludingOptions.retainAll(toBeAddedOptionsList);
             if (!optionExcludingOptions.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
                 for (TariffOption tariffOption : optionExcludingOptions) {
-                    sb.append(activeTariffOption.getName()).append(" excludes ").append(tariffOption.getName()).append(".\n");
+                    sb.append(expectedActiveTariffOption.getName()).append(" excludes ").append(tariffOption.getName()).append(".\n");
                 }
                 throw new LogicException(sb.toString());
             }
         }
 
         Set<TariffOption> optionRelatedOptions;
-        Set<TariffOption> expectedOptionsList = Stream.of(contractActiveOptions, toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());
         for (TariffOption toBeAddedOption : toBeAddedOptionsList) {
             optionRelatedOptions = toBeAddedOption.getRelatedTariffOptions();
             if (!expectedOptionsList.containsAll(optionRelatedOptions)) {
@@ -287,17 +289,27 @@ public class ContractServiceImpl implements ContractService {
             throw new LogicException("Contract with that phone number already exists.");
         }
         Contract contract = modelMapperWrapper.mapToContract(addContractDto);
+        Set<TariffOption> contractAvailableOptions = contract.getTariff().getAvailableOptions();
+        Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionList(addContractDto.getTariffOptionDtoList());
 
-        Double price = contract.getTariff().getPrice();
+
         if (!addContractDto.getTariffOptionDtoList().isEmpty()) {
-            Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(addContractDto.getTariffOptionDtoList());
-            for (TariffOption tariffOption : tariffOptionList) {
-                price += tariffOption.getPrice();
+            //todo refactor, common methods
+            if (!contractAvailableOptions.containsAll(toBeAddedOptionsList)) {
+                toBeAddedOptionsList.removeAll(contractAvailableOptions);
+                StringBuilder sb = new StringBuilder("Current1 tariff doesn't allow these options:\n");
+                for (TariffOption tariffOption : toBeAddedOptionsList) {
+                    sb.append(tariffOption.getName()).append("\n");
+                }
+                throw new LogicException(sb.toString());
             }
-            contract.setActiveOptions(tariffOptionList);
-        }
-        contract.setPrice(price);
+            //todo
 
+
+            contract.setActiveOptions(toBeAddedOptionsList);
+        }
+
+        contract.setPrice(contract.countPrice());
         // also add COST here later (cost of adding options)
         // i mean just take funds from user :D
         dao.save(contract);
