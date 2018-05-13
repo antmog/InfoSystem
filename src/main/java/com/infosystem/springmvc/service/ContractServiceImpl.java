@@ -290,10 +290,9 @@ public class ContractServiceImpl implements ContractService {
         }
         Contract contract = modelMapperWrapper.mapToContract(addContractDto);
         Set<TariffOption> contractAvailableOptions = contract.getTariff().getAvailableOptions();
-        Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionList(addContractDto.getTariffOptionDtoList());
-
 
         if (!addContractDto.getTariffOptionDtoList().isEmpty()) {
+            Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionList(addContractDto.getTariffOptionDtoList());
             //todo refactor, common methods
             if (!contractAvailableOptions.containsAll(toBeAddedOptionsList)) {
                 toBeAddedOptionsList.removeAll(contractAvailableOptions);
@@ -319,6 +318,17 @@ public class ContractServiceImpl implements ContractService {
             }
 
             //todo
+            Set<TariffOption> optionRelatedOptions;
+            for (TariffOption toBeAddedTariffOption : toBeAddedOptionsList) {
+                optionRelatedOptions = toBeAddedTariffOption.getRelatedTariffOptions();
+                if (!toBeAddedOptionsList.containsAll(optionRelatedOptions)) {
+                    StringBuilder sb = new StringBuilder();
+                    for (TariffOption tariffOption : optionRelatedOptions) {
+                        sb.append(toBeAddedTariffOption.getName()).append(" related with ").append(tariffOption.getName()).append(".\n");
+                    }
+                    throw new LogicException(sb.toString());
+                }
+            }
 
             contract.setActiveOptions(toBeAddedOptionsList);
         }
