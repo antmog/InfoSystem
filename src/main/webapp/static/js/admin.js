@@ -343,8 +343,7 @@
             alert("Request failed: " + jqXHR.responseText);
         });
     }
-
-
+    
     function addTariffPanel() {
         $('#addTariff').on('click', function () {
             addTariff();
