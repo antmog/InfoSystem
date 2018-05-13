@@ -46,7 +46,9 @@ public class TariffServiceImpl implements TariffService {
         return tariff;
     }
 
-    public Tariff findByName(String name) {return dao.findByName(name);}
+    public Tariff findByName(String name) {
+        return dao.findByName(name);
+    }
 
     public void addTariff(Tariff tariff) {
         dao.save(tariff);
@@ -74,24 +76,54 @@ public class TariffServiceImpl implements TariffService {
 
     /**
      * Creates new tariff with data from DTO
+     *
      * @param addTariffDto
      */
     public void addTariff(AddTariffDto addTariffDto) throws LogicException {
-        if (!isNameUnique(addTariffDto.getTariffDto().getName())){
+        if (!isNameUnique(addTariffDto.getTariffDto().getName())) {
             throw new LogicException("Chose another name for tariff.");
         }
         Tariff tariff = modelMapperWrapper.mapToTariff(addTariffDto);
-        if (!addTariffDto.getTariffOptionDtoList().isEmpty()) {
-            Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(addTariffDto.getTariffOptionDtoList());
-            tariff.setAvailableOptions(tariffOptionList);
+
+        Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionList(addTariffDto.getTariffOptionDtoList());
+
+        //todo
+        Set<TariffOption> optionExcludingOptions;
+        for (TariffOption toBeAddedTariffOption : toBeAddedOptionsList) {
+            optionExcludingOptions = new HashSet<>(toBeAddedTariffOption.getExcludingTariffOptions());
+            optionExcludingOptions.retainAll(toBeAddedOptionsList);
+            if (!optionExcludingOptions.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (TariffOption tariffOption : optionExcludingOptions) {
+                    sb.append(toBeAddedTariffOption.getName()).append(" excludes ").append(tariffOption.getName()).append(".\n");
+                }
+                throw new LogicException(sb.toString());
+            }
         }
+
+        //todo
+        Set<TariffOption> optionRelatedOptions;
+        for (TariffOption toBeAddedTariffOption : toBeAddedOptionsList) {
+            optionRelatedOptions = toBeAddedTariffOption.getRelatedTariffOptions();
+            if (!toBeAddedOptionsList.containsAll(optionRelatedOptions)) {
+                StringBuilder sb = new StringBuilder();
+                for (TariffOption tariffOption : optionRelatedOptions) {
+                    sb.append(toBeAddedTariffOption.getName()).append(" related with ").append(tariffOption.getName()).append(".\n");
+                }
+                throw new LogicException(sb.toString());
+            }
+        }
+
+        tariff.setAvailableOptions(toBeAddedOptionsList);
+
         dao.save(tariff);
     }
 
     /**
      * Deletes tariff if its not used.
+     *
      * @param id
-     * @throws LogicException if tariff is still used in any contracts
+     * @throws LogicException    if tariff is still used in any contracts
      * @throws DatabaseException if tariff doesn't exist
      */
     public void deleteTariffById(int id) throws LogicException, DatabaseException {
@@ -106,6 +138,7 @@ public class TariffServiceImpl implements TariffService {
 
     /**
      * Add selected options to selected tariff.
+     *
      * @param editTariffDto
      * @throws DatabaseException if tariff doesn't exist
      */
@@ -147,6 +180,7 @@ public class TariffServiceImpl implements TariffService {
 
     /**
      * Delete selected options from selected tariff.
+     *
      * @param editTariffDto
      * @throws DatabaseException if tariff doesn't exist
      */
@@ -181,6 +215,7 @@ public class TariffServiceImpl implements TariffService {
 
     /**
      * Set status of selected tariff to selected status.
+     *
      * @param setNewStatusDto
      * @throws DatabaseException if tariff doesn't exist
      */
