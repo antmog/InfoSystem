@@ -1,22 +1,20 @@
 package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.TariffDao;
-import com.infosystem.springmvc.dto.TariffOptionDto;
 import com.infosystem.springmvc.dto.AddTariffDto;
 import com.infosystem.springmvc.dto.EditTariffDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
-import com.infosystem.springmvc.model.Contract;
-import com.infosystem.springmvc.model.Tariff;
-import com.infosystem.springmvc.model.TariffOption;
+import com.infosystem.springmvc.model.entity.Contract;
+import com.infosystem.springmvc.model.entity.Tariff;
+import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -112,8 +110,7 @@ public class TariffServiceImpl implements TariffService {
     public void addOptions(EditTariffDto editTariffDto) throws DatabaseException {
         Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
-        tariffOptionList.addAll(tariff.getAvailableOptions());
-        tariff.setAvailableOptions(tariffOptionList);
+        tariff.addAvailableOptions(tariffOptionList);
     }
 
     /**
@@ -125,9 +122,7 @@ public class TariffServiceImpl implements TariffService {
     public void delOptions(EditTariffDto editTariffDto) throws DatabaseException {
         Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
-        Set<TariffOption> newTariffOptionList = tariff.getAvailableOptions();
-        newTariffOptionList.removeAll(tariffOptionList);
-        tariff.setAvailableOptions(newTariffOptionList);
+        tariff.delAvailableOptions(tariffOptionList);
     }
 
     @Override
