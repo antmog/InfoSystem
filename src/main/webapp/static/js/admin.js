@@ -343,7 +343,7 @@
             alert("Request failed: " + jqXHR.responseText);
         });
     }
-    
+
     function addTariffPanel() {
         $('#addTariff').on('click', function () {
             addTariff();
@@ -549,7 +549,6 @@
             });
 
             $('#tariffAddOption').on('click', function () {
-                // OPTIONS RULES
                 var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").clone();
                 var table = $('#parseTable');
                 for (var i = 0; i < tr.length; i++) {
@@ -575,14 +574,12 @@
                     tr.removeClass('add-tariff-table-selected');
                     $("#tariffAddedOptions").append(tr);
                 }).fail(function (jqXHR, textStatus) {
-                    alert("Request failed: " + textStatus);
+                    alert(jqXHR.responseText);
                 });
                 $('#parseTable tr.move-row').remove();
             });
 
             $('#tariffDelOption').on('click', function () {
-                // OPTIONS RULES
-
                 var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").clone();
                 var table = $('#parseTable');
                 for (var i = 0; i < tr.length; i++) {
@@ -606,7 +603,7 @@
                     alert(msg);
                     var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove();
                 }).fail(function (jqXHR, textStatus) {
-                    alert("Request failed: " + textStatus);
+                    alert(jqXHR.responseText);
                 });
                 $('#parseTable tr.move-row').remove();
             });

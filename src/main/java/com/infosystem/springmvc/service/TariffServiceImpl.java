@@ -15,9 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service("tariffService")
 @Transactional
@@ -107,10 +110,39 @@ public class TariffServiceImpl implements TariffService {
      * @throws DatabaseException if tariff doesn't exist
      */
     @Override
-    public void addOptions(EditTariffDto editTariffDto) throws DatabaseException {
+    public void addOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException {
         Tariff tariff = findById(editTariffDto.getTariffId());
-        Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
-        tariff.getAvailableOptions().addAll(tariffOptionList);
+        Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
+        Set<TariffOption> expectedOptionsList = Stream.of(tariff.getAvailableOptions(), toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());
+
+        //todo
+        Set<TariffOption> optionExcludingOptions;
+        for (TariffOption expectedActiveTariffOption : expectedOptionsList) {
+            optionExcludingOptions = new HashSet<>(expectedActiveTariffOption.getExcludingTariffOptions());
+            optionExcludingOptions.retainAll(toBeAddedOptionsList);
+            if (!optionExcludingOptions.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (TariffOption tariffOption : optionExcludingOptions) {
+                    sb.append(expectedActiveTariffOption.getName()).append(" excludes ").append(tariffOption.getName()).append(".\n");
+                }
+                throw new LogicException(sb.toString());
+            }
+        }
+        //todo
+        Set<TariffOption> optionRelatedOptions;
+        for (TariffOption toBeAddedOption : toBeAddedOptionsList) {
+            optionRelatedOptions = toBeAddedOption.getRelatedTariffOptions();
+            if (!expectedOptionsList.containsAll(optionRelatedOptions)) {
+                StringBuilder sb = new StringBuilder();
+                for (TariffOption tariffOption : optionRelatedOptions) {
+                    sb.append(toBeAddedOption.getName()).append(" related with ").append(tariffOption.getName()).append(".\n");
+                }
+                throw new LogicException(sb.toString());
+            }
+        }
+
+
+        tariff.getAvailableOptions().addAll(toBeAddedOptionsList);
     }
 
     /**
@@ -119,10 +151,27 @@ public class TariffServiceImpl implements TariffService {
      * @throws DatabaseException if tariff doesn't exist
      */
     @Override
-    public void delOptions(EditTariffDto editTariffDto) throws DatabaseException {
+    public void delOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException {
         Tariff tariff = findById(editTariffDto.getTariffId());
-        Set<TariffOption> tariffOptionList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
-        tariff.getAvailableOptions().removeAll(tariffOptionList);
+        Set<TariffOption> toBeDeletedOptionsList = modelMapperWrapper.mapToTariffOptionList(editTariffDto.getTariffOptionDtoList());
+
+        //todo
+        Set<TariffOption> expectedOptionsList = new HashSet<>(tariff.getAvailableOptions());
+        expectedOptionsList.removeAll(toBeDeletedOptionsList);
+        Set<TariffOption> optionRelatedOptions;
+        for (TariffOption expectedActiveTariffOption : expectedOptionsList) {
+            optionRelatedOptions = new HashSet<>(expectedActiveTariffOption.getRelatedTariffOptions());
+            optionRelatedOptions.retainAll(toBeDeletedOptionsList);
+            if (!optionRelatedOptions.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (TariffOption tariffOption : expectedActiveTariffOption.getRelatedTariffOptions()) {
+                    sb.append(expectedActiveTariffOption.getName()).append(" related with ").append(tariffOption.getName()).append(".\n");
+                }
+                throw new LogicException(sb.toString());
+            }
+        }
+
+        tariff.getAvailableOptions().removeAll(toBeDeletedOptionsList);
     }
 
     @Override

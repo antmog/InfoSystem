@@ -33,9 +33,9 @@ public interface TariffService {
 
     List<Tariff> findFirstTariffs();
 
-    void addOptions(EditTariffDto editTariffDto) throws DatabaseException;
+    void addOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException;
 
-    void delOptions(EditTariffDto editTariffDto) throws DatabaseException;
+    void delOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException;
 
     Set<TariffOption> getAvailableOptionsForTariff(int tariffId) throws DatabaseException;
 }

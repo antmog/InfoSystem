@@ -167,7 +167,7 @@ public class AdminDataController {
      * @throws DatabaseException   if tariff doesn't exist
      */
     @RequestMapping(value = "/adminPanel/tariff/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String tariffAddOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException, DatabaseException {
+    public String tariffAddOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException, DatabaseException, LogicException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }
@@ -185,7 +185,7 @@ public class AdminDataController {
      * @throws ValidationException if tariff doesn't exist
      */
     @RequestMapping(value = "/adminPanel/tariff/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String tariffDelOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException, DatabaseException {
+    public String tariffDelOptions(@RequestBody @Valid EditTariffDto editTariffDto, BindingResult result) throws ValidationException, DatabaseException, LogicException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to delete.");
         }
