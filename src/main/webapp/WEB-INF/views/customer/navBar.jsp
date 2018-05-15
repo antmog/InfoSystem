@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li class="nav-item mr-4">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="/customerPanel/cart">
                     Cart
                     <i class="fas fa-cart-arrow-down"></i>
                 </a>

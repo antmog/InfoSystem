@@ -64,13 +64,13 @@ public class User implements Serializable {
     @Column(name = "USER_CONTRACTS", nullable = false)
     private Set<Contract> userContracts = new HashSet<Contract>();
 
-//    @Override
-//    public String toString() {
-//        return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
-//                + ", address=" + address + ", birthDate=" + birthDate+ ", passport=" + passport +
-//                ", role=" + role +  ", mail=" + mail +  ", login=" +  login  + ", status=" + status + "]";
-//
-//    }
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
+                + ", address=" + address + ", birthDate=" + birthDate+ ", passport=" + passport +
+                ", role=" + role +  ", mail=" + mail +  ", login=" +  login  + ", status=" + status + "]";
+
+    }
 
 //    @Override
 //    public int hashCode() {

@@ -15,7 +15,6 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/")
-//@SessionAttributes("roles")
 public class GlobalViewController extends ViewControllerTemplate {
 
     /**

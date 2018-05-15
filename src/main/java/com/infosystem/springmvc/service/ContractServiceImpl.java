@@ -9,14 +9,12 @@ import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.util.CustomModelMapper;
+import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.rmi.runtime.Log;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service("contractService")
 @Transactional
@@ -31,6 +29,11 @@ public class ContractServiceImpl implements ContractService {
     UserService userService;
     @Autowired
     CustomModelMapper modelMapperWrapper;
+    @Autowired
+    OptionsRulesChecker optionsRulesChecker;
+    @Autowired
+    SessionCart sessionCart;
+
 
 //    @Autowired
 //    public ContractServiceImpl(ContractDao dao, TariffOptionService tariffOptionService, TariffService tariffService,
@@ -111,44 +114,11 @@ public class ContractServiceImpl implements ContractService {
      */
     public void addOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         Contract contract = findById(editContractDto.getContractId());
-        Set<TariffOption> contractAvailableOptions = contract.getTariff().getAvailableOptions();
-        Set<TariffOption> contractActiveOptions = contract.getActiveOptions();
-        Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
-        Set<TariffOption> expectedOptionsList = Stream.of(contractActiveOptions, toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());
+        Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
 
-        if (!contractAvailableOptions.containsAll(toBeAddedOptionsList)) {
-            toBeAddedOptionsList.removeAll(contractAvailableOptions);
-            StringBuilder sb = new StringBuilder("Current tariff doesn't allow these options:\n");
-            for (TariffOption tariffOption : toBeAddedOptionsList) {
-                sb.append(tariffOption.getName()).append("\n");
-            }
-            throw new LogicException(sb.toString());
-        }
+        optionsRulesChecker.checkAddToContract(editContractDto.getContractId(),toBeAddedOptionsList);
 
-        Set<TariffOption> optionExcludingOptions;
-        for (TariffOption expectedActiveTariffOption : expectedOptionsList) {
-            optionExcludingOptions = new HashSet<>(expectedActiveTariffOption.getExcludingTariffOptions());
-            optionExcludingOptions.retainAll(toBeAddedOptionsList);
-            if (!optionExcludingOptions.isEmpty()) {
-                StringBuilder sb = new StringBuilder();
-                for (TariffOption tariffOption : optionExcludingOptions) {
-                    sb.append(expectedActiveTariffOption.getName()).append(" excludes ").append(tariffOption.getName()).append(".\n");
-                }
-                throw new LogicException(sb.toString());
-            }
-        }
-
-        Set<TariffOption> optionRelatedOptions;
-        for (TariffOption toBeAddedOption : toBeAddedOptionsList) {
-            optionRelatedOptions = toBeAddedOption.getRelatedTariffOptions();
-            if (!expectedOptionsList.containsAll(optionRelatedOptions)) {
-                StringBuilder sb = new StringBuilder();
-                for (TariffOption tariffOption : optionRelatedOptions) {
-                    sb.append(toBeAddedOption.getName()).append(" related with ").append(tariffOption.getName()).append(".\n");
-                }
-                throw new LogicException(sb.toString());
-            }
-        }
+        // todo get money for added options
         contract.getActiveOptions().addAll(toBeAddedOptionsList);
         contract.setPrice(contract.countPrice());
     }
@@ -167,14 +137,23 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Add options only to active contracts.
      *
-     * @param editContractDto
      * @throws DatabaseException
      */
     @Override
-    public void customerAddOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
-        if (findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
-            addOptions(editContractDto);
+    public void customerAddOptions() throws DatabaseException, LogicException {
+        Contract contract;
+        Set<TariffOption> toBeAddedOptionsList;
+        for (Map.Entry<Integer, Set<TariffOptionDto>> entry : sessionCart.getOptions().entrySet()) {
+            contract = findById(entry.getKey());
+            if (!contract.getStatus().equals(Status.ACTIVE)) {
+                throw new LogicException("Contract " + contract.getId() + " is NOT active, sorry.");
+            }
+            toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(entry.getValue());
+            optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
+            optionsRulesChecker.checkAddToContract(contract.getId(),toBeAddedOptionsList);
+            contract.getActiveOptions().addAll(toBeAddedOptionsList);
         }
+        //todo PAII FOR DIIS BIIATCH
     }
 
     /**
@@ -186,23 +165,10 @@ public class ContractServiceImpl implements ContractService {
      */
     public void delOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         Contract contract = findById(editContractDto.getContractId());
-        Set<TariffOption> contractActiveOptions = contract.getActiveOptions();
-        Set<TariffOption> toBeDeletedOptionsList = modelMapperWrapper.mapToTariffOptionList(editContractDto.getTariffOptionDtoList());
+        Set<TariffOption> toBeDeletedOptionsList = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
 
-        Set<TariffOption> expectedOptionsList = new HashSet<>(contractActiveOptions);
-        expectedOptionsList.removeAll(toBeDeletedOptionsList);
-        Set<TariffOption> optionRelatedOptions;
-        for (TariffOption expectedActiveTariffOption : expectedOptionsList) {
-            optionRelatedOptions = new HashSet<>(expectedActiveTariffOption.getRelatedTariffOptions());
-            optionRelatedOptions.retainAll(toBeDeletedOptionsList);
-            if (!optionRelatedOptions.isEmpty()) {
-                StringBuilder sb = new StringBuilder();
-                for (TariffOption tariffOption : expectedActiveTariffOption.getRelatedTariffOptions()) {
-                    sb.append(expectedActiveTariffOption.getName()).append(" related with ").append(tariffOption.getName()).append(".\n");
-                }
-                throw new LogicException(sb.toString());
-            }
-        }
+        optionsRulesChecker.checkDelFromContract(editContractDto.getContractId(),toBeDeletedOptionsList);
+
         contract.getActiveOptions().removeAll(toBeDeletedOptionsList);
         contract.setPrice(contract.countPrice());
     }
@@ -284,58 +250,23 @@ public class ContractServiceImpl implements ContractService {
      * @param addContractDto data for new contract
      * @throws LogicException if number already exists
      */
-    public void newContract(AddContractDto addContractDto) throws LogicException {
+    public void newContract(AddContractDto addContractDto) throws LogicException, DatabaseException {
         if (doesPhoneNumberExist(addContractDto.getContractDto().getPhoneNumber())) {
             throw new LogicException("Contract with that phone number already exists.");
         }
         Contract contract = modelMapperWrapper.mapToContract(addContractDto);
-        Set<TariffOption> contractAvailableOptions = contract.getTariff().getAvailableOptions();
-
+        Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addContractDto.getTariffOptionDtoList());
+        contract.setActiveOptions(new HashSet<TariffOption>());
         if (!addContractDto.getTariffOptionDtoList().isEmpty()) {
-            Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionList(addContractDto.getTariffOptionDtoList());
-            //todo refactor, common methods
-            if (!contractAvailableOptions.containsAll(toBeAddedOptionsList)) {
-                toBeAddedOptionsList.removeAll(contractAvailableOptions);
-                StringBuilder sb = new StringBuilder("Current1 tariff doesn't allow these options:\n");
-                for (TariffOption tariffOption : toBeAddedOptionsList) {
-                    sb.append(tariffOption.getName()).append("\n");
-                }
-                throw new LogicException(sb.toString());
-            }
-
-            //todo
-            Set<TariffOption> optionExcludingOptions;
-            for(TariffOption toBeAddedTariffOption : toBeAddedOptionsList){
-                optionExcludingOptions = new HashSet<>(toBeAddedTariffOption.getExcludingTariffOptions());
-                optionExcludingOptions.retainAll(toBeAddedOptionsList);
-                if (!optionExcludingOptions.isEmpty()) {
-                    StringBuilder sb = new StringBuilder();
-                    for (TariffOption tariffOption : optionExcludingOptions) {
-                        sb.append(toBeAddedTariffOption.getName()).append(" excludes ").append(tariffOption.getName()).append(".\n");
-                    }
-                    throw new LogicException(sb.toString());
-                }
-            }
-
-            //todo
-            Set<TariffOption> optionRelatedOptions;
-            for (TariffOption toBeAddedTariffOption : toBeAddedOptionsList) {
-                optionRelatedOptions = toBeAddedTariffOption.getRelatedTariffOptions();
-                if (!toBeAddedOptionsList.containsAll(optionRelatedOptions)) {
-                    StringBuilder sb = new StringBuilder();
-                    for (TariffOption tariffOption : optionRelatedOptions) {
-                        sb.append(toBeAddedTariffOption.getName()).append(" related with ").append(tariffOption.getName()).append(".\n");
-                    }
-                    throw new LogicException(sb.toString());
-                }
-            }
-
+            optionsRulesChecker.checkAddToContract(contract.getId(),toBeAddedOptionsList);
+//            optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
+//            optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptionsList);
+//            optionsRulesChecker.checkAddExcludingAdmin(toBeAddedOptionsList);
             contract.setActiveOptions(toBeAddedOptionsList);
         }
 
+        //todo get money for added options
         contract.setPrice(contract.countPrice());
-        // also add COST here later (cost of adding options)
-        // i mean just take funds from user :D
         dao.save(contract);
     }
 

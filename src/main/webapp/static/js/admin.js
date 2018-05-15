@@ -413,7 +413,7 @@
         function addContract() {
             var part1 = $('#addContractAddedOptions').tableToJSON();
             var tariffId = $("#addContractTariffs tr.add-tariff-table-selected").find('td:first').html();
-            var part2 = {userId: $('#user_id').val(), phoneNumber: $('#phoneNumber').val(), tariffId: tariffId};
+            var part2 = {userId: $('#userId').val(), phoneNumber: $('#phoneNumber').val(), tariffId: tariffId};
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             $.ajax({

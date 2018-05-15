@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.List;
 
 
+//todo primitives DTO, NO ENTITY in dto )0)0
+//todo best practise for DTO
 public class AddContractDto implements Serializable {
     @Valid
     private ContractDto contractDto;

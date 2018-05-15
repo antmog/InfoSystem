@@ -1,7 +1,11 @@
 package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.ContractPageDto;
+import com.infosystem.springmvc.dto.SessionCart;
 import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.MyBusinessException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.DataService.DataService;
@@ -47,6 +51,8 @@ public class CustomerViewController extends ViewControllerTemplate {
     @Autowired
     DataService dataService;
 
+
+
     /**
      * Returns customer panel view with user info.
      * @param model
@@ -63,16 +69,16 @@ public class CustomerViewController extends ViewControllerTemplate {
 
     /**
      * Returns view with contract page.
-     * @param contract_id
+     * @param contractId
      * @param model
      * @return view
      * @throws DatabaseException
      */
-    @RequestMapping(value = "/customerPanel/contract/{contract_id}")
-    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model){
+    @RequestMapping(value = "/customerPanel/contract/{contractId}")
+    public String contract(@PathVariable(value = "contractId") Integer contractId, ModelMap model){
         ContractPageDto contractPageDto = null;
         try {
-            contractPageDto = dataService.getContractPageData(contract_id);
+            contractPageDto = dataService.getContractPageData(contractId);
         } catch (DatabaseException e) {
             return prepareErrorPage(model,e);
         }
@@ -81,4 +87,35 @@ public class CustomerViewController extends ViewControllerTemplate {
         return path +"contract";
     }
 
+    /**
+     * Returns view with cart page.
+     * @return view
+     */
+    @RequestMapping(value = "/customerPanel/cart")
+    public String cart(ModelMap model){
+        String login =  getPrincipal();
+        User user = userService.findByLogin(login);
+        model.addAttribute("loggedinuser", login);
+        model.addAttribute("user", user);
+        return path +"cart";
+    }
+
+
+    /**
+     * Buys items from cart for user.
+     * @param model
+     * @return success view.
+     */
+    @RequestMapping("/customerPanel/buyOptions")
+    public String buyOptionsInCart(ModelMap model) {
+        String login =  getPrincipal();
+        try {
+            contractService.customerAddOptions();
+        } catch (MyBusinessException e) {
+            return prepareErrorPage(model,e);
+        }
+        model.addAttribute("success","You bought smth.");
+        model.addAttribute("loggedinuser", login);
+        return path +"success";
+    }
 }

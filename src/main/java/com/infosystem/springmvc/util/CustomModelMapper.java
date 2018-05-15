@@ -14,9 +14,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class CustomModelMapper {
@@ -29,9 +29,11 @@ public class CustomModelMapper {
     private TariffOptionService tariffOptionService;
 
     private ModelMapper modelMapper = new ModelMapper();
+
     {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
     }
+
     @Autowired
     public CustomModelMapper(ContractDao contractDao, TariffDao tariffDao, TariffOptionDao tariffOptionDao,
                              UserDao userDao, TariffOptionService tariffOptionService) {
@@ -63,9 +65,9 @@ public class CustomModelMapper {
      * @param tariffOptionDtoList
      * @return tariffOption list(set) with ID's from tariffOptionDtoList
      */
-    public Set<TariffOption> mapToTariffOptionList(List<TariffOptionDto> tariffOptionDtoList){
+    public Set<TariffOption> mapToTariffOptionSet(Collection<TariffOptionDto> tariffOptionDtoList) {
         List<Integer> optionIdList = new ArrayList<>();
-        for( TariffOptionDto tariffOptionDto : tariffOptionDtoList){
+        for (TariffOptionDto tariffOptionDto : tariffOptionDtoList) {
             optionIdList.add(tariffOptionDto.getId());
         }
         return tariffOptionService.selectListByIdList(optionIdList);
@@ -75,7 +77,7 @@ public class CustomModelMapper {
      * @param addTariffDto
      * @return tariff with name and price from addTariffDto
      */
-    public Tariff mapToTariff(AddTariffDto addTariffDto){
+    public Tariff mapToTariff(AddTariffDto addTariffDto) {
         Tariff tariff = new Tariff();
         tariff.setName(addTariffDto.getTariffDto().getName());
         tariff.setPrice(addTariffDto.getTariffDto().getPrice());
@@ -86,15 +88,27 @@ public class CustomModelMapper {
      * @param addUserDto
      * @return user
      */
-    public User mapToUser(AddUserDto addUserDto){
-        return modelMapper.map(addUserDto,User.class);
+    public User mapToUser(AddUserDto addUserDto) {
+        return modelMapper.map(addUserDto, User.class);
     }
 
     /**
      * @param addTariffOptionDto
      * @return TariffOption
      */
-    public TariffOption mapToTariffOption(AddTariffOptionDto addTariffOptionDto){
-        return modelMapper.map(addTariffOptionDto,TariffOption.class);
+    public TariffOption mapToTariffOption(AddTariffOptionDto addTariffOptionDto) {
+        return modelMapper.map(addTariffOptionDto, TariffOption.class);
+    }
+
+    /**
+     * @param tariffOptionList
+     * @return tariffOption list(set) with ID's from tariffOptionDtoList
+     */
+    public Set<TariffOptionDto> mapToTariffOptionDtoSet(Set<TariffOption> tariffOptionList) {
+        Set<TariffOptionDto> tariffOptionDtoList = new HashSet<TariffOptionDto>();
+
+        tariffOptionList.forEach(tariffOption -> tariffOptionDtoList.add(modelMapper.map(tariffOption, TariffOptionDto.class)));
+
+        return tariffOptionDtoList;
     }
 }

@@ -15,21 +15,21 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = "com.infosystem.springmvc")
 public class AppConfig implements WebMvcConfigurer {
 
-
-	/**
+    /**
      * Configure ViewResolvers to deliver preferred views.
      */
-	@Override
-	public void configureViewResolvers(ViewResolverRegistry registry) {
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setPrefix("/WEB-INF/views/");
-		viewResolver.setSuffix(".jsp");
-		registry.viewResolver(viewResolver);
-	}
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix("/WEB-INF/views/");
+        viewResolver.setSuffix(".jsp");
+        viewResolver.setExposeContextBeansAsAttributes(true);
+        viewResolver.setExposedContextBeanNames("sessionCart");
+        registry.viewResolver(viewResolver);
+    }
 
-
-	/**
+    /**
      * Configure ResourceHandlers to serve static resources like CSS/ Javascript etc...
      */
     @Override
@@ -37,26 +37,26 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
     }
 
-	/*
-	 * Configure MessageSource to provide internationalized messages
-	 *
-	 */
+    /*
+     * Configure MessageSource to provide internationalized messages
+     *
+     */
+    @Bean
+    protected MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
+        return messageSource;
+    }
 
-	@Bean
-	protected MessageSource messageSource() {
-		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("messages");
-		return messageSource;
-	}
-
-	/**Optional. It's only required when handling '.' in @PathVariables which otherwise ignore everything after last '.' in @PathVaidables argument.
-	 * It's a known bug in Spring [https://jira.spring.io/browse/SPR-6164], still present in Spring 4.3.0.
-	 * This is a workaround for this issue.
-	 */
-	@Override
+    /**
+     * Optional. It's only required when handling '.' in @PathVariables which otherwise ignore everything after last '.' in @PathVaidables argument.
+     * It's a known bug in Spring [https://jira.spring.io/browse/SPR-6164], still present in Spring 4.3.0.
+     * This is a workaround for this issue.
+     */
+    @Override
     public void configurePathMatch(PathMatchConfigurer matcher) {
         matcher.setUseRegisteredSuffixPatternMatch(true);
     }
-    
+
 }
 

@@ -6,6 +6,7 @@ import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.dto.SwitchTariffDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.Contract;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public interface ContractService {
     Contract findByPhoneNumber(String phoneNumber);
 
     void adminAddOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
-    void customerAddOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
+    void customerAddOptions() throws DatabaseException, LogicException;
 
     void adminDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
     void customerDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
@@ -36,5 +37,5 @@ public interface ContractService {
     void adminSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException;
     void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException;
 
-    void newContract(AddContractDto addContractDto) throws LogicException;
+    void newContract(AddContractDto addContractDto) throws LogicException, DatabaseException;
 }

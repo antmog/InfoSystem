@@ -29,6 +29,12 @@ public class DataServiceImpl implements DataService {
     @Autowired
     ContractService contractService;
 
+    //todo javadoc
+
+    /**
+     *
+     * @return
+     */
     @Override
     public AdminPanelDto getAdminPanelData() {
         return new AdminPanelDto(userService.findFirstUsers(),
@@ -36,8 +42,8 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public TariffPageDto getTariffPageData(Integer tariff_id) throws DatabaseException {
-        return new TariffPageDto(tariffService.findById(tariff_id),tariffOptionService.findAllTariffOptions());
+    public TariffPageDto getTariffPageData(Integer tariffId) throws DatabaseException {
+        return new TariffPageDto(tariffService.findById(tariffId),tariffOptionService.findAllTariffOptions());
     }
 
     @Override
@@ -45,6 +51,11 @@ public class DataServiceImpl implements DataService {
         return new ContractPageDto(contractService.findById(contractId),tariffService.findAllActiveTariffs());
     }
 
+    /**
+     * @param optionId
+     * @return
+     * @throws DatabaseException
+     */
     @Override
     public TariffOptionPageDto getTariffOptionPageData(Integer optionId) throws DatabaseException {
         List<TariffOption> options = tariffOptionService.findAllTariffOptions();

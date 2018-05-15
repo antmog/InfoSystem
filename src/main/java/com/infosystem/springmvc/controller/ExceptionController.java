@@ -12,6 +12,9 @@ import sun.rmi.runtime.Log;
 @RestControllerAdvice
 public class ExceptionController {
 
+
+    //todo cheat catch exception (error)
+
     /**
      * Sends bad request to the page with selected message.
      * @param e Logic exception

@@ -1,6 +1,7 @@
 package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.EditContractDto;
+import com.infosystem.springmvc.dto.SessionCart;
 import com.infosystem.springmvc.dto.SwitchTariffDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
@@ -39,13 +40,18 @@ public class CustomerDataController {
     @Autowired
     TariffService tariffService;
 
+    @Autowired
+    SessionCart sessionCart;
+
+
     /**
      * Changes tariff of current contract to selected.
+     *
      * @param switchTariffDto
-     * @param result validation result
+     * @param result          validation result
      * @return message
      * @throws ValidationException if tariff is not selected
-     * @throws DatabaseException if contract doesn't exist
+     * @throws DatabaseException   if contract doesn't exist
      */
     @RequestMapping(value = "/customerPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
@@ -58,28 +64,30 @@ public class CustomerDataController {
 
     /**
      * Deleting selected options from the contract.
+     *
      * @param editContractDto
-     * @param result validation result
+     * @param result          validation result
      * @return message
      * @throws ValidationException if no options selected
-     * @throws DatabaseException if contract doesn't exist
+     * @throws DatabaseException   if contract doesn't exist
      */
     @RequestMapping(value = "/customerPanel/contract/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String contractAddOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
+    public String contractAddOptionsToCart(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }
-        contractService.customerAddOptions(editContractDto);
-        return "Options added.";
+        sessionCart.addCartItems(editContractDto);
+        return "Options added to cart.";
     }
 
     /**
      * Adding selected options to the contract.
+     *
      * @param editContractDto
-     * @param result validation result
+     * @param result          validation result
      * @return message
      * @throws ValidationException if no options selected
-     * @throws DatabaseException if contract doesn't exist
+     * @throws DatabaseException   if contract doesn't exist
      */
     @RequestMapping(value = "/customerPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
@@ -89,4 +97,23 @@ public class CustomerDataController {
         contractService.customerDelOptions(editContractDto);
         return "Options deleted.";
     }
+
+    /**
+     * Adding selected options to the contract.
+     *
+     * @param editContractDto
+     * @param result          validation result
+     * @return message
+     * @throws ValidationException if no options selected
+     * @throws DatabaseException   if contract doesn't exist
+     */
+    @RequestMapping(value = "/customerPanel/contract/delOptionsFromCart", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String contractDelOptionsFromCart(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Select options to delete.");
+        }
+        sessionCart.delCartItems(editContractDto);
+        return "Options deleted from cart.";
+    }
+
 }

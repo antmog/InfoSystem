@@ -41,19 +41,20 @@ public class GlobalDataController {
 
     /**
      * Returns options available for tariff.
-     * @param tariff_id
-     * @param result validation result
+     *
+     * @param tariffId
+     * @param result    validation result
      * @return message
      * @throws DatabaseException   if tariff doesn't exist
      * @throws ValidationException if input is wrong
      */
     @RequestMapping(value = "/tariffOptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    Set<TariffOption> tariffOptions(@RequestBody @NotNull String tariff_id, BindingResult result) throws DatabaseException, ValidationException {
+    Set<TariffOption> tariffOptions(@RequestBody @NotNull String tariffId, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
             throw new ValidationException("Wrong tariff ID!");
         }
-        return tariffService.getAvailableOptionsForTariff(Integer.parseInt(tariff_id));
+        return tariffService.getAvailableOptionsForTariff(Integer.parseInt(tariffId));
     }
 
     // Careful. Status setters are NOT protected from "hackers" :D (you still can generate request with valid header etc
@@ -62,10 +63,11 @@ public class GlobalDataController {
 
     /**
      * Set new status for contract.
+     *
      * @param setNewStatusDto
-     * @param result validation result
+     * @param result          validation result
      * @return message
-     * @throws DatabaseException if contract doesn't exist
+     * @throws DatabaseException   if contract doesn't exist
      * @throws ValidationException if input is wrong
      */
     @RequestMapping(value = "/contract/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
@@ -79,10 +81,11 @@ public class GlobalDataController {
 
     /**
      * Set new status for user.
+     *
      * @param setNewStatusDto
-     * @param result validation result
+     * @param result          validation result
      * @return message
-     * @throws DatabaseException if user doesn't exist
+     * @throws DatabaseException   if user doesn't exist
      * @throws ValidationException if input is wrong
      */
     @RequestMapping(value = "/user/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
@@ -96,10 +99,11 @@ public class GlobalDataController {
 
     /**
      * Set new status for tariff.
+     *
      * @param setNewStatusDto
-     * @param result validation result
+     * @param result          validation result
      * @return message
-     * @throws DatabaseException if tariff doesn't exist
+     * @throws DatabaseException   if tariff doesn't exist
      * @throws ValidationException if input is wrong
      */
     @RequestMapping(value = "/tariff/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
@@ -113,15 +117,16 @@ public class GlobalDataController {
 
     /**
      * Modifies selected values of user.
+     *
      * @param editUserDto
-     * @param result validation result
+     * @param result      validation result
      * @return message
-     * @throws DatabaseException if user doesn't exist
+     * @throws DatabaseException   if user doesn't exist
      * @throws ValidationException if input is wrong or if passport is not numeric
      */
     @RequestMapping(value = "/user/editUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String editUser(@RequestBody @Valid EditUserDto editUserDto, BindingResult result) throws DatabaseException, ValidationException {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ValidationException("Wrong input!");
         }
         userService.updateUser(editUserDto);

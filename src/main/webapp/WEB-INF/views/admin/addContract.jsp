@@ -21,12 +21,12 @@
                     </h5>
                     <br/>
                     <c:choose>
-                        <c:when test="${empty user_id}">
-                            <label class="control-lable" for="user_id">user_id</label>
-                            <input type="text" id="user_id" class="form-control input-sm"/>
+                        <c:when test="${empty userId}">
+                            <label class="control-lable" for="userId">userId</label>
+                            <input type="text" id="userId" class="form-control input-sm"/>
                         </c:when>
                         <c:otherwise>
-                            <input type="hidden" path="user_id" id="user_id" class="form-control input-sm" value="${user_id}"/>
+                            <input type="hidden" path="userId" id="userId" class="form-control input-sm" value="${userId}"/>
                         </c:otherwise>
                     </c:choose>
                     <label class="control-lable" for="phoneNumber">phoneNumber</label>

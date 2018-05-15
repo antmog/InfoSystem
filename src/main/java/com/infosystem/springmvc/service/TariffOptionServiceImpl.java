@@ -13,7 +13,6 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.rmi.runtime.Log;
 
 
 import java.util.Collections;
@@ -95,6 +94,7 @@ public class TariffOptionServiceImpl implements TariffOptionService {
         for (Contract contract : contractService.findAllContracts()) {
             for (TariffOption option : contract.getActiveOptions()) {
                 if (tariffOption.equals(option)) {
+                    //todo log (warn)
                     throw new LogicException("This option is still used.");
                 }
             }
@@ -119,7 +119,7 @@ public class TariffOptionServiceImpl implements TariffOptionService {
      */
     @Override
     public void addRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws DatabaseException, LogicException {
-        Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionList(tariffOptionDtoList);
+        Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionSet(tariffOptionDtoList);
         TariffOption tariffOption = findById(tariffOptionId);
         isWrongRule(tariffOption, optionList);
         if (rule.equals(TariffOptionRule.RELATED)) {
@@ -147,7 +147,7 @@ public class TariffOptionServiceImpl implements TariffOptionService {
      */
     @Override
     public void delRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws LogicException, DatabaseException {
-        Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionList(tariffOptionDtoList);
+        Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionSet(tariffOptionDtoList);
         TariffOption tariffOption = findById(tariffOptionId);
         isWrongRule(tariffOption, optionList);
         if (rule.equals(TariffOptionRule.RELATED)) {

@@ -186,15 +186,15 @@ public class AdminViewController extends ViewControllerTemplate{
     /**
      * Returns view with addContract custom form with selected userId
      *
-     * @param user_id
+     * @param userId
      * @param model
      * @return view
      */
-    @RequestMapping(value = "/adminPanel/addContractToUser/{user_id}", method = RequestMethod.GET)
-    public String addContractToUser(@PathVariable(value = "user_id") Integer user_id, ModelMap model) {
+    @RequestMapping(value = "/adminPanel/addContractToUser/{userId}", method = RequestMethod.GET)
+    public String addContractToUser(@PathVariable(value = "userId") Integer userId, ModelMap model) {
         model.addAttribute("loggedinuser", getPrincipal());
         List<Tariff> tariffs = tariffService.findAllActiveTariffs();
-        model.addAttribute("user_id", user_id);
+        model.addAttribute("userId", userId);
         model.addAttribute("tariffs", tariffs);
         return path + "addContract";
     }
@@ -249,15 +249,15 @@ public class AdminViewController extends ViewControllerTemplate{
 
     /**
      * Returns user page view.
-     * @param user_id
+     * @param userId
      * @param model
      * @return error page view if user doesn't exist
      */
-    @RequestMapping(value = "/adminPanel/user/{user_id}")
-    public String user(@PathVariable(value = "user_id") Integer user_id, ModelMap model)  {
+    @RequestMapping(value = "/adminPanel/user/{userId}")
+    public String user(@PathVariable(value = "userId") Integer userId, ModelMap model)  {
         User user = null;
         try {
-            user = userService.findById(user_id);
+            user = userService.findById(userId);
         } catch (DatabaseException e) {
             return prepareErrorPage(model,e);
         }
@@ -268,15 +268,15 @@ public class AdminViewController extends ViewControllerTemplate{
 
     /**
      * Returns contract page view.
-     * @param contract_id
+     * @param contractId
      * @param model
      * @return error page view if contract doesn't exist
      */
-    @RequestMapping(value = "/adminPanel/contract/{contract_id}")
-    public String contract(@PathVariable(value = "contract_id") Integer contract_id, ModelMap model)  {
+    @RequestMapping(value = "/adminPanel/contract/{contractId}")
+    public String contract(@PathVariable(value = "contractId") Integer contractId, ModelMap model)  {
         ContractPageDto contractPageDto;
         try {
-            contractPageDto = dataService.getContractPageData(contract_id);
+            contractPageDto = dataService.getContractPageData(contractId);
         } catch (DatabaseException e) {
             return prepareErrorPage(model,e);
         }
@@ -287,15 +287,15 @@ public class AdminViewController extends ViewControllerTemplate{
 
     /**
      * Returns tariff page view.
-     * @param tariff_id
+     * @param tariffId
      * @param model
      * @return error page view if tariff doesn't exist
      */
-    @RequestMapping(value = "/adminPanel/tariff/{tariff_id}")
-    public String tariff(@PathVariable(value = "tariff_id") Integer tariff_id, ModelMap model){
+    @RequestMapping(value = "/adminPanel/tariff/{tariffId}")
+    public String tariff(@PathVariable(value = "tariffId") Integer tariffId, ModelMap model){
         TariffPageDto tariffPageDto;
         try {
-            tariffPageDto = dataService.getTariffPageData(tariff_id);
+            tariffPageDto = dataService.getTariffPageData(tariffId);
         } catch (DatabaseException e) {
             return prepareErrorPage(model,e);
         }
@@ -306,15 +306,15 @@ public class AdminViewController extends ViewControllerTemplate{
 
     /**
      * Returns option page view.
-     * @param option_id
+     * @param optionId
      * @param model
      * @return error page view if option doesn't exist
      */
-    @RequestMapping(value = "/adminPanel/option/{option_id}")
-    public String option(@PathVariable(value = "option_id") Integer option_id, ModelMap model) {
+    @RequestMapping(value = "/adminPanel/option/{optionId}")
+    public String option(@PathVariable(value = "optionId") Integer optionId, ModelMap model) {
         TariffOptionPageDto tariffOptionPageDto;
         try {
-            tariffOptionPageDto = dataService.getTariffOptionPageData(option_id);
+            tariffOptionPageDto = dataService.getTariffOptionPageData(optionId);
         } catch (DatabaseException e) {
             return prepareErrorPage(model,e);
         }

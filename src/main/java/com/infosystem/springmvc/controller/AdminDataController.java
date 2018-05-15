@@ -20,6 +20,7 @@ import com.infosystem.springmvc.service.UserService;
 import javax.validation.Valid;
 
 
+
 @RestController
 @RequestMapping("/")
 public class AdminDataController {
@@ -54,9 +55,9 @@ public class AdminDataController {
      * @throws LogicException      if pohne number already exists
      * @throws ValidationException if data in fields is not valid (phone number length(min = 6, max = 32))
      */
-    @RequestMapping(value = {"/adminPanel/addContract", "/adminPanel/addContractToUser/{user_id}"}, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+    @RequestMapping(value = {"/adminPanel/addContract", "/adminPanel/addContractToUser/{userId}"}, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             method = RequestMethod.POST)
-    public String addContract(@Valid @RequestBody AddContractDto addContractDto, BindingResult result) throws LogicException, ValidationException {
+    public String addContract(@Valid @RequestBody AddContractDto addContractDto, BindingResult result) throws LogicException, ValidationException, DatabaseException {
         if (result.hasErrors()) {
             throw new ValidationException("Enter correct phone number and chose tariff please.");
         }
@@ -101,60 +102,61 @@ public class AdminDataController {
         return userService.findByPhoneNumber(searchByNumber);
     }
 
+
     /**
      * Called on deleting user (user page).
      *
-     * @param user_id
+     * @param userId
      * @return message
      * @throws LogicException    if user still have contracts
-     * @throws DatabaseException if user with @user_id doesn't exist
+     * @throws DatabaseException if user with @userId doesn't exist
      */
     @RequestMapping(value = "/adminPanel/user/deleteUser", method = RequestMethod.POST)
-    public String deleteUser(@RequestBody String user_id) throws LogicException, DatabaseException {
-        userService.deleteUserById(Integer.parseInt(user_id));
-        return "User (id:" + user_id + ") successfully deleted.";
+    public String deleteUser(@RequestBody String userId) throws LogicException, DatabaseException {
+        userService.deleteUserById(Integer.parseInt(userId));
+        return "User (id:" + userId + ") successfully deleted.";
     }
 
     /**
      * Called on deleting tariff (tariff page).
      *
-     * @param tariff_id
+     * @param tariffId
      * @return message
      * @throws LogicException    if tariff is still used
-     * @throws DatabaseException if tariff with @tariff_id doesn't exist
+     * @throws DatabaseException if tariff with @tariffId doesn't exist
      */
     @RequestMapping(value = "/adminPanel/tariff/deleteTariff", method = RequestMethod.POST)
-    public String deleteTariff(@RequestBody @Valid String tariff_id) throws DatabaseException, LogicException {
-        tariffService.deleteTariffById(Integer.parseInt(tariff_id));
-        return "Tariff (id:" + tariff_id + ") successfully deleted.";
+    public String deleteTariff(@RequestBody @Valid String tariffId) throws DatabaseException, LogicException {
+        tariffService.deleteTariffById(Integer.parseInt(tariffId));
+        return "Tariff (id:" + tariffId + ") successfully deleted.";
     }
 
     /**
      * Called on deleting contract (tariff page).
      *
-     * @param contract_id
+     * @param contractId
      * @return message
-     * @throws DatabaseException if contract with @contract_id doesn't exist
+     * @throws DatabaseException if contract with @contractId doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/deleteContract", method = RequestMethod.POST)
-    public String deleteContract(@RequestBody String contract_id) throws DatabaseException {
-        contractService.deleteContractById(Integer.parseInt(contract_id));
-        return "Contract (id:" + contract_id + ") successfully deleted.";
+    public String deleteContract(@RequestBody String contractId) throws DatabaseException {
+        contractService.deleteContractById(Integer.parseInt(contractId));
+        return "Contract (id:" + contractId + ") successfully deleted.";
     }
 
 
     /**
      * Deleting option.
      *
-     * @param option_id
+     * @param optionId
      * @return message
-     * @throws DatabaseException if option with @option_id doesn't exist
+     * @throws DatabaseException if option with @optionId doesn't exist
      * @throws LogicException    if options is still used somewhere.
      */
     @RequestMapping(value = "/adminPanel/option/deleteOption", method = RequestMethod.POST)
-    public String deleteOption(@RequestBody String option_id) throws DatabaseException, LogicException {
-        tariffOptionService.deleteTariffOptionById(Integer.parseInt(option_id));
-        return "Option (id:" + option_id + ") successfully deleted.";
+    public String deleteOption(@RequestBody String optionId) throws DatabaseException, LogicException {
+        tariffOptionService.deleteTariffOptionById(Integer.parseInt(optionId));
+        return "Option (id:" + optionId + ") successfully deleted.";
     }
 
     /**

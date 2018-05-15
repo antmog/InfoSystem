@@ -5,7 +5,7 @@ public enum Status {
     INACTIVE("INACTIVE"),
     BLOCKED("BLOCKED");
 
-    String status;
+    private String status;
 
     Status(String status) {
         this.status = status;

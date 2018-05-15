@@ -46,7 +46,6 @@ public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> impl
                 .createQuery("SELECT t FROM TariffOption t WHERE t.id IN (:idList)")
                 .setParameter("idList",optionIdList)
                 .getResultList();
-        System.out.println(tariffOptions);
         return new HashSet<TariffOption>(tariffOptions) ;
     }
 

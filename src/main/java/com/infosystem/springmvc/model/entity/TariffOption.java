@@ -2,16 +2,18 @@ package com.infosystem.springmvc.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.infosystem.springmvc.model.enums.TariffOptionRule;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "TARIFF_OPTIONS")
 public class TariffOption implements Serializable {
@@ -63,18 +65,34 @@ public class TariffOption implements Serializable {
 //        result = prime * result + ((id == null) ? 0 : id.hashCode());
 //        return result;
 //    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj)
+//            return true;
+//        if (obj == null)
+//            return false;
+//        if (!(obj instanceof TariffOption))
+//            return false;
+//        TariffOption other = (TariffOption) obj;
+//        if (this.id == null) {
+//            return other.id == null;
+//        } else return id.equals(other.id);
+//    }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (!(obj instanceof TariffOption))
-            return false;
-        TariffOption other = (TariffOption) obj;
-        if (this.id == null) {
-            return other.id == null;
-        } else return id.equals(other.id);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TariffOption that = (TariffOption) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(price, that.price) &&
+                Objects.equals(costOfAdd, that.costOfAdd);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, price, costOfAdd);
     }
 }
