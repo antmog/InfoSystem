@@ -9,6 +9,7 @@ import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.model.entity.User;
+import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.service.TariffOptionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,16 +115,16 @@ public class CustomModelMapper {
         return modelMapper.map(tariffOption, TariffOptionDto.class);
     }
 
-    public List<AddUserDto> mapToAddUserDtoList(List<User> users) {
-        List<AddUserDto> addUserDtoList = new ArrayList<>();
-        users.forEach(user -> addUserDtoList.add(modelMapper.map(user, AddUserDto.class)));
-        return addUserDtoList;
+    public List<UserDto> mapToUserDtoList(List<User> users) {
+        List<UserDto> userDtoList = new ArrayList<>();
+        users.forEach(user -> userDtoList.add(modelMapper.map(user, UserDto.class)));
+        return userDtoList;
     }
 
     public List<TariffDto> mapToTariffDtoList(List<Tariff> tariffs) {
-        List<TariffDto> addUserDtoList = new ArrayList<>();
-        tariffs.forEach(tariff -> addUserDtoList.add(modelMapper.map(tariff, TariffDto.class)));
-        return addUserDtoList;
+        List<TariffDto> tariffDtoList = new ArrayList<>();
+        tariffs.forEach(tariff -> tariffDtoList.add(modelMapper.map(tariff, TariffDto.class)));
+        return tariffDtoList;
     }
 
     public ContractDto mapToContractDto(Contract contract) {
@@ -132,5 +133,9 @@ public class CustomModelMapper {
 
     public TariffDto mapToTariffDto(Tariff tariff) {
         return modelMapper.map(tariff, TariffDto.class);
+    }
+
+    public Status mapToStatus(String status){
+        return modelMapper.map(status,Status.class);
     }
 }

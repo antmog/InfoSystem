@@ -12,6 +12,10 @@ import com.infosystem.springmvc.model.entity.User;
 @Repository("userDao")
 public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 
+    public void save(User user) {
+        persist(user);
+    }
+
     public User findById(int id) {
         User user = getByKey(id);
         if (user != null) {
@@ -64,13 +68,8 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
         return users;
     }
 
-    public void save(User user) {
-        persist(user);
-    }
-
     /**
      * @param id
-     * @throws DatabaseException if entity doesnt exist
      */
     public void deleteById(int id){
         List users =  getSession()
@@ -79,6 +78,4 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
                 .getResultList();
         delete((User) users.get(0));
     }
-
-
 }

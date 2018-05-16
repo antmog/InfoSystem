@@ -78,7 +78,7 @@ public class GlobalDataController {
             throw new ValidationException("Wrong contract id or status!");
         }
         contractService.setStatus(setNewStatusDto);
-        return "Contract is now " + setNewStatusDto.getEntityStatus().getStatus() + ".";
+        return "Contract is now " + setNewStatusDto.getEntityStatus() + ".";
     }
 
     /**
@@ -96,7 +96,7 @@ public class GlobalDataController {
             throw new ValidationException("Wrong contract id or status!");
         }
         userService.setStatus(setNewStatusDto);
-        return "User is now " + setNewStatusDto.getEntityStatus().getStatus() + ".";
+        return "User is now " + setNewStatusDto.getEntityStatus() + ".";
     }
 
     /**
@@ -114,7 +114,7 @@ public class GlobalDataController {
             throw new ValidationException("Wrong contract id or status!");
         }
         tariffService.setStatus(setNewStatusDto);
-        return "User is now " + setNewStatusDto.getEntityStatus().getStatus() + ".";
+        return "User is now " + setNewStatusDto.getEntityStatus() + ".";
     }
 
     /**

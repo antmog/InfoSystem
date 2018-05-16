@@ -8,11 +8,11 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 public class AdminPanelDto {
-    private List<AddUserDto> users;
+    private List<UserDto> users;
     private List<TariffDto> tariffs;
     private Set<TariffOptionDto> tariffOptions;
 
-    public AdminPanelDto(List<AddUserDto> users, List<TariffDto> tariffs, Set<TariffOptionDto> tariffOptions) {
+    public AdminPanelDto(List<UserDto> users, List<TariffDto> tariffs, Set<TariffOptionDto> tariffOptions) {
         this.users = users;
         this.tariffs = tariffs;
         this.tariffOptions = tariffOptions;

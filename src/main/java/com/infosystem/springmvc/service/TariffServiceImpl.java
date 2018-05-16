@@ -155,7 +155,7 @@ public class TariffServiceImpl implements TariffService {
      * @throws DatabaseException if tariff doesn't exist
      */
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
-        findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
+        findById(setNewStatusDto.getEntityId()).setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
     }
 
     private boolean isNameUnique(String tariffName) {

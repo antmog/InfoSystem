@@ -11,6 +11,7 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.Contract;
+import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
-        findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
+        findById(setNewStatusDto.getEntityId()).setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
     }
 
     /**
@@ -151,6 +152,7 @@ public class UserServiceImpl implements UserService {
     public void addUser(AddUserDto addUserDto) {
         User user = modelMapperWrapper.mapToUser(addUserDto);
         user.setBalance(0.0);
+        user.setStatus(Status.ACTIVE);
         saveUser(user);
     }
 

@@ -14,7 +14,7 @@ public class ContractDto implements Serializable {
 
     private int id;
 
-    private AddUserDto user;
+    private UserDto user;
 
     @Size(min = 6, max = 32)
     private String phoneNumber;

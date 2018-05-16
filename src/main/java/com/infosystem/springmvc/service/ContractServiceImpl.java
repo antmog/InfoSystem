@@ -99,7 +99,7 @@ public class ContractServiceImpl implements ContractService {
      */
     @Override
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
-        findById(setNewStatusDto.getEntityId()).setStatus(setNewStatusDto.getEntityStatus());
+        findById(setNewStatusDto.getEntityId()).setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
     }
 
     /**

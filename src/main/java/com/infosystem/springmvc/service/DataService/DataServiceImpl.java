@@ -40,7 +40,7 @@ public class DataServiceImpl implements DataService {
      */
     @Override
     public AdminPanelDto getAdminPanelData() {
-        return new AdminPanelDto(modelMapper.mapToAddUserDtoList(userService.findFirstUsers()),
+        return new AdminPanelDto(modelMapper.mapToUserDtoList(userService.findFirstUsers()),
                 modelMapper.mapToTariffDtoList(tariffService.findFirstTariffs()),
                 modelMapper.mapToTariffOptionDtoSet(new HashSet<>(tariffOptionService.findFirstTariffOptions())));
     }

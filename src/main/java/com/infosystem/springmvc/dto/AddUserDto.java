@@ -18,7 +18,6 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 public class AddUserDto {
-    private int id;
 
     @Size(min = 6, max = 32)
     private String firstName;
@@ -47,9 +46,9 @@ public class AddUserDto {
     @Size(min = 6, max = 32)
     private String password;
 
-    @Enumerated(EnumType.STRING)
+    @Pattern(regexp="^(ADMIN|CUSTOMER)$",message="invalid code")
     @NotNull
-    private Role role;
+    private String role;
 
     private Set<ContractDto> userContracts;
 
@@ -60,8 +59,7 @@ public class AddUserDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AddUserDto that = (AddUserDto) o;
-        return id == that.id &&
-                Objects.equals(firstName, that.firstName) &&
+        return Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(address, that.address) &&
                 Objects.equals(birthDate, that.birthDate) &&
@@ -69,12 +67,12 @@ public class AddUserDto {
                 Objects.equals(mail, that.mail) &&
                 Objects.equals(login, that.login) &&
                 Objects.equals(password, that.password) &&
-                role == that.role &&
-                status == that.status;
+                Objects.equals(role, that.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, address, birthDate, passport, mail, login, password, role, status);
+
+        return Objects.hash(firstName, lastName, address, birthDate, passport, mail, login, password, role);
     }
 }
