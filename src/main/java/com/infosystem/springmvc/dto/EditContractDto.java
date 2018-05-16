@@ -13,5 +13,5 @@ public class EditContractDto {
     @NotEmpty
     private List<TariffOptionDto> tariffOptionDtoList;
     @NotNull
-    private Integer contractId;
+    private int contractId;
 }

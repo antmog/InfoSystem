@@ -13,13 +13,13 @@ import java.util.Objects;
 @NoArgsConstructor
 public class TariffOptionDto implements Serializable {
     @NotNull
-    private Integer id;
+    private int id;
     @NotNull
     private String name;
     @NotNull
-    private Double price;
+    private double price;
     @NotNull
-    private Double costofadd;
+    private double costofadd;
 
     @Override
     public String toString() {
