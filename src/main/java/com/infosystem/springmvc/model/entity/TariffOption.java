@@ -23,40 +23,39 @@ public class TariffOption implements Serializable {
     @Column(name = "OPTION_ID")
     private Integer id;
 
-
     @Column(name = "NAME", unique = true, nullable = false)
     private String name;
-
 
     @Column(name = "PRICE", nullable = false)
     private Double price;
 
-
     @Column(name = "COSTOFADD", nullable = false)
     private Double costOfAdd;
 
-
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(name = "RELATED_OPTIONS",
             joinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")},
             inverseJoinColumns = {@JoinColumn(name = "RELATED_OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> relatedTariffOptions = new HashSet<TariffOption>();
 
-
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(name = "EXCLUDING_OPTIONS",
             joinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")},
             inverseJoinColumns = {@JoinColumn(name = "EXCLUDING_OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> excludingTariffOptions = new HashSet<TariffOption>();
 
-//    @Override
-//    public String toString() {
-//        return "TariffOption [id=" + id + ", name=" + name + ", price=" + price
-//                + ", costOfAdd=" + costOfAdd + "]";
-//
-//    }
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinTable(name = "IS_RELATED_FOR",
+            joinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "RELATED_FOR", nullable = false, referencedColumnName = "OPTION_ID")})
+    private Set<TariffOption> isRelatedFor = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "TariffOption [id=" + id + ", name=" + name + ", price=" + price
+                + ", costOfAdd=" + costOfAdd + "]";
+    }
+
 //
 //    @Override
 //    public int hashCode() {

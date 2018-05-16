@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -123,14 +124,38 @@ public class TariffOptionServiceImpl implements TariffOptionService {
         TariffOption tariffOption = findById(tariffOptionId);
         isWrongRule(tariffOption, optionList);
         if (rule.equals(TariffOptionRule.RELATED)) {
+            Set<TariffOption> expectedTariffOptions = new HashSet<>(tariffOption.getRelatedTariffOptions());
+            expectedTariffOptions.addAll(optionList);
             if (!Collections.disjoint(tariffOption.getExcludingTariffOptions(), optionList)) {
-                throw new LogicException("One or more of chosen options are already in exclude list.");
+                throw new LogicException("One or more of chosen options are in exclude list.");
             }
+            for (TariffOption option : optionList) {
+                if (!Collections.disjoint(option.getExcludingTariffOptions(), expectedTariffOptions)) {
+                    throw new LogicException("Some of option you want to add are excluding each other, or current related.");
+                }
+            }
+            optionList.forEach(relatedTariffOption -> relatedTariffOption.getIsRelatedFor().add(tariffOption));
             tariffOption.getRelatedTariffOptions().addAll(optionList);
         }
         if (rule.equals(TariffOptionRule.EXCLUDING)) {
+            for(TariffOption toBeExcluded : optionList){
+                if(!Collections.disjoint(tariffOption.getRelatedTariffOptions(),toBeExcluded.getIsRelatedFor())){
+                    throw new LogicException("One or more of chosen options are related for one of related options.");
+                }
+            }
             if (!Collections.disjoint(tariffOption.getRelatedTariffOptions(), optionList)) {
-                throw new LogicException("One or more of chosen options are already in related list.");
+                throw new LogicException("One or more of chosen options are in related list.");
+            }
+            if (!tariffOption.getIsRelatedFor().isEmpty()) {
+                for (TariffOption isRelatedForThis : tariffOption.getIsRelatedFor()) {
+                    if(optionList.contains(isRelatedForThis)){
+                        throw new LogicException("This option is related for one of chosen.");
+                    }
+                    if (!Collections.disjoint(isRelatedForThis.getRelatedTariffOptions(), optionList)) {
+                        throw new LogicException("Cant exclude one or more options. " + isRelatedForThis.getName() +
+                                " option has current option, with one or more options you want to exclude, in related list.");
+                    }
+                }
             }
             tariffOption.getExcludingTariffOptions().addAll(optionList);
             optionList.forEach(excludingTariffOption -> excludingTariffOption.getExcludingTariffOptions().add(tariffOption));
@@ -151,6 +176,7 @@ public class TariffOptionServiceImpl implements TariffOptionService {
         TariffOption tariffOption = findById(tariffOptionId);
         isWrongRule(tariffOption, optionList);
         if (rule.equals(TariffOptionRule.RELATED)) {
+            optionList.forEach(relatedTariffOption -> relatedTariffOption.getIsRelatedFor().remove(tariffOption));
             tariffOption.getRelatedTariffOptions().removeAll(optionList);
         }
         if (rule.equals(TariffOptionRule.EXCLUDING)) {

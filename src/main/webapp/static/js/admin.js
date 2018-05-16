@@ -631,7 +631,6 @@
                 alert(msg);
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
-                alert("Request failed: " + textStatus);
             });
         });
 
@@ -676,7 +675,7 @@
                         tr.removeClass('add-tariff-table-selected');
                         addedOptionsTable.append(tr);
                     }).fail(function (jqXHR, textStatus) {
-                        alert("Request failed: " + textStatus);
+                        alert(jqXHR.responseText);
                     });
                     $('#parseTable tr.move-row').remove();
                 });
@@ -711,7 +710,7 @@
                         alert(msg);
                         var tr = addedOptionsTable.find("tr.add-tariff-table-selected").remove();
                     }).fail(function (jqXHR, textStatus) {
-                        alert("Request failed: " + textStatus);
+                        alert(jqXHR.responseText);
                     });
                     $('#parseTable tr.move-row').remove();
                 });
