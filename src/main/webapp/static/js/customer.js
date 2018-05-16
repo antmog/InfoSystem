@@ -137,7 +137,7 @@
                     'Accept': 'text/html; charset=utf-8'
                 },
                 type: "POST",
-                url: "/customerPanel/contract/addOptions",
+                url: "/customerPanel/contract/addOptionsToCart",
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
@@ -250,7 +250,56 @@
         });
     }
 
+    function cartPanel(){
+        $("#cartTable").on("click","#deleteFromCart", function () {
+            var tr = $(this).parent().parent();
+            var option_id= tr.find("td:eq(1)").html();
+            var contract_id= tr.find("td:eq(0)").html();
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/customerPanel/contract/delOptionsFromCart",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({optionId: option_id, contractId: contract_id})
+            }).done(function (msg) {
+                alert(msg);
+                tr.remove();
+            }).fail(function (jqXHR, textStatus) {
+                alert(jqXHR.responseText);
+            });
+        });
 
+        $("#buy").on("click", function () {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "GET",
+                url: "/customerPanel/contract/addOptions"
+                // The key needs to match your method's input parameter (case-sensitive).
+            }).done(function (msg) {
+                alert(msg);
+                $("#cartTable body tr").remove();
+            }).fail(function (jqXHR, textStatus) {
+                alert(jqXHR.responseText);
+            });
+        });
+    }
+
+    cartPanel();
     userPanel();
     contractPanel();
 

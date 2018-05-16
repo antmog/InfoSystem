@@ -111,4 +111,8 @@ public class CustomModelMapper {
 
         return tariffOptionDtoList;
     }
+
+    public TariffOptionDto mapToTariffOptionDto(TariffOption tariffOption){
+        return modelMapper.map(tariffOption, TariffOptionDto.class);
+    }
 }

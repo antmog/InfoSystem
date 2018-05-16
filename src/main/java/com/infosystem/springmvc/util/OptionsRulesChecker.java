@@ -32,7 +32,7 @@ public class OptionsRulesChecker {
 
     private Set<TariffOption> expectedOptionsListAfterAdd(Set<TariffOption> currentOptions, Set<TariffOption> toBeAddedOptionsList, Integer contractId) {
         Set<TariffOption> cartItems = new HashSet<>();
-        if(sessionCart.getOptions().containsKey(contractId)){
+        if(sessionCart.getOptions().containsKey(contractId)&&!sessionCart.getOptions().get(contractId).isEmpty()){
             cartItems = modelMapperWrapper.mapToTariffOptionSet(sessionCart.getOptions().get(contractId));
         }
         return Stream.of(cartItems, currentOptions, toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());

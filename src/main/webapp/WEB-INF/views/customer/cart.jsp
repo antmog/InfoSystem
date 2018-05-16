@@ -40,13 +40,12 @@
                         <c:if test="${empty sessionCart.options}">
                             Empty cart.
                         </c:if>
-                        ${sessionCart}
-                        <table class="table table-hover contracts-table">
+                        <table class="table table-hover contracts-table" id="cartTable">
                             <thead>
                             <tr>
                                 <th>Contract id</th>
-                                <th>Option name</th>
                                 <th>Option id</th>
+                                <th>Option name</th>
                                 <th>Option price</th>
                                 <th>Option costofadd</th>
                             </tr>
@@ -54,20 +53,23 @@
                             <tbody>
                             <c:forEach items="${sessionCart.options}" var="item">
                                 <c:forEach items="${item.value}" var="option">
-                                    <tr class="move-row">
+                                    <tr>
                                         <td>${item.key}</td>
-                                        <td>${option.name}</td>
                                         <td>${option.id}</td>
+                                        <td>${option.name}</td>
                                         <td>${option.price}</td>
                                         <td>${option.costOfAdd}</td>
+                                        <td><button type="button" class="btn btn-sm btn-danger" id="deleteFromCart">delete
+                                        </button></td>
                                     </tr>
                                 </c:forEach>
                             </c:forEach>
                             </tbody>
                         </table>
-                        <a href="#" class="card-link">buy and continue shopping</a>
                     </div>
                 </div>
+                <div class="col-md-4">button1</div>
+                <div class="col-md-4"><button type="button" id="buy" class="btn btn-primary">Buy</button></div>
             </div>
         </div>
     </div>

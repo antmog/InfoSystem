@@ -13,6 +13,7 @@ import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.rmi.runtime.Log;
 
 import java.util.*;
 
@@ -143,6 +144,9 @@ public class ContractServiceImpl implements ContractService {
     public void customerAddOptions() throws DatabaseException, LogicException {
         Contract contract;
         Set<TariffOption> toBeAddedOptionsList;
+        if(sessionCart.getOptions().isEmpty()){
+            throw new LogicException("Cart is empty.");
+        }
         for (Map.Entry<Integer, Set<TariffOptionDto>> entry : sessionCart.getOptions().entrySet()) {
             contract = findById(entry.getKey());
             if (!contract.getStatus().equals(Status.ACTIVE)) {
@@ -151,8 +155,11 @@ public class ContractServiceImpl implements ContractService {
             toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(entry.getValue());
             optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
             optionsRulesChecker.checkAddToContract(contract.getId(),toBeAddedOptionsList);
+
             contract.getActiveOptions().addAll(toBeAddedOptionsList);
         }
+        sessionCart.getOptions().clear();
+
         //todo PAII FOR DIIS BIIATCH
     }
 
