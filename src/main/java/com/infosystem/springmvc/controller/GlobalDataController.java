@@ -1,7 +1,9 @@
 package com.infosystem.springmvc.controller;
 
-import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
+import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
+import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.TariffOption;
@@ -116,21 +118,57 @@ public class GlobalDataController {
     }
 
     /**
-     * Modifies selected values of user.
+     * Modifies selected value of user.
      *
-     * @param editUserDto
+     * @param editMailDto
      * @param result      validation result
      * @return message
      * @throws DatabaseException   if user doesn't exist
-     * @throws ValidationException if input is wrong or if passport is not numeric
+     * @throws ValidationException if input is wrong
      */
-    @RequestMapping(value = "/user/editUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String editUser(@RequestBody @Valid EditUserDto editUserDto, BindingResult result) throws DatabaseException, ValidationException {
+    @RequestMapping(value = "/user/editUserMail", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String editUserMail(@RequestBody @Valid EditMailDto editMailDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
             throw new ValidationException("Wrong input!");
         }
-        userService.updateUser(editUserDto);
-        return editUserDto.getDataInstance() + " modified successfully.";
+        userService.updateUserMail(editMailDto);
+        return "Email modified successfully.";
+    }
+
+    /**
+     * Modifies selected value of user.
+     *
+     * @param editPassportDto
+     * @param result      validation result
+     * @return message
+     * @throws DatabaseException   if user doesn't exist
+     * @throws ValidationException if input is wrong
+     */
+    @RequestMapping(value = "/user/editUserPassport", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String editUserPassport(@RequestBody @Valid EditPassportDto editPassportDto, BindingResult result) throws DatabaseException, ValidationException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Wrong input!");
+        }
+        userService.updateUserPassport(editPassportDto);
+        return "Passport modified successfully.";
+    }
+
+    /**
+     * Modifies selected value of user.
+     *
+     * @param editAddressDto
+     * @param result      validation result
+     * @return message
+     * @throws DatabaseException   if user doesn't exist
+     * @throws ValidationException if input is wrong
+     */
+    @RequestMapping(value = "/user/editUserAddress", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String editUserAddress(@RequestBody @Valid EditAddressDto editAddressDto, BindingResult result) throws DatabaseException, ValidationException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Wrong input!");
+        }
+        userService.updateUserAddress(editAddressDto);
+        return "Address modified successfully.";
     }
 
 

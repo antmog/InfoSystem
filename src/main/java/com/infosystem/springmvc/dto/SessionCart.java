@@ -60,7 +60,11 @@ public class SessionCart {
             if(!currentOptions.remove(tariffOptionDto)){
                 throw new ValidationException("No such element, hacker.");
             }
-            options.put(deleteFromCartDto.getContractId(),currentOptions);
+            if(!currentOptions.isEmpty()){
+                options.put(deleteFromCartDto.getContractId(),currentOptions);
+                return;
+            }
+            options.remove(deleteFromCartDto.getContractId());
         }
     }
 }

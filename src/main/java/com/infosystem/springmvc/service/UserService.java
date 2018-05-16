@@ -3,9 +3,11 @@ package com.infosystem.springmvc.service;
 import java.util.List;
 
 import com.infosystem.springmvc.dto.AddUserDto;
-import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
+import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
+import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
@@ -21,8 +23,6 @@ public interface UserService {
 	User findByPassport(Integer passport);
 
 	void saveUser(User user);
-	
-	void updateUser(User user) throws DatabaseException;
 
 	List<User> findAllUsers();
 
@@ -32,7 +32,9 @@ public interface UserService {
 
     void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException;
 
-    void updateUser(EditUserDto editUserDto) throws DatabaseException, ValidationException;
+    void updateUserMail(EditMailDto editMailDto) throws DatabaseException, ValidationException;
+    void updateUserPassport(EditPassportDto editPassportDto) throws DatabaseException, ValidationException;
+    void updateUserAddress(EditAddressDto editAddressDto) throws DatabaseException, ValidationException;
 
     User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException;
 

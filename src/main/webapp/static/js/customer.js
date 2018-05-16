@@ -51,12 +51,11 @@
                             'Accept': 'text/html; charset=utf-8'
                         },
                         type: "POST",
-                        url: "/user/editUser",
+                        url: "/user/editUser"+editing.find("td:first").html(),
                         // The key needs to match your method's input parameter (case-sensitive).
                         data: JSON.stringify({
-                            dataInstance: editing.find("td:first").html(),
-                            value: value,
-                            userId: user_id
+                            userId: user_id,
+                            value: value
                         })
                     }).done(function (msg) {
                         alert(msg);
@@ -292,7 +291,7 @@
                 // The key needs to match your method's input parameter (case-sensitive).
             }).done(function (msg) {
                 alert(msg);
-                $("#cartTable body tr").remove();
+                $("#cartTable tbody tr").remove();
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
             });

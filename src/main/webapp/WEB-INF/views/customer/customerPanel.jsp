@@ -32,19 +32,19 @@
                         <table class="table table-hover userEditableTable">
                             <tbody>
                             <tr class="editable">
-                                <td>address</td>
+                                <td>Address</td>
                                 <td>${user.address}</td>
                             </tr>
                             <tr>
-                                <td>birth date</td>
+                                <td>Birth date</td>
                                 <td>${user.birthDate}</td>
                             </tr>
                             <tr class="editable">
-                                <td>mail</td>
+                                <td>Mail</td>
                                 <td>${user.mail}</td>
                             </tr>
                             <tr class="editable">
-                                <td>passport</td>
+                                <td>Passport</td>
                                 <td>${user.passport}</td>
                             </tr>
                             </tbody>

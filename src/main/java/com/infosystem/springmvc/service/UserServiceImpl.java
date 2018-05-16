@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.infosystem.springmvc.dto.AddUserDto;
-import com.infosystem.springmvc.dto.EditUserDto;
 import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
+import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
+import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
@@ -45,13 +47,15 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public User findByLogin(String login){
+    public User findByLogin(String login) {
         return dao.findByLogin(login);
     }
-    public User findByEmail(String mail){
+
+    public User findByEmail(String mail) {
         return dao.findByEmail(mail);
     }
-    public User findByPassport(Integer passport){
+
+    public User findByPassport(Integer passport) {
         return dao.findByPassport(passport);
     }
 
@@ -59,27 +63,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         dao.save(user);
     }
-
-    /*
-     * Since the method is running with Transaction, No need to call hibernate update explicitly.
-     * Just fetch the entity from db and update it with proper values within transaction.
-     * It will be updated in db once transaction ends.
-     */
-    public void updateUser(User user) throws DatabaseException {
-        User entity = findById(user.getId());
-        if (entity != null) {
-            entity.setFirstName(user.getFirstName());
-            entity.setLastName(user.getLastName());
-            entity.setAddress(user.getAddress());
-            entity.setBirthDate(user.getBirthDate());
-            entity.setPassport(user.getPassport());
-            entity.setLogin(user.getLogin());
-            entity.setMail(user.getMail());
-            entity.setPassword(user.getPassword());
-            entity.setRole(user.getRole());
-        }
-    }
-
 
     public List<User> findAllUsers() {
         return dao.findAllUsers();
@@ -92,13 +75,14 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Deletes user if he has no contracts.
+     *
      * @param id
-     * @throws LogicException if user still has contracts
+     * @throws LogicException    if user still has contracts
      * @throws DatabaseException if user doesn't exist
      */
     @Override
     public void deleteUserById(int id) throws LogicException, DatabaseException {
-       findById(id);
+        findById(id);
         if (!dao.findById(id).getUserContracts().isEmpty()) {
             throw new LogicException("User still have contracts!");
         }
@@ -107,6 +91,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Set user status to selected status.
+     *
      * @param setNewStatusDto
      * @throws DatabaseException if user doesn't exist
      */
@@ -117,32 +102,38 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Updates selected user fields.
-     * @param editUserDto
+     *
+     * @param editAddressDto
      * @throws DatabaseException if user doesn't exist
      */
     @Override
-    public void updateUser(EditUserDto editUserDto) throws DatabaseException, ValidationException {
-        User user = findById(editUserDto.getUserId());
-        String newValue = editUserDto.getValue();
-        switch (editUserDto.getDataInstance()) {
-            case "address":
-                if(newValue.length()<6){
-                    throw new ValidationException("Too short adress.");
-                }
-                user.setAddress(newValue);
-                break;
-            case "passport":
-                if(!newValue.matches("\\d*")){
-                    throw new ValidationException("Passport contains only numbers.");
-                }
-                user.setPassport(Integer.valueOf(newValue));
-                break;
-            case "mail":
-                user.setMail(newValue);
-                break;
-            default:
-                break;
-        }
+    public void updateUserAddress(EditAddressDto editAddressDto) throws DatabaseException, ValidationException {
+        User user = findById(editAddressDto.getUserId());
+        user.setAddress(editAddressDto.getValue());
+    }
+
+    /**
+     * Updates selected user fields.
+     *
+     * @param editMailDto
+     * @throws DatabaseException if user doesn't exist
+     */
+    @Override
+    public void updateUserMail(EditMailDto editMailDto) throws DatabaseException, ValidationException {
+        User user = findById(editMailDto.getUserId());
+        user.setMail(editMailDto.getValue());
+    }
+
+    /**
+     * Updates selected user fields.
+     *
+     * @param editPassportDto
+     * @throws DatabaseException if user doesn't exist
+     */
+    @Override
+    public void updateUserPassport(EditPassportDto editPassportDto) throws DatabaseException, ValidationException {
+        User user = findById(editPassportDto.getUserId());
+        user.setPassport(Integer.valueOf(editPassportDto.getValue()));
     }
 
     /**
@@ -159,7 +150,7 @@ public class UserServiceImpl implements UserService {
         return contractService.findByPhoneNumber(searchByNumber.getPhoneNumber()).getUser();
     }
 
-    public void addUser(AddUserDto addUserDto){
+    public void addUser(AddUserDto addUserDto) {
         User user = modelMapperWrapper.mapToUser(addUserDto);
         user.setBalance(0.0);
         saveUser(user);

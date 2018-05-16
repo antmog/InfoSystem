@@ -32,7 +32,8 @@ public class OptionsRulesChecker {
 
     private Set<TariffOption> expectedOptionsListAfterAdd(Set<TariffOption> currentOptions, Set<TariffOption> toBeAddedOptionsList, Integer contractId) {
         Set<TariffOption> cartItems = new HashSet<>();
-        if(sessionCart.getOptions().containsKey(contractId)&&!sessionCart.getOptions().get(contractId).isEmpty()){
+        //&&!sessionCart.getOptions().get(contractId).isEmpty()
+        if(sessionCart.getOptions().containsKey(contractId)){
             cartItems = modelMapperWrapper.mapToTariffOptionSet(sessionCart.getOptions().get(contractId));
         }
         return Stream.of(cartItems, currentOptions, toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());
@@ -153,5 +154,17 @@ public class OptionsRulesChecker {
         Set<TariffOption> contractActiveOptions = contract.getActiveOptions();
 
         checkDelRalated(tariffOptions, contractActiveOptions);
+    }
+
+    public void checkIfContractAlreadyHave(Contract contract, Set<TariffOption> toBeAddedOptionsList) throws LogicException {
+        Set<TariffOption> currentOptions = new HashSet<>(contract.getActiveOptions());
+        currentOptions.retainAll(toBeAddedOptionsList);
+        if(!currentOptions.isEmpty()){
+            StringBuilder sb = new StringBuilder();
+            for (TariffOption tariffOption : currentOptions) {
+                sb.append("Contract ").append(contract.getId()).append(" already has ").append(tariffOption.getName()).append(" option.\n");
+            }
+            throw new LogicException(sb.toString());
+        }
     }
 }

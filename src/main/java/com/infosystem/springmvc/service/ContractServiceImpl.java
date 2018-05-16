@@ -142,6 +142,8 @@ public class ContractServiceImpl implements ContractService {
      */
     @Override
     public void customerAddOptions() throws DatabaseException, LogicException {
+        System.out.println("ERQWEWQEQWEWQEWQE");
+        System.out.println("ERQWEWQEQWEWQEWQE");
         Contract contract;
         Set<TariffOption> toBeAddedOptionsList;
         if(sessionCart.getOptions().isEmpty()){
@@ -155,7 +157,7 @@ public class ContractServiceImpl implements ContractService {
             toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(entry.getValue());
             optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
             optionsRulesChecker.checkAddToContract(contract.getId(),toBeAddedOptionsList);
-
+            optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptionsList);
             contract.getActiveOptions().addAll(toBeAddedOptionsList);
         }
         sessionCart.getOptions().clear();
