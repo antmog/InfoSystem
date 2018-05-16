@@ -87,7 +87,6 @@ public class TariffServiceImpl implements TariffService {
         Tariff tariff = modelMapperWrapper.mapToTariff(addTariffDto);
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addTariffDto.getTariffOptionDtoList());
 
-        optionsRulesChecker.checkAddExcludingAdmin(toBeAddedOptionsList);
         optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptionsList);
 
         tariff.setAvailableOptions(toBeAddedOptionsList);
@@ -122,7 +121,6 @@ public class TariffServiceImpl implements TariffService {
         Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> toBeAddedOptions = modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList());
 
-        optionsRulesChecker.checkAddExcludingAdmin(toBeAddedOptions, tariff.getAvailableOptions());
         optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptions, tariff.getAvailableOptions());
 
         //todo + get money for added options

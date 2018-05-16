@@ -142,8 +142,6 @@ public class ContractServiceImpl implements ContractService {
      */
     @Override
     public void customerAddOptions() throws DatabaseException, LogicException {
-        System.out.println("ERQWEWQEQWEWQEWQE");
-        System.out.println("ERQWEWQEQWEWQEWQE");
         Contract contract;
         Set<TariffOption> toBeAddedOptionsList;
         if(sessionCart.getOptions().isEmpty()){
@@ -201,9 +199,10 @@ public class ContractServiceImpl implements ContractService {
      */
     @Override
     public void customerDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
-        if (findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
-            delOptions(editContractDto);
+        if (!findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
+           throw new LogicException("Sorry, contract is not active, refresh page.");
         }
+        delOptions(editContractDto);
     }
 
     /**
@@ -248,9 +247,10 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException {
         Contract contract = findById(switchTariffDto.getContractId());
-        if (contract.getStatus().equals(Status.ACTIVE)) {
-            switchTariff(switchTariffDto);
+        if (!contract.getStatus().equals(Status.ACTIVE)) {
+            throw new LogicException("Sorry, contract is not active, refresh page.");
         }
+        switchTariff(switchTariffDto);
     }
 
     /**
