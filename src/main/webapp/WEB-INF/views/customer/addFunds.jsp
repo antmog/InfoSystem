@@ -18,6 +18,9 @@
             <button type="submit" class="btn btn-primary" id="addFunds">add funds</button>
     </main>
 </div>
+<script>
+    var user_id = ${user.id};
+</script>
 <jsp:include page="../footer.jsp"/>
 </body>
 </html>
