@@ -99,26 +99,6 @@ public class CustomerController extends ControllerTemplate {
         return path + "cart";
     }
 
-
-    /**
-     * Buys items from cart for user.
-     *
-     * @param model
-     * @return success view
-     */
-    @RequestMapping("/customerPanel/buyOptions")
-    public String buyOptionsInCart(ModelMap model) {
-        String login = getPrincipal();
-        try {
-            contractService.customerAddOptions();
-        } catch (MyBusinessException e) {
-            return prepareErrorPage(model, e);
-        }
-        model.addAttribute("success", "You bought smth.");
-        model.addAttribute("loggedinuser", login);
-        return path + "success";
-    }
-
     /**
      * Returns addFunds view.
      *

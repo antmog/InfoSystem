@@ -5,16 +5,21 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.entity.Contract;
+import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sun.rmi.runtime.Log;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 
 @Service("contractService")
@@ -141,9 +146,10 @@ public class ContractServiceImpl implements ContractService {
      * @throws DatabaseException
      */
     @Override
-    public void customerAddOptions() throws DatabaseException, LogicException {
+    public void customerAddOptions(AddOptionsDto addOptionsDto) throws DatabaseException, LogicException {
         Contract contract;
         Set<TariffOption> toBeAddedOptionsList;
+        Double amount = 0.0;
         if(sessionCart.getOptions().isEmpty()){
             throw new LogicException("Cart is empty.");
         }
@@ -156,11 +162,17 @@ public class ContractServiceImpl implements ContractService {
             optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
             optionsRulesChecker.checkAddToContract(contract.getId(),toBeAddedOptionsList);
             optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptionsList);
+            for(TariffOption tariffOption : toBeAddedOptionsList){
+                amount+=tariffOption.getCostOfAdd();
+            }
             contract.getActiveOptions().addAll(toBeAddedOptionsList);
         }
         sessionCart.getOptions().clear();
-
-        //todo PAII FOR DIIS BIIATCH
+        User user = userService.findById(addOptionsDto.getUserId());
+        if(user.getBalance()<amount){
+            throw new LogicException("Not enough funds.");
+        }
+        user.spendFunds(amount);
     }
 
     /**

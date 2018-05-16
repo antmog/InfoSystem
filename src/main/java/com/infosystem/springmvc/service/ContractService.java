@@ -1,9 +1,6 @@
 package com.infosystem.springmvc.service;
 
-import com.infosystem.springmvc.dto.AddContractDto;
-import com.infosystem.springmvc.dto.EditContractDto;
-import com.infosystem.springmvc.dto.SetNewStatusDto;
-import com.infosystem.springmvc.dto.SwitchTariffDto;
+import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
@@ -29,7 +26,7 @@ public interface ContractService {
     Contract findByPhoneNumber(String phoneNumber);
 
     void adminAddOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
-    void customerAddOptions() throws DatabaseException, LogicException;
+    void customerAddOptions(AddOptionsDto addOptionsDto) throws DatabaseException, LogicException;
 
     void adminDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
     void customerDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;

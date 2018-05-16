@@ -27,6 +27,7 @@
                 })
             }).done(function (msg) {
                 alert(msg);
+                updateCartBalance();
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
             });
@@ -77,7 +78,7 @@
                             'Accept': 'text/html; charset=utf-8'
                         },
                         type: "POST",
-                        url: "/user/editUser"+editing.find("td:first").html(),
+                        url: "/user/editUser" + editing.find("td:first").html(),
                         // The key needs to match your method's input parameter (case-sensitive).
                         data: JSON.stringify({
                             userId: user_id,
@@ -277,11 +278,11 @@
         });
     }
 
-    function cartPanel(){
-        $("#cartTable").on("click","#deleteFromCart", function () {
+    function cartPanel() {
+        $("#cartTable").on("click", "#deleteFromCart", function () {
             var tr = $(this).parent().parent();
-            var option_id= tr.find("td:eq(1)").html();
-            var contract_id= tr.find("td:eq(0)").html();
+            var option_id = tr.find("td:eq(1)").html();
+            var contract_id = tr.find("td:eq(0)").html();
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             $.ajax({
@@ -312,17 +313,44 @@
                     xhr.setRequestHeader(header, token);
                 },
                 headers: {
+                    'Content-Type': 'application/json',
                     'Accept': 'text/html; charset=utf-8'
                 },
-                type: "GET",
-                url: "/customerPanel/contract/addOptions"
-                // The key needs to match your method's input parameter (case-sensitive).
+                type: "POST",
+                url: "/customerPanel/addOptions",
+                data: JSON.stringify({
+                    userId: user_id
+                })
             }).done(function (msg) {
                 alert(msg);
                 $("#cartTable tbody tr").remove();
+                updateCartBalance();
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
             });
+        });
+    }
+
+    function updateCartBalance() {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'text/html; charset=utf-8'
+            },
+            type: "POST",
+            url: "/customerPanel/getBalance",
+            data: JSON.stringify({
+                userId: user_id
+            })
+        }).done(function (msg) {
+            $("#walletBalance").html(msg);
+        }).fail(function (jqXHR, textStatus) {
+            alert(jqXHR.responseText);
         });
     }
 

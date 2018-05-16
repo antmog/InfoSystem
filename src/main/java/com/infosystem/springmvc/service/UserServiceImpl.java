@@ -3,10 +3,7 @@ package com.infosystem.springmvc.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.infosystem.springmvc.dto.FundsDto;
-import com.infosystem.springmvc.dto.AddUserDto;
-import com.infosystem.springmvc.dto.SearchByNumber;
-import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
 import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
@@ -182,6 +179,10 @@ public class UserServiceImpl implements UserService {
         User user = findByLogin(login);
         checkIfUserExist(user);
         user.spendFunds(FundsDto.getAmount());
+    }
+
+    public String getBalance(GetBalanceDto getBalanceDto) throws DatabaseException {
+        return String.valueOf(findById(getBalanceDto.getUserId()).getBalance());
     }
 
     private void checkIfUserExist(User user) throws DatabaseException {

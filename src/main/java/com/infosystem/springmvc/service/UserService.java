@@ -2,10 +2,7 @@ package com.infosystem.springmvc.service;
 
 import java.util.List;
 
-import com.infosystem.springmvc.dto.FundsDto;
-import com.infosystem.springmvc.dto.AddUserDto;
-import com.infosystem.springmvc.dto.SearchByNumber;
-import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
 import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
@@ -54,4 +51,6 @@ public interface UserService {
     void addFunds(FundsDto fundsDto, String login) throws DatabaseException;
 
     void spendFunds(FundsDto fundsDto, String login) throws DatabaseException;
+
+    String getBalance(GetBalanceDto getBalanceDto) throws DatabaseException;
 }

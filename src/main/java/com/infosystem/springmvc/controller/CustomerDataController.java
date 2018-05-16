@@ -121,9 +121,12 @@ public class CustomerDataController extends ControllerTemplate {
      * @throws LogicException    if no options selected
      * @throws DatabaseException if contract doesn't exist
      */
-    @RequestMapping(value = "/customerPanel/contract/addOptions")
-    public String contractAddOptions() throws DatabaseException, LogicException {
-        contractService.customerAddOptions();
+    @RequestMapping(value = "/customerPanel/addOptions",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    public String addOptions(@Valid @RequestBody AddOptionsDto addOptionsDto, BindingResult result) throws DatabaseException, LogicException, ValidationException {
+        if(result.hasErrors()){
+            throw new ValidationException("Wrong input.");
+        }
+        contractService.customerAddOptions(addOptionsDto);
         return "Bought all successfully.";
     }
 
@@ -141,5 +144,20 @@ public class CustomerDataController extends ControllerTemplate {
         }
         userService.addFunds(fundsDto, getPrincipal());
         return fundsDto.getAmount() + " funds added.";
+    }
+
+    /**
+     * Adding funds to user.
+     *
+     * @return message
+     * @throws ValidationException if amount value is null
+     * @throws DatabaseException   if user doesn't exist
+     */
+    @RequestMapping(value = "/customerPanel/getBalance", method = RequestMethod.POST)
+    public String getBalance(@RequestBody @Valid GetBalanceDto getBalanceDto, BindingResult result) throws DatabaseException, ValidationException {
+        if(result.hasErrors()){
+            throw new ValidationException("Wrong input!");
+        }
+        return userService.getBalance(getBalanceDto);
     }
 }

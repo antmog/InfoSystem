@@ -19,8 +19,8 @@
                         ${user.firstName} ${user.lastName}
                     </h5>
                     <div class="card-body">
-                        Wallet balance: ${user.balance}
-                        <a class="btn btn-info btn-sm" href="/customerPanel/addFunds" role="button">Add funds to wallet</a>
+                        <p>Wallet balance: <label id="walletBalance">${user.balance}</label></p>
+                        <p><a class="btn btn-info btn-sm" href="/customerPanel/addFunds" role="button">Add funds to wallet</a></p>
                     </div>
                 </div>
             </div>
