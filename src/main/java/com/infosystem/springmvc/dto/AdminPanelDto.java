@@ -1,24 +1,18 @@
 package com.infosystem.springmvc.dto;
 
-import com.infosystem.springmvc.model.entity.Tariff;
-import com.infosystem.springmvc.model.entity.TariffOption;
-import com.infosystem.springmvc.model.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Required;
-
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 public class AdminPanelDto {
-    //todo edit
-    private List<User> users;
-    private List<Tariff> tariffs;
-    private List<TariffOption> tariffOptions;
+    private List<AddUserDto> users;
+    private List<TariffDto> tariffs;
+    private Set<TariffOptionDto> tariffOptions;
 
-    public AdminPanelDto(List<User> users, List<Tariff> tariffs, List<TariffOption> tariffOptions) {
+    public AdminPanelDto(List<AddUserDto> users, List<TariffDto> tariffs, Set<TariffOptionDto> tariffOptions) {
         this.users = users;
         this.tariffs = tariffs;
         this.tariffOptions = tariffOptions;

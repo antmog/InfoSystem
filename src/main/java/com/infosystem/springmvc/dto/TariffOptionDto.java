@@ -1,17 +1,16 @@
 package com.infosystem.springmvc.dto;
 
-
-import com.infosystem.springmvc.model.entity.TariffOption;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 public class TariffOptionDto implements Serializable {
+
     @NotNull
     private int id;
     @NotNull
@@ -25,6 +24,10 @@ public class TariffOptionDto implements Serializable {
     public String toString() {
         return "{id: \""+id+"\",name: \"" + name + "\",price: \""+price+"\",costofadd: \""+costofadd+"\"}";
     }
+
+    private Set<TariffOptionDto> relatedTariffOptions;
+
+    private Set<TariffOptionDto> excludingTariffOptions;
 
     @Override
     public boolean equals(Object o) {

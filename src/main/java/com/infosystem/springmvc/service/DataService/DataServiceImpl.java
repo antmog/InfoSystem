@@ -10,11 +10,14 @@ import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
 import com.infosystem.springmvc.service.UserService;
+import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("dataService")
 @Transactional
@@ -28,8 +31,8 @@ public class DataServiceImpl implements DataService {
     UserService userService;
     @Autowired
     ContractService contractService;
-
-    //todo javadoc
+    @Autowired
+    CustomModelMapper modelMapper;
 
     /**
      *
@@ -37,18 +40,21 @@ public class DataServiceImpl implements DataService {
      */
     @Override
     public AdminPanelDto getAdminPanelData() {
-        return new AdminPanelDto(userService.findFirstUsers(),
-                tariffService.findFirstTariffs(),tariffOptionService.findFirstTariffOptions());
+        return new AdminPanelDto(modelMapper.mapToAddUserDtoList(userService.findFirstUsers()),
+                modelMapper.mapToTariffDtoList(tariffService.findFirstTariffs()),
+                modelMapper.mapToTariffOptionDtoSet(new HashSet<>(tariffOptionService.findFirstTariffOptions())));
     }
 
     @Override
     public TariffPageDto getTariffPageData(Integer tariffId) throws DatabaseException {
-        return new TariffPageDto(tariffService.findById(tariffId),tariffOptionService.findAllTariffOptions());
+        return new TariffPageDto(modelMapper.mapToTariffDto(tariffService.findById(tariffId)),
+                modelMapper.mapToTariffOptionDtoSet(new HashSet<>(tariffOptionService.findAllTariffOptions())));
     }
 
     @Override
     public ContractPageDto getContractPageData(Integer contractId) throws DatabaseException {
-        return new ContractPageDto(contractService.findById(contractId),tariffService.findAllActiveTariffs());
+        return new ContractPageDto(modelMapper.mapToContractDto(contractService.findById(contractId)),
+                modelMapper.mapToTariffDtoList(tariffService.findAllActiveTariffs()));
     }
 
     /**
@@ -58,9 +64,9 @@ public class DataServiceImpl implements DataService {
      */
     @Override
     public TariffOptionPageDto getTariffOptionPageData(Integer optionId) throws DatabaseException {
-        List<TariffOption> options = tariffOptionService.findAllTariffOptions();
+        Set<TariffOption> options = new HashSet<>(tariffOptionService.findAllTariffOptions());
         TariffOption option = tariffOptionService.findById(optionId);
         options.remove(option);
-        return new TariffOptionPageDto(option,options);
+        return new TariffOptionPageDto(modelMapper.mapToTariffOptionDto(option),modelMapper.mapToTariffOptionDtoSet(options));
     }
 }

@@ -27,7 +27,7 @@
                             </tr>
                             <tr class="contract-row">
                                 <td>cost of add</td>
-                                <td>${tariffOptionPageDto.tariffOption.costOfAdd}</td>
+                                <td>${tariffOptionPageDto.tariffOption.costofadd}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -63,7 +63,7 @@
                                         <td>${availableOption.id}</td>
                                         <td>${availableOption.name}</td>
                                         <td>${availableOption.price}</td>
-                                        <td>${availableOption.costOfAdd}</td>
+                                        <td>${availableOption.costofadd}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -96,7 +96,7 @@
                                         <td>${option.id}</td>
                                         <td>${option.name}</td>
                                         <td>${option.price}</td>
-                                        <td>${option.costOfAdd}</td>
+                                        <td>${option.costofadd}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -131,7 +131,7 @@
                                         <td>${availableOption.id}</td>
                                         <td>${availableOption.name}</td>
                                         <td>${availableOption.price}</td>
-                                        <td>${availableOption.costOfAdd}</td>
+                                        <td>${availableOption.costofadd}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -164,7 +164,7 @@
                                         <td>${option.id}</td>
                                         <td>${option.name}</td>
                                         <td>${option.price}</td>
-                                        <td>${option.costOfAdd}</td>
+                                        <td>${option.costofadd}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

@@ -3,7 +3,6 @@ package com.infosystem.springmvc.dto;
 import com.infosystem.springmvc.model.enums.Status;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;

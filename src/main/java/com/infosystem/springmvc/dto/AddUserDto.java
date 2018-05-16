@@ -1,10 +1,10 @@
 package com.infosystem.springmvc.dto;
 
 import com.infosystem.springmvc.model.enums.Role;
+import com.infosystem.springmvc.model.enums.Status;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
@@ -12,10 +12,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 public class AddUserDto {
+    private int id;
+
     @Size(min = 6, max = 32)
     private String firstName;
 
@@ -46,4 +50,31 @@ public class AddUserDto {
     @Enumerated(EnumType.STRING)
     @NotNull
     private Role role;
+
+    private Set<ContractDto> userContracts;
+
+    private Status status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AddUserDto that = (AddUserDto) o;
+        return id == that.id &&
+                Objects.equals(firstName, that.firstName) &&
+                Objects.equals(lastName, that.lastName) &&
+                Objects.equals(address, that.address) &&
+                Objects.equals(birthDate, that.birthDate) &&
+                Objects.equals(passport, that.passport) &&
+                Objects.equals(mail, that.mail) &&
+                Objects.equals(login, that.login) &&
+                Objects.equals(password, that.password) &&
+                role == that.role &&
+                status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, address, birthDate, passport, mail, login, password, role, status);
+    }
 }

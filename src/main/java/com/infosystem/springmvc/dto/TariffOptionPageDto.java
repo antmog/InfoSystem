@@ -3,16 +3,16 @@ package com.infosystem.springmvc.dto;
 import com.infosystem.springmvc.model.entity.TariffOption;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 public class TariffOptionPageDto {
-    private TariffOption tariffOption;
-    private List<TariffOption> options;
 
-    public TariffOptionPageDto(TariffOption tariffOption, List<TariffOption> options) {
+    private TariffOptionDto tariffOption;
+    private Set<TariffOptionDto> options;
+
+    public TariffOptionPageDto(TariffOptionDto tariffOption, Set<TariffOptionDto> options) {
         this.tariffOption = tariffOption;
         this.options = options;
     }

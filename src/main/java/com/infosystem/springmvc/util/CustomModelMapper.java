@@ -53,7 +53,7 @@ public class CustomModelMapper {
         Contract contract = new Contract();
 
         Tariff tariff = tariffDao.findById(addContractDto.getContractDto().getTariffId());
-        User user = userDao.findById(addContractDto.getContractDto().getUserId());
+        User user = userDao.findById(addContractDto.getContractDto().getUser().getId());
 
         contract.setPhoneNumber(addContractDto.getContractDto().getPhoneNumber());
         contract.setTariff(tariff);
@@ -106,13 +106,31 @@ public class CustomModelMapper {
      */
     public Set<TariffOptionDto> mapToTariffOptionDtoSet(Set<TariffOption> tariffOptionList) {
         Set<TariffOptionDto> tariffOptionDtoList = new HashSet<TariffOptionDto>();
-
         tariffOptionList.forEach(tariffOption -> tariffOptionDtoList.add(modelMapper.map(tariffOption, TariffOptionDto.class)));
-
         return tariffOptionDtoList;
     }
 
-    public TariffOptionDto mapToTariffOptionDto(TariffOption tariffOption){
+    public TariffOptionDto mapToTariffOptionDto(TariffOption tariffOption) {
         return modelMapper.map(tariffOption, TariffOptionDto.class);
+    }
+
+    public List<AddUserDto> mapToAddUserDtoList(List<User> users) {
+        List<AddUserDto> addUserDtoList = new ArrayList<>();
+        users.forEach(user -> addUserDtoList.add(modelMapper.map(user, AddUserDto.class)));
+        return addUserDtoList;
+    }
+
+    public List<TariffDto> mapToTariffDtoList(List<Tariff> tariffs) {
+        List<TariffDto> addUserDtoList = new ArrayList<>();
+        tariffs.forEach(tariff -> addUserDtoList.add(modelMapper.map(tariff, TariffDto.class)));
+        return addUserDtoList;
+    }
+
+    public ContractDto mapToContractDto(Contract contract) {
+        return modelMapper.map(contract, ContractDto.class);
+    }
+
+    public TariffDto mapToTariffDto(Tariff tariff) {
+        return modelMapper.map(tariff, TariffDto.class);
     }
 }
