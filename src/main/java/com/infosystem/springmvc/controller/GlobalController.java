@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/")
-public class GlobalViewController extends ViewControllerTemplate {
+public class GlobalController extends ControllerTemplate {
 
     /**
      * Mapping to login screen.

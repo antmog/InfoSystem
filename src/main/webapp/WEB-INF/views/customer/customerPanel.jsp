@@ -49,20 +49,18 @@
                             </tr>
                             </tbody>
                         </table>
-                        <button type="button" class="btn btn-primary btn-sm">Change first/last name</button>
-                        <button type="button" class="btn btn-primary btn-sm">Change password</button>
+                        <p><button type="button" class="btn btn-primary btn-sm">Change first/last name</button>
+                        <button type="button" class="btn btn-primary btn-sm">Change password</button></p>
+                        <p>Wallet balance: ${user.balance}</p>
+                        <a class="btn btn-info btn-sm" href="/customerPanel/addFunds" role="button">Add funds to wallet</a>
                     </div>
                     <c:choose>
                         <c:when test="${user.status == 'INACTIVE'}">
-                            <label value="Inactive">Inactive (deactivated)
-                            </label>
-                            <button type="button" class="btn btn-success" id="unBlockUserButton">Activate
+                            <button type="button" class="btn btn-success" id="unBlockUserButton">Activate account
                             </button>
                         </c:when>
                         <c:when test="${user.status == 'ACTIVE'}">
-                            <label value="Inactive">Active
-                            </label>
-                            <button type="button" class="btn btn-warning" id="deactivateUserButton">Deactivate
+                            <button type="button" class="btn btn-warning" id="deactivateUserButton">Deactivate account
                             </button>
                         </c:when>
                     </c:choose>
@@ -109,7 +107,6 @@
                             </c:forEach>
                             </tbody>
                         </table>
-                        <a href="#" class="card-link">All contracts</a>
                     </div>
                 </div>
             </div>

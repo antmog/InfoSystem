@@ -51,6 +51,13 @@ public class User implements Serializable {
     @Column(name = "BALANCE")
     private Double balance;
 
+    public void addFunds(double amount){
+        balance+=amount;
+    }
+    public void spendFunds(double amount){
+        balance-=amount;
+    }
+
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE", nullable = false)
     private Role role;

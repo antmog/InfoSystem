@@ -3,6 +3,7 @@ package com.infosystem.springmvc.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.infosystem.springmvc.dto.FundsDto;
 import com.infosystem.springmvc.dto.AddUserDto;
 import com.infosystem.springmvc.dto.SearchByNumber;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
@@ -171,4 +172,21 @@ public class UserServiceImpl implements UserService {
         return (user != null);
     }
 
+    public void addFunds(FundsDto FundsDto, String login) throws DatabaseException {
+        User user = findByLogin(login);
+        checkIfUserExist(user);
+        user.addFunds(FundsDto.getAmount());
+    }
+
+    public void spendFunds(FundsDto FundsDto, String login) throws DatabaseException {
+        User user = findByLogin(login);
+        checkIfUserExist(user);
+        user.spendFunds(FundsDto.getAmount());
+    }
+
+    private void checkIfUserExist(User user) throws DatabaseException {
+        if (user == null) {
+            throw new DatabaseException("Whoops, user doesn't exist.");
+        }
+    }
 }

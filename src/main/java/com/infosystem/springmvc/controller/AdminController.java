@@ -28,9 +28,9 @@ import java.util.*;
 @Controller
 @RequestMapping("/")
 @SessionAttributes("roles")
-public class AdminViewController extends ViewControllerTemplate{
+public class AdminController extends ControllerTemplate {
 
-    public AdminViewController(){
+    public AdminController(){
         super("admin/");
     }
 

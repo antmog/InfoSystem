@@ -6,6 +6,32 @@
 
     function userPanel() {
         var newStatus;
+
+        $('#addFunds').click(function () {
+            var amount = $('#addFundsInput').val();
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'text/html; charset=utf-8'
+                },
+                type: "POST",
+                url: "/customerPanel/addFunds",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({
+                    amount: amount
+                })
+            }).done(function (msg) {
+                alert(msg);
+            }).fail(function (jqXHR, textStatus) {
+                alert(jqXHR.responseText);
+            });
+        });
+
         $('#unBlockUserButton').click(function () {
             newStatus = 'ACTIVE';
             globalSetNewStatus("user", newStatus, user_id);
@@ -61,7 +87,7 @@
                         alert(msg);
                         oldValue.html(value);
                     }).fail(function (jqXHR, textStatus) {
-                        alert("Request failed: " + textStatus);
+                        alert(jqXHR.responseText);
                     });
                 }
                 $(this).removeClass('editing').addClass('editable');

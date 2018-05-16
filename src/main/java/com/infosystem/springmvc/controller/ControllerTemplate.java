@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 
-public abstract class ViewControllerTemplate {
+public abstract class ControllerTemplate {
 
     protected String path;
 
-    public ViewControllerTemplate(){}
-    public ViewControllerTemplate(String path){
+    public ControllerTemplate(){}
+    public ControllerTemplate(String path){
         this.path = path;
     }
 

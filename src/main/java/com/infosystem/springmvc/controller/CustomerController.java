@@ -1,11 +1,8 @@
 package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.ContractPageDto;
-import com.infosystem.springmvc.dto.SessionCart;
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.MyBusinessException;
-import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.DataService.DataService;
@@ -19,14 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/")
 //@SessionAttributes("roles")
-public class CustomerViewController extends ViewControllerTemplate {
+public class CustomerController extends ControllerTemplate {
 
-    public CustomerViewController(){
+    public CustomerController() {
         super("customer/");
     }
 
@@ -53,70 +49,87 @@ public class CustomerViewController extends ViewControllerTemplate {
     DataService dataService;
 
 
-
     /**
      * Returns customer panel view with user info.
+     *
      * @param model
      * @return view
      */
     @RequestMapping("/customerPanel")
     public String customerPanel(ModelMap model) {
-        String login =  getPrincipal();
+        String login = getPrincipal();
         User user = userService.findByLogin(login);
         model.addAttribute("loggedinuser", login);
         model.addAttribute("user", user);
-        return path +"customerPanel";
+        return path + "customerPanel";
     }
 
     /**
      * Returns view with contract page.
+     *
      * @param contractId
      * @param model
      * @return view
      * @throws DatabaseException
      */
     @RequestMapping(value = "/customerPanel/contract/{contractId}")
-    public String contract(@PathVariable(value = "contractId") Integer contractId, ModelMap model){
+    public String contract(@PathVariable(value = "contractId") Integer contractId, ModelMap model) {
         ContractPageDto contractPageDto = null;
         try {
             contractPageDto = dataService.getContractPageData(contractId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model,e);
+            return prepareErrorPage(model, e);
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("contractPageDto", contractPageDto);
-        return path +"contract";
+        return path + "contract";
     }
 
     /**
      * Returns view with cart page.
+     *
      * @return view
      */
     @RequestMapping(value = "/customerPanel/cart")
-    public String cart(ModelMap model){
-        String login =  getPrincipal();
+    public String cart(ModelMap model) {
+        String login = getPrincipal();
         User user = userService.findByLogin(login);
         model.addAttribute("loggedinuser", login);
         model.addAttribute("user", user);
-        return path +"cart";
+        return path + "cart";
     }
 
 
     /**
      * Buys items from cart for user.
+     *
      * @param model
-     * @return success view.
+     * @return success view
      */
     @RequestMapping("/customerPanel/buyOptions")
     public String buyOptionsInCart(ModelMap model) {
-        String login =  getPrincipal();
+        String login = getPrincipal();
         try {
             contractService.customerAddOptions();
         } catch (MyBusinessException e) {
-            return prepareErrorPage(model,e);
+            return prepareErrorPage(model, e);
         }
-        model.addAttribute("success","You bought smth.");
+        model.addAttribute("success", "You bought smth.");
         model.addAttribute("loggedinuser", login);
-        return path +"success";
+        return path + "success";
+    }
+
+    /**
+     * Returns addFunds view.
+     *
+     * @return view
+     */
+    @RequestMapping("/customerPanel/addFunds")
+    public String addFunds(ModelMap model) {
+        String login = getPrincipal();
+        User user = userService.findByLogin(login);
+        model.addAttribute("loggedinuser", login);
+        model.addAttribute("user", user);
+        return path + "addFunds";
     }
 }

@@ -19,15 +19,8 @@
                         ${user.firstName} ${user.lastName}
                     </h5>
                     <div class="card-body">
-                        <table class="table table-hover">
-                            <tbody>
-                            <tr class="editable">
-                                <td>Money</td>
-                                <td>${user.balance}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <button type="button" class="btn btn-primary btn-sm">TBD add funds</button>
+                        Wallet balance: ${user.balance}
+                        <a class="btn btn-info btn-sm" href="/customerPanel/addFunds" role="button">Add funds to wallet</a>
                     </div>
                 </div>
             </div>

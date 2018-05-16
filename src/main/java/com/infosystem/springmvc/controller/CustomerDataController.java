@@ -1,9 +1,6 @@
 package com.infosystem.springmvc.controller;
 
-import com.infosystem.springmvc.dto.DeleteFromCartDto;
-import com.infosystem.springmvc.dto.EditContractDto;
-import com.infosystem.springmvc.dto.SessionCart;
-import com.infosystem.springmvc.dto.SwitchTariffDto;
+import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
@@ -24,7 +21,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/")
-public class CustomerDataController {
+public class CustomerDataController extends ControllerTemplate {
 
     @Autowired
     UserService userService;
@@ -103,7 +100,7 @@ public class CustomerDataController {
      * Deleting selected options from cart.
      *
      * @param deleteFromCartDto
-     * @param result          validation result
+     * @param result            validation result
      * @return message
      * @throws ValidationException if no options selected
      * @throws DatabaseException   if contract doesn't exist
@@ -121,8 +118,8 @@ public class CustomerDataController {
      * Adding options to contract (buying).
      *
      * @return message
-     * @throws LogicException if no options selected
-     * @throws DatabaseException   if contract doesn't exist
+     * @throws LogicException    if no options selected
+     * @throws DatabaseException if contract doesn't exist
      */
     @RequestMapping(value = "/customerPanel/contract/addOptions")
     public String contractAddOptions() throws DatabaseException, LogicException {
@@ -130,4 +127,19 @@ public class CustomerDataController {
         return "Bought all successfully.";
     }
 
+    /**
+     * Adding funds to user.
+     *
+     * @return message
+     * @throws ValidationException if amount value is null
+     * @throws DatabaseException   if user doesn't exist
+     */
+    @RequestMapping(value = "/customerPanel/addFunds", method = RequestMethod.POST)
+    public String addFunds(@RequestBody @Valid FundsDto fundsDto, BindingResult result) throws DatabaseException, ValidationException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Chose the amount of money you want to add.");
+        }
+        userService.addFunds(fundsDto, getPrincipal());
+        return fundsDto.getAmount() + " funds added.";
+    }
 }

@@ -18,7 +18,7 @@ public class UserFormValidator implements Validator {
     }
 
     @Override
-    public void validate(Object o, Errors errors) {
+    public void validate(Object o, Errors errors)  {
         AddUserDto addUserDto = (AddUserDto) o;
 
         if(userService.doesLoginExist(addUserDto.getLogin())){
