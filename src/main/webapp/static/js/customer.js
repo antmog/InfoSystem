@@ -119,12 +119,13 @@
         });
 
         $('#contractAddOption').on('click', function () {
-            // OPTIONS RULES
             var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
             var table = $('#parseTable');
             for (var i = 0; i < tr.length; i++) {
                 table.append(tr[i]);
             }
+            console.log(table);
+            console.log(table.tableToJSON());
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             $.ajax({
@@ -144,6 +145,7 @@
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
             });
+            console.log($('#parseTable tr'))
             $('#parseTable tr.move-row').remove();
         });
 

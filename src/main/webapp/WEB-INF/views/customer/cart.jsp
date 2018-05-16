@@ -58,7 +58,7 @@
                                         <td>${option.id}</td>
                                         <td>${option.name}</td>
                                         <td>${option.price}</td>
-                                        <td>${option.costOfAdd}</td>
+                                        <td>${option.costofadd}</td>
                                         <td><button type="button" class="btn btn-sm btn-danger" id="deleteFromCart">delete
                                         </button></td>
                                     </tr>

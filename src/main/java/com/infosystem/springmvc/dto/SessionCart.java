@@ -41,14 +41,30 @@ public class SessionCart {
     public void addCartItems(EditContractDto editContractDto) throws DatabaseException, LogicException {
         Set<TariffOptionDto> newSet = new HashSet<>();
         Set<TariffOption> toBeAddedOptions = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
+        Integer contractId = editContractDto.getContractId();
 
-        optionsRulesChecker.checkAddToContractCustomer(editContractDto.getContractId(), toBeAddedOptions);
+        optionsRulesChecker.checkAddToContractCustomer(contractId, toBeAddedOptions);
+        optionsRulesChecker.checkIfContractAlreadyHave(contractService.findById(contractId),toBeAddedOptions);
+        if(!options.isEmpty()){
+            if(options.containsKey(contractId)){
+                Set<TariffOptionDto> currentOptions = new HashSet<>(options.get(contractId));
+                currentOptions.retainAll(editContractDto.getTariffOptionDtoList());
+                if(!currentOptions.isEmpty()){
+                    StringBuilder sb = new StringBuilder();
+                    for (TariffOptionDto tariffOptionDto : currentOptions) {
+                        sb.append("Option ").append(tariffOptionDto.getName()).append(" for contract ").append(contractId)
+                                .append(" alrdy in cart.\n");
+                    }
+                    throw new LogicException(sb.toString());
+                }
+            }
+        }
 
-        if(options.containsKey(editContractDto.getContractId())){
-            newSet.addAll(options.get(editContractDto.getContractId()));
+        if(options.containsKey(contractId)){
+            newSet.addAll(options.get(contractId));
         }
         newSet.addAll(modelMapperWrapper.mapToTariffOptionDtoSet(toBeAddedOptions));
-        options.put(editContractDto.getContractId(), newSet);
+        options.put(contractId, newSet);
     }
 
     @Transactional

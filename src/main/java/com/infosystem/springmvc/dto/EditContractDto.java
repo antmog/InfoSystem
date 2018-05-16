@@ -1,34 +1,17 @@
 package com.infosystem.springmvc.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
 public class EditContractDto {
     @NotEmpty
     private List<TariffOptionDto> tariffOptionDtoList;
+    @NotNull
     private Integer contractId;
-
-    public EditContractDto(List<TariffOptionDto> tariffOptionDtoList, Integer contractId) {
-        this.tariffOptionDtoList = tariffOptionDtoList;
-        this.contractId = contractId;
-    }
-
-    public EditContractDto() {
-    }
-
-    public List<TariffOptionDto> getTariffOptionDtoList() {
-        return tariffOptionDtoList;
-    }
-
-    public void setTariffOptionDtoList(List<TariffOptionDto> tariffOptionDtoList) {
-        this.tariffOptionDtoList = tariffOptionDtoList;
-    }
-
-    public Integer getContractId() {
-        return contractId;
-    }
-
-    public void setContractId(Integer contractId) {
-        this.contractId = contractId;
-    }
 }
