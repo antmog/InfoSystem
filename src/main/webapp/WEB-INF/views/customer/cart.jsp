@@ -61,7 +61,6 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-md-4">button1</div>
                 <div class="col-md-4"><button type="button" id="buy" class="btn btn-primary">Buy</button></div>
             </div>
         </div>

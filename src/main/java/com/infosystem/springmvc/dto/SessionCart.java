@@ -9,6 +9,7 @@ import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
+import javassist.bytecode.analysis.Executor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -26,6 +27,7 @@ import java.util.Set;
 @Data
 public class SessionCart {
     private Map<Integer, Set<TariffOptionDto>> options = new HashMap<>();
+    private Integer count = 0;
 
     @Autowired
     private CustomModelMapper modelMapperWrapper;
@@ -64,6 +66,7 @@ public class SessionCart {
         }
         newSet.addAll(modelMapperWrapper.mapToTariffOptionDtoSet(toBeAddedOptions));
         options.put(contractId, newSet);
+        countItems();
     }
 
     @Transactional
@@ -75,11 +78,16 @@ public class SessionCart {
             if(!currentOptions.remove(tariffOptionDto)){
                 throw new ValidationException("No such element, hacker.");
             }
-            if(!currentOptions.isEmpty()){
-                options.put(deleteFromCartDto.getContractId(),currentOptions);
-                return;
+            options.put(deleteFromCartDto.getContractId(),currentOptions);
+            if(currentOptions.isEmpty()){
+                options.remove(deleteFromCartDto.getContractId());
             }
-            options.remove(deleteFromCartDto.getContractId());
+            countItems();
         }
+    }
+
+    public void countItems(){
+        count = 0;
+        options.forEach((k,v)-> count+=v.size());
     }
 }

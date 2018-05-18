@@ -24,10 +24,12 @@
                     User Panel
                 </a>
             </li>
-            <li class="nav-item mr-4">
+            <li class="nav-item">
                 <a class="nav-link" href="/customerPanel/cart">
                     Cart
-                    <i class="fas fa-cart-arrow-down"></i>
+                    <span class="p1 fa-stack fa-2x has-badge" data-count="${sessionCart.count}" id="cartItemsCount">
+                        <i class="p3 fa fa-shopping-cart fa-stack-1x xfa-inverse"></i>
+                    </span>
                 </a>
             </li>
             <sec:authorize access="isAuthenticated()">

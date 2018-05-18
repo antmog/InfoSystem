@@ -50,3 +50,29 @@ body {
 .add-funds{
     max-width: 400px;
 }
+.p1{
+    max-height:20pt;
+    max-width:35pt
+}
+.p3{
+    max-height:20pt;
+    bottom: 15pt
+}
+.fa-shopping-cart{
+    font-size:0.6em;
+}
+.p1[data-count]:after{
+    position:absolute;
+    right:5%;
+    top:-10%;
+    content: attr(data-count);
+    font-size:30%;
+    padding:.5em;
+    border-radius:650%;
+    line-height:1em;
+    width:2em;
+    color: #f8f9fa;
+    background:rgba(36, 142, 173, 0.85);
+    text-align:center;
+    min-width: 1em;
+}

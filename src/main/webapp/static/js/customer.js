@@ -168,6 +168,7 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
+                updateCartItemsCount();
                 alert(msg);
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
@@ -300,11 +301,11 @@
             }).done(function (msg) {
                 alert(msg);
                 tr.remove();
+                updateCartItemsCount();
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
             });
         });
-
         $("#buy").on("click", function () {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -324,6 +325,7 @@
             }).done(function (msg) {
                 alert(msg);
                 $("#cartTable tbody tr").remove();
+                updateCartItemsCount();
                 updateCartBalance();
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
@@ -349,6 +351,25 @@
             })
         }).done(function (msg) {
             $("#walletBalance").html(msg);
+        }).fail(function (jqXHR, textStatus) {
+            alert(jqXHR.responseText);
+        });
+    }
+
+    function updateCartItemsCount() {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            headers: {
+                'Accept': 'text/html; charset=utf-8'
+            },
+            type: "Get",
+            url: "/customerPanel/getCartItemsCount"
+        }).done(function (msg) {
+            $("#cartItemsCount")[0].dataset.count = msg;
         }).fail(function (jqXHR, textStatus) {
             alert(jqXHR.responseText);
         });

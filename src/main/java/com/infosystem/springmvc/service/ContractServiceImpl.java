@@ -173,6 +173,7 @@ public class ContractServiceImpl implements ContractService {
             throw new LogicException("Not enough funds.");
         }
         user.spendFunds(amount);
+        sessionCart.countItems();
     }
 
     /**

@@ -160,4 +160,16 @@ public class CustomerDataController extends ControllerTemplate {
         }
         return userService.getBalance(getBalanceDto);
     }
+
+    /**
+     * Adding funds to user.
+     *
+     * @return message
+     * @throws ValidationException if amount value is null
+     * @throws DatabaseException   if user doesn't exist
+     */
+    @RequestMapping(value = "/customerPanel/getCartItemsCount", method = RequestMethod.GET)
+    public String getCartItemsCount(){
+        return String.valueOf(sessionCart.getCount());
+    }
 }
