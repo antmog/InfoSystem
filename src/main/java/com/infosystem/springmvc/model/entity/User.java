@@ -48,7 +48,7 @@ public class User implements Serializable {
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @Column(name = "BALANCE")
+    @Column(name = "BALANCE", nullable = false)
     private Double balance;
 
     public void addFunds(double amount){

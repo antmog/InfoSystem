@@ -63,6 +63,7 @@ Adding option
         </c:otherwise>
     </c:choose>
 </form:form>
+<button id = "superButton"> superbutton</button>
 <jsp:include page="../footer.jsp"/>
 </body>
 </html>

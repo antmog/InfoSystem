@@ -76,6 +76,9 @@
         $('#addOptionButton').click(function () {
             document.location.href = "/adminPanel/addOption"
         });
+        $('#superButton').click(function () {
+            document.location.href = "/adminPanel/addOptionS"
+        });
     }
 
 

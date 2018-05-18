@@ -2,6 +2,7 @@ package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.TariffOptionDao;
 import com.infosystem.springmvc.dto.AddTariffOptionDto;
+import com.infosystem.springmvc.dto.SessionCart;
 import com.infosystem.springmvc.dto.TariffOptionDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
@@ -13,6 +14,7 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 
 import java.util.Collections;
@@ -62,7 +64,6 @@ public class TariffOptionServiceImpl implements TariffOptionService {
             // logic
         }
     }
-
 
     public List<TariffOption> findAllTariffOptions() {
         return dao.findAllTariffOptions();

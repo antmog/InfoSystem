@@ -265,6 +265,7 @@ public class AdminDataController {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }
+        //todo
         tariffOptionService.addRuleTariffOptions(tariffOptionRulesDto.getTariffOptionId(),
                 tariffOptionRulesDto.getTariffOptionDtoList(), TariffOptionRule.valueOf(tariffOptionRulesDto.getRule()));
         return "Options added.";
