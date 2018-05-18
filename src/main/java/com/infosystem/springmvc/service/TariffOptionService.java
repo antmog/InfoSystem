@@ -2,6 +2,7 @@ package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dto.AddTariffOptionDto;
 import com.infosystem.springmvc.dto.TariffOptionDto;
+import com.infosystem.springmvc.dto.TariffOptionRulesDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.entity.TariffOption;
@@ -32,8 +33,8 @@ public interface TariffOptionService {
 
     boolean isTariffOptionUnique(String tariffOptionName);
 
-    void addRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws DatabaseException, LogicException;
+    void addRuleTariffOptions(TariffOptionRulesDto tariffOptionRulesDto) throws DatabaseException, LogicException;
 
-    void delRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws LogicException, DatabaseException;
+    void delRuleTariffOptions(TariffOptionRulesDto tariffOptionRulesDto) throws LogicException, DatabaseException;
 
 }

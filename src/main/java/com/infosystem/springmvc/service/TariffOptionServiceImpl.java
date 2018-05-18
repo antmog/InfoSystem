@@ -4,6 +4,7 @@ import com.infosystem.springmvc.dao.TariffOptionDao;
 import com.infosystem.springmvc.dto.AddTariffOptionDto;
 import com.infosystem.springmvc.dto.SessionCart;
 import com.infosystem.springmvc.dto.TariffOptionDto;
+import com.infosystem.springmvc.dto.TariffOptionRulesDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.entity.Contract;
@@ -114,15 +115,16 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     /**
      * Adding rule to option depending on input.
      *
-     * @param tariffOptionId
-     * @param tariffOptionDtoList
      * @throws DatabaseException if option doesn't exist
      * @throws LogicException    if trying to make rule for itself
      */
     @Override
-    public void addRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws DatabaseException, LogicException {
-        Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionSet(tariffOptionDtoList);
-        TariffOption tariffOption = findById(tariffOptionId);
+    public void addRuleTariffOptions(TariffOptionRulesDto tariffOptionRulesDto) throws DatabaseException, LogicException {
+        TariffOptionRule rule = TariffOptionRule.valueOf(tariffOptionRulesDto.getRule());
+
+        Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionSet(tariffOptionRulesDto.getTariffOptionDtoList());
+        TariffOption tariffOption = findById(tariffOptionRulesDto.getTariffOptionId());
+
         isWrongRule(tariffOption, optionList);
         if (rule.equals(TariffOptionRule.RELATED)) {
             Set<TariffOption> expectedTariffOptions = new HashSet<>(tariffOption.getRelatedTariffOptions());
@@ -166,15 +168,16 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     /**
      * Deleting rule to option depending on input.
      *
-     * @param tariffOptionId
-     * @param tariffOptionDtoList
      * @throws DatabaseException if option doesn't exist
      * @throws LogicException    if trying to make rule for itself
      */
     @Override
-    public void delRuleTariffOptions(Integer tariffOptionId, List<TariffOptionDto> tariffOptionDtoList, TariffOptionRule rule) throws LogicException, DatabaseException {
-        Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionSet(tariffOptionDtoList);
-        TariffOption tariffOption = findById(tariffOptionId);
+    public void delRuleTariffOptions(TariffOptionRulesDto tariffOptionRulesDto) throws LogicException, DatabaseException {
+        TariffOptionRule rule = TariffOptionRule.valueOf(tariffOptionRulesDto.getRule());
+
+        Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionSet(tariffOptionRulesDto.getTariffOptionDtoList());
+        TariffOption tariffOption = findById(tariffOptionRulesDto.getTariffOptionId());
+
         isWrongRule(tariffOption, optionList);
         if (rule.equals(TariffOptionRule.RELATED)) {
             optionList.forEach(relatedTariffOption -> relatedTariffOption.getIsRelatedFor().remove(tariffOption));

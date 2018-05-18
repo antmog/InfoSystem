@@ -265,9 +265,7 @@ public class AdminDataController {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to add.");
         }
-        //todo
-        tariffOptionService.addRuleTariffOptions(tariffOptionRulesDto.getTariffOptionId(),
-                tariffOptionRulesDto.getTariffOptionDtoList(), TariffOptionRule.valueOf(tariffOptionRulesDto.getRule()));
+        tariffOptionService.addRuleTariffOptions(tariffOptionRulesDto);
         return "Options added.";
     }
 
@@ -285,8 +283,7 @@ public class AdminDataController {
         if (result.hasErrors()) {
             throw new ValidationException("Select options to delete.");
         }
-        tariffOptionService.delRuleTariffOptions(tariffOptionRulesDto.getTariffOptionId(),
-                tariffOptionRulesDto.getTariffOptionDtoList(),TariffOptionRule.valueOf(tariffOptionRulesDto.getRule()));
+        tariffOptionService.delRuleTariffOptions(tariffOptionRulesDto);
         return "Options deleted.";
 
     }
