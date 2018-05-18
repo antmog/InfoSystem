@@ -25,8 +25,9 @@ public class HibernateConfiguration {
     @Bean(initMethod = "migrate")
     Flyway flyway() {
         Flyway flyway = new Flyway();
+        flyway.setValidateOnMigrate(false);
         flyway.setBaselineOnMigrate(true);
-        flyway.setLocations("com.infosystem.springmvc.db.migration");
+        flyway.setLocations("com.infosystem.springmvc.db.migration","classpath:db/migration/");
         flyway.setDataSource(dataSource());
         return flyway;
     }

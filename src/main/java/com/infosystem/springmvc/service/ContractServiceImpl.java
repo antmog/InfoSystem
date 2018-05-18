@@ -155,6 +155,7 @@ public class ContractServiceImpl implements ContractService {
     public void customerAddOptions(AddOptionsDto addOptionsDto) throws DatabaseException, LogicException {
         Contract contract;
         Set<TariffOption> toBeAddedOptionsList;
+        User user = userService.findById(addOptionsDto.getUserId());
         Double amount = 0.0;
         if (sessionCart.getOptions().isEmpty()) {
             throw new LogicException("Cart is empty.");
@@ -171,13 +172,12 @@ public class ContractServiceImpl implements ContractService {
             for (TariffOption tariffOption : toBeAddedOptionsList) {
                 amount += tariffOption.getCostOfAdd();
             }
+            if (user.getBalance() < amount) {
+                throw new LogicException("Not enough funds.");
+            }
             contract.getActiveOptions().addAll(toBeAddedOptionsList);
         }
         sessionCart.getOptions().clear();
-        User user = userService.findById(addOptionsDto.getUserId());
-        if (user.getBalance() < amount) {
-            throw new LogicException("Not enough funds.");
-        }
         user.spendFunds(amount);
         sessionCart.countItems();
     }

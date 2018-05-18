@@ -19,10 +19,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class AddUserDto {
 
-    @Size(min = 6, max = 32)
+    @Size(min = 4, max = 32)
     private String firstName;
 
-    @Size(min = 6, max = 32)
+    @Size(min = 4, max = 32)
     private String lastName;
 
     @Size(min = 6, max = 32)
@@ -43,7 +43,7 @@ public class AddUserDto {
     @Size(min = 6, max = 32)
     private String login;
 
-    @Size(min = 6, max = 32)
+    @Size(min = 4, max = 32)
     private String password;
 
     @Pattern(regexp="^(ADMIN|CUSTOMER)$",message="invalid code")

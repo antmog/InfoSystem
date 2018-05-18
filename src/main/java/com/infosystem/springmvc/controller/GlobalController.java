@@ -26,7 +26,7 @@ public class GlobalController extends ControllerTemplate {
         if (isCurrentAuthenticationAnonymous()) {
             return "login";
         } else {
-            return "redirect:/index";
+            return "redirect:/";
         }
     }
 

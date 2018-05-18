@@ -37,6 +37,8 @@ public class UserDto {
 
     private Status status;
 
+    private Double balance;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

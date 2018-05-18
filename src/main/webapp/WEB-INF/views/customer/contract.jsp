@@ -49,6 +49,8 @@
                             </tr>
                             </tbody>
                         </table>
+                        <p>Wallet balance: ${contractPageDto.contract.user.balance}</p>
+                        <a class="btn btn-info btn-sm" href="/customerPanel/addFunds" role="button">Add funds to wallet</a>
                     </div>
                     <c:choose>
                         <c:when test="${contractPageDto.contract.status == 'INACTIVE'}">

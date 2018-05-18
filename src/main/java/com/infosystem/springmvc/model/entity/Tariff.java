@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "TARIFF")
+@Table(name = "TARIFFS")
 public class Tariff implements Serializable {
 
     @Id

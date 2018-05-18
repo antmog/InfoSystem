@@ -103,14 +103,14 @@
     }
 
     function contractPanel() {
-        $("#contractCurrentOptions").on("click", "tr.move-row", function () {
+        $("#contractCurrentOptions").on("click", "tbody tr", function () {
             if ($(this).hasClass('add-tariff-table-selected')) {
                 $(this).removeClass('add-tariff-table-selected');
             } else {
                 $(this).addClass('add-tariff-table-selected');
             }
         });
-        $("#contractAvailableOptions").on("click", "tr.move-row", function () {
+        $("#contractAvailableOptions").on("click", "tbody tr", function () {
             if ($(this).hasClass('add-tariff-table-selected')) {
                 $(this).removeClass('add-tariff-table-selected');
             } else {
@@ -140,6 +140,9 @@
             }).done(function (msg) {
                 alert(msg);
                 $('#tariffTable').find('tr:eq(1)').find('td:eq(1)').html(newTariffId);
+                var available = $("#contractAvailableOptions tbody tr").remove();
+                var newAvailable = $("#addContractAvailableOptions tbody tr").clone();
+                $("#contractAvailableOptions tbody").append(newAvailable);
             }).fail(function (jqXHR, textStatus) {
                 alert(jqXHR.responseText);
             });
