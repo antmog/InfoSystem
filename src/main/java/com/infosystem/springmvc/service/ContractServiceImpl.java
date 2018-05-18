@@ -121,12 +121,17 @@ public class ContractServiceImpl implements ContractService {
      */
     public void addOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         Contract contract = findById(editContractDto.getContractId());
+        User user = contract.getUser();
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
 
         optionsRulesChecker.checkAddToContract(editContractDto.getContractId(), toBeAddedOptionsList);
-
-        // todo get money for added options
+        Amount amount = new Amount();
         contract.getActiveOptions().addAll(toBeAddedOptionsList);
+        toBeAddedOptionsList.forEach(option->amount.add(option.getCostOfAdd()));
+        if (user.getBalance() < amount.getAmount()) {
+            throw new LogicException("Not enough funds.");
+        }
+        user.spendFunds(amount.getAmount());
         contract.setPrice(contract.countPrice());
     }
 
