@@ -1,12 +1,13 @@
 package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.dto.TariffOptionDto;
+import com.infosystem.springmvc.dto.TariffOptionDtoShort;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
 import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
@@ -52,7 +53,7 @@ public class GlobalDataController {
      */
     @RequestMapping(value = "/tariffOptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    Set<TariffOption> tariffOptions(@RequestBody @NotNull String tariffId, BindingResult result) throws DatabaseException, ValidationException {
+    Set<TariffOptionDtoShort> tariffOptions(@RequestBody @NotNull String tariffId, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
             throw new ValidationException("Wrong tariff ID!");
         }

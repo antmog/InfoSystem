@@ -111,6 +111,12 @@ public class CustomModelMapper {
         return tariffOptionDtoList;
     }
 
+    public Set<TariffOptionDtoShort> mapToTariffOptionDtoShortSet(Set<TariffOption> tariffOptionList) {
+        Set<TariffOptionDtoShort> tariffOptionDtoList = new HashSet<>();
+        tariffOptionList.forEach(tariffOption -> tariffOptionDtoList.add(modelMapper.map(tariffOption, TariffOptionDtoShort.class)));
+        return tariffOptionDtoList;
+    }
+
     public TariffOptionDto mapToTariffOptionDto(TariffOption tariffOption) {
         return modelMapper.map(tariffOption, TariffOptionDto.class);
     }

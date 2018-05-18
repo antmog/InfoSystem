@@ -1,9 +1,7 @@
 package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.TariffDao;
-import com.infosystem.springmvc.dto.AddTariffDto;
-import com.infosystem.springmvc.dto.EditTariffDto;
-import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.entity.Contract;
@@ -141,8 +139,8 @@ public class TariffServiceImpl implements TariffService {
     }
 
     @Override
-    public Set<TariffOption> getAvailableOptionsForTariff(int tariffId) throws DatabaseException {
-        return findById(tariffId).getAvailableOptions();
+    public Set<TariffOptionDtoShort> getAvailableOptionsForTariff(int tariffId) throws DatabaseException {
+        return modelMapperWrapper.mapToTariffOptionDtoShortSet(findById(tariffId).getAvailableOptions());
     }
 
     /**

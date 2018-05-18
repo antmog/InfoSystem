@@ -54,7 +54,8 @@
             }).done(function (msg) {
                 updateUserTable(msg);
             }).fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
+                alert(jqXHR.responseText);
+
             });
         }
 
@@ -96,7 +97,8 @@
             }).done(function (msg) {
                 alert(msg);
             }).fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
+                alert(jqXHR.responseText);
+
             });
         });
         var newStatus;
@@ -164,7 +166,8 @@
                         alert(msg);
                         oldValue.html(value);
                     }).fail(function (jqXHR, textStatus) {
-                        alert("Request failed: " + textStatus);
+                        alert(jqXHR.responseText);
+
                     });
                 }
                 $(this).removeClass('editing').addClass('editable');
@@ -196,7 +199,7 @@
             }).done(function (msg) {
                 document.location.href = "/adminPanel"
             }).fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
+                alert(jqXHR.responseText);
             });
         });
         $("#contractCurrentOptions").on("click", "tbody tr", function () {
@@ -290,8 +293,6 @@
         });
 
         $('#contractDelOption').on('click', function () {
-            // OPTIONS RULES
-
             var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").clone();
             var table = $('#parseTable');
             for (var i = 0; i < tr.length; i++) {
@@ -340,7 +341,7 @@
             alert(msg);
             location.reload();
         }).fail(function (jqXHR, textStatus) {
-            alert("Request failed: " + jqXHR.responseText);
+            alert(jqXHR.responseText);
         });
     }
 
@@ -485,7 +486,7 @@
                     });
                     $("#addContractAvailableOptions").append(tbl_body);
                 }).fail(function (jqXHR, textStatus) {
-                    alert("Request failed: " + textStatus);
+                    alert(jqXHR.responseText);
                 });
             });
 
@@ -528,7 +529,8 @@
             }).done(function (msg) {
                 alert(msg);
             }).fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
+                alert(jqXHR.responseText);
+
             });
         });
 
@@ -820,7 +822,8 @@
             });
             $("#contractAvailableOptions").append(tbl_body);
         }).fail(function (jqXHR, textStatus) {
-            alert("Request failed: " + textStatus);
+            alert(jqXHR.responseText);
+
         });
     }
 

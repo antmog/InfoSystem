@@ -1,12 +1,9 @@
 package com.infosystem.springmvc.service;
 
-import com.infosystem.springmvc.dto.AddTariffDto;
-import com.infosystem.springmvc.dto.EditTariffDto;
-import com.infosystem.springmvc.dto.SetNewStatusDto;
+import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.entity.Tariff;
-import com.infosystem.springmvc.model.entity.TariffOption;
 
 import java.util.List;
 import java.util.Set;
@@ -37,5 +34,5 @@ public interface TariffService {
 
     void delOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException;
 
-    Set<TariffOption> getAvailableOptionsForTariff(int tariffId) throws DatabaseException;
+    Set<TariffOptionDtoShort> getAvailableOptionsForTariff(int tariffId) throws DatabaseException;
 }
