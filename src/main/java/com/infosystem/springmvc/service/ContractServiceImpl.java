@@ -4,6 +4,7 @@ import com.infosystem.springmvc.dao.ContractDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.model.Amount;
 import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Status;
@@ -122,7 +123,7 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = findById(editContractDto.getContractId());
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
 
-        optionsRulesChecker.checkAddToContract(editContractDto.getContractId(),toBeAddedOptionsList);
+        optionsRulesChecker.checkAddToContract(editContractDto.getContractId(), toBeAddedOptionsList);
 
         // todo get money for added options
         contract.getActiveOptions().addAll(toBeAddedOptionsList);
@@ -150,7 +151,7 @@ public class ContractServiceImpl implements ContractService {
         Contract contract;
         Set<TariffOption> toBeAddedOptionsList;
         Double amount = 0.0;
-        if(sessionCart.getOptions().isEmpty()){
+        if (sessionCart.getOptions().isEmpty()) {
             throw new LogicException("Cart is empty.");
         }
         for (Map.Entry<Integer, Set<TariffOptionDto>> entry : sessionCart.getOptions().entrySet()) {
@@ -160,16 +161,16 @@ public class ContractServiceImpl implements ContractService {
             }
             toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(entry.getValue());
             optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
-            optionsRulesChecker.checkAddToContract(contract.getId(),toBeAddedOptionsList);
+            optionsRulesChecker.checkAddToContract(contract.getId(), toBeAddedOptionsList);
             optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptionsList);
-            for(TariffOption tariffOption : toBeAddedOptionsList){
-                amount+=tariffOption.getCostOfAdd();
+            for (TariffOption tariffOption : toBeAddedOptionsList) {
+                amount += tariffOption.getCostOfAdd();
             }
             contract.getActiveOptions().addAll(toBeAddedOptionsList);
         }
         sessionCart.getOptions().clear();
         User user = userService.findById(addOptionsDto.getUserId());
-        if(user.getBalance()<amount){
+        if (user.getBalance() < amount) {
             throw new LogicException("Not enough funds.");
         }
         user.spendFunds(amount);
@@ -187,7 +188,7 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = findById(editContractDto.getContractId());
         Set<TariffOption> toBeDeletedOptionsList = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
 
-        optionsRulesChecker.checkDelFromContract(editContractDto.getContractId(),toBeDeletedOptionsList);
+        optionsRulesChecker.checkDelFromContract(editContractDto.getContractId(), toBeDeletedOptionsList);
 
         contract.getActiveOptions().removeAll(toBeDeletedOptionsList);
         contract.setPrice(contract.countPrice());
@@ -213,7 +214,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void customerDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         if (!findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
-           throw new LogicException("Sorry, contract is not active, refresh page.");
+            throw new LogicException("Sorry, contract is not active, refresh page.");
         }
         delOptions(editContractDto);
     }
@@ -273,21 +274,24 @@ public class ContractServiceImpl implements ContractService {
      * @throws LogicException if number already exists
      */
     public void newContract(AddContractDto addContractDto) throws LogicException, DatabaseException {
+        Amount amount = new Amount();
         if (doesPhoneNumberExist(addContractDto.getContractDto().getPhoneNumber())) {
             throw new LogicException("Contract with that phone number already exists.");
         }
         Contract contract = modelMapperWrapper.mapToContract(addContractDto);
+        User user = contract.getUser();
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addContractDto.getTariffOptionDtoList());
-        contract.setActiveOptions(new HashSet<TariffOption>());
+        contract.setActiveOptions(new HashSet<>());
         if (!addContractDto.getTariffOptionDtoList().isEmpty()) {
-            optionsRulesChecker.checkAddToContract(contract.getId(),toBeAddedOptionsList);
-//            optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
-//            optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptionsList);
-//            optionsRulesChecker.checkAddExcludingAdmin(toBeAddedOptionsList);
+            optionsRulesChecker.checkAddToContract(contract.getId(), toBeAddedOptionsList);
             contract.setActiveOptions(toBeAddedOptionsList);
         }
+        contract.getActiveOptions().forEach(option -> amount.add(option.getCostOfAdd()));
 
-        //todo get money for added options
+        if (user.getBalance() < amount.getAmount()) {
+            throw new LogicException("Not enough funds.");
+        }
+        user.spendFunds(amount.getAmount());
         contract.setPrice(contract.countPrice());
         dao.save(contract);
     }

@@ -22,6 +22,7 @@
         <script src="/static/js/customer.js" defer></script>
     </sec:authorize>
 </sec:authorize>
+<script src="/static/vendors/bootstrap-4.1.0/js/bootstrap.min.js" defer></script>
 <script src="/static/vendors/bootstrap-notify/bootstrap-notify.min.js" defer></script>
 </body>
 </html>

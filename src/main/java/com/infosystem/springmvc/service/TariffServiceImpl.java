@@ -120,10 +120,7 @@ public class TariffServiceImpl implements TariffService {
     public void addOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException {
         Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> toBeAddedOptions = modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList());
-
         optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptions, tariff.getAvailableOptions());
-
-        //todo + get money for added options
         tariff.getAvailableOptions().addAll(modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList()));
     }
 
