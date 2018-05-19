@@ -31,20 +31,17 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.infosystem.springmvc")
 public class AppConfig implements WebMvcConfigurer {
 
-//    @Bean
-//    HandlerExceptionResolver customExceptionResolver () {
-//        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
-//        Properties properties = new Properties();
-//        //mapping spring internal error NoHandlerFoundException to a view name.
-//        properties.setProperty(NoHandlerFoundException.class.getName(), "404");
-//        simpleMappingExceptionResolver.setExceptionMappings(properties);
-//        //uncomment following line if we want to send code other than default 200
-//        simpleMappingExceptionResolver.addStatusCode("404", HttpStatus.NOT_FOUND.value());
-//
-//        //This resolver will be processed before default ones
-//        simpleMappingExceptionResolver.setOrder(Ordered.HIGHEST_PRECEDENCE);
-//        return simpleMappingExceptionResolver;
-//    }
+    @Bean
+    HandlerExceptionResolver customExceptionResolver () {
+        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
+        Properties properties = new Properties();
+        //mapping spring internal error NoHandlerFoundException to a view name.
+        properties.setProperty(NoHandlerFoundException.class.getName(), "404");
+        simpleMappingExceptionResolver.setExceptionMappings(properties);
+        //This resolver will be processed before default ones
+        simpleMappingExceptionResolver.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return simpleMappingExceptionResolver;
+    }
 
     /**
      * Configure ViewResolvers to deliver preferred views.

@@ -13,17 +13,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class ExceptionDataController {
 
-    /**
-     * Custom 404.
-     * @return message
-     */
-    @ExceptionHandler(NoHandlerFoundException.class)
-    @ResponseStatus(value = HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    public
-    @ResponseBody String noSuchPage() {
-        System.out.println("WEQEQWEWEWEWEQWE");
-        return "404";
-    }
     //todo cheat catch exception (error)
 
     /**
