@@ -149,6 +149,10 @@
                     var header = $("meta[name='_csrf_header']").attr("content");
                     var editing = $(".userEditableTable tr.editing");
                     var value = editing.find("input").val();
+                    var token = $("meta[name='_csrf']").attr("content");
+                    var header = $("meta[name='_csrf_header']").attr("content");
+                    var editing = $(".userEditableTable tr.editing");
+                    var value = editing.find("input").val();
                     $.ajax({
                         beforeSend: function (xhr) {
                             xhr.setRequestHeader(header, token);
@@ -158,19 +162,17 @@
                             'Accept': 'text/html; charset=utf-8'
                         },
                         type: "POST",
-                        url: "/user/editUser",
+                        url: "/user/editUser" + editing.find("td:first").html(),
                         // The key needs to match your method's input parameter (case-sensitive).
                         data: JSON.stringify({
-                            dataInstance: editing.find("td:first").html(),
-                            value: value,
-                            userId: user_id
+                            userId: user_id,
+                            value: value
                         })
                     }).done(function (msg) {
                         alert(msg);
                         oldValue.html(value);
                     }).fail(function (jqXHR, textStatus) {
                         alert(jqXHR.responseText);
-
                     });
                 }
                 $(this).removeClass('editing').addClass('editable');

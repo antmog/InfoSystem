@@ -8,13 +8,15 @@ public interface TariffDao {
 
     Tariff findById(int id);
 
-    Tariff findByName(String name);
-
     void save(Tariff tariff);
 
     List<Tariff> findAllTariffs();
 
+    void deleteById(int id);
+
+    Tariff findByName(String name);
+
     List<Tariff> findAllActiveTariffs();
 
-    void deleteById(int id);
+
 }

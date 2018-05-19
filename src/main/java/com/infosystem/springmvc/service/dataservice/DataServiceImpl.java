@@ -1,4 +1,4 @@
-package com.infosystem.springmvc.service.DataService;
+package com.infosystem.springmvc.service.dataservice;
 
 import com.infosystem.springmvc.dto.AdminPanelDto;
 import com.infosystem.springmvc.dto.ContractPageDto;
@@ -14,29 +14,31 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service("dataService")
 @Transactional
 public class DataServiceImpl implements DataService {
 
+    private final TariffOptionService tariffOptionService;
+    private final TariffService tariffService;
+    private final UserService userService;
+    private final ContractService contractService;
+    private final CustomModelMapper modelMapper;
+
     @Autowired
-    TariffOptionService tariffOptionService;
-    @Autowired
-    TariffService tariffService;
-    @Autowired
-    UserService userService;
-    @Autowired
-    ContractService contractService;
-    @Autowired
-    CustomModelMapper modelMapper;
+    public DataServiceImpl(TariffOptionService tariffOptionService, TariffService tariffService,
+                           UserService userService, ContractService contractService, CustomModelMapper modelMapper) {
+        this.tariffOptionService = tariffOptionService;
+        this.tariffService = tariffService;
+        this.userService = userService;
+        this.contractService = contractService;
+        this.modelMapper = modelMapper;
+    }
 
     /**
-     *
-     * @return
+     * @return AdminPanelDto
      */
     @Override
     public AdminPanelDto getAdminPanelData() {
@@ -58,15 +60,15 @@ public class DataServiceImpl implements DataService {
     }
 
     /**
-     * @param optionId
-     * @return
-     * @throws DatabaseException
+     * @param optionId optionId
+     * @return TariffOptionPageDto
+     * @throws DatabaseException if no such option
      */
     @Override
     public TariffOptionPageDto getTariffOptionPageData(Integer optionId) throws DatabaseException {
         Set<TariffOption> options = new HashSet<>(tariffOptionService.findAllTariffOptions());
         TariffOption option = tariffOptionService.findById(optionId);
         options.remove(option);
-        return new TariffOptionPageDto(modelMapper.mapToTariffOptionDto(option),modelMapper.mapToTariffOptionDtoSet(options));
+        return new TariffOptionPageDto(modelMapper.mapToTariffOptionDto(option), modelMapper.mapToTariffOptionDtoSet(options));
     }
 }

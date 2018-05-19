@@ -1,14 +1,16 @@
 package com.infosystem.springmvc.model.entity;
 
 import com.infosystem.springmvc.model.enums.Status;
-import lombok.Data;
-
+import lombok.Getter;
+import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "CONTRACTS")
 public class Contract implements Serializable {
@@ -49,10 +51,10 @@ public class Contract implements Serializable {
         return price;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Contract [id=" + id + ", user=" + user + ", phoneNumber=" + phoneNumber + ", tariff=" +  ", status=" + status + "]";
-//    }
+    @Override
+    public String toString() {
+        return "Contract [id=" + id + ", user=" + user + ", phoneNumber=" + phoneNumber + ", tariff=" +  ", status=" + status + "]";
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -66,5 +68,10 @@ public class Contract implements Serializable {
         if (this.id == null) {
             return other.id == null;
         } else return id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, phoneNumber, price, status, user, tariff, activeOptions);
     }
 }

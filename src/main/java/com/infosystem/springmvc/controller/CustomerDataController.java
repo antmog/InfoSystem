@@ -23,29 +23,23 @@ import javax.validation.Valid;
 @RequestMapping("/")
 public class CustomerDataController extends ControllerTemplate {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    private final ContractService contractService;
+
+    private final SessionCart sessionCart;
 
     @Autowired
-    ContractService contractService;
-
-    @Autowired
-    TariffOptionService tariffOptionService;
-
-    @Autowired
-    MessageSource messageSource;
-
-    @Autowired
-    TariffService tariffService;
-
-    @Autowired
-    SessionCart sessionCart;
-
+    public CustomerDataController(UserService userService, ContractService contractService, SessionCart sessionCart) {
+        this.userService = userService;
+        this.contractService = contractService;
+        this.sessionCart = sessionCart;
+    }
 
     /**
      * Changes tariff of current contract to selected.
      *
-     * @param switchTariffDto
+     * @param switchTariffDto switchTariffDto
      * @param result          validation result
      * @return message
      * @throws ValidationException if tariff is not selected
@@ -63,7 +57,7 @@ public class CustomerDataController extends ControllerTemplate {
     /**
      * Adding selected options to cart.
      *
-     * @param editContractDto
+     * @param editContractDto editContractDto
      * @param result          validation result
      * @return message
      * @throws ValidationException if no options selected
@@ -81,7 +75,7 @@ public class CustomerDataController extends ControllerTemplate {
     /**
      * Deleting selected options from the contract.
      *
-     * @param editContractDto
+     * @param editContractDto editContractDto
      * @param result          validation result
      * @return message
      * @throws ValidationException if no options selected
@@ -99,7 +93,7 @@ public class CustomerDataController extends ControllerTemplate {
     /**
      * Deleting selected options from cart.
      *
-     * @param deleteFromCartDto
+     * @param deleteFromCartDto deleteFromCartDto
      * @param result            validation result
      * @return message
      * @throws ValidationException if no options selected
@@ -121,9 +115,9 @@ public class CustomerDataController extends ControllerTemplate {
      * @throws LogicException    if no options selected
      * @throws DatabaseException if contract doesn't exist
      */
-    @RequestMapping(value = "/customerPanel/addOptions",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+    @RequestMapping(value = "/customerPanel/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String addOptions(@Valid @RequestBody AddOptionsDto addOptionsDto, BindingResult result) throws DatabaseException, LogicException, ValidationException {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ValidationException("Wrong input.");
         }
         contractService.customerAddOptions(addOptionsDto);
@@ -155,7 +149,7 @@ public class CustomerDataController extends ControllerTemplate {
      */
     @RequestMapping(value = "/customerPanel/getBalance", method = RequestMethod.POST)
     public String getBalance(@RequestBody @Valid GetBalanceDto getBalanceDto, BindingResult result) throws DatabaseException, ValidationException {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ValidationException("Wrong input!");
         }
         return userService.getBalance(getBalanceDto);
@@ -165,11 +159,9 @@ public class CustomerDataController extends ControllerTemplate {
      * Adding funds to user.
      *
      * @return message
-     * @throws ValidationException if amount value is null
-     * @throws DatabaseException   if user doesn't exist
      */
     @RequestMapping(value = "/customerPanel/getCartItemsCount", method = RequestMethod.GET)
-    public String getCartItemsCount(){
+    public String getCartItemsCount() {
         return String.valueOf(sessionCart.getCount());
     }
 }

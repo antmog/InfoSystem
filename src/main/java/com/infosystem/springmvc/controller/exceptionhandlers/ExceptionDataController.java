@@ -1,4 +1,4 @@
-package com.infosystem.springmvc.controller;
+package com.infosystem.springmvc.controller.exceptionhandlers;
 
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
@@ -6,13 +6,24 @@ import com.infosystem.springmvc.exception.MyBusinessException;
 import com.infosystem.springmvc.exception.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import sun.rmi.runtime.Log;
+import org.springframework.web.servlet.NoHandlerFoundException;
+
 
 
 @RestControllerAdvice
-public class ExceptionController {
+public class ExceptionDataController {
 
-
+    /**
+     * Custom 404.
+     * @return message
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(value = HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    public
+    @ResponseBody String noSuchPage() {
+        System.out.println("WEQEQWEWEWEWEQWE");
+        return "404";
+    }
     //todo cheat catch exception (error)
 
     /**
@@ -38,5 +49,7 @@ public class ExceptionController {
     String validationException(ValidationException e) {
         return e.getMessage();
     }
+
+
 
 }

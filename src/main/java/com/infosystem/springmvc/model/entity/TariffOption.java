@@ -1,19 +1,15 @@
 package com.infosystem.springmvc.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.infosystem.springmvc.model.enums.TariffOptionRule;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "TARIFF_OPTIONS")
 public class TariffOption implements Serializable {
@@ -55,29 +51,6 @@ public class TariffOption implements Serializable {
         return "TariffOption [id=" + id + ", name=" + name + ", price=" + price
                 + ", costOfAdd=" + costOfAdd + "]";
     }
-
-//
-//    @Override
-//    public int hashCode() {
-//        final int prime = 31;
-//        int result = 1;
-//        result = prime * result + ((id == null) ? 0 : id.hashCode());
-//        return result;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj)
-//            return true;
-//        if (obj == null)
-//            return false;
-//        if (!(obj instanceof TariffOption))
-//            return false;
-//        TariffOption other = (TariffOption) obj;
-//        if (this.id == null) {
-//            return other.id == null;
-//        } else return id.equals(other.id);
-//    }
 
     @Override
     public boolean equals(Object o) {

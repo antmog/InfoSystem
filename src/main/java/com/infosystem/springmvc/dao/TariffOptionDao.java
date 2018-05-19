@@ -6,15 +6,16 @@ import java.util.List;
 import java.util.Set;
 
 public interface TariffOptionDao {
-    TariffOption findById(int id);
 
-    TariffOption findByName(String name);
+    TariffOption findById(int id);
 
     void save(TariffOption tariffOption);
 
+    List<TariffOption> findAllTariffOptions();
+
     void deleteById(int id);
 
-    List<TariffOption> findAllTariffOptions();
+    TariffOption findByName(String name);
 
     Set<TariffOption> selectListByIdList(List<Integer> optionIdList);
 }

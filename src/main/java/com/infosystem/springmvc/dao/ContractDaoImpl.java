@@ -30,10 +30,6 @@ public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements C
         persist(contract);
     }
 
-    /**
-     * @param id
-     * @throws DatabaseException if entity doesnt exist
-     */
     public void deleteById(int id) {
         List contracts = getSession()
                 .createQuery("SELECT c FROM Contract c WHERE c.id LIKE :Id")
@@ -45,7 +41,7 @@ public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements C
 
     /**
      * Searching for contract in DB with selected phoneNumber.
-     * @param phoneNumber
+     * @param phoneNumber phoneNumber
      * @return contract with phoneNumber or null if there is no contract with that number.
      */
     @Override

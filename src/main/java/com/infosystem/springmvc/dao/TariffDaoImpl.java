@@ -53,10 +53,6 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
         persist(tariff);
     }
 
-    /**
-     * @param id
-     * @throws DatabaseException if entity doesnt exist
-     */
     public void deleteById(int id){
         List tariffs = getSession()
                 .createQuery("SELECT t FROM Tariff t WHERE t.id LIKE :Id")

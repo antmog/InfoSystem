@@ -12,8 +12,6 @@ import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,20 +20,19 @@ import java.util.stream.Collectors;
 @Transactional
 public class TariffServiceImpl implements TariffService {
 
-    @Autowired
-    private TariffDao dao;
+    private final TariffDao dao;
+    private final ContractService contractService;
+    private final CustomModelMapper modelMapperWrapper;
+    private final OptionsRulesChecker optionsRulesChecker;
 
     @Autowired
-    private TariffOptionService tariffOptionService;
-
-    @Autowired
-    private ContractService contractService;
-
-    @Autowired
-    CustomModelMapper modelMapperWrapper;
-
-    @Autowired
-    OptionsRulesChecker optionsRulesChecker;
+    public TariffServiceImpl(TariffDao dao, ContractService contractService, CustomModelMapper modelMapperWrapper,
+                             OptionsRulesChecker optionsRulesChecker) {
+        this.dao = dao;
+        this.contractService = contractService;
+        this.modelMapperWrapper = modelMapperWrapper;
+        this.optionsRulesChecker = optionsRulesChecker;
+    }
 
     public Tariff findById(int id) throws DatabaseException {
         Tariff tariff = dao.findById(id);
@@ -60,7 +57,6 @@ public class TariffServiceImpl implements TariffService {
         }
     }
 
-
     public List<Tariff> findAllTariffs() {
         return dao.findAllTariffs();
     }
@@ -76,7 +72,7 @@ public class TariffServiceImpl implements TariffService {
     /**
      * Creates new tariff with data from DTO
      *
-     * @param addTariffDto
+     * @param addTariffDto addTariffDto
      */
     public void addTariff(AddTariffDto addTariffDto) throws LogicException {
         if (!isNameUnique(addTariffDto.getTariffDto().getName())) {
@@ -111,7 +107,7 @@ public class TariffServiceImpl implements TariffService {
     /**
      * Add selected options to selected tariff.
      *
-     * @param editTariffDto
+     * @param editTariffDto editTariffDto
      * @throws DatabaseException if tariff doesn't exist
      */
     @Override
@@ -125,7 +121,7 @@ public class TariffServiceImpl implements TariffService {
     /**
      * Delete selected options from selected tariff.
      *
-     * @param editTariffDto
+     * @param editTariffDto editTariffDto
      * @throws DatabaseException if tariff doesn't exist
      */
     @Override
@@ -146,7 +142,7 @@ public class TariffServiceImpl implements TariffService {
     /**
      * Set status of selected tariff to selected status.
      *
-     * @param setNewStatusDto
+     * @param  setNewStatusDto setNewStatusDto
      * @throws DatabaseException if tariff doesn't exist
      */
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {

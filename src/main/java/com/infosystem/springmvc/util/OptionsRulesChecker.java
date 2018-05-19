@@ -9,7 +9,6 @@ import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,12 +18,16 @@ import java.util.stream.Stream;
 @Component
 public class OptionsRulesChecker {
 
+    private final CustomModelMapper modelMapperWrapper;
+    private final ContractService contractService;
+    private final SessionCart sessionCart;
+
     @Autowired
-    CustomModelMapper modelMapperWrapper;
-    @Autowired
-    ContractService contractService;
-    @Autowired
-    SessionCart sessionCart;
+    public OptionsRulesChecker(CustomModelMapper modelMapperWrapper, ContractService contractService, SessionCart sessionCart) {
+        this.modelMapperWrapper = modelMapperWrapper;
+        this.contractService = contractService;
+        this.sessionCart = sessionCart;
+    }
 
     private Set<TariffOption> expectedOptionsListAfterAdd(Set<TariffOption> currentOptions, Set<TariffOption> toBeAddedOptionsList) {
         return Stream.of(currentOptions, toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());
@@ -33,7 +36,7 @@ public class OptionsRulesChecker {
     private Set<TariffOption> expectedOptionsListAfterAdd(Set<TariffOption> currentOptions, Set<TariffOption> toBeAddedOptionsList, Integer contractId) {
         Set<TariffOption> cartItems = new HashSet<>();
         //&&!sessionCart.getOptions().get(contractId).isEmpty()
-        if(sessionCart.getOptions().containsKey(contractId)){
+        if (sessionCart.getOptions().containsKey(contractId)) {
             cartItems = modelMapperWrapper.mapToTariffOptionSet(sessionCart.getOptions().get(contractId));
         }
         return Stream.of(cartItems, currentOptions, toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());
@@ -91,12 +94,12 @@ public class OptionsRulesChecker {
 
     public void checkAddRelatedAdmin(Set<TariffOption> toBeAddedOptionsList, Set<TariffOption> currentOptions) throws LogicException {
         Set<TariffOption> expectedOptionsList = expectedOptionsListAfterAdd(currentOptions, toBeAddedOptionsList);
-        checkAddRelated(expectedOptionsList,toBeAddedOptionsList);
+        checkAddRelated(expectedOptionsList, toBeAddedOptionsList);
     }
 
     public void checkAddRelatedCustomer(Set<TariffOption> toBeAddedOptionsList, Set<TariffOption> currentOptions, Integer contractId) throws LogicException {
-        Set<TariffOption> expectedOptionsList = expectedOptionsListAfterAdd(currentOptions, toBeAddedOptionsList,contractId);
-        checkAddRelated(expectedOptionsList,toBeAddedOptionsList);
+        Set<TariffOption> expectedOptionsList = expectedOptionsListAfterAdd(currentOptions, toBeAddedOptionsList, contractId);
+        checkAddRelated(expectedOptionsList, toBeAddedOptionsList);
 
     }
 
@@ -145,8 +148,8 @@ public class OptionsRulesChecker {
         Set<TariffOption> contractActiveOptions = contract.getActiveOptions();
 
         checkIfAllowedByTariff(toBeAddedOptions, contract.getTariff());
-        checkAddExcludingCustomer(toBeAddedOptions, contractActiveOptions,contractId);
-        checkAddRelatedCustomer(toBeAddedOptions, contractActiveOptions,contractId);
+        checkAddExcludingCustomer(toBeAddedOptions, contractActiveOptions, contractId);
+        checkAddRelatedCustomer(toBeAddedOptions, contractActiveOptions, contractId);
     }
 
     public void checkDelFromContract(Integer contractId, Set<TariffOption> tariffOptions) throws DatabaseException, LogicException {
@@ -159,7 +162,7 @@ public class OptionsRulesChecker {
     public void checkIfContractAlreadyHave(Contract contract, Set<TariffOption> toBeAddedOptionsList) throws LogicException {
         Set<TariffOption> currentOptions = new HashSet<>(contract.getActiveOptions());
         currentOptions.retainAll(toBeAddedOptionsList);
-        if(!currentOptions.isEmpty()){
+        if (!currentOptions.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             for (TariffOption tariffOption : currentOptions) {
                 sb.append("Contract ").append(contract.getId()).append(" already has ").append(tariffOption.getName()).append(" option.\n");

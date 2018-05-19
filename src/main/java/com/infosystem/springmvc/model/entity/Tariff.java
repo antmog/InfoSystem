@@ -1,15 +1,16 @@
 package com.infosystem.springmvc.model.entity;
 
 import com.infosystem.springmvc.model.enums.Status;
-import lombok.Data;
-
+import lombok.Getter;
+import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "TARIFFS")
 public class Tariff implements Serializable {
@@ -19,7 +20,7 @@ public class Tariff implements Serializable {
     @Column(name = "TARIFF_ID")
     private Integer id;
 
-    @Column(name="NAME", unique=true, nullable=false)
+    @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -30,7 +31,7 @@ public class Tariff implements Serializable {
      * per month
      * Allows to use the tariff -> allows to use the options (options have its own cost/price)
      */
-    @Column(name="PRICE", nullable=false)
+    @Column(name = "PRICE", nullable = false)
     private Double price;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -39,10 +40,10 @@ public class Tariff implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "OPTION_ID", nullable = false, referencedColumnName = "OPTION_ID")})
     private Set<TariffOption> availableOptions = new HashSet<TariffOption>();
 
-    //    @Override
-//    public String toString() {
-//        return "Tariff [id=" + id + ", name=" + name + ", price=" + price +"]";
-//    }
+    @Override
+    public String toString() {
+        return "Tariff [id=" + id + ", name=" + name + ", price=" + price + "]";
+    }
 
     @Override
     public int hashCode() {
@@ -62,6 +63,4 @@ public class Tariff implements Serializable {
             return other.id == null;
         } else return id.equals(other.id);
     }
-
-
 }

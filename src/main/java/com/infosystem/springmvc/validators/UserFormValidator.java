@@ -9,8 +9,13 @@ import org.springframework.validation.Validator;
 
 @Component
 public class UserFormValidator implements Validator {
+
+    private final UserService userService;
+
     @Autowired
-    UserService userService;
+    public UserFormValidator(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -18,10 +23,10 @@ public class UserFormValidator implements Validator {
     }
 
     @Override
-    public void validate(Object o, Errors errors)  {
+    public void validate(Object o, Errors errors) {
         AddUserDto addUserDto = (AddUserDto) o;
 
-        if(userService.doesLoginExist(addUserDto.getLogin())){
+        if (userService.doesLoginExist(addUserDto.getLogin())) {
             errors.rejectValue("login", "Unique.addUserDto.login");
         }
         if (userService.doesEmailExist(addUserDto.getMail())) {

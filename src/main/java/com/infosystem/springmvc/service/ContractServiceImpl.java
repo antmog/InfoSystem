@@ -13,44 +13,34 @@ import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.rmi.runtime.Log;
 
-import javax.xml.crypto.Data;
+
 import java.util.*;
 
 @Service("contractService")
 @Transactional
 public class ContractServiceImpl implements ContractService {
-    @Autowired
-    ContractDao dao;
-    @Autowired
-    TariffOptionService tariffOptionService;
-    @Autowired
-    TariffService tariffService;
-    @Autowired
-    UserService userService;
-    @Autowired
-    CustomModelMapper modelMapperWrapper;
-    @Autowired
-    OptionsRulesChecker optionsRulesChecker;
-    @Autowired
-    SessionCart sessionCart;
 
+    private final ContractDao dao;
+    private final TariffService tariffService;
+    private final UserService userService;
+    private final CustomModelMapper modelMapperWrapper;
+    private final OptionsRulesChecker optionsRulesChecker;
+    private final SessionCart sessionCart;
 
-//    @Autowired
-//    public ContractServiceImpl(ContractDao dao, TariffOptionService tariffOptionService, TariffService tariffService,
-//                               UserService userService, CustomModelMapper modelMapperWrapper) {
-//        this.dao = dao;
-//        this.tariffOptionService = tariffOptionService;
-//        this.tariffService = tariffService;
-//        this.userService = userService;
-//        this.modelMapperWrapper = modelMapperWrapper;
-//    }
+    @Autowired
+    public ContractServiceImpl(ContractDao dao, TariffService tariffService, UserService userService,
+                               CustomModelMapper modelMapperWrapper, OptionsRulesChecker optionsRulesChecker,
+                               SessionCart sessionCart) {
+        this.dao = dao;
+        this.tariffService = tariffService;
+        this.userService = userService;
+        this.modelMapperWrapper = modelMapperWrapper;
+        this.optionsRulesChecker = optionsRulesChecker;
+        this.sessionCart = sessionCart;
+    }
 
     public Contract findById(int id) throws DatabaseException {
         Contract contract = dao.findById(id);
@@ -64,18 +54,6 @@ public class ContractServiceImpl implements ContractService {
         dao.save(contract);
     }
 
-    public void updateContract(Contract contract) throws DatabaseException {
-        Contract entity = findById(contract.getId());
-        if (entity != null) {
-            entity.setActiveOptions(contract.getActiveOptions());
-            entity.setUser(contract.getUser());
-            entity.setTariff(contract.getTariff());
-            entity.setPhoneNumber(contract.getPhoneNumber());
-            entity.setPrice(contract.getPrice());
-            entity.setStatus(contract.getStatus());
-        }
-    }
-
     public List<Contract> findAllContracts() {
         return dao.findAllContracts();
     }
@@ -83,7 +61,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Deletes contract.
      *
-     * @param id
+     * @param id id
      * @throws DatabaseException if contract doesn't exist
      */
     @Override
@@ -95,7 +73,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Set selected status to contract with selected id.
      *
-     * @param setNewStatusDto
+     * @param setNewStatusDto setNewStatusDto
      * @throws DatabaseException if contract doesn't exist
      */
     @Override
@@ -104,7 +82,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     /**
-     * @param phoneNumber
+     * @param phoneNumber phoneNumber
      * @return contract
      */
     @Override
@@ -115,8 +93,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Add selected options to selected contract.
      *
-     * @param editContractDto
-     * @return
+     * @param editContractDto editContractDto
      * @throws DatabaseException if contract doesn't exist
      */
     public void addOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
@@ -127,7 +104,7 @@ public class ContractServiceImpl implements ContractService {
         optionsRulesChecker.checkAddToContract(editContractDto.getContractId(), toBeAddedOptionsList);
         Amount amount = new Amount();
         contract.getActiveOptions().addAll(toBeAddedOptionsList);
-        toBeAddedOptionsList.forEach(option->amount.add(option.getCostOfAdd()));
+        toBeAddedOptionsList.forEach(option -> amount.add(option.getCostOfAdd()));
         if (user.getBalance() < amount.getAmount()) {
             throw new LogicException("Not enough funds.");
         }
@@ -138,7 +115,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Add options to any contract.
      *
-     * @param editContractDto
+     * @param editContractDto editContractDto
      * @throws DatabaseException if contract doesn't exist
      */
     @Override
@@ -149,7 +126,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Add options only to active contracts.
      *
-     * @throws DatabaseException
+     * @throws DatabaseException if no such user
      */
     @Override
     public void customerAddOptions(AddOptionsDto addOptionsDto) throws DatabaseException, LogicException {
@@ -185,8 +162,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Delete selected options from selected contract.
      *
-     * @param editContractDto
-     * @return
+     * @param editContractDto editContractDto
      * @throws DatabaseException if contract doesn't exist
      */
     public void delOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
@@ -202,7 +178,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Delete options from any contract.
      *
-     * @param editContractDto
+     * @param editContractDto editContractDto
      * @throws DatabaseException if contract doesn't exist
      */
     @Override
@@ -213,7 +189,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Delete options from active contract.
      *
-     * @param editContractDto
+     * @param editContractDto editContractDto
      * @throws DatabaseException if contract doesn't exist
      */
     @Override
@@ -227,7 +203,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Set contract's tariff to selected.
      *
-     * @param switchTariffDto
+     * @param switchTariffDto switchTariffDto
      * @throws DatabaseException if tariff/contract doesn't exist
      */
     public void switchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException {
@@ -249,7 +225,7 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Set any contract's tariff to selected.
      *
-     * @param switchTariffDto
+     * @param switchTariffDto switchTariffDto
      * @throws DatabaseException
      */
     @Override
@@ -260,8 +236,8 @@ public class ContractServiceImpl implements ContractService {
     /**
      * Set active contract's tariff to selected.
      *
-     * @param switchTariffDto
-     * @throws DatabaseException
+     * @param switchTariffDto switchTariffDto
+     * @throws DatabaseException if no such contract
      */
     @Override
     public void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException {
@@ -302,7 +278,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     /**
-     * @param phoneNumber
+     * @param phoneNumber phoneNumber
      * @return true is exist
      */
     private boolean doesPhoneNumberExist(String phoneNumber) {

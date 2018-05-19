@@ -19,8 +19,12 @@ import java.util.Properties;
 @PropertySource(value = { "classpath:application.properties" })
 public class HibernateConfiguration {
 
+    private final Environment environment;
+
     @Autowired
-    private Environment environment;
+    public HibernateConfiguration(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean(initMethod = "migrate")
     Flyway flyway() {

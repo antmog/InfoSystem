@@ -1,7 +1,6 @@
 package com.infosystem.springmvc.service;
 
 import java.util.List;
-
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;

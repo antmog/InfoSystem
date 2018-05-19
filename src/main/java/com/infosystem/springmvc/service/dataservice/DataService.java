@@ -1,4 +1,4 @@
-package com.infosystem.springmvc.service.DataService;
+package com.infosystem.springmvc.service.dataservice;
 
 import com.infosystem.springmvc.dto.AdminPanelDto;
 import com.infosystem.springmvc.dto.ContractPageDto;

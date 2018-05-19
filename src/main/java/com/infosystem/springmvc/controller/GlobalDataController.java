@@ -27,25 +27,23 @@ import java.util.Set;
 @RequestMapping("/")
 public class GlobalDataController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    private final ContractService contractService;
+
+    private final TariffService tariffService;
 
     @Autowired
-    ContractService contractService;
-
-    @Autowired
-    TariffOptionService tariffOptionService;
-
-    @Autowired
-    MessageSource messageSource;
-
-    @Autowired
-    TariffService tariffService;
+    public GlobalDataController(UserService userService, ContractService contractService, TariffOptionService tariffOptionService, MessageSource messageSource, TariffService tariffService) {
+        this.userService = userService;
+        this.contractService = contractService;
+        this.tariffService = tariffService;
+    }
 
     /**
      * Returns options available for tariff.
      *
-     * @param tariffId
+     * @param tariffId tariffId
      * @param result    validation result
      * @return message
      * @throws DatabaseException   if tariff doesn't exist
@@ -67,7 +65,7 @@ public class GlobalDataController {
     /**
      * Set new status for contract.
      *
-     * @param setNewStatusDto
+     * @param setNewStatusDto setNewStatusDto
      * @param result          validation result
      * @return message
      * @throws DatabaseException   if contract doesn't exist
@@ -85,7 +83,7 @@ public class GlobalDataController {
     /**
      * Set new status for user.
      *
-     * @param setNewStatusDto
+     * @param setNewStatusDto setNewStatusDto
      * @param result          validation result
      * @return message
      * @throws DatabaseException   if user doesn't exist
@@ -103,7 +101,7 @@ public class GlobalDataController {
     /**
      * Set new status for tariff.
      *
-     * @param setNewStatusDto
+     * @param setNewStatusDto setNewStatusDto
      * @param result          validation result
      * @return message
      * @throws DatabaseException   if tariff doesn't exist
@@ -121,7 +119,7 @@ public class GlobalDataController {
     /**
      * Modifies selected value of user.
      *
-     * @param editMailDto
+     * @param editMailDto editMailDto
      * @param result      validation result
      * @return message
      * @throws DatabaseException   if user doesn't exist
@@ -139,7 +137,7 @@ public class GlobalDataController {
     /**
      * Modifies selected value of user.
      *
-     * @param editPassportDto
+     * @param editPassportDto editPassportDto
      * @param result      validation result
      * @return message
      * @throws DatabaseException   if user doesn't exist
@@ -157,7 +155,7 @@ public class GlobalDataController {
     /**
      * Modifies selected value of user.
      *
-     * @param editAddressDto
+     * @param editAddressDto editAddressDto
      * @param result      validation result
      * @return message
      * @throws DatabaseException   if user doesn't exist

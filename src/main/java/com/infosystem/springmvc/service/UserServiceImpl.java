@@ -2,7 +2,6 @@ package com.infosystem.springmvc.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
@@ -17,26 +16,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.infosystem.springmvc.dao.UserDao;
 import com.infosystem.springmvc.model.entity.User;
 
-import static java.util.Arrays.stream;
 
 
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao dao;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private ContractService contractService;
+    private final UserDao dao;
+    private final PasswordEncoder passwordEncoder;
+    private final ContractService contractService;
+    private final CustomModelMapper modelMapperWrapper;
 
     @Autowired
-    CustomModelMapper modelMapperWrapper;
+    public UserServiceImpl(UserDao dao, PasswordEncoder passwordEncoder, ContractService contractService,
+                           CustomModelMapper modelMapperWrapper) {
+        this.dao = dao;
+        this.passwordEncoder = passwordEncoder;
+        this.contractService = contractService;
+        this.modelMapperWrapper = modelMapperWrapper;
+    }
 
     public User findById(int id) throws DatabaseException {
         User user = dao.findById(id);
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Deletes user if he has no contracts.
      *
-     * @param id
+     * @param id id
      * @throws LogicException    if user still has contracts
      * @throws DatabaseException if user doesn't exist
      */
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Set user status to selected status.
      *
-     * @param setNewStatusDto
+     * @param setNewStatusDto setNewStatusDto
      * @throws DatabaseException if user doesn't exist
      */
     @Override
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Updates selected user fields.
      *
-     * @param editAddressDto
+     * @param editAddressDto editAddressDto
      * @throws DatabaseException if user doesn't exist
      */
     @Override
@@ -114,7 +115,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Updates selected user fields.
      *
-     * @param editMailDto
+     * @param editMailDto editMailDto
      * @throws DatabaseException if user doesn't exist
      */
     @Override
@@ -126,7 +127,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Updates selected user fields.
      *
-     * @param editPassportDto
+     * @param editPassportDto editPassportDto
      * @throws DatabaseException if user doesn't exist
      */
     @Override
@@ -136,7 +137,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * @param searchByNumber
+     * @param searchByNumber searchByNumber
      * @return user (related with contract that has phoneNumber)
      * @throws LogicException if there is no contract (user) with such phone number
      */

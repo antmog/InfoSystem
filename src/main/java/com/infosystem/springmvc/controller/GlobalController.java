@@ -46,7 +46,7 @@ public class GlobalController extends ControllerTemplate {
 
     /**
      * Redirects to LK(main menu of account interface) admin/customer.
-     * @param model
+     * @param model model
      * @return adminPanel if current user is ADMIN, customerPanel if CUSTOMER
      */
     @RequestMapping("/lk")
@@ -66,7 +66,7 @@ public class GlobalController extends ControllerTemplate {
 
     /**
      * Index page.
-     * @param model
+     * @param model model
      * @return startPage
      */
     @RequestMapping("/")

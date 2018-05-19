@@ -9,7 +9,7 @@ import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Role;
 import com.infosystem.springmvc.service.ContractService;
-import com.infosystem.springmvc.service.DataService.DataService;
+import com.infosystem.springmvc.service.dataservice.DataService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
 import com.infosystem.springmvc.service.UserService;
@@ -30,33 +30,28 @@ import java.util.*;
 @SessionAttributes("roles")
 public class AdminController extends ControllerTemplate {
 
-    public AdminController(){
+    private final UserFormValidator userFormValidator;
+    private final TariffOptionFormValidator tariffOptionFormValidator;
+    private final UserService userService;
+    private final DataService dataService;
+    private final ContractService contractService;
+    private final TariffOptionService tariffOptionService;
+    private final TariffService tariffService;
+
+    @Autowired
+    public AdminController(UserFormValidator userFormValidator, TariffOptionFormValidator tariffOptionFormValidator,
+                           UserService userService, DataService dataService, ContractService contractService,
+                           TariffOptionService tariffOptionService, TariffService tariffService) {
         super("admin/");
+        this.userFormValidator = userFormValidator;
+        this.tariffOptionFormValidator = tariffOptionFormValidator;
+        this.userService = userService;
+        this.dataService = dataService;
+        this.contractService = contractService;
+        this.tariffOptionService = tariffOptionService;
+        this.tariffService = tariffService;
     }
 
-    @Autowired
-    UserFormValidator userFormValidator;
-
-    @Autowired
-    TariffOptionFormValidator tariffOptionFormValidator;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    DataService dataService;
-
-    @Autowired
-    ContractService contractService;
-
-    @Autowired
-    TariffOptionService tariffOptionService;
-
-    @Autowired
-    MessageSource messageSource;
-
-    @Autowired
-    TariffService tariffService;
 
     /**
      * Returns view of main admin panel.
@@ -77,7 +72,7 @@ public class AdminController extends ControllerTemplate {
     /**
      * Returns view with list of all users.
      *
-     * @param model
+     * @param model model
      * @return view with list of all users
      */
     @RequestMapping("/adminPanel/allUsers")
@@ -91,7 +86,7 @@ public class AdminController extends ControllerTemplate {
     /**
      * Returns view of all contracts.
      *
-     * @param model
+     * @param model model
      * @return view of all contracts
      */
     @RequestMapping("/adminPanel/allContracts")
@@ -105,8 +100,8 @@ public class AdminController extends ControllerTemplate {
     /**
      * Returns view with all tariffs.
      *
-     * @param model
-     * @return
+     * @param model model
+     * @return view of all tariffs
      */
     @RequestMapping("/adminPanel/allTariffs")
     public String adminPanelAllTariffs(ModelMap model) {
@@ -119,8 +114,8 @@ public class AdminController extends ControllerTemplate {
     /**
      * Returns view with all tariffOptions.
      *
-     * @param model
-     * @return
+     * @param model model
+     * @return view of all options
      */
     @RequestMapping("/adminPanel/allOptions")
     public String adminPanelAllOptions(ModelMap model) {
@@ -133,8 +128,8 @@ public class AdminController extends ControllerTemplate {
     /**
      * Returns view with addUser submit form.
      *
-     * @param model
-     * @return
+     * @param model model
+     * @return add user page
      */
     @RequestMapping(value = "/adminPanel/addUser", method = RequestMethod.GET)
     public String addUser(ModelMap model) {
@@ -148,9 +143,9 @@ public class AdminController extends ControllerTemplate {
     /**
      * Validates and saves user if data is correct
      *
-     * @param addUserDto
+     * @param addUserDto addUserDto
      * @param result     validation result
-     * @param model
+     * @param model model
      * @return success page on success or addUser view
      */
     @RequestMapping(value = "/adminPanel/addUser", method = RequestMethod.POST)
@@ -172,7 +167,7 @@ public class AdminController extends ControllerTemplate {
     /**
      * Returns view with addContract custom form.
      *
-     * @param model
+     * @param model model
      * @return view with addContract custom form
      */
     @RequestMapping(value = "/adminPanel/addContract", method = RequestMethod.GET)
@@ -186,8 +181,8 @@ public class AdminController extends ControllerTemplate {
     /**
      * Returns view with addContract custom form with selected userId
      *
-     * @param userId
-     * @param model
+     * @param userId userId
+     * @param model model
      * @return view
      */
     @RequestMapping(value = "/adminPanel/addContractToUser/{userId}", method = RequestMethod.GET)
@@ -202,7 +197,7 @@ public class AdminController extends ControllerTemplate {
     /**
      * Returns view with addOption custom form with selected userId.
      *
-     * @param model
+     * @param model model
      * @return view
      */
     @RequestMapping(value = "/adminPanel/addOption", method = RequestMethod.GET)
@@ -216,10 +211,10 @@ public class AdminController extends ControllerTemplate {
     /**
      * Validates and saves tariffOption if data is correct.
      *
-     * @param addTariffOptionDto
-     * @param result
-     * @param model
-     * @return
+     * @param addTariffOptionDto addTariffOptionDto
+     * @param result validation result
+     * @param model model
+     * @return result
      */
     @RequestMapping(value = "/adminPanel/addOption", method = RequestMethod.POST)
     public String saveOption(@Valid AddTariffOptionDto addTariffOptionDto, BindingResult result, ModelMap model) {
@@ -236,7 +231,7 @@ public class AdminController extends ControllerTemplate {
     /**
      * Returns view with addTariff custom form.
      *
-     * @param model
+     * @param model model
      * @return view
      */
     @RequestMapping(value = "/adminPanel/addTariff", method = RequestMethod.GET)
@@ -249,17 +244,18 @@ public class AdminController extends ControllerTemplate {
 
     /**
      * Returns user page view.
-     * @param userId
-     * @param model
+     *
+     * @param userId userId
+     * @param model model
      * @return error page view if user doesn't exist
      */
     @RequestMapping(value = "/adminPanel/user/{userId}")
-    public String user(@PathVariable(value = "userId") Integer userId, ModelMap model)  {
+    public String user(@PathVariable(value = "userId") Integer userId, ModelMap model) {
         User user = null;
         try {
             user = userService.findById(userId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model,e);
+            return prepareErrorPage(model, e);
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("user", user);
@@ -268,17 +264,18 @@ public class AdminController extends ControllerTemplate {
 
     /**
      * Returns contract page view.
-     * @param contractId
-     * @param model
+     *
+     * @param contractId contractId
+     * @param model model
      * @return error page view if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/{contractId}")
-    public String contract(@PathVariable(value = "contractId") Integer contractId, ModelMap model)  {
+    public String contract(@PathVariable(value = "contractId") Integer contractId, ModelMap model) {
         ContractPageDto contractPageDto;
         try {
             contractPageDto = dataService.getContractPageData(contractId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model,e);
+            return prepareErrorPage(model, e);
         }
         model.addAttribute("contractPageDto", contractPageDto);
         model.addAttribute("loggedinuser", getPrincipal());
@@ -287,17 +284,18 @@ public class AdminController extends ControllerTemplate {
 
     /**
      * Returns tariff page view.
-     * @param tariffId
-     * @param model
+     *
+     * @param tariffId tariffId
+     * @param model model
      * @return error page view if tariff doesn't exist
      */
     @RequestMapping(value = "/adminPanel/tariff/{tariffId}")
-    public String tariff(@PathVariable(value = "tariffId") Integer tariffId, ModelMap model){
+    public String tariff(@PathVariable(value = "tariffId") Integer tariffId, ModelMap model) {
         TariffPageDto tariffPageDto;
         try {
             tariffPageDto = dataService.getTariffPageData(tariffId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model,e);
+            return prepareErrorPage(model, e);
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffPageDto", tariffPageDto);
@@ -306,8 +304,9 @@ public class AdminController extends ControllerTemplate {
 
     /**
      * Returns option page view.
-     * @param optionId
-     * @param model
+     *
+     * @param optionId optionId
+     * @param model model
      * @return error page view if option doesn't exist
      */
     @RequestMapping(value = "/adminPanel/option/{optionId}")
@@ -316,14 +315,12 @@ public class AdminController extends ControllerTemplate {
         try {
             tariffOptionPageDto = dataService.getTariffOptionPageData(optionId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model,e);
+            return prepareErrorPage(model, e);
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffOptionPageDto", tariffOptionPageDto);
         return path + "option";
     }
-
-
 
 
 }

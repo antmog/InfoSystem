@@ -30,7 +30,7 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
                 .createQuery("SELECT u FROM User u WHERE u.login LIKE :Login")
                 .setParameter("Login", login)
                 .getResultList();
-        if(users.isEmpty()){
+        if (users.isEmpty()) {
             return null;
         }
         return (User) users.get(0);
@@ -42,7 +42,7 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
                 .createQuery("SELECT u FROM User u WHERE u.mail LIKE :mail")
                 .setParameter("mail", mail)
                 .getResultList();
-        if(users.isEmpty()){
+        if (users.isEmpty()) {
             return null;
         }
         return (User) users.get(0);
@@ -54,7 +54,7 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
                 .createQuery("SELECT u FROM User u WHERE u.passport LIKE :passport")
                 .setParameter("passport", passport)
                 .getResultList();
-        if(users.isEmpty()){
+        if (users.isEmpty()) {
             return null;
         }
         return (User) users.get(0);
@@ -68,11 +68,8 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
         return users;
     }
 
-    /**
-     * @param id
-     */
-    public void deleteById(int id){
-        List users =  getSession()
+    public void deleteById(int id) {
+        List users = getSession()
                 .createQuery("SELECT u FROM User u WHERE u.id LIKE :Id")
                 .setParameter("Id", id)
                 .getResultList();

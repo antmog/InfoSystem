@@ -2,10 +2,9 @@ package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.ContractPageDto;
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.exception.MyBusinessException;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.service.ContractService;
-import com.infosystem.springmvc.service.DataService.DataService;
+import com.infosystem.springmvc.service.dataservice.DataService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
 import com.infosystem.springmvc.service.UserService;
@@ -22,37 +21,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 //@SessionAttributes("roles")
 public class CustomerController extends ControllerTemplate {
 
-    public CustomerController() {
+    public final UserService userService;
+    private final DataService dataService;
+
+    @Autowired
+    public CustomerController(UserService userService, DataService dataService) {
         super("customer/");
+        this.userService = userService;
+        this.dataService = dataService;
     }
-
-
-    @Autowired
-    UserDetailsService customUserDetailsService;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    ContractService contractService;
-
-    @Autowired
-    TariffOptionService tariffOptionService;
-
-    @Autowired
-    MessageSource messageSource;
-
-    @Autowired
-    TariffService tariffService;
-
-    @Autowired
-    DataService dataService;
-
 
     /**
      * Returns customer panel view with user info.
      *
-     * @param model
+     * @param model model
      * @return view
      */
     @RequestMapping("/customerPanel")
@@ -67,10 +49,9 @@ public class CustomerController extends ControllerTemplate {
     /**
      * Returns view with contract page.
      *
-     * @param contractId
-     * @param model
+     * @param contractId contractId
+     * @param model model
      * @return view
-     * @throws DatabaseException
      */
     @RequestMapping(value = "/customerPanel/contract/{contractId}")
     public String contract(@PathVariable(value = "contractId") Integer contractId, ModelMap model) {

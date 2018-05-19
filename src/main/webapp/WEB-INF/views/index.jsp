@@ -9,8 +9,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/"><i class="fas fa-phone-square"></i> Info-System</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -56,7 +55,18 @@
                     <a class="btn btn-primary btn-lg" href="/login" role="button">Log In »</a>
                 </c:otherwise>
             </c:choose>
-
+            <sec:authorize access="isAuthenticated()">
+                <sec:authorize access="hasAnyRole('ADMIN')">
+                    <a href="/lk">
+                        Admin Panel
+                    </a>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('CUSTOMER')">
+                    <a href="/lk">
+                        User Panel
+                    </a>
+                </sec:authorize>
+            </sec:authorize>
         </div>
     </div>
 
@@ -89,5 +99,6 @@
     </div>
 
 </main>
+<jsp:include page="footer.jsp"/>
 </body>
 </html>

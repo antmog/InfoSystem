@@ -2,8 +2,6 @@ package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.TariffOptionDao;
 import com.infosystem.springmvc.dto.AddTariffOptionDto;
-import com.infosystem.springmvc.dto.SessionCart;
-import com.infosystem.springmvc.dto.TariffOptionDto;
 import com.infosystem.springmvc.dto.TariffOptionRulesDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
@@ -15,9 +13,6 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -28,15 +23,19 @@ import java.util.stream.Collectors;
 @Transactional
 public class TariffOptionServiceImpl implements TariffOptionService {
 
-    @Autowired
-    private ContractService contractService;
-    @Autowired
-    private TariffService tariffService;
-    @Autowired
-    private TariffOptionDao dao;
+    private final ContractService contractService;
+    private final TariffService tariffService;
+    private final TariffOptionDao dao;
+    private final CustomModelMapper modelMapperWrapper;
 
     @Autowired
-    CustomModelMapper modelMapperWrapper;
+    public TariffOptionServiceImpl(ContractService contractService, TariffService tariffService, TariffOptionDao dao,
+                                   CustomModelMapper modelMapperWrapper) {
+        this.contractService = contractService;
+        this.tariffService = tariffService;
+        this.dao = dao;
+        this.modelMapperWrapper = modelMapperWrapper;
+    }
 
     public TariffOption findById(int id) throws DatabaseException {
         TariffOption tariffOption = dao.findById(id);
@@ -52,18 +51,6 @@ public class TariffOptionServiceImpl implements TariffOptionService {
 
     public void saveTariffOption(TariffOption tariffOption) {
         dao.save(tariffOption);
-    }
-
-    /*
-     * Since the method is running with Transaction, No need to call hibernate update explicitly.
-     * Just fetch the entity from db and update it with proper values within transaction.
-     * It will be updated in db once transaction ends.
-     */
-    public void updateTariffOption(TariffOption tariffOption) throws DatabaseException {
-        TariffOption entity = findById(tariffOption.getId());
-        if (entity != null) {
-            // logic
-        }
     }
 
     public List<TariffOption> findAllTariffOptions() {
@@ -88,7 +75,7 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     /**
      * Deletes tariffOption if its not used.
      *
-     * @param id
+     * @param id id
      * @throws DatabaseException if tariffOption doesn't exist
      * @throws LogicException    if tariffOption is still used
      */
@@ -141,8 +128,8 @@ public class TariffOptionServiceImpl implements TariffOptionService {
             tariffOption.getRelatedTariffOptions().addAll(optionList);
         }
         if (rule.equals(TariffOptionRule.EXCLUDING)) {
-            for(TariffOption toBeExcluded : optionList){
-                if(!Collections.disjoint(tariffOption.getRelatedTariffOptions(),toBeExcluded.getIsRelatedFor())){
+            for (TariffOption toBeExcluded : optionList) {
+                if (!Collections.disjoint(tariffOption.getRelatedTariffOptions(), toBeExcluded.getIsRelatedFor())) {
                     throw new LogicException("One or more of chosen options are related for one of related options.");
                 }
             }
@@ -151,7 +138,7 @@ public class TariffOptionServiceImpl implements TariffOptionService {
             }
             if (!tariffOption.getIsRelatedFor().isEmpty()) {
                 for (TariffOption isRelatedForThis : tariffOption.getIsRelatedFor()) {
-                    if(optionList.contains(isRelatedForThis)){
+                    if (optionList.contains(isRelatedForThis)) {
                         throw new LogicException("This option is related for one of chosen.");
                     }
                     if (!Collections.disjoint(isRelatedForThis.getRelatedTariffOptions(), optionList)) {
@@ -192,9 +179,8 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     /**
      * Check if trying to make rule for itself (tariffOption).
      *
-     * @param tariffOption
-     * @param tariffOptions
-     * @return
+     * @param tariffOption tariffOption
+     * @param tariffOptions tariffOptions
      */
     private void isWrongRule(TariffOption tariffOption, Set<TariffOption> tariffOptions) throws LogicException {
         if (tariffOptions.remove(tariffOption)) {

@@ -1,8 +1,6 @@
 package com.infosystem.springmvc.util;
 
-import com.infosystem.springmvc.dao.ContractDao;
 import com.infosystem.springmvc.dao.TariffDao;
-import com.infosystem.springmvc.dao.TariffOptionDao;
 import com.infosystem.springmvc.dao.UserDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.model.entity.Contract;
@@ -14,17 +12,12 @@ import com.infosystem.springmvc.service.TariffOptionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class CustomModelMapper {
 
-    private ContractDao contractDao;
     private TariffDao tariffDao;
-    private TariffOptionDao tariffOptionDao;
     private UserDao userDao;
 
     private TariffOptionService tariffOptionService;
@@ -36,18 +29,14 @@ public class CustomModelMapper {
     }
 
     @Autowired
-    public CustomModelMapper(ContractDao contractDao, TariffDao tariffDao, TariffOptionDao tariffOptionDao,
-                             UserDao userDao, TariffOptionService tariffOptionService) {
-        this.contractDao = contractDao;
+    public CustomModelMapper(TariffDao tariffDao, UserDao userDao, TariffOptionService tariffOptionService) {
         this.tariffDao = tariffDao;
-        this.tariffOptionDao = tariffOptionDao;
         this.userDao = userDao;
         this.tariffOptionService = tariffOptionService;
     }
 
-
     /**
-     * @param addContractDto
+     * @param addContractDto addContractDto
      * @return contract with phone number, tariff and user according to DTO data.
      */
     public Contract mapToContract(AddContractDto addContractDto) {
@@ -63,7 +52,7 @@ public class CustomModelMapper {
     }
 
     /**
-     * @param tariffOptionDtoList
+     * @param tariffOptionDtoList tariffOptionDtoList
      * @return tariffOption list(set) with ID's from tariffOptionDtoList
      */
     public Set<TariffOption> mapToTariffOptionSet(Collection<TariffOptionDto> tariffOptionDtoList) {
@@ -75,7 +64,7 @@ public class CustomModelMapper {
     }
 
     /**
-     * @param addTariffDto
+     * @param addTariffDto addTariffDto
      * @return tariff with name and price from addTariffDto
      */
     public Tariff mapToTariff(AddTariffDto addTariffDto) {
@@ -86,7 +75,7 @@ public class CustomModelMapper {
     }
 
     /**
-     * @param addUserDto
+     * @param addUserDto addUserDto
      * @return user
      */
     public User mapToUser(AddUserDto addUserDto) {
@@ -94,7 +83,7 @@ public class CustomModelMapper {
     }
 
     /**
-     * @param addTariffOptionDto
+     * @param addTariffOptionDto addTariffOptionDto
      * @return TariffOption
      */
     public TariffOption mapToTariffOption(AddTariffOptionDto addTariffOptionDto) {
@@ -102,7 +91,7 @@ public class CustomModelMapper {
     }
 
     /**
-     * @param tariffOptionList
+     * @param tariffOptionList tariffOptionList
      * @return tariffOption list(set) with ID's from tariffOptionDtoList
      */
     public Set<TariffOptionDto> mapToTariffOptionDtoSet(Set<TariffOption> tariffOptionList) {
@@ -141,7 +130,7 @@ public class CustomModelMapper {
         return modelMapper.map(tariff, TariffDto.class);
     }
 
-    public Status mapToStatus(String status){
-        return modelMapper.map(status,Status.class);
+    public Status mapToStatus(String status) {
+        return modelMapper.map(status, Status.class);
     }
 }

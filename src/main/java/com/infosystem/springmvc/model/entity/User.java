@@ -3,17 +3,19 @@ package com.infosystem.springmvc.model.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-
 import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.infosystem.springmvc.model.enums.Role;
 import com.infosystem.springmvc.model.enums.Status;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "USERS")
 public class User implements Serializable {
@@ -51,11 +53,12 @@ public class User implements Serializable {
     @Column(name = "BALANCE", nullable = false)
     private Double balance;
 
-    public void addFunds(double amount){
-        balance+=amount;
+    public void addFunds(double amount) {
+        balance += amount;
     }
-    public void spendFunds(double amount){
-        balance-=amount;
+
+    public void spendFunds(double amount) {
+        balance -= amount;
     }
 
     @Enumerated(EnumType.STRING)
@@ -67,16 +70,15 @@ public class User implements Serializable {
     private Status status = Status.ACTIVE;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @Column(name = "USER_CONTRACTS", nullable = false)
     private Set<Contract> userContracts = new HashSet<Contract>();
 
     @Override
     public String toString() {
         return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
-                + ", address=" + address + ", birthDate=" + birthDate+ ", passport=" + passport +
-                ", role=" + role +  ", mail=" + mail +  ", login=" +  login  + ", status=" + status + "]";
-
+                + ", address=" + address + ", birthDate=" + birthDate + ", passport=" + passport +
+                ", role=" + role + ", mail=" + mail + ", login=" + login + ", status=" + status + "]";
     }
 
     @Override
@@ -91,5 +93,10 @@ public class User implements Serializable {
         if (this.id == null) {
             return other.id == null;
         } else return id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, address, birthDate, passport, mail, login, password, balance, role, status);
     }
 }

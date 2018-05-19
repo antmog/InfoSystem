@@ -20,36 +20,28 @@ import com.infosystem.springmvc.service.UserService;
 import javax.validation.Valid;
 
 
-
 @RestController
 @RequestMapping("/")
 public class AdminDataController {
+
+    private final UserService userService;
+    private final ContractService contractService;
+    private final TariffOptionService tariffOptionService;
+    private final TariffService tariffService;
+
     @Autowired
-    UserService userService;
-    @Autowired
-    ContractService contractService;
-    @Autowired
-    TariffOptionService tariffOptionService;
-    @Autowired
-    MessageSource messageSource;
-    @Autowired
-    TariffService tariffService;
-//
-//    @Autowired
-//    public AdminDataController(UserService userService, ContractService contractService,
-//                               TariffOptionService tariffOptionService, MessageSource messageSource,
-//                               TariffService tariffService) {
-//        this.userService = userService;
-//        this.contractService = contractService;
-//        this.tariffOptionService = tariffOptionService;
-//        this.messageSource = messageSource;
-//        this.tariffService = tariffService;
-//    }
+    public AdminDataController(UserService userService, ContractService contractService,
+                               TariffOptionService tariffOptionService, TariffService tariffService) {
+        this.userService = userService;
+        this.contractService = contractService;
+        this.tariffOptionService = tariffOptionService;
+        this.tariffService = tariffService;
+    }
 
     /**
      * Called on submit of adding contract (allContracts page and user page).
      *
-     * @param addContractDto
+     * @param addContractDto addContractDto
      * @param result         validation result
      * @return message
      * @throws LogicException      if pohne number already exists
@@ -68,7 +60,7 @@ public class AdminDataController {
     /**
      * Called on adding tariff (adminPanel and allTariffs pages).
      *
-     * @param addTariffDto
+     * @param addTariffDto addTariffDto
      * @param result       validation result
      * @return message
      * @throws LogicException      if tariff with selected name alrdy exists
@@ -86,7 +78,7 @@ public class AdminDataController {
     /**
      * Called while searching user by number (adminPanel and allUsers pages).
      *
-     * @param searchByNumber
+     * @param searchByNumber searchByNumber
      * @param result         validation result
      * @return message
      * @throws LogicException      if no such number
@@ -106,7 +98,7 @@ public class AdminDataController {
     /**
      * Called on deleting user (user page).
      *
-     * @param userId
+     * @param userId userId
      * @return message
      * @throws LogicException    if user still have contracts
      * @throws DatabaseException if user with @userId doesn't exist
@@ -120,7 +112,7 @@ public class AdminDataController {
     /**
      * Called on deleting tariff (tariff page).
      *
-     * @param tariffId
+     * @param tariffId tariffId
      * @return message
      * @throws LogicException    if tariff is still used
      * @throws DatabaseException if tariff with @tariffId doesn't exist
@@ -134,7 +126,7 @@ public class AdminDataController {
     /**
      * Called on deleting contract (tariff page).
      *
-     * @param contractId
+     * @param contractId contractId
      * @return message
      * @throws DatabaseException if contract with @contractId doesn't exist
      */
@@ -148,7 +140,7 @@ public class AdminDataController {
     /**
      * Deleting option.
      *
-     * @param optionId
+     * @param optionId optionId
      * @return message
      * @throws DatabaseException if option with @optionId doesn't exist
      * @throws LogicException    if options is still used somewhere.
@@ -162,7 +154,7 @@ public class AdminDataController {
     /**
      * Adding selected options to the tariff.
      *
-     * @param editTariffDto
+     * @param editTariffDto editTariffDto
      * @param result        validation result
      * @return message
      * @throws ValidationException if no options selected
@@ -180,7 +172,7 @@ public class AdminDataController {
     /**
      * Deleting selected options from the tariff.
      *
-     * @param editTariffDto
+     * @param editTariffDto editTariffDto
      * @param result        validation result
      * @return message
      * @throws ValidationException if no options selected
@@ -199,7 +191,7 @@ public class AdminDataController {
     /**
      * Deleting selected options from the contract.
      *
-     * @param editContractDto
+     * @param editContractDto editContractDto
      * @param result          validation result
      * @return message
      * @throws ValidationException if no options selected
@@ -217,7 +209,7 @@ public class AdminDataController {
     /**
      * Adding selected options to the contract.
      *
-     * @param editContractDto
+     * @param editContractDto editContractDto
      * @param result          validation result
      * @return message
      * @throws ValidationException if no options selected
@@ -235,7 +227,7 @@ public class AdminDataController {
     /**
      * Changes tariff of current contract to selected.
      *
-     * @param switchTariffDto
+     * @param switchTariffDto switchTariffDto
      * @param result          validation result
      * @return message
      * @throws ValidationException if tariff is not selected
@@ -254,7 +246,7 @@ public class AdminDataController {
     /**
      * Adding selected options to the tariff.
      *
-     * @param tariffOptionRulesDto
+     * @param tariffOptionRulesDto tariffOptionRulesDto
      * @param result               validation result
      * @return message
      * @throws ValidationException if no options selected
@@ -272,7 +264,7 @@ public class AdminDataController {
     /**
      * Deleting selected options from the tariff.
      *
-     * @param tariffOptionRulesDto
+     * @param tariffOptionRulesDto tariffOptionRulesDto
      * @param result               validation result
      * @return message
      * @throws ValidationException if no options selected
