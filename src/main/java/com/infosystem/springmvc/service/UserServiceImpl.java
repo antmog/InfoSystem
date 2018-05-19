@@ -2,6 +2,7 @@ package com.infosystem.springmvc.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
@@ -20,23 +21,23 @@ import com.infosystem.springmvc.dao.UserDao;
 import com.infosystem.springmvc.model.entity.User;
 
 
-
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final UserDao dao;
-    private final PasswordEncoder passwordEncoder;
-    private final ContractService contractService;
-    private final CustomModelMapper modelMapperWrapper;
+    @Autowired
+    ContractService contractService;
 
     @Autowired
-    public UserServiceImpl(UserDao dao, PasswordEncoder passwordEncoder, ContractService contractService,
-                           CustomModelMapper modelMapperWrapper) {
+    CustomModelMapper modelMapperWrapper;
+
+    private final UserDao dao;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserServiceImpl(UserDao dao, PasswordEncoder passwordEncoder) {
         this.dao = dao;
         this.passwordEncoder = passwordEncoder;
-        this.contractService = contractService;
-        this.modelMapperWrapper = modelMapperWrapper;
     }
 
     public User findById(int id) throws DatabaseException {

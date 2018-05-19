@@ -21,6 +21,7 @@
                     <div class="card-body">
                         <p>Wallet balance: <label id="walletBalance">${user.balance}</label></p>
                         <p><a class="btn btn-info btn-sm" href="/customerPanel/addFunds" role="button">Add funds to wallet</a></p>
+                        <div class="col-md-4"><button type="button" id="buy" class="btn btn-primary">Buy all</button></div>
                     </div>
                 </div>
             </div>
@@ -61,7 +62,6 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-md-4"><button type="button" id="buy" class="btn btn-primary">Buy</button></div>
             </div>
         </div>
     </div>

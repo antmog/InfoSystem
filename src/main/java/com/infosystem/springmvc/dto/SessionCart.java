@@ -4,7 +4,9 @@ package com.infosystem.springmvc.dto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
+import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.TariffOption;
+import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.util.CustomModelMapper;
@@ -17,6 +19,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+import sun.rmi.runtime.Log;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -40,12 +44,16 @@ public class SessionCart {
 
     @Transactional
     public void addCartItems(EditContractDto editContractDto) throws DatabaseException, LogicException {
+        Integer contractId = editContractDto.getContractId();
+        Contract contract = contractService.findById(contractId);
+        if(!contract.getStatus().equals(Status.ACTIVE)){
+            throw new LogicException("Contract is not active. Refresh page.");
+        }
         Set<TariffOptionDto> newSet = new HashSet<>();
         Set<TariffOption> toBeAddedOptions = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
-        Integer contractId = editContractDto.getContractId();
 
         optionsRulesChecker.checkAddToContractCustomer(contractId, toBeAddedOptions);
-        optionsRulesChecker.checkIfContractAlreadyHave(contractService.findById(contractId),toBeAddedOptions);
+        optionsRulesChecker.checkIfContractAlreadyHave(contract,toBeAddedOptions);
         if(!options.isEmpty()){
             if(options.containsKey(contractId)){
                 Set<TariffOptionDto> currentOptions = new HashSet<>(options.get(contractId));

@@ -12,6 +12,7 @@ import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,18 +21,20 @@ import java.util.stream.Collectors;
 @Transactional
 public class TariffServiceImpl implements TariffService {
 
-    private final TariffDao dao;
-    private final ContractService contractService;
-    private final CustomModelMapper modelMapperWrapper;
-    private final OptionsRulesChecker optionsRulesChecker;
+    @Autowired
+    ContractService contractService;
 
     @Autowired
-    public TariffServiceImpl(TariffDao dao, ContractService contractService, CustomModelMapper modelMapperWrapper,
-                             OptionsRulesChecker optionsRulesChecker) {
+    CustomModelMapper modelMapperWrapper;
+
+    @Autowired
+    OptionsRulesChecker optionsRulesChecker;
+
+    private final TariffDao dao;
+
+    @Autowired
+    public TariffServiceImpl(TariffDao dao) {
         this.dao = dao;
-        this.contractService = contractService;
-        this.modelMapperWrapper = modelMapperWrapper;
-        this.optionsRulesChecker = optionsRulesChecker;
     }
 
     public Tariff findById(int id) throws DatabaseException {
@@ -142,7 +145,7 @@ public class TariffServiceImpl implements TariffService {
     /**
      * Set status of selected tariff to selected status.
      *
-     * @param  setNewStatusDto setNewStatusDto
+     * @param setNewStatusDto setNewStatusDto
      * @throws DatabaseException if tariff doesn't exist
      */
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {

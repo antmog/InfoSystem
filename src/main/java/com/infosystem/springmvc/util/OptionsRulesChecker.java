@@ -18,14 +18,15 @@ import java.util.stream.Stream;
 @Component
 public class OptionsRulesChecker {
 
+    @Autowired
+    ContractService contractService;
+
     private final CustomModelMapper modelMapperWrapper;
-    private final ContractService contractService;
     private final SessionCart sessionCart;
 
     @Autowired
-    public OptionsRulesChecker(CustomModelMapper modelMapperWrapper, ContractService contractService, SessionCart sessionCart) {
+    public OptionsRulesChecker(CustomModelMapper modelMapperWrapper, SessionCart sessionCart) {
         this.modelMapperWrapper = modelMapperWrapper;
-        this.contractService = contractService;
         this.sessionCart = sessionCart;
     }
 

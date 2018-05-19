@@ -34,7 +34,7 @@
                                 <td>${user.mail}</td>
                             </tr>
                             <tr class = "editable">
-                                <td>Massport</td>
+                                <td>Passport</td>
                                 <td>${user.passport}</td>
                             </tr>
                             </tbody>

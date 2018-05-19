@@ -23,23 +23,26 @@ import java.util.*;
 @Transactional
 public class ContractServiceImpl implements ContractService {
 
-    private final ContractDao dao;
-    private final TariffService tariffService;
-    private final UserService userService;
-    private final CustomModelMapper modelMapperWrapper;
-    private final OptionsRulesChecker optionsRulesChecker;
-    private final SessionCart sessionCart;
+    @Autowired
+    UserService userService;
 
     @Autowired
-    public ContractServiceImpl(ContractDao dao, TariffService tariffService, UserService userService,
-                               CustomModelMapper modelMapperWrapper, OptionsRulesChecker optionsRulesChecker,
-                               SessionCart sessionCart) {
+    TariffService tariffService;
+
+    @Autowired
+    OptionsRulesChecker optionsRulesChecker;
+
+    @Autowired
+    SessionCart sessionCart;
+
+    @Autowired
+    CustomModelMapper modelMapperWrapper;
+
+    private final ContractDao dao;
+
+    @Autowired
+    public ContractServiceImpl(ContractDao dao) {
         this.dao = dao;
-        this.tariffService = tariffService;
-        this.userService = userService;
-        this.modelMapperWrapper = modelMapperWrapper;
-        this.optionsRulesChecker = optionsRulesChecker;
-        this.sessionCart = sessionCart;
     }
 
     public Contract findById(int id) throws DatabaseException {

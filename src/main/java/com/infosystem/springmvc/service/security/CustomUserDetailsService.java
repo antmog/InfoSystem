@@ -15,17 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
-    private final UserService userService;
-
     @Autowired
-    public CustomUserDetailsService(UserService userService) {
-        this.userService = userService;
-    }
+    UserService userService;
 
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String login)

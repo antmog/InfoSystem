@@ -17,22 +17,20 @@ import java.util.*;
 @Component
 public class CustomModelMapper {
 
+    @Autowired
+    TariffOptionService tariffOptionService;
+
     private TariffDao tariffDao;
     private UserDao userDao;
-
-    private TariffOptionService tariffOptionService;
-
     private ModelMapper modelMapper = new ModelMapper();
-
     {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
     }
 
     @Autowired
-    public CustomModelMapper(TariffDao tariffDao, UserDao userDao, TariffOptionService tariffOptionService) {
+    public CustomModelMapper(TariffDao tariffDao, UserDao userDao) {
         this.tariffDao = tariffDao;
         this.userDao = userDao;
-        this.tariffOptionService = tariffOptionService;
     }
 
     /**

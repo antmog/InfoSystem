@@ -23,15 +23,16 @@ import java.util.stream.Collectors;
 @Transactional
 public class TariffOptionServiceImpl implements TariffOptionService {
 
-    private final ContractService contractService;
+    @Autowired
+    ContractService contractService;
+
     private final TariffService tariffService;
     private final TariffOptionDao dao;
     private final CustomModelMapper modelMapperWrapper;
 
     @Autowired
-    public TariffOptionServiceImpl(ContractService contractService, TariffService tariffService, TariffOptionDao dao,
+    public TariffOptionServiceImpl(TariffService tariffService, TariffOptionDao dao,
                                    CustomModelMapper modelMapperWrapper) {
-        this.contractService = contractService;
         this.tariffService = tariffService;
         this.dao = dao;
         this.modelMapperWrapper = modelMapperWrapper;
