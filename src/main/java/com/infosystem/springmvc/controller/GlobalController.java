@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/")
+@SessionAttributes("loggedinuser")
 public class GlobalController extends ControllerTemplate {
 
     /**
@@ -34,6 +36,14 @@ public class GlobalController extends ControllerTemplate {
         } else {
             return "redirect:/";
         }
+    }
+
+    /**
+     * Access denied.
+     */
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    public String accessDenied(ModelMap model) {
+        return "403";
     }
 
     /**

@@ -74,7 +74,7 @@
                             </dl>
                         </div>
                         <div class="card-footer">
-                            <a href="/adminPanel/editUser${userPageDto.id}" class="btn btn-outline-primary btn-sm">Edit</a>
+                            <a href="/adminPanel/editUser/${userPageDto.id}" class="btn btn-outline-primary btn-sm">Edit</a>
                         </div>
                     </div>
                 </div>

@@ -62,7 +62,6 @@ public class AdminController extends ControllerTemplate {
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("userDto", userDto);
         return path + "adminPanel";
     }
@@ -84,7 +83,6 @@ public class AdminController extends ControllerTemplate {
             return prepareErrorPage(model, "No such page.");
         }
         allUsersDto.setPageNumber(pageNumberInt);
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("allUsersDto", allUsersDto);
         return path + "allUsers";
     }
@@ -106,7 +104,6 @@ public class AdminController extends ControllerTemplate {
             return prepareErrorPage(model, "No such page.");
         }
         allContractsDto.setPageNumber(pageNumberInt);
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("allContractsDto", allContractsDto);
         return path + "allContracts";
     }
@@ -128,7 +125,6 @@ public class AdminController extends ControllerTemplate {
             return prepareErrorPage(model, "No such page.");
         }
         allTariffsDto.setPageNumber(pageNumberInt);
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("allTariffsDto", allTariffsDto);
         return path + "allTariffs";
     }
@@ -151,7 +147,6 @@ public class AdminController extends ControllerTemplate {
             return prepareErrorPage(model, "No such page.");
         }
         allTariffOptionsDto.setPageNumber(pageNumberInt);
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("allTariffOptionsDto", allTariffOptionsDto);
         return path + "allOptions";
     }
@@ -164,7 +159,6 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/addUser", method = RequestMethod.GET)
     public String addUser(ModelMap model) {
-        model.addAttribute("loggedinuser", getPrincipal());
         AddUserDto addUserDto = new AddUserDto();
         model.addAttribute("addUserDto", addUserDto);
         model.addAttribute("roles", Role.getAllRoles());
@@ -191,7 +185,6 @@ public class AdminController extends ControllerTemplate {
         userService.addUser(addUserDto);
         model.addAttribute("success", "User " + addUserDto.getFirstName() + " " +
                 addUserDto.getLastName() + " registered successfully");
-        model.addAttribute("loggedinuser", getPrincipal());
         return path + "addSuccess";
     }
 
@@ -204,7 +197,6 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/addContract", method = RequestMethod.GET)
     public String addContract(ModelMap model) {
         List<TariffDto> tariffDtoList = dataService.findAllActiveTariffs();
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffs", tariffDtoList);
         return path + "addContract";
     }
@@ -223,7 +215,6 @@ public class AdminController extends ControllerTemplate {
         }
         int userIdInt = Integer.parseInt(userId);
         List<TariffDto> tariffDtoList = dataService.findAllActiveTariffs();
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("userId", userIdInt);
         model.addAttribute("tariffs", tariffDtoList);
         return path + "addContract";
@@ -238,7 +229,6 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/addOption", method = RequestMethod.GET)
     public String addOption(ModelMap model) {
         AddTariffOptionDto addTariffOptionDto = new AddTariffOptionDto();
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("addTariffOptionDto", addTariffOptionDto);
         return path + "addOption";
     }
@@ -259,7 +249,6 @@ public class AdminController extends ControllerTemplate {
         }
         tariffOptionService.addTariffOption(addTariffOptionDto);
         model.addAttribute("success", "Option " + addTariffOptionDto.getName() + " registered successfully");
-        model.addAttribute("loggedinuser", getPrincipal());
         return path + "addSuccess";
     }
 
@@ -272,7 +261,6 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/addTariff", method = RequestMethod.GET)
     public String addTariff(ModelMap model) {
         List<TariffOptionDtoShort> tariffOptionDtoShortList = dataService.findAllTariffOptions();
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("options", tariffOptionDtoShortList);
         return path + "addTariff";
     }
@@ -295,7 +283,6 @@ public class AdminController extends ControllerTemplate {
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("userPageDto", userPageDto);
         return path + "user";
     }
@@ -320,7 +307,6 @@ public class AdminController extends ControllerTemplate {
             return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("contractPageDto", contractPageDto);
-        model.addAttribute("loggedinuser", getPrincipal());
         return path + "contract";
     }
 
@@ -343,7 +329,6 @@ public class AdminController extends ControllerTemplate {
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffPageDto", tariffPageDto);
         return path + "tariff";
     }
@@ -367,7 +352,6 @@ public class AdminController extends ControllerTemplate {
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffOptionPageDto", tariffOptionPageDto);
         return path + "option";
     }
@@ -389,7 +373,6 @@ public class AdminController extends ControllerTemplate {
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("userFundsDto", userFundsDto);
         return path + "addFunds";
     }
@@ -399,7 +382,7 @@ public class AdminController extends ControllerTemplate {
      * @param model model
      * @return edit user view
      */
-    @RequestMapping("/adminPanel/editUser{userId}")
+    @RequestMapping("/adminPanel/editUser/{userId}")
     public String editUser(@PathVariable(value = "userId") String userId, ModelMap model) {
         if(!pathVariableIsANumber(userId)){
             return prepareErrorPage(model, "Wrong path variable.");
@@ -411,7 +394,6 @@ public class AdminController extends ControllerTemplate {
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("editUserDto", editUserDto);
         return path+"editUser";
     }
@@ -424,7 +406,7 @@ public class AdminController extends ControllerTemplate {
      * @param model              model
      * @return result
      */
-    @RequestMapping(value = "/adminPanel/editUser{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/adminPanel/editUser/{userId}", method = RequestMethod.POST)
     public String editUserSubmit(@PathVariable(value = "userId") String userId, @Valid EditUserDto editUserDto, BindingResult result, ModelMap model) {
         if(!pathVariableIsANumber(userId)){
             return prepareErrorPage(model, "Wrong path variable.");
@@ -443,7 +425,6 @@ public class AdminController extends ControllerTemplate {
         }
         model.addAttribute("success", "User " + editUserDto.getFirstName() + " " +
                 editUserDto.getLastName()+" edited successfully");
-        model.addAttribute("loggedinuser", getPrincipal());
         return path + "addSuccess";
     }
 

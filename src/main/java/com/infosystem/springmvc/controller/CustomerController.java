@@ -52,7 +52,6 @@ public class CustomerController extends ControllerTemplate {
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", login);
         model.addAttribute("userPageDto", userPageDto);
         return path + "customerPanel";
     }
@@ -76,7 +75,6 @@ public class CustomerController extends ControllerTemplate {
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("contractPageDto", contractPageDto);
         return path + "contract";
     }
@@ -95,7 +93,6 @@ public class CustomerController extends ControllerTemplate {
         } catch (DatabaseException e) {
             prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", login);
         model.addAttribute("user", userDto);
         return path + "cart";
     }
@@ -114,7 +111,6 @@ public class CustomerController extends ControllerTemplate {
         } catch (DatabaseException e) {
             prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", login);
         model.addAttribute("user", userFundsDto);
         return path + "addFunds";
     }
@@ -136,7 +132,6 @@ public class CustomerController extends ControllerTemplate {
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("editUserDto", editUserDto);
         return path + "customerEditUser";
     }
@@ -168,7 +163,6 @@ public class CustomerController extends ControllerTemplate {
         }
         model.addAttribute("success", "User " + editUserDto.getFirstName() + " " +
                 editUserDto.getLastName()+" edited successfully");
-        model.addAttribute("loggedinuser", getPrincipal());
         return path + "addSuccess";
     }
 }

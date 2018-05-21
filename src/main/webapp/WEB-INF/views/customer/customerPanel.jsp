@@ -71,7 +71,8 @@
                             </dl>
                         </div>
                         <div class="card-footer">
-                            <a href="/customerPanel/editUser${userPageDto.id}" class="btn btn-outline-primary btn-sm">Edit</a>
+                            <a href="/customerPanel/editUser/${userPageDto.id}" class="btn btn-outline-primary btn-sm">Edit</a>
+                            <a href="/customerPanel/editUser/changePassword/${userPageDto.id}" class="btn btn-outline-primary btn-sm">Change password</a>
                         </div>
                     </div>
                 </div>
