@@ -130,7 +130,7 @@ public class CustomerController extends ControllerTemplate {
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("editUserDto", editUserDto);
-        return "customerEditUser";
+        return path + "customerEditUser";
     }
 
     /**

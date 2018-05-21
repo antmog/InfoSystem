@@ -213,7 +213,7 @@
                 url: "/adminPanel/contract/deleteContract",
                 data: contract_id.toString()
             }).done(function (msg) {
-                notify("Leave the page please: ",msg,"success","fa fa-thumbs-o-up");
+                notify("Leave the page please: ",msg,"success","fa fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
                 notify("",jqXHR.responseText,"info");
             });
@@ -268,7 +268,7 @@
                     contractId: contract_id
                 })
             }).done(function (msg) {
-                notify("",msg,"success","fa fa-thumbs-o-up");
+                notify("",msg,"success","fa fa-thumbs-up");
                 $('#tariffTable').find('tr:eq(1)').find('td:eq(1)').html(newTariffId);
                 getOptionsForTariff(newTariffId, header, token);
             }).fail(function (jqXHR, textStatus) {
@@ -298,7 +298,7 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
-                notify("",msg,"success","fa fa-thumbs-o-up");
+                notify("",msg,"success","fa fa-thumbs-up");
                 var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
                 tr.removeClass('add-tariff-table-selected');
                 $("#contractCurrentOptions").append(tr);
@@ -329,7 +329,7 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
-                notify("",msg,"success","fa fa-thumbs-o-up");
+                notify("",msg,"success","fa fa-thumbs-up");
                 var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove();
             }).fail(function (jqXHR, textStatus) {
                 notify("",jqXHR.responseText,"info");
@@ -417,7 +417,7 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: part1, tariffDto: part2})
             }).done(function (msg) {
-                notify("",msg,"success","fa fa-thumbs-o-up");
+                notify("",msg,"success","fa fa-thumbs-up");
             }).fail(function (xhr, a, error) {
                 notify("",xhr.responseText,"info");
             })
@@ -450,7 +450,7 @@
                 url: "/adminPanel/addContract",
                 data: JSON.stringify({tariffOptionDtoList: part1, userId: $('#userId').val(), tariffId: tariffId, phoneNumber: $('#phoneNumber').val()})
             }).done(function (msg) {
-                notify("",msg,"success","fa fa-thumbs-o-up")
+                notify("",msg,"success","fa fa-thumbs-up")
             }).fail(function (xhr) {
                 notify("",xhr.responseText,"primary")
             })
@@ -656,9 +656,9 @@
                 url: "/adminPanel/option/deleteOption",
                 data: option_id.toString()
             }).done(function (msg) {
-                alert(msg);
+                notify("Leave page please:",msg,"success","fa fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("",jqXHR.responseText,"info");
             });
         });
 
@@ -698,12 +698,12 @@
                             rule: rule
                         })
                     }).done(function (msg) {
-                        alert(msg);
+                        notify("",msg,"success","fas fa-thumbs-up");
                         var tr = availableOptionsTable.find("tr.add-tariff-table-selected").clone();
                         tr.removeClass('add-tariff-table-selected');
                         addedOptionsTable.append(tr);
                     }).fail(function (jqXHR, textStatus) {
-                        alert(jqXHR.responseText);
+                        notify("",jqXHR.responseText,"info");
                     });
                     $('#parseTable tr.move-row').remove();
                 });
@@ -735,10 +735,10 @@
                             rule: rule
                         })
                     }).done(function (msg) {
-                        alert(msg);
+                        notify("",msg,"success","fas fa-thumbs-up");
                         var tr = addedOptionsTable.find("tr.add-tariff-table-selected").remove();
                     }).fail(function (jqXHR, textStatus) {
-                        alert(jqXHR.responseText);
+                        notify("",jqXHR.responseText,"info");
                     });
                     $('#parseTable tr.move-row').remove();
                 });
@@ -799,8 +799,7 @@
             });
             $("#contractAvailableOptions").append(tbl_body);
         }).fail(function (jqXHR, textStatus) {
-            alert(jqXHR.responseText);
-
+            notify("Error:",jqXHR,"alert","Something went wrong.");
         });
     }
 

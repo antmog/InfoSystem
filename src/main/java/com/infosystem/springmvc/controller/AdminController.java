@@ -369,7 +369,7 @@ public class AdminController extends ControllerTemplate {
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("editUserDto", editUserDto);
-        return "editUser";
+        return path+"editUser";
     }
 
     /**
