@@ -505,7 +505,7 @@
                     });
                     $("#addContractAvailableOptions").append(tbl_body);
                 }).fail(function (jqXHR, textStatus) {
-                    notify("Error:",jqXHR.responseText,"alarm");
+                    notify("Error:",jqXHR.responseText,"danger");
                 });
             });
 
@@ -553,10 +553,9 @@
                 url: "/adminPanel/tariff/deleteTariff",
                 data: tariff_id.toString()
             }).done(function (msg) {
-                alert(msg);
+                notify("Leave the page please:",msg,"success","fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
-
+                notify("",jqXHR.responseText,"info");
             });
         });
 
@@ -597,12 +596,12 @@
                     // The key needs to match your method's input parameter (case-sensitive).
                     data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id})
                 }).done(function (msg) {
-                    alert(msg);
+                    notify("",msg,"success","fas fa-thumbs-up");
                     var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").clone();
                     tr.removeClass('add-tariff-table-selected');
                     $("#tariffAddedOptions").append(tr);
                 }).fail(function (jqXHR, textStatus) {
-                    alert(jqXHR.responseText);
+                    notify("",jqXHR.responseText,"info");
                 });
                 $('#parseTable tr.move-row').remove();
             });
@@ -628,10 +627,10 @@
                     // The key needs to match your method's input parameter (case-sensitive).
                     data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id})
                 }).done(function (msg) {
-                    alert(msg);
+                    notify("",msg,"success","fas fa-thumbs-up");
                     var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove();
                 }).fail(function (jqXHR, textStatus) {
-                    alert(jqXHR.responseText);
+                    notify("",jqXHR.responseText,"info");
                 });
                 $('#parseTable tr.move-row').remove();
             });
@@ -799,7 +798,7 @@
             });
             $("#contractAvailableOptions").append(tbl_body);
         }).fail(function (jqXHR, textStatus) {
-            notify("Error:",jqXHR,"alert","Something went wrong.");
+            notify("Error:",jqXHR.responseText,"danger");
         });
     }
 
@@ -823,10 +822,10 @@
                 userId: user_id
             })
         }).done(function (msg) {
-            notify("",msg,"success")
+            notify("",msg,"success","fas fa-thumbs-up");
             updateCartBalance();
         }).fail(function (jqXHR) {
-            notify("",jqXHR.responseText,"primary")
+            notify("",jqXHR.responseText,"info")
         });
     });
 
@@ -849,7 +848,7 @@
         }).done(function (msg) {
             $("#walletBalance").html(msg);
         }).fail(function (jqXHR, textStatus) {
-            alert(jqXHR.responseText);
+            notify("Error",jqXHR.responseText,"danger");
         });
     }
 

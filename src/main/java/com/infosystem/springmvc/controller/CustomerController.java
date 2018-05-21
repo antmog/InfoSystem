@@ -65,10 +65,14 @@ public class CustomerController extends ControllerTemplate {
      * @return view
      */
     @RequestMapping(value = "/customerPanel/contract/{contractId}")
-    public String contract(@PathVariable(value = "contractId") Integer contractId, ModelMap model) {
+    public String contract(@PathVariable(value = "contractId") String contractId, ModelMap model) {
+        if(!pathVariableIsANumber(contractId)){
+            return prepareErrorPage(model, "Wrong path variable.");
+        }
+        int contractIdInt = Integer.parseInt(contractId);
         ContractPageDto contractPageDto;
         try {
-            contractPageDto = dataService.getContractPageData(contractId);
+            contractPageDto = dataService.getContractPageData(contractIdInt);
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
@@ -121,10 +125,14 @@ public class CustomerController extends ControllerTemplate {
      * @return edit user view
      */
     @RequestMapping("/customerPanel/editUser{userId}")
-    public String editUser(@PathVariable(value = "userId") Integer userId, ModelMap model) {
+    public String editUser(@PathVariable(value = "userId") String userId, ModelMap model) {
+        if(!pathVariableIsANumber(userId)){
+            return prepareErrorPage(model, "Wrong path variable.");
+        }
+        int userIdInt = Integer.parseInt(userId);
         EditUserDto editUserDto;
         try {
-            editUserDto = dataService.getEditUserData(userId);
+            editUserDto = dataService.getEditUserData(userIdInt);
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
@@ -142,7 +150,10 @@ public class CustomerController extends ControllerTemplate {
      * @return result
      */
     @RequestMapping(value = "/customerPanel/editUser{userId}", method = RequestMethod.POST)
-    public String editUserSubmit(@Valid EditUserDto editUserDto, BindingResult result, ModelMap model) {
+    public String editUserSubmit(@PathVariable(value = "userId")String userId, @Valid EditUserDto editUserDto, BindingResult result, ModelMap model) {
+        if(!pathVariableIsANumber(userId)){
+            return prepareErrorPage(model, "Wrong path variable.");
+        }
         if (result.hasErrors()) {
             return path + "customerEditUser";
         }

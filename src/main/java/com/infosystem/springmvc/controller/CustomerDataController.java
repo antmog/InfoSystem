@@ -131,7 +131,7 @@ public class CustomerDataController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/addFunds", method = RequestMethod.POST)
     public String addFunds(@RequestBody @Valid FundsDto fundsDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            throw new ValidationException("Chose the amount of money you want to add.");
+            throw new ValidationException("Chose the amount of money you want to add (min 10).");
         }
         userService.addFunds(fundsDto, getPrincipal());
         return fundsDto.getAmount() + " funds added.";

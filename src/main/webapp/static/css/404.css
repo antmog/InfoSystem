@@ -1,0 +1,6 @@
+#myButton {
+    position: absolute;
+}
+body{
+    background:  url(/static/images/404.png) repeat-y;
+}

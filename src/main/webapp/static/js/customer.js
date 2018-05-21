@@ -26,10 +26,10 @@
                     amount: amount
                 })
             }).done(function (msg) {
-                alert(msg);
+                notify("",msg,"success","fas fa-thumbs-up");
                 updateCartBalance();
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("",jqXHR.responseText,"info");
             });
         });
 
@@ -85,10 +85,10 @@
                             value: value
                         })
                     }).done(function (msg) {
-                        alert(msg);
+                        notify("",msg,"success","fas fa-thumbs-up");
                         oldValue.html(value);
                     }).fail(function (jqXHR, textStatus) {
-                        alert(jqXHR.responseText);
+                        notify("",jqXHR.responseText,"info");
                     });
                 }
                 $(this).removeClass('editing').addClass('editable');
@@ -138,13 +138,13 @@
                     contractId: contract_id
                 })
             }).done(function (msg) {
-                alert(msg);
+                notify("",msg,"success","fas fa-thumbs-up");
                 $('#tariffTable').find('tr:eq(1)').find('td:eq(1)').html(newTariffId);
                 var available = $("#contractAvailableOptions tbody tr").remove();
                 var newAvailable = $("#addContractAvailableOptions tbody tr").clone();
                 $("#contractAvailableOptions tbody").append(newAvailable);
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("",jqXHR.responseText,"info");
             });
         });
 
@@ -171,10 +171,10 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
+                notify("",msg,"success","fas fa-thumbs-up");
                 updateCartItemsCount();
-                alert(msg);
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("",jqXHR.responseText,"info");
             });
             console.log($('#parseTable tr'))
             $('#parseTable tr.move-row').remove();
@@ -203,10 +203,10 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
-                alert(msg);
+                notify("",msg,"success","fas fa-thumbs-up");
                 var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove();
             }).fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
+                notify("",jqXHR.responseText,"info");
             });
             $('#parseTable tr.move-row').remove();
         });
@@ -254,7 +254,7 @@
                 });
                 $("#addContractAvailableOptions").append(tbl_body);
             }).fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
+                notify("Error:",jqXHR.responseText,"danger");
             });
         });
     }
@@ -275,10 +275,10 @@
             // The key needs to match your method's input parameter (case-sensitive).
             data: JSON.stringify({entityId: entity_id, entityStatus: status})
         }).done(function (msg) {
-            alert(msg);
+            notify("",msg,"success","fas fa-thumbs-up");
             location.reload();
         }).fail(function (jqXHR, textStatus) {
-            alert("Request failed: " + jqXHR.responseText);
+            notify("Error",jqXHR.responseText,"danger");
         });
     }
 
@@ -302,11 +302,11 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({optionId: option_id, contractId: contract_id})
             }).done(function (msg) {
-                alert(msg);
+                notify("",msg,"success","fas fa-thumbs-up");
                 tr.remove();
                 updateCartItemsCount();
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("Error:",jqXR.responseText,"danger");
             });
         });
         $("#buy").on("click", function () {
@@ -326,12 +326,12 @@
                     userId: user_id
                 })
             }).done(function (msg) {
-                alert(msg);
+                notify("",msg,"success","fas fa-thumbs-up");
                 $("#cartTable tbody tr").remove();
                 updateCartItemsCount();
                 updateCartBalance();
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("",jqXHR.responseText,"info");
             });
         });
     }
@@ -355,7 +355,7 @@
         }).done(function (msg) {
             $("#walletBalance").html(msg);
         }).fail(function (jqXHR, textStatus) {
-            alert(jqXHR.responseText);
+            notify("Error:",jqXHR.responseText,"danger");
         });
     }
 
@@ -374,7 +374,7 @@
         }).done(function (msg) {
             $("#cartItemsCount")[0].dataset.count = msg;
         }).fail(function (jqXHR, textStatus) {
-            alert(jqXHR.responseText);
+            notify("Error",jqXHR.responseText,"danger");
         });
     }
 

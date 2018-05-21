@@ -56,4 +56,11 @@ public abstract class ControllerTemplate {
         model.addAttribute("loggedinuser", getPrincipal());
         return path + "errorPage";
     }
+
+    /**
+     *  r
+     */
+    protected boolean pathVariableIsANumber(String variable){
+        return variable.matches("\\d*");
+    }
 }

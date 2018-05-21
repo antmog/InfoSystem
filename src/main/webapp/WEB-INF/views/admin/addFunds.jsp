@@ -13,7 +13,7 @@
         <p>Wallet balance: <label id="walletBalance">${userFundsDto.amount} €</label></p>
         <h3 class="cover-heading">Enter the amount you want to add.</h3>
         <div class="form-group">
-            <p><input type="text" class="form-control" id="addFundsInput" placeholder="Amount"></p>
+            <p><input type="number" class="form-control" id="addFundsInput" placeholder="Amount"></p>
         </div>
             <button type="submit" class="btn btn-primary" id="addFunds">add funds</button>
     </main>
