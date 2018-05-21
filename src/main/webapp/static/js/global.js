@@ -1,6 +1,6 @@
 function notify(title, msg, type, icon) {
     $.notify({
-        icon: "fas fa-thu",
+        icon: icon,
         title: title,
         message: msg,
         //url: 'https://github.com/mouse0270/bootstrap-notify',
