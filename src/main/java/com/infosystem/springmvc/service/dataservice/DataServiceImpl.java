@@ -55,16 +55,16 @@ public class DataServiceImpl implements DataService {
         int startIndex = (pageNumber - 1) * itemsPerPage + 1;
         List<T> entityDtoList = new ArrayList<>();
         if (type.equals(ContractDto.class)) {
-            entityDtoList = modelMapper.mapToDtoList(type, contractService.findListOfContracts(startIndex, itemsPerPage));
+            entityDtoList = modelMapper.mapToList(type, contractService.findListOfContracts(startIndex, itemsPerPage));
             allEntitiesDto.setPageCount(contractService.getPagesCount(itemsPerPage));
         } else if (type.equals(UserDto.class)) {
-            entityDtoList = modelMapper.mapToDtoList(type, userService.findListOfUsers(startIndex, itemsPerPage));
+            entityDtoList = modelMapper.mapToList(type, userService.findListOfUsers(startIndex, itemsPerPage));
             allEntitiesDto.setPageCount(userService.getPagesCount(itemsPerPage));
         } else if (type.equals(TariffDto.class)) {
-            entityDtoList = modelMapper.mapToDtoList(type, tariffService.findListOfTariffs(startIndex, itemsPerPage));
+            entityDtoList = modelMapper.mapToList(type, tariffService.findListOfTariffs(startIndex, itemsPerPage));
             allEntitiesDto.setPageCount(tariffService.getPagesCount(itemsPerPage));
         } else if (type.equals(TariffOptionDtoShort.class)) {
-            entityDtoList = modelMapper.mapToDtoList(type, tariffOptionService.findListOfTariffOptions(startIndex, itemsPerPage));
+            entityDtoList = modelMapper.mapToList(type, tariffOptionService.findListOfTariffOptions(startIndex, itemsPerPage));
             allEntitiesDto.setPageCount(tariffOptionService.getPagesCount(itemsPerPage));
         }
         allEntitiesDto.setEntityDtoList(entityDtoList);
@@ -76,7 +76,7 @@ public class DataServiceImpl implements DataService {
      */
     @Override
     public List<TariffDto> findAllActiveTariffs() {
-        return modelMapper.mapToDtoList(TariffDto.class, tariffService.findAllActiveTariffs());
+        return modelMapper.mapToList(TariffDto.class, tariffService.findAllActiveTariffs());
     }
 
     /**
@@ -84,7 +84,7 @@ public class DataServiceImpl implements DataService {
      */
     @Override
     public List<TariffOptionDtoShort> findAllTariffOptions() {
-        return modelMapper.mapToDtoList(TariffOptionDtoShort.class, tariffOptionService.findAllTariffOptions());
+        return modelMapper.mapToList(TariffOptionDtoShort.class, tariffOptionService.findAllTariffOptions());
     }
 
     /**

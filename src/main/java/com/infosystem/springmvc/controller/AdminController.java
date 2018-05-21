@@ -350,7 +350,7 @@ public class AdminController extends ControllerTemplate {
             return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("adminFundsDto", userFundsDto);
+        model.addAttribute("userFundsDto", userFundsDto);
         return path + "addFunds";
     }
 
@@ -359,7 +359,7 @@ public class AdminController extends ControllerTemplate {
      * @param model model
      * @return edit user view
      */
-    @RequestMapping("/editUser{userId}")
+    @RequestMapping("/adminPanel/editUser{userId}")
     public String editUser(@PathVariable(value = "userId") Integer userId, ModelMap model) {
         EditUserDto editUserDto;
         try {

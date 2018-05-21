@@ -69,7 +69,6 @@ public class User implements Serializable {
     @Column(name = "STATUS", nullable = false)
     private Status status = Status.ACTIVE;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @Column(name = "USER_CONTRACTS", nullable = false)
     private Set<Contract> userContracts = new HashSet<Contract>();

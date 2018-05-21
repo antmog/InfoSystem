@@ -9,6 +9,7 @@ import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,7 +39,7 @@ public class OptionsRulesChecker {
         Set<TariffOption> cartItems = new HashSet<>();
         //&&!sessionCart.getOptions().get(contractId).isEmpty()
         if (sessionCart.getOptions().containsKey(contractId)) {
-            cartItems = modelMapperWrapper.mapToTariffOptionSet(sessionCart.getOptions().get(contractId));
+            cartItems = modelMapperWrapper.mapToSet(TariffOption.class, sessionCart.getOptions().get(contractId));
         }
         return Stream.of(cartItems, currentOptions, toBeAddedOptionsList).flatMap(Collection::stream).collect(Collectors.toSet());
     }

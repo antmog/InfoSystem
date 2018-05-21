@@ -105,6 +105,7 @@ public class ContractServiceImpl implements ContractService {
         User user = contract.getUser();
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
 
+        optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptionsList);
         optionsRulesChecker.checkAddToContract(editContractDto.getContractId(), toBeAddedOptionsList);
         Amount amount = new Amount();
         contract.getActiveOptions().addAll(toBeAddedOptionsList);
@@ -146,7 +147,7 @@ public class ContractServiceImpl implements ContractService {
             if (!contract.getStatus().equals(Status.ACTIVE)) {
                 throw new LogicException("Contract " + contract.getId() + " is NOT active, sorry.");
             }
-            toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(entry.getValue());
+            toBeAddedOptionsList = modelMapperWrapper.mapToSet(TariffOption.class,entry.getValue());
             optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
             optionsRulesChecker.checkAddToContract(contract.getId(), toBeAddedOptionsList);
             optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptionsList);
@@ -260,14 +261,19 @@ public class ContractServiceImpl implements ContractService {
      */
     public void newContract(AddContractDto addContractDto) throws LogicException, DatabaseException {
         Amount amount = new Amount();
-        if (doesPhoneNumberExist(addContractDto.getContractDto().getPhoneNumber())) {
+        if (doesPhoneNumberExist(addContractDto.getPhoneNumber())) {
             throw new LogicException("Contract with that phone number already exists.");
         }
-        Contract contract = modelMapperWrapper.mapToContract(addContractDto);
-        User user = contract.getUser();
-        Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addContractDto.getTariffOptionDtoList());
-        contract.setActiveOptions(new HashSet<>());
+        User user = userService.findById(addContractDto.getUserId());
+        Tariff tariff = tariffService.findById(addContractDto.getTariffId());
+        Contract contract = new Contract();
+        contract.setUser(user);
+        contract.setTariff(tariff);
+        contract.setPhoneNumber(addContractDto.getPhoneNumber());
+
+        Set<TariffOption> toBeAddedOptionsList;
         if (!addContractDto.getTariffOptionDtoList().isEmpty()) {
+            toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addContractDto.getTariffOptionDtoList());
             optionsRulesChecker.checkAddToContract(contract.getId(), toBeAddedOptionsList);
             contract.setActiveOptions(toBeAddedOptionsList);
         }

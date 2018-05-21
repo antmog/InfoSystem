@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html lang="ru">
 <head>
     <jsp:include page="../header.jsp"/>
@@ -87,6 +88,7 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Phone number</th>
+                                <th>Options count</th>
                                 <th>Tariff</th>
                                 <th>Price</th>
                                 <th>Status</th>
@@ -97,6 +99,7 @@
                                 <tr class="contract-row">
                                     <td>${contract.id}</td>
                                     <td>${contract.phoneNumber}</td>
+                                    <td>${fn:length(contract.activeOptions)}</td>
                                     <td>${contract.tariff.name}</td>
                                     <td>${contract.price}</td>
                                     <td>${contract.status}</td>

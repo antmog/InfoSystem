@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html lang="ru">
 <head>
     <jsp:include page="../header.jsp"/>
@@ -30,6 +31,7 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>Options count</th>
                 <th>Price</th>
                 <th>Status</th>
             </tr>
@@ -38,6 +40,8 @@
             <c:forEach items="${allTariffsDto.entityDtoList}" var="tariff">
                 <tr class="tariff-row">
                     <td>${tariff.id}</td>
+                    <td>${tariff.name}</td>
+                    <td>${fn:length(tariff.availableOptions)}</td>
                     <td>${tariff.name}</td>
                     <td>${tariff.price}</td>
                     <td><span class="badge badge-success">${tariff.status}</span></td>

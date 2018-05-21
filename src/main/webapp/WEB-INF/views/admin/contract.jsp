@@ -11,8 +11,17 @@
 
 <main class="mt-4">
     <div class="container">
+        <c:if test="${contractPageDto.contract.status == 'BLOCKED'}">
+            <div class="alert alert-danger" role="alert">
+                Contract is blocked!
+            </div>
+        </c:if>
+        <c:if test="${contractPageDto.contract.status == 'INACTIVE'}">
+            <div class="alert alert-warning" role="alert">
+                Contract is inactive.
+            </div>
+        </c:if>
         <div class="row">
-
             <div class="col-md-4">
                 <div class="card mb-4">
                     <h5 class="card-header">
@@ -41,24 +50,24 @@
                             </tr>
                             </tbody>
                         </table>
+                        <div class="card text-white bg-info mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Wallet balance: ${contractPageDto.contract.user.balance} €</h5>
+                                <a href="/adminPanel/addFunds/${contractPageDto.contract.user.id}" class="btn btn-outline-light btn-sm">Add funds</a>
+                            </div>
+                        </div>
                         <button id="deleteContract" type="button" class="btn btn-primary btn-sm btn-danger">Delete contract</button>
                     </div>
                     <c:choose>
                         <c:when test="${contractPageDto.contract.status == 'BLOCKED'}">
-                            <label value="Inactive">Blocked
-                            </label>
                             <button type="button" class="btn btn-success" id="unBlockContractButton">Unblock contract
                             </button>
                         </c:when>
                         <c:when test="${contractPageDto.contract.status == 'INACTIVE'}">
-                            <label value="Inactive">Inactive (deactivated)
-                            </label>
                             <button type="button" class="btn btn-success" id="unBlockContractButton">Activate contract
                             </button>
                         </c:when>
                         <c:otherwise>
-                            <label value="Inactive">Active
-                            </label>
                             <button type="button" class="btn btn-danger" id="blockContractButton">Block contract
                             </button>
                             <button type="button" class="btn btn-warning" id="deactivateContractButton">Deactivate contract

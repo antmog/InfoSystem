@@ -61,44 +61,42 @@ public class CustomModelMapper {
 
     /**
      * @param type Dto type class
-     * @param entityList list of entities
+     * @param list list of entities
      * @param <T> Dto type
      * @param <D> entity type
      * @return List of Dto
      */
-    public <T,D> List<T> mapToDtoList(Class<T> type, List<D> entityList) {
-        List<T> dtoList = new ArrayList<>();
-        entityList.forEach(entity -> dtoList.add(mapToDto(type,entity)));
-        return dtoList;
+    public <T,D> List<T> mapToList(Class<T> type, List<D> list) {
+        List<T> resultList = new ArrayList<>();
+        list.forEach(element -> resultList.add(mapToDto(type,element)));
+        return resultList;
     }
 
     /**
-     * @param addContractDto addContractDto
-     * @return contract with phone number, tariff and user according to DTO data.
+     * @param type Dto type class
+     * @param set set of entities
+     * @param <T> Dto type
+     * @param <D> entity type
+     * @return List of Dto
      */
-    public Contract mapToContract(AddContractDto addContractDto) throws DatabaseException {
-        Contract contract = new Contract();
-
-        Tariff tariff = tariffDao.findById(addContractDto.getContractDto().getTariffId());
-        User user = userDao.findById(addContractDto.getContractDto().getUser().getId());
-
-        contract.setPhoneNumber(addContractDto.getContractDto().getPhoneNumber());
-        contract.setTariff(tariff);
-        contract.setUser(user);
-        return contract;
+    public <T,D> Set<T> mapToSet(Class<T> type, Set<D> set) {
+        Set<T> resultSet = new HashSet<>();
+        set.forEach(element -> resultSet.add(mapToDto(type,element)));
+        return resultSet;
     }
 
     /**
      * @param tariffOptionDtoList tariffOptionDtoList
      * @return tariffOption list(set) with ID's from tariffOptionDtoList
      */
-    public Set<TariffOption> mapToTariffOptionSet(Collection<TariffOptionDto> tariffOptionDtoList) {
+    public Set<TariffOption> mapToTariffOptionSet(List<TariffOptionDto> tariffOptionDtoList) {
         List<Integer> optionIdList = new ArrayList<>();
-        for (TariffOptionDto tariffOptionDto : tariffOptionDtoList) {
-            optionIdList.add(tariffOptionDto.getId());
-        }
-        return tariffOptionService.selectListByIdList(optionIdList);
+        tariffOptionDtoList.forEach(tariffOptionDto -> optionIdList.add(tariffOptionDto.getId()));
+        return new HashSet<>(tariffOptionService.selectListByIdList(optionIdList));
     }
+
+
+
 
     /**
      * @param addTariffDto addTariffDto

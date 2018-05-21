@@ -67,7 +67,7 @@ public class AdminDataController {
     @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String saveTariff(@Valid @RequestBody AddTariffDto addTariffDto, BindingResult result) throws LogicException, ValidationException {
         if (result.hasErrors()) {
-            throw new ValidationException("Enter correct name and price for new tariff please.");
+            throw new ValidationException("Enter correct name and price for new tariff please (name length between 2 and 32, min price 1).");
         }
         tariffService.addTariff(addTariffDto);
         return "Tariff added successfully.";
@@ -87,7 +87,7 @@ public class AdminDataController {
     public @ResponseBody
     User searchUserByNumber(@Valid @RequestBody SearchByNumberDto searchByNumberDto, BindingResult result) throws ValidationException, LogicException {
         if (result.hasErrors()) {
-            throw new ValidationException("Incorrect input!");
+            throw new ValidationException("Phone number length is between 6 and 32 (only numbers).");
         }
         return userService.findByPhoneNumber(searchByNumberDto);
     }
@@ -288,7 +288,7 @@ public class AdminDataController {
     @RequestMapping(value = "/adminPanel/addFunds", method = RequestMethod.POST)
     public String addFunds(@RequestBody @Valid UserFundsDto userFundsDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            throw new ValidationException("Chose the amount of money you want to add.");
+            throw new ValidationException("Chose the amount of money you want to add (min - 10).");
         }
         userService.addFunds(userFundsDto);
         return userFundsDto.getAmount() + " funds added.";

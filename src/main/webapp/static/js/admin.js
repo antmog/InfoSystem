@@ -38,10 +38,10 @@
     }
 
     function adminPanel() {
-
-        $(".searchUserByNumber").on("click", function () {
-            if ($('.searchUserByNumberInput').val() === "") {
-                alert("Enter phone number.");
+        $("#searchUserByPhoneNumberForm").on("submit", function (e) {
+            e.preventDefault();
+            if ($("#searchUserByNumberInput").val() === "") {
+                notify("","Enter phone number.","primary","fas fa-search");
             } else {
                 searchUserByNumber();
             }
@@ -50,7 +50,7 @@
         function searchUserByNumber() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
-            var phoneNumber = $('.searchUserByNumberInput').val();
+            var phoneNumber = $('#searchUserByNumberInput').val();
             $.ajax({
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
@@ -66,8 +66,7 @@
             }).done(function (msg) {
                 updateUserTable(msg);
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
-
+                notify("",jqXHR.responseText,"primary","fas fa-search");
             });
         }
 
@@ -214,9 +213,9 @@
                 url: "/adminPanel/contract/deleteContract",
                 data: contract_id.toString()
             }).done(function (msg) {
-                document.location.href = "/adminPanel"
+                notify("Leave the page please: ",msg,"success","fa fa-thumbs-o-up");
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("",jqXHR.responseText,"info");
             });
         });
         $("#contractCurrentOptions").on("click", "tbody tr", function () {
@@ -269,11 +268,11 @@
                     contractId: contract_id
                 })
             }).done(function (msg) {
-                alert(msg);
+                notify("",msg,"success","fa fa-thumbs-o-up");
                 $('#tariffTable').find('tr:eq(1)').find('td:eq(1)').html(newTariffId);
                 getOptionsForTariff(newTariffId, header, token);
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("",jqXHR.responseText,"info");
             });
         });
 
@@ -299,12 +298,12 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
-                alert(msg);
+                notify("",msg,"success","fa fa-thumbs-o-up");
                 var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
                 tr.removeClass('add-tariff-table-selected');
                 $("#contractCurrentOptions").append(tr);
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("",jqXHR.responseText,"info");
             });
             $('#parseTable tr.move-row').remove();
         });
@@ -330,10 +329,10 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
-                alert(msg);
+                notify("",msg,"success","fa fa-thumbs-o-up");
                 var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove();
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
+                notify("",jqXHR.responseText,"info");
             });
             $('#parseTable tr.move-row').remove();
         });
@@ -355,10 +354,9 @@
             // The key needs to match your method's input parameter (case-sensitive).
             data: JSON.stringify({entityId: entity_id, entityStatus: status})
         }).done(function (msg) {
-            alert(msg);
             location.reload();
         }).fail(function (jqXHR, textStatus) {
-            alert(jqXHR.responseText);
+            notify("",jqXHR.responseText,"info");
         });
     }
 
@@ -385,11 +383,17 @@
 
             $('#addTariffAddOption').on('click', function () {
                 var tr = $("#addTariffAvailableOptions tr.add-tariff-table-selected").clone();
+                if(tr.length === 0) {
+                    notify("","Chose option to add.","info");
+                }
                 tr.removeClass('add-tariff-table-selected');
                 $("#addTariffAddedOptions").append(tr);
             });
             $('#addTariffDelOption').on('click', function () {
                 var tr = $("#addTariffAddedOptions tr.add-tariff-table-selected").remove().clone();
+                if(tr.length === 0) {
+                    notify("","Chose option to delete.","info");
+                }
                 tr.removeClass('add-tariff-table-selected');
                 $("#addTariffAvailableOptions").append(tr);
             });
@@ -413,9 +417,9 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: part1, tariffDto: part2})
             }).done(function (msg) {
-                alert(msg);
+                notify("",msg,"success","fa fa-thumbs-o-up");
             }).fail(function (xhr, a, error) {
-                alert(xhr.responseText);
+                notify("",xhr.responseText,"info");
             })
         }
 
@@ -430,8 +434,8 @@
 
         function addContract() {
             var part1 = $('#addContractAddedOptions').tableToJSON();
-            var tariffId = $("#addContractTariffs tr.add-tariff-table-selected").find('td:first').html();
-            var part2 = {userId: $('#userId').val(), phoneNumber: $('#phoneNumber').val(), tariffId: tariffId};
+            var tariffId = null;
+            tariffId = $("#addContractTariffs tr.add-tariff-table-selected").find('td:first').html();
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             $.ajax({
@@ -444,13 +448,11 @@
                 },
                 type: "POST",
                 url: "/adminPanel/addContract",
-                data: JSON.stringify({tariffOptionDtoList: part1, contractDto: part2})
+                data: JSON.stringify({tariffOptionDtoList: part1, userId: $('#userId').val(), tariffId: tariffId, phoneNumber: $('#phoneNumber').val()})
             }).done(function (msg) {
-                alert(msg);
-            }).fail(function (xhr, a, error) {
-                alert(xhr.responseText);
-                //415 warning validation
-                //400 error wrong param
+                notify("",msg,"success","fa fa-thumbs-o-up")
+            }).fail(function (xhr) {
+                notify("",xhr.responseText,"primary")
             })
         }
 
@@ -503,17 +505,24 @@
                     });
                     $("#addContractAvailableOptions").append(tbl_body);
                 }).fail(function (jqXHR, textStatus) {
-                    alert(jqXHR.responseText);
+                    notify("Error:",jqXHR.responseText,"alarm");
                 });
             });
 
             $('#addContractAddOption').on('click', function () {
                 var tr = $("#addContractAvailableOptions tr.add-tariff-table-selected").clone();
+                if(tr.length===0){
+                    notify("","Chose option to add.","info");
+                }
                 tr.removeClass('add-tariff-table-selected');
                 $("#addContractAddedOptions").append(tr);
             });
             $('#addContractDelOption').on('click', function () {
-                $("#addContractAddedOptions tr.add-tariff-table-selected").remove();
+                tr = $("#addContractAddedOptions tr.add-tariff-table-selected");
+                if(tr.length===0){
+                    notify("","Chose option to delete.","info");
+                }
+                tr.remove();
             });
         }
 
@@ -762,55 +771,6 @@
 
     }
 
-
-    function notify(title, msg) {
-        $.notify({
-            icon: 'fas fa-search',
-            title: title,
-            message: msg,
-            url: 'https://github.com/mouse0270/bootstrap-notify',
-            target: '_blank'
-        }, {
-            // settings
-            element: 'body',
-            position: null,
-            type: "info",
-            allow_dismiss: true,
-            newest_on_top: false,
-            showProgressbar: false,
-            placement: {
-                from: "top",
-                align: "right"
-            },
-            offset: 20,
-            spacing: 10,
-            z_index: 1031,
-            delay: 5000,
-            timer: 1000,
-            url_target: '_blank',
-            mouse_over: null,
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-            },
-            onShow: null,
-            onShown: null,
-            onClose: null,
-            onClosed: null,
-            icon_type: 'class',
-            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-            '<span data-notify="icon"></span> ' +
-            '<span data-notify="title">{1}</span> ' +
-            '<span data-notify="message">{2}</span>' +
-            '<div class="progress" data-notify="progressbar">' +
-            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-            '</div>' +
-            '<a href="{3}" target="{4}" data-notify="url"></a>' +
-            '</div>'
-        });
-    }
-
     function getOptionsForTariff(newTariffId, header, token) {
         $.ajax({
             beforeSend: function (xhr) {
@@ -864,10 +824,10 @@
                 userId: user_id
             })
         }).done(function (msg) {
-            alert(msg);
+            notify("",msg,"success")
             updateCartBalance();
-        }).fail(function (jqXHR, textStatus) {
-            alert(jqXHR.responseText);
+        }).fail(function (jqXHR) {
+            notify("",jqXHR.responseText,"primary")
         });
     });
 

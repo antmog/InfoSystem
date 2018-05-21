@@ -18,22 +18,22 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/adminPanel/allUsers/1">
                     All users
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/adminPanel/allContracts/1">
                     All contracts
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/adminPanel/allTariffs/1">
                     All tariffs
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/adminPanel/allOptions/1">
                     All options
                 </a>

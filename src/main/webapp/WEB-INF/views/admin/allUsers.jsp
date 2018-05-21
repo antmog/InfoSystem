@@ -6,9 +6,7 @@
     <jsp:include page="../header.jsp"/>
 </head>
 <body>
-
 <jsp:include page="navBar.jsp"/>
-
 <main class="mt-4">
     <div class="container">
         <div class="pt-4 pb-4">
@@ -25,8 +23,7 @@
                             <form id="searchUserByPhoneNumberForm">
                                 <div class="form-row justify-content-end">
                                     <div class="col-auto">
-                                        <label class="sr-only" for="userPhoneNumberInput">Name</label>
-                                        <input id="userPhoneNumberInput" type="text" class="form-control mb-2"
+                                        <input id="searchUserByNumberInput" type="text" class="form-control mb-2"
                                                placeholder="Search by phone number">
                                     </div>
                                     <div class="col-auto">

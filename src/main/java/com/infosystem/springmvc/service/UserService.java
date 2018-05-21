@@ -53,7 +53,7 @@ public interface UserService {
 
     void addFunds(FundsDto fundsDto, String login) throws DatabaseException;
 
-    void spendFunds(FundsDto fundsDto, String login) throws DatabaseException;
+    void spendFunds(User user, double amount);
 
     String getBalance(GetBalanceDto getBalanceDto) throws DatabaseException;
 

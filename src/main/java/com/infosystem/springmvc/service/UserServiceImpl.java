@@ -196,9 +196,8 @@ public class UserServiceImpl implements UserService {
         user.addFunds(amount);
     }
 
-    public void spendFunds(FundsDto FundsDto, String login) throws DatabaseException {
-        User user = findByLogin(login);
-        user.spendFunds(FundsDto.getAmount());
+    public void spendFunds(User user, double amount) {
+        user.spendFunds(amount);
     }
 
     public String getBalance(GetBalanceDto getBalanceDto) throws DatabaseException {

@@ -4,13 +4,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 public class UserFundsDto {
 
-    @NotNull
+    @Min(value = 10)
     private double amount;
     private int userId;
 

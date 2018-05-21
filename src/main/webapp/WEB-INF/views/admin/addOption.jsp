@@ -52,10 +52,9 @@ Adding option
         </div>
     </div>
 
-    <input type="submit" value="Register" class="btn btn-primary btn-sm"/> or <a href="/adminPanel">Cancel</a>
+    <input type="submit" value="Add" class="btn btn-primary btn-sm"/> or <a href="/adminPanel">Cancel</a>
 
 </form:form>
-<button id="superButton"> superbutton</button>
 <jsp:include page="../footer.jsp"/>
 </body>
 </html>
