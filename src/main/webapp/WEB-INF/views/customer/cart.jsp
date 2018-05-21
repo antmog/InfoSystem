@@ -18,51 +18,65 @@
                     <h5 class="card-header">
                         ${user.firstName} ${user.lastName}
                     </h5>
+                </div>
+                <div class="card text-white bg-info mb-4">
                     <div class="card-body">
-                        <p>Wallet balance: <label id="walletBalance">${user.balance}</label></p>
-                        <p><a class="btn btn-info btn-sm" href="/customerPanel/addFunds" role="button">Add funds to wallet</a></p>
-                        <div class="col-md-4"><button type="button" id="buy" class="btn btn-primary">Buy all</button></div>
+                        <h5 class="card-title">Wallet balance: ${user.balance} €</h5>
+                        <div class="col-md-4"><a href="/customerPanel/addFunds" class="btn btn-outline-light btn-sm">
+                            Add funds</a></div>
+                        <div class="col-md-4"><p id="buy"><a class="btn btn-outline-light btn-sm">Buy all</a></p></div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="card mb-8">
-                    <h5 class="card-header">
-                        My Contracts
-                    </h5>
-                    <div class="card-body">
-                        <c:if test="${empty sessionCart.options}">
-                            Empty cart.
-                        </c:if>
-                        <table class="table table-hover contracts-table" id="cartTable">
-                            <thead>
-                            <tr>
-                                <th>Contract id</th>
-                                <th>Option id</th>
-                                <th>Option name</th>
-                                <th>Option price</th>
-                                <th>Option costofadd</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${sessionCart.options}" var="item">
-                                <c:forEach items="${item.value}" var="option">
+            <c:choose>
+                <c:when test="${empty sessionCart.options}">
+                    <div class="col-md-8">
+                        <div class="alert alert-info" role="alert">
+                            Cart is empty.
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="col-md-8">
+                        <div class="card mb-8">
+                            <h5 class="card-header">
+                                My Contracts
+                            </h5>
+                            <div class="card-body">
+                                <table class="table table-hover contracts-table" id="cartTable">
+                                    <thead>
                                     <tr>
-                                        <td>${item.key}</td>
-                                        <td>${option.id}</td>
-                                        <td>${option.name}</td>
-                                        <td>${option.price}</td>
-                                        <td>${option.costofadd}</td>
-                                        <td><button type="button" class="btn btn-sm btn-danger" id="deleteFromCart">delete
-                                        </button></td>
+                                        <th>Contract id</th>
+                                        <th>Option id</th>
+                                        <th>Option name</th>
+                                        <th>Option price</th>
+                                        <th>Option costofadd</th>
                                     </tr>
-                                </c:forEach>
-                            </c:forEach>
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach items="${sessionCart.options}" var="item">
+                                        <c:forEach items="${item.value}" var="option">
+                                            <tr>
+                                                <td>${item.key}</td>
+                                                <td>${option.id}</td>
+                                                <td>${option.name}</td>
+                                                <td>${option.price}</td>
+                                                <td>${option.costofadd}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-danger"
+                                                            id="deleteFromCart">delete
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 

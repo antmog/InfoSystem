@@ -6,9 +6,14 @@
 .add-tariff-table-selected {
     background-color: #c0ffdb;
 }
+
 html,
 body {
     height: 100%;
+}
+
+p {
+    margin-bottom: 0;
 }
 
 .form-signin-container {
@@ -24,9 +29,11 @@ body {
     padding: 15px;
     margin: auto;
 }
+
 .form-signin .checkbox {
     font-weight: 400;
 }
+
 .form-signin .form-control {
     position: relative;
     box-sizing: border-box;
@@ -34,45 +41,53 @@ body {
     padding: 10px;
     font-size: 16px;
 }
+
 .form-signin .form-control:focus {
     z-index: 2;
 }
+
 .form-signin input[type="text"] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
+
 .form-signin input[type="password"] {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
-.add-funds{
+
+.add-funds {
     max-width: 400px;
 }
-.p1{
-    max-height:20pt;
-    max-width:35pt
+
+.p1 {
+    max-height: 20pt;
+    max-width: 35pt
 }
-.p3{
-    max-height:20pt;
+
+.p3 {
+    max-height: 20pt;
     bottom: 15pt
 }
-.fa-shopping-cart{
-    font-size:0.6em;
+
+.fa-shopping-cart {
+    font-size: 0.6em;
 }
-.p1[data-count]:after{
-    position:absolute;
-    right:5%;
-    top:-10%;
+
+.p1[data-count]:after {
+    position: absolute;
+    right: 5%;
+    top: -10%;
     content: attr(data-count);
-    font-size:30%;
-    padding:.5em;
-    border-radius:650%;
-    line-height:1em;
-    width:2em;
+    font-size: 30%;
+    padding: .5em;
+    border-radius: 650%;
+    line-height: 1em;
+    width: 2em;
     color: #f8f9fa;
-    background:rgba(36, 142, 173, 0.85);
-    text-align:center;
+    background: rgba(36, 142, 173, 0.85);
+    text-align: center;
     min-width: 1em;
 }

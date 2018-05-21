@@ -8,13 +8,13 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
-public class AdminFundsDto {
+public class UserFundsDto {
 
     @NotNull
     private double amount;
     private int userId;
 
-    public AdminFundsDto(Double amount, Integer id) {
+    public UserFundsDto(Double amount, Integer id) {
         this.amount = amount;
         this.userId = id;
     }

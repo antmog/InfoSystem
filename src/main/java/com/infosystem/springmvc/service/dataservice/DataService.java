@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DataService {
 
-    UserDto getAdminPanelData(String login) throws DatabaseException;
+    UserDto getUserInfo(String login) throws DatabaseException;
 
     ContractPageDto getContractPageData(Integer contractId) throws DatabaseException;
 
@@ -24,9 +24,11 @@ public interface DataService {
 
     UserPageDto getUserPageDto(Integer userId) throws DatabaseException;
 
-    AdminFundsDto getAdminAddPageData(Integer userId) throws DatabaseException;
+    UserFundsDto getUserAddFundsData(Integer userId) throws DatabaseException;
 
     EditUserDto getEditUserData(int userId) throws DatabaseException;
 
     UserPageDto getCustomerPageData(String login) throws DatabaseException;
+
+    UserFundsDto getUserAddFundsData(String login) throws DatabaseException;
 }

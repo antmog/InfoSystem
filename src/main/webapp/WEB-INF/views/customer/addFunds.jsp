@@ -10,8 +10,8 @@
 <jsp:include page="navBar.jsp"/>
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column add-funds">
     <main role="main" class="inner cover">
-        <p>Wallet balance: <label id="walletBalance">${user.balance}</label></p>
-        <h1 class="cover-heading">Enter the amount you want to add.</h1>
+        <p>Wallet balance: <label id="walletBalance">${user.amount}</label></p>
+        <h3 class="cover-heading">Enter the amount you want to add.</h3>
         <div class="form-group">
             <p><input type="text" class="form-control" id="addFundsInput" placeholder="Amount"></p>
         </div>
@@ -19,7 +19,7 @@
     </main>
 </div>
 <script>
-    var user_id = ${user.id};
+    var user_id = ${user.userId};
 </script>
 <jsp:include page="../footer.jsp"/>
 </body>

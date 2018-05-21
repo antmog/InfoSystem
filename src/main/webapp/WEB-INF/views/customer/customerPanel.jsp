@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html lang="ru">
 <head>
@@ -45,7 +46,7 @@
                     <div class="card text-white bg-info mb-4">
                         <div class="card-body">
                             <h5 class="card-title">Wallet balance: ${userPageDto.balance} €</h5>
-                            <a href="/adminPanel/addFunds/${userPageDto.id}" class="btn btn-outline-light btn-sm">Add funds</a>
+                            <a href="/customerPanel/addFunds" class="btn btn-outline-light btn-sm">Add funds</a>
                         </div>
                     </div>
 
@@ -70,7 +71,7 @@
                             </dl>
                         </div>
                         <div class="card-footer">
-                            <a href="/adminPanel/editUser${userPageDto.id}" class="btn btn-outline-primary btn-sm">Edit</a>
+                            <a href="/customerPanel/editUser${userPageDto.id}" class="btn btn-outline-primary btn-sm">Edit</a>
                         </div>
                     </div>
                 </div>
@@ -84,6 +85,7 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Phone number</th>
+                                <th>Options count</th>
                                 <th>Tariff</th>
                                 <th>Price</th>
                                 <th>Status</th>
@@ -94,6 +96,7 @@
                                 <tr class="contract-row">
                                     <td>${contract.id}</td>
                                     <td>${contract.phoneNumber}</td>
+                                    <td>${fn:length(contract.activeOptions)}</td>
                                     <td>${contract.tariff.name}</td>
                                     <td>${contract.price}</td>
                                     <td>${contract.status}</td>
@@ -108,7 +111,7 @@
     </div>
 </main>
 <script>
-    var user_id = ${user.id};
+    var user_id = ${userPageDto.id};
 </script>
 <jsp:include page="../footer.jsp"/>
 </body>

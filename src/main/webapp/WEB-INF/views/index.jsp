@@ -17,23 +17,28 @@
         <ul class="navbar-nav ml-auto">
             <sec:authorize access="isAuthenticated()">
                 <sec:authorize access="hasAnyRole('ADMIN')">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="/lk">
                             Admin Panel
                         </a>
                     </li>
                 </sec:authorize>
                 <sec:authorize access="hasAnyRole('CUSTOMER')">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="/lk">
                             User Panel
                         </a>
                     </li>
                 </sec:authorize>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">
-                        <strong>${loggedinuser}</strong>, Log out
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                            ${loggedinuser}
                     </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout">Log out</a>
+                    </div>
                 </li>
             </sec:authorize>
         </ul>

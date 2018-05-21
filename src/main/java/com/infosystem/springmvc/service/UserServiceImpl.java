@@ -178,8 +178,8 @@ public class UserServiceImpl implements UserService {
         addFunds(findByLogin(login), FundsDto.getAmount());
     }
 
-    public void addFunds(AdminFundsDto adminFundsDto) throws DatabaseException {
-        addFunds(findById(adminFundsDto.getUserId()), adminFundsDto.getAmount());
+    public void addFunds(UserFundsDto userFundsDto) throws DatabaseException {
+        addFunds(findById(userFundsDto.getUserId()), userFundsDto.getAmount());
     }
 
     @Override

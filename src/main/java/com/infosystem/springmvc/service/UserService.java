@@ -59,7 +59,7 @@ public interface UserService {
 
     int getPagesCount(int itemsPerPAge);
 
-    void addFunds(AdminFundsDto adminFundsDto) throws DatabaseException;
+    void addFunds(UserFundsDto userFundsDto) throws DatabaseException;
 
     void editUser(EditUserDto editUserDto) throws DatabaseException;
 }

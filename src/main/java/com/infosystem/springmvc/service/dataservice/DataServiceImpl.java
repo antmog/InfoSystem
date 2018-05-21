@@ -3,7 +3,6 @@ package com.infosystem.springmvc.service.dataservice;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.service.ContractService;
@@ -41,7 +40,7 @@ public class DataServiceImpl implements DataService {
      * @return AdminPanelDto
      */
     @Override
-    public UserDto getAdminPanelData(String login) throws DatabaseException {
+    public UserDto getUserInfo(String login) throws DatabaseException {
         return modelMapper.mapToDto(UserDto.class, userService.findByLogin(login));
     }
 
@@ -99,9 +98,9 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public AdminFundsDto getAdminAddPageData(Integer userId) throws DatabaseException {
+    public UserFundsDto getUserAddFundsData(Integer userId) throws DatabaseException {
         User user = userService.findById(userId);
-        return new AdminFundsDto(user.getBalance(),user.getId());
+        return new UserFundsDto(user.getBalance(),user.getId());
     }
 
     @Override
@@ -114,10 +113,12 @@ public class DataServiceImpl implements DataService {
         return modelMapper.mapToDto(UserPageDto.class, userService.findByLogin(login));
     }
 
+    @Override
+    public UserFundsDto getUserAddFundsData(String login) throws DatabaseException {
+        User user = userService.findByLogin(login);
+        return new UserFundsDto(user.getBalance(),user.getId());
+    }
 
-
-
-    
 
     @Override
     public TariffPageDto getTariffPageData(Integer tariffId) throws DatabaseException {

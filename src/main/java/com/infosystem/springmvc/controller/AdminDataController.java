@@ -8,7 +8,6 @@ import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
-import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
@@ -287,12 +286,12 @@ public class AdminDataController {
      * @throws DatabaseException   if user doesn't exist
      */
     @RequestMapping(value = "/adminPanel/addFunds", method = RequestMethod.POST)
-    public String addFunds(@RequestBody @Valid AdminFundsDto adminFundsDto, BindingResult result) throws DatabaseException, ValidationException {
+    public String addFunds(@RequestBody @Valid UserFundsDto userFundsDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
             throw new ValidationException("Chose the amount of money you want to add.");
         }
-        userService.addFunds(adminFundsDto);
-        return adminFundsDto.getAmount() + " funds added.";
+        userService.addFunds(userFundsDto);
+        return userFundsDto.getAmount() + " funds added.";
     }
 
     /**

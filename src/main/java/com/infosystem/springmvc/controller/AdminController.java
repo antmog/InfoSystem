@@ -5,10 +5,8 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.enums.Role;
-import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.dataservice.DataService;
 import com.infosystem.springmvc.service.TariffOptionService;
-import com.infosystem.springmvc.service.TariffService;
 import com.infosystem.springmvc.service.UserService;
 import com.infosystem.springmvc.validators.EditUserValidator;
 import com.infosystem.springmvc.validators.TariffOptionFormValidator;
@@ -34,23 +32,19 @@ public class AdminController extends ControllerTemplate {
     private final EditUserValidator editUserValidator;
     private final UserService userService;
     private final DataService dataService;
-    private final ContractService contractService;
     private final TariffOptionService tariffOptionService;
-    private final TariffService tariffService;
 
     @Autowired
     public AdminController(UserFormValidator userFormValidator, TariffOptionFormValidator tariffOptionFormValidator,
-                           EditUserValidator editUserValidator, UserService userService, DataService dataService, ContractService contractService,
-                           TariffOptionService tariffOptionService, TariffService tariffService) {
+                           EditUserValidator editUserValidator, UserService userService, DataService dataService,
+                           TariffOptionService tariffOptionService) {
         super("admin/");
         this.userFormValidator = userFormValidator;
         this.tariffOptionFormValidator = tariffOptionFormValidator;
         this.editUserValidator = editUserValidator;
         this.userService = userService;
         this.dataService = dataService;
-        this.contractService = contractService;
         this.tariffOptionService = tariffOptionService;
-        this.tariffService = tariffService;
     }
 
     /**
@@ -63,7 +57,7 @@ public class AdminController extends ControllerTemplate {
     public String adminPanel(ModelMap model) {
         UserDto userDto = null;
         try {
-            userDto = dataService.getAdminPanelData(getPrincipal());
+            userDto = dataService.getUserInfo(getPrincipal());
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
@@ -349,25 +343,25 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping("/adminPanel/addFunds/{userId}")
     public String addFunds(@PathVariable(value = "userId") Integer userId, ModelMap model) {
-        AdminFundsDto adminFundsDto = new AdminFundsDto();
+        UserFundsDto userFundsDto;
         try {
-            adminFundsDto = dataService.getAdminAddPageData(userId);
+            userFundsDto = dataService.getUserAddFundsData(userId);
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("adminFundsDto", adminFundsDto);
+        model.addAttribute("adminFundsDto", userFundsDto);
         return path + "addFunds";
     }
 
     /**
-     * Returns addFunds view.
-     *
-     * @return view
+     * @param userId userId
+     * @param model model
+     * @return edit user view
      */
-    @RequestMapping("/adminPanel/editUser{userId}")
+    @RequestMapping("/editUser{userId}")
     public String editUser(@PathVariable(value = "userId") Integer userId, ModelMap model) {
-        EditUserDto editUserDto = new EditUserDto();
+        EditUserDto editUserDto;
         try {
             editUserDto = dataService.getEditUserData(userId);
         } catch (DatabaseException e) {
@@ -375,7 +369,7 @@ public class AdminController extends ControllerTemplate {
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("editUserDto", editUserDto);
-        return path + "editUser";
+        return "editUser";
     }
 
     /**
