@@ -18,5 +18,7 @@ public interface TariffDao {
 
     List<Tariff> findAllActiveTariffs();
 
+    int tariffCount();
 
+    List<Tariff> findListOfTariffs(int startIndex, int count);
 }

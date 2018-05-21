@@ -24,5 +24,6 @@
 </sec:authorize>
 <script src="/static/vendors/bootstrap-4.1.0/js/bootstrap.min.js" defer></script>
 <script src="/static/vendors/bootstrap-notify/bootstrap-notify.min.js" defer></script>
+<script src="/static/vendors/datatables/jquery.dataTables.min.js" defer></script>
 </body>
 </html>

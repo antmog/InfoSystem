@@ -17,6 +17,7 @@ import javax.validation.Valid;
 @RequestMapping("/")
 public class GlobalController extends ControllerTemplate {
 
+    //todo
     /**
      * Mapping to login screen.
      */
@@ -53,7 +54,6 @@ public class GlobalController extends ControllerTemplate {
     public String lk(ModelMap model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("loggedinuser", getPrincipal());
-
         if (isCurrentAuthenticationAnonymous()) {
             return "login";
         }
@@ -74,5 +74,4 @@ public class GlobalController extends ControllerTemplate {
         model.addAttribute("loggedinuser", getPrincipal());
         return "index";
     }
-
 }

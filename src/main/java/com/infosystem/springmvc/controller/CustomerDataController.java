@@ -4,12 +4,9 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.service.ContractService;
-import com.infosystem.springmvc.service.TariffOptionService;
-import com.infosystem.springmvc.service.TariffService;
-import com.infosystem.springmvc.service.UserService;
+import com.infosystem.springmvc.service.*;
+import com.infosystem.springmvc.sessioncart.SessionCart;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -141,7 +138,7 @@ public class CustomerDataController extends ControllerTemplate {
     }
 
     /**
-     * Adding funds to user.
+     * Getting current balance value.
      *
      * @return message
      * @throws ValidationException if amount value is null

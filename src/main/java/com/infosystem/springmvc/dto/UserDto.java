@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -33,7 +32,7 @@ public class UserDto {
 
     private String role;
 
-    private Set<ContractDto> userContracts;
+    private Integer contractsCount;
 
     private Status status;
 
@@ -59,7 +58,6 @@ public class UserDto {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, firstName, lastName, address, birthDate, passport, mail, login, password, role, status);
     }
 }

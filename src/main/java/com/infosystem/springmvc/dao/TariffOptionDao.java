@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.dao;
 
+import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface TariffOptionDao {
     TariffOption findByName(String name);
 
     Set<TariffOption> selectListByIdList(List<Integer> optionIdList);
+
+    int tariffOptionCount();
+
+    List<TariffOption> findListOfTariffOptions(int startIndex, int count);
 }

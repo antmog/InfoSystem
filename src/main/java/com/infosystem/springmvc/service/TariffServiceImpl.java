@@ -49,17 +49,6 @@ public class TariffServiceImpl implements TariffService {
         return dao.findByName(name);
     }
 
-    public void addTariff(Tariff tariff) {
-        dao.save(tariff);
-    }
-
-    public void updateTariff(Tariff tariff) throws DatabaseException {
-        Tariff entity = findById(tariff.getId());
-        if (entity != null) {
-
-        }
-    }
-
     public List<Tariff> findAllTariffs() {
         return dao.findAllTariffs();
     }
@@ -85,7 +74,6 @@ public class TariffServiceImpl implements TariffService {
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addTariffDto.getTariffOptionDtoList());
 
         optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptionsList);
-
         tariff.setAvailableOptions(toBeAddedOptionsList);
         dao.save(tariff);
     }
@@ -141,6 +129,17 @@ public class TariffServiceImpl implements TariffService {
     public Set<TariffOptionDtoShort> getAvailableOptionsForTariff(int tariffId) throws DatabaseException {
         return modelMapperWrapper.mapToTariffOptionDtoShortSet(findById(tariffId).getAvailableOptions());
     }
+
+    @Override
+    public List<Tariff> findListOfTariffs(int startIndex, int count) {
+        return dao.findListOfTariffs(startIndex, count);
+    }
+
+    @Override
+    public int getPagesCount(int itemsPerPage) {
+        return (dao.tariffCount() - 1) / itemsPerPage + 1;
+    }
+
 
     /**
      * Set status of selected tariff to selected status.

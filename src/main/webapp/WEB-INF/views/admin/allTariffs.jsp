@@ -11,51 +11,62 @@
 
 <main class="mt-4">
     <div class="container">
-        <div class="row">
-
-            <div class="col-md-8">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <strong>All tariffs</strong>
-                    </h5>
-                    <div class="card-body">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <table class="table table-hover tariffs-table">
-                                <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>available options id</th>
-                                    <th>status</th>
-                                    <th width="100"></th>
-                                    <th width="100"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${tariffs}" var="tariff">
-                                    <tr class="tariff-row">
-                                        <td>${tariff.id}</td>
-                                        <td>${tariff.name}</td>
-                                        <td>${tariff.price}</td>
-                                        <td><c:forEach items="${tariff.availableOptions}" var="option">
-                                            ${option.id};
-                                        </c:forEach></td>
-                                        <td>${tariff.status}</td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </li>
+        <div class="pt-4 pb-4">
+            <div class="row">
+                <div class="col-6">
+                    <h1 class="h2 mb-0">Tariffs</h1>
+                </div>
+                <div class="col-6">
+                    <div class="row justify-content-end">
+                        <div class="col-auto">
+                            <a href="/adminPanel/addTariff" class="btn btn-primary">Add tariff</a>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="addTariffButton">Add tariff</button>
                 </div>
             </div>
-
         </div>
+        <table class="table table-hover tariffs-table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${allTariffsDto.entityDtoList}" var="tariff">
+                <tr class="tariff-row">
+                    <td>${tariff.id}</td>
+                    <td>${tariff.name}</td>
+                    <td>${tariff.price}</td>
+                    <td><span class="badge badge-success">${tariff.status}</span></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" id="prevPage"><a class="page-link">Previous</a></li>
+                <c:forEach begin="1" end="${allTariffsDto.pageCount}" varStatus="loop">
+                    <c:if test = "${allTariffsDto.pageNumber == loop.index }">
+                        <li class="page-item active"><a class="page-link" href="/adminPanel/allTariffs/${loop.index}">${loop.index}</a></li>
+                    </c:if>
+                    <c:if test = "${allTariffsDto.pageNumber != loop.index }">
+                        <li class="page-item"><a class="page-link" href="/adminPanel/allTariffs/${loop.index}">${loop.index}</a></li>
+                    </c:if>
+                </c:forEach>
+                <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
+            </ul>
+        </nav>
     </div>
-
 </main>
+
+<script>
+    var pageNumber = ${allTariffsDto.pageNumber};
+    var pageCount = ${allTariffsDto.pageCount};
+    var entities = "Tariffs";
+</script>
 <jsp:include page="../footer.jsp"/>
 </body>
 </html>

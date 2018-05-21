@@ -1,6 +1,6 @@
 package com.infosystem.springmvc.util;
 
-import com.infosystem.springmvc.dto.SessionCart;
+import com.infosystem.springmvc.sessioncart.SessionCart;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.entity.Contract;

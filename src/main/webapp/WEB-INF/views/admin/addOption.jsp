@@ -52,18 +52,10 @@ Adding option
         </div>
     </div>
 
-    <c:choose>
-        <c:when test="${edit}">
-            <input type="submit" value="Update" class="btn btn-primary btn-sm"/> or <a
-                href="/adminPanel">Cancel</a>
-        </c:when>
-        <c:otherwise>
-            <input type="submit" value="Register" class="btn btn-primary btn-sm"/> or <a
-                href="/adminPanel">Cancel</a>
-        </c:otherwise>
-    </c:choose>
+    <input type="submit" value="Register" class="btn btn-primary btn-sm"/> or <a href="/adminPanel">Cancel</a>
+
 </form:form>
-<button id = "superButton"> superbutton</button>
+<button id="superButton"> superbutton</button>
 <jsp:include page="../footer.jsp"/>
 </body>
 </html>

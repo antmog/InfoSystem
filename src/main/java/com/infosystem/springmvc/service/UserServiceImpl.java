@@ -1,12 +1,12 @@
 package com.infosystem.springmvc.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
 import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
+import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
@@ -41,23 +41,19 @@ public class UserServiceImpl implements UserService {
     }
 
     public User findById(int id) throws DatabaseException {
-        User user = dao.findById(id);
-        if (user == null) {
-            throw new DatabaseException("User doesn't exist.");
-        }
-        return user;
+        return dao.findById(id);
     }
 
-    public User findByLogin(String login) {
-        return dao.findByLogin(login);
+    public User findByLogin(String login) throws DatabaseException {
+        return dao.findByParameter("login", login);
     }
 
-    public User findByEmail(String mail) {
-        return dao.findByEmail(mail);
+    public User findByEmail(String mail) throws DatabaseException {
+        return dao.findByParameter("mail", mail);
     }
 
-    public User findByPassport(Integer passport) {
-        return dao.findByPassport(passport);
+    public User findByPassport(Integer passport) throws DatabaseException {
+        return dao.findByParameter("passport", String.valueOf(passport));
     }
 
     public void saveUser(User user) {
@@ -70,8 +66,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findFirstUsers() {
-        return dao.findAllUsers().stream().limit(5).collect(Collectors.toList());
+    public List<User> findListOfUsers(int startIndex, int count) {
+        return dao.findListOfUsers(startIndex, count);
     }
 
     /**
@@ -138,50 +134,70 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * @param searchByNumber searchByNumber
+     * @param searchByNumberDto searchByNumberDto
      * @return user (related with contract that has phoneNumber)
      * @throws LogicException if there is no contract (user) with such phone number
      */
     @Override
-    public User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException {
-        Contract contract = contractService.findByPhoneNumber(searchByNumber.getPhoneNumber());
+    public User findByPhoneNumber(SearchByNumberDto searchByNumberDto) throws LogicException {
+        Contract contract = contractService.findByPhoneNumber(searchByNumberDto.getPhoneNumber());
         if (contract == null) {
             throw new LogicException("No such number.");
         }
-        return contractService.findByPhoneNumber(searchByNumber.getPhoneNumber()).getUser();
+        return contractService.findByPhoneNumber(searchByNumberDto.getPhoneNumber()).getUser();
     }
 
     public void addUser(AddUserDto addUserDto) {
-        User user = modelMapperWrapper.mapToUser(addUserDto);
+        User user = modelMapperWrapper.mapToEntity(User.class, addUserDto);
         user.setBalance(0.0);
         user.setStatus(Status.ACTIVE);
         saveUser(user);
     }
 
-    public boolean doesLoginExist(String login) {
-        User user = findByLogin(login);
-        return (user != null);
+    @Override
+    public boolean checkParameterNotUnique(String parameter, String parameterValue) {
+        try {
+            User user = dao.findByParameter(parameter, parameterValue);
+        } catch (DatabaseException dbe) {
+            return false;
+        }
+        return true;
     }
 
-    public boolean doesEmailExist(String mail) {
-        User user = findByEmail(mail);
-        return (user != null);
-    }
-
-    public boolean doesPassportExist(String passport) {
-        User user = findByPassport(Integer.valueOf(passport));
-        return (user != null);
-    }
+//    public boolean doesEmailExist(String mail) throws DatabaseException {
+//        User user = findByEmail(mail);
+//        return (user != null);
+//    }
+//
+//    public boolean doesPassportExist(String passport) throws DatabaseException {
+//        User user = findByPassport(Integer.valueOf(passport));
+//        return (user != null);
+//    }
 
     public void addFunds(FundsDto FundsDto, String login) throws DatabaseException {
-        User user = findByLogin(login);
-        checkIfUserExist(user);
-        user.addFunds(FundsDto.getAmount());
+        addFunds(findByLogin(login), FundsDto.getAmount());
+    }
+
+    public void addFunds(AdminFundsDto adminFundsDto) throws DatabaseException {
+        addFunds(findById(adminFundsDto.getUserId()), adminFundsDto.getAmount());
+    }
+
+    @Override
+    public void editUser(EditUserDto editUserDto) throws DatabaseException {
+        User user = findById(editUserDto.getId());
+        user.setFirstName(editUserDto.getFirstName());
+        user.setLastName(editUserDto.getLastName());
+        user.setAddress(editUserDto.getAddress());
+        user.setMail(editUserDto.getMail());
+        user.setPassword(passwordEncoder.encode(editUserDto.getPassword()));
+}
+
+    private void addFunds(User user, double amount) {
+        user.addFunds(amount);
     }
 
     public void spendFunds(FundsDto FundsDto, String login) throws DatabaseException {
         User user = findByLogin(login);
-        checkIfUserExist(user);
         user.spendFunds(FundsDto.getAmount());
     }
 
@@ -189,9 +205,8 @@ public class UserServiceImpl implements UserService {
         return String.valueOf(findById(getBalanceDto.getUserId()).getBalance());
     }
 
-    private void checkIfUserExist(User user) throws DatabaseException {
-        if (user == null) {
-            throw new DatabaseException("Whoops, user doesn't exist.");
-        }
+    @Override
+    public int getPagesCount(int itemsPerPage) {
+        return (dao.userCount() - 1) / itemsPerPage + 1;
     }
 }

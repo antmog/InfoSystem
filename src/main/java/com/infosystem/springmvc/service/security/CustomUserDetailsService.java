@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.service.security;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.service.UserService;
 import org.slf4j.Logger;
@@ -27,9 +28,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String login)
             throws UsernameNotFoundException {
-        User user = userService.findByLogin(login);
-
-        if (user == null) {
+        User user;
+        try{
+            user = userService.findByLogin(login);
+        }catch(DatabaseException dbe){
             throw new UsernameNotFoundException("Username not found");
         }
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(),

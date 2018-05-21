@@ -10,6 +10,7 @@ import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
+import com.infosystem.springmvc.sessioncart.SessionCart;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -279,6 +280,17 @@ public class ContractServiceImpl implements ContractService {
         contract.setPrice(contract.countPrice());
         dao.save(contract);
     }
+
+    @Override
+    public List<Contract> findListOfContracts(int startIndex, int count) {
+        return dao.findListOfContracts(startIndex, count);
+    }
+
+    @Override
+    public int getPagesCount(int itemsPerPage) {
+        return (dao.contractCount()-1)/itemsPerPage + 1;
+    }
+
 
     /**
      * @param phoneNumber phoneNumber

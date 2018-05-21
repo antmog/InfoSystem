@@ -11,72 +11,86 @@
 
 <main class="mt-4">
     <div class="container">
-        <div class="row">
-
-            <div class="col-md-8">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <div class="row">
-                            <div class="col-auto mr-auto">
-                                Users list
-                            </div>
-                            <div class="col-auto">
-                                <div class="input-group">
-                                    Search by number:
-                                    <input class="searchUserByNumberInput" type="text" height="3">
-                                    <i class="fas fa-search search-icon searchByNumber"></i>
-                                </div>
-                            </div>
+        <div class="pt-4 pb-4">
+            <div class="row">
+                <div class="col-6">
+                    <h1 class="h2 mb-0">Users</h1>
+                </div>
+                <div class="col-6">
+                    <div class="row justify-content-end">
+                        <div class="col-auto">
+                            <a href="/adminPanel/addUser" class="btn btn-primary">Add user</a>
                         </div>
-                    </h5>
-                    <ul class="list-group list-group-flush">
+                        <div class="col-auto">
+                            <form id="searchUserByPhoneNumberForm">
+                                <div class="form-row justify-content-end">
+                                    <div class="col-auto">
+                                        <label class="sr-only" for="userPhoneNumberInput">Name</label>
+                                        <input id="userPhoneNumberInput" type="text" class="form-control mb-2"
+                                               placeholder="Search by phone number">
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-primary mb-2">
+                                            <i class="fas fa-search search-icon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
 
-
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <table class="table table-hover users-table">
-                                <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>firstName</th>
-                                    <th>lastName</th>
-                                    <th>address</th>
-                                    <th>birthDate</th>
-                                    <th>passport</th>
-                                    <th>mail</th>
-                                    <th>contracts</th>
-                                    <th width="100"></th>
-                                    <th width="100"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${users}" var="user">
-                                    <tr class="user-row">
-                                        <td>${user.id}</td>
-                                        <td>${user.firstName}</td>
-                                        <td>${user.lastName}</td>
-                                        <td>${user.address}</td>
-                                        <td>${user.birthDate}</td>
-                                        <td>${user.passport}</td>
-                                        <td>${user.mail}</td>
-                                        <td><c:forEach items="${user.userContracts}" var="contract">
-                                            ${contract.id};
-                                        </c:forEach></td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </li>
-
-
-                    </ul>
-                    <button type="button" class="btn btn-success" id="addUserButton">Add user</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
+        <table class="table table-hover users-table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Passport</th>
+                <th>Address</th>
+                <th>E-mail</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${allUsersDto.entityDtoList}" var="user">
+                <tr class="user-row">
+                    <td>${user.id}</td>
+                    <td>${user.firstName}</td>
+                    <td>${user.lastName}</td>
+                    <td>${user.passport}</td>
+                    <td>${user.address}</td>
+                    <td>${user.mail}</td>
+                    <td>${user.status}</td>
+                    <td><span class="badge badge-success">${user.status}</span></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" id="prevPage"><a class="page-link">Previous</a></li>
+                <c:forEach begin="1" end="${allUsersDto.pageCount}" varStatus="loop">
+                    <c:if test = "${allUsersDto.pageNumber == loop.index }">
+                        <li class="page-item active"><a class="page-link" href="/adminPanel/allUsers/${loop.index}">${loop.index}</a></li>
+                    </c:if>
+                    <c:if test = "${allUsersDto.pageNumber != loop.index }">
+                        <li class="page-item"><a class="page-link" href="/adminPanel/allUsers/${loop.index}">${loop.index}</a></li>
+                    </c:if>
+                </c:forEach>
+                <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
+            </ul>
+        </nav>
     </div>
-
 </main>
+
+<script>
+    var pageNumber = ${allUsersDto.pageNumber};
+    var pageCount = ${allUsersDto.pageCount};
+    var entities = "Users";
+</script>
 <jsp:include page="../footer.jsp"/>
 </body>
 </html>

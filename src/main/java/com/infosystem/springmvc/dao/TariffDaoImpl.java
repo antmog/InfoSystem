@@ -1,12 +1,14 @@
 package com.infosystem.springmvc.dao;
 
 import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.model.entity.Tariff;
 
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository("TariffDao")
@@ -59,6 +61,27 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
                 .setParameter("Id", id)
                 .getResultList();
         delete((Tariff)tariffs.get(0));
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Tariff> findListOfTariffs(int startIndex, int count) {
+        if (count == 0) {
+            return new ArrayList<>();
+        }
+        List<Tariff> tariffs = getSession()
+                .createQuery("SELECT u FROM Tariff u ORDER BY u.id")
+                .setFirstResult(startIndex - 1)
+                .setMaxResults(count)
+                .getResultList();
+        return new ArrayList<>(tariffs);
+    }
+
+    @Override
+    public int tariffCount() {
+        int count = ((Long) getSession()
+                .createQuery("select count(*) from Tariff")
+                .uniqueResult()).intValue();
+        return count;
     }
 
 }

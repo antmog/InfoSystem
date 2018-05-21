@@ -5,12 +5,11 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.User;
-import com.infosystem.springmvc.model.enums.TariffOptionRule;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
+import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -78,7 +77,7 @@ public class AdminDataController {
     /**
      * Called while searching user by number (adminPanel and allUsers pages).
      *
-     * @param searchByNumber searchByNumber
+     * @param searchByNumberDto searchByNumberDto
      * @param result         validation result
      * @return message
      * @throws LogicException      if no such number
@@ -87,11 +86,11 @@ public class AdminDataController {
     @RequestMapping(value = "/adminPanel/user/searchUserByNumber", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public @ResponseBody
-    User searchUserByNumber(@Valid @RequestBody SearchByNumber searchByNumber, BindingResult result) throws ValidationException, LogicException {
+    User searchUserByNumber(@Valid @RequestBody SearchByNumberDto searchByNumberDto, BindingResult result) throws ValidationException, LogicException {
         if (result.hasErrors()) {
             throw new ValidationException("Incorrect input!");
         }
-        return userService.findByPhoneNumber(searchByNumber);
+        return userService.findByPhoneNumber(searchByNumberDto);
     }
 
 
@@ -278,6 +277,37 @@ public class AdminDataController {
         tariffOptionService.delRuleTariffOptions(tariffOptionRulesDto);
         return "Options deleted.";
 
+    }
+
+    /**
+     * Adding funds to user.
+     *
+     * @return message
+     * @throws ValidationException if amount value is null
+     * @throws DatabaseException   if user doesn't exist
+     */
+    @RequestMapping(value = "/adminPanel/addFunds", method = RequestMethod.POST)
+    public String addFunds(@RequestBody @Valid AdminFundsDto adminFundsDto, BindingResult result) throws DatabaseException, ValidationException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Chose the amount of money you want to add.");
+        }
+        userService.addFunds(adminFundsDto);
+        return adminFundsDto.getAmount() + " funds added.";
+    }
+
+    /**
+     * Getting current balance value.
+     *
+     * @return message
+     * @throws ValidationException if amount value is null
+     * @throws DatabaseException   if user doesn't exist
+     */
+    @RequestMapping(value = "/adminPanel/getBalance", method = RequestMethod.POST)
+    public String getBalance(@RequestBody @Valid GetBalanceDto getBalanceDto, BindingResult result) throws DatabaseException, ValidationException {
+        if (result.hasErrors()) {
+            throw new ValidationException("Wrong input!");
+        }
+        return userService.getBalance(getBalanceDto);
     }
 }
 

@@ -81,7 +81,7 @@
                                         <td>${option.id}</td>
                                         <td>${option.name}</td>
                                         <td>${option.price}</td>
-                                        <td>${option.costOfAdd}</td>
+                                        <td>${option.costofadd}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

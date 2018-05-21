@@ -3,15 +3,18 @@ package com.infosystem.springmvc.util;
 import com.infosystem.springmvc.dao.TariffDao;
 import com.infosystem.springmvc.dao.UserDao;
 import com.infosystem.springmvc.dto.*;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.service.TariffOptionService;
+import com.infosystem.springmvc.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.*;
 
 @Component
@@ -19,10 +22,13 @@ public class CustomModelMapper {
 
     @Autowired
     TariffOptionService tariffOptionService;
+    @Autowired
+    UserService userService;
 
     private TariffDao tariffDao;
     private UserDao userDao;
     private ModelMapper modelMapper = new ModelMapper();
+
     {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
     }
@@ -34,10 +40,43 @@ public class CustomModelMapper {
     }
 
     /**
+     * @param type Dto type class
+     * @param entity entity
+     * @param <T> Dto type
+     * @return Dto
+     */
+    public <T> T mapToDto(Class<T> type, Object entity) {
+        return modelMapper.map(entity, type);
+    }
+
+    /**
+     * @param type Entity type class
+     * @param dto dto
+     * @param <T> entity type
+     * @return entity
+     */
+    public <T> T mapToEntity(Class<T> type, Object dto) {
+        return modelMapper.map(dto, type);
+    }
+
+    /**
+     * @param type Dto type class
+     * @param entityList list of entities
+     * @param <T> Dto type
+     * @param <D> entity type
+     * @return List of Dto
+     */
+    public <T,D> List<T> mapToDtoList(Class<T> type, List<D> entityList) {
+        List<T> dtoList = new ArrayList<>();
+        entityList.forEach(entity -> dtoList.add(mapToDto(type,entity)));
+        return dtoList;
+    }
+
+    /**
      * @param addContractDto addContractDto
      * @return contract with phone number, tariff and user according to DTO data.
      */
-    public Contract mapToContract(AddContractDto addContractDto) {
+    public Contract mapToContract(AddContractDto addContractDto) throws DatabaseException {
         Contract contract = new Contract();
 
         Tariff tariff = tariffDao.findById(addContractDto.getContractDto().getTariffId());
@@ -72,13 +111,7 @@ public class CustomModelMapper {
         return tariff;
     }
 
-    /**
-     * @param addUserDto addUserDto
-     * @return user
-     */
-    public User mapToUser(AddUserDto addUserDto) {
-        return modelMapper.map(addUserDto, User.class);
-    }
+
 
     /**
      * @param addTariffOptionDto addTariffOptionDto
@@ -108,17 +141,14 @@ public class CustomModelMapper {
         return modelMapper.map(tariffOption, TariffOptionDto.class);
     }
 
-    public List<UserDto> mapToUserDtoList(List<User> users) {
-        List<UserDto> userDtoList = new ArrayList<>();
-        users.forEach(user -> userDtoList.add(modelMapper.map(user, UserDto.class)));
-        return userDtoList;
-    }
+
 
     public List<TariffDto> mapToTariffDtoList(List<Tariff> tariffs) {
         List<TariffDto> tariffDtoList = new ArrayList<>();
         tariffs.forEach(tariff -> tariffDtoList.add(modelMapper.map(tariff, TariffDto.class)));
         return tariffDtoList;
     }
+
 
     public ContractDto mapToContractDto(Contract contract) {
         return modelMapper.map(contract, ContractDto.class);

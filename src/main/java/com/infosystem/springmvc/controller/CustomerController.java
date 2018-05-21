@@ -31,6 +31,7 @@ public class CustomerController extends ControllerTemplate {
         this.dataService = dataService;
     }
 
+    //todo
     /**
      * Returns customer panel view with user info.
      *
@@ -40,7 +41,12 @@ public class CustomerController extends ControllerTemplate {
     @RequestMapping("/customerPanel")
     public String customerPanel(ModelMap model) {
         String login = getPrincipal();
-        User user = userService.findByLogin(login);
+        User user = null;
+        try {
+            user = userService.findByLogin(login);
+        } catch (DatabaseException e) {
+            prepareErrorPage(model, e.getMessage());
+        }
         model.addAttribute("loggedinuser", login);
         model.addAttribute("user", user);
         return path + "customerPanel";
@@ -59,13 +65,14 @@ public class CustomerController extends ControllerTemplate {
         try {
             contractPageDto = dataService.getContractPageData(contractId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model, e);
+            return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("contractPageDto", contractPageDto);
         return path + "contract";
     }
 
+    //todo
     /**
      * Returns view with cart page.
      *
@@ -74,12 +81,19 @@ public class CustomerController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/cart")
     public String cart(ModelMap model) {
         String login = getPrincipal();
-        User user = userService.findByLogin(login);
+        User user = null;
+        try {
+            user = userService.findByLogin(login);
+        } catch (DatabaseException e) {
+            prepareErrorPage(model, e.getMessage());
+        }
         model.addAttribute("loggedinuser", login);
         model.addAttribute("user", user);
         return path + "cart";
     }
 
+
+    //todo
     /**
      * Returns addFunds view.
      *
@@ -88,7 +102,12 @@ public class CustomerController extends ControllerTemplate {
     @RequestMapping("/customerPanel/addFunds")
     public String addFunds(ModelMap model) {
         String login = getPrincipal();
-        User user = userService.findByLogin(login);
+        User user = null;
+        try {
+            user = userService.findByLogin(login);
+        } catch (DatabaseException e) {
+            prepareErrorPage(model, e.getMessage());
+        }
         model.addAttribute("loggedinuser", login);
         model.addAttribute("user", user);
         return path + "addFunds";

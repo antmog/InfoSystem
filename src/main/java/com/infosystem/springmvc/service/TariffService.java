@@ -4,6 +4,8 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.entity.Tariff;
+import com.infosystem.springmvc.model.entity.User;
+
 import java.util.List;
 import java.util.Set;
 
@@ -13,11 +15,7 @@ public interface TariffService {
 
     Tariff findByName(String name);
 
-    void addTariff(Tariff tariff);
-
     void addTariff(AddTariffDto tariff) throws LogicException;
-
-    void updateTariff(Tariff tariff) throws DatabaseException;
 
     List<Tariff> findAllTariffs();
 
@@ -34,4 +32,8 @@ public interface TariffService {
     void delOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException;
 
     Set<TariffOptionDtoShort> getAvailableOptionsForTariff(int tariffId) throws DatabaseException;
+
+    List<Tariff> findListOfTariffs(int startIndex, int count);
+
+    int getPagesCount(int itemsPerPage);
 }

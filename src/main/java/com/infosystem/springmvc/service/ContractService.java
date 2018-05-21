@@ -34,4 +34,8 @@ public interface ContractService {
     void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException;
 
     void newContract(AddContractDto addContractDto) throws LogicException, DatabaseException;
+
+    List<Contract> findListOfContracts(int startIndex, int count);
+
+    int getPagesCount(int itemsPerPage);
 }

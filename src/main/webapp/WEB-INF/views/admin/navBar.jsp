@@ -19,17 +19,36 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/lk">
-                    Admin Panel
+                <a class="nav-link" href="/adminPanel/allUsers/1">
+                    All users
                 </a>
             </li>
-            <sec:authorize access="isAuthenticated()">
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">
-                        <strong>${loggedinuser}</strong>, Log out
-                    </a>
-                </li>
-            </sec:authorize>
+            <li class="nav-item active">
+                <a class="nav-link" href="/adminPanel/allContracts/1">
+                    All contracts
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/adminPanel/allTariffs/1">
+                    All tariffs
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/adminPanel/allOptions/1">
+                    All options
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    ${loggedinuser}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/lk">Admin Panel</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">Log out</a>
+                </div>
+            </li>
         </ul>
     </div>
 </nav>

@@ -1,9 +1,11 @@
 package com.infosystem.springmvc.dao;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.infosystem.springmvc.exception.DatabaseException;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
 import com.infosystem.springmvc.model.entity.User;
@@ -16,48 +18,80 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
         persist(user);
     }
 
-    public User findById(int id) {
+    public User findById(int id) throws DatabaseException {
         User user = getByKey(id);
-        if (user != null) {
-            Hibernate.initialize(user);
+        if (user == null) {
+            throw new DatabaseException("User doesn't exist.");
         }
         return user;
     }
 
-    @Override
-    public User findByLogin(String login) {
+    public User findByParameter(String parameter, String parameterValue) throws DatabaseException {
         List users = getSession()
-                .createQuery("SELECT u FROM User u WHERE u.login LIKE :Login")
-                .setParameter("Login", login)
+                .createQuery("SELECT u FROM User u WHERE u." + parameter + " LIKE :parameter")
+                .setParameter("parameter", parameterValue)
                 .getResultList();
         if (users.isEmpty()) {
-            return null;
+            throw new DatabaseException("User doesn't exist.");
         }
         return (User) users.get(0);
     }
 
-    @Override
-    public User findByEmail(String mail) {
-        List users = getSession()
-                .createQuery("SELECT u FROM User u WHERE u.mail LIKE :mail")
-                .setParameter("mail", mail)
-                .getResultList();
-        if (users.isEmpty()) {
-            return null;
+//    @Override
+//    public User findByLogin(String login) throws DatabaseException {
+//        List users = getSession()
+//                .createQuery("SELECT u FROM User u WHERE u.login LIKE :Login")
+//                .setParameter("Login", login)
+//                .getResultList();
+//        if (users.isEmpty()) {
+//            throw new DatabaseException("User doesn't exist.");
+//        }
+//        return (User) users.get(0);
+//    }
+//
+//    @Override
+//    public User findByEmail(String mail) throws DatabaseException {
+//        List users = getSession()
+//                .createQuery("SELECT u FROM User u WHERE u.mail LIKE :mail")
+//                .setParameter("mail", mail)
+//                .getResultList();
+//        if (users.isEmpty()) {
+//            throw new DatabaseException("User doesn't exist.");
+//        }
+//        return (User) users.get(0);
+//    }
+//
+//    @Override
+//    public User findByPassport(Integer passport) throws DatabaseException {
+//        List users = getSession()
+//                .createQuery("SELECT u FROM User u WHERE u.passport LIKE :passport")
+//                .setParameter("passport", passport)
+//                .getResultList();
+//        if (users.isEmpty()) {
+//            throw new DatabaseException("User doesn't exist.");
+//        }
+//        return (User) users.get(0);
+//    }
+
+    @SuppressWarnings("unchecked")
+    public List<User> findListOfUsers(int startIndex, int count) {
+        if(count==0){
+            return new ArrayList<>();
         }
-        return (User) users.get(0);
+        List<User> users = getSession()
+                .createQuery("SELECT u FROM User u ORDER BY u.id")
+                .setFirstResult(startIndex-1)
+                .setMaxResults(count)
+                .getResultList();
+        return new ArrayList<>(users) ;
     }
 
     @Override
-    public User findByPassport(Integer passport) {
-        List users = getSession()
-                .createQuery("SELECT u FROM User u WHERE u.passport LIKE :passport")
-                .setParameter("passport", passport)
-                .getResultList();
-        if (users.isEmpty()) {
-            return null;
-        }
-        return (User) users.get(0);
+    public int userCount() {
+        int count = ((Long)getSession()
+                .createQuery("select count(*) from User")
+                .uniqueResult()).intValue();
+        return count;
     }
 
     @SuppressWarnings("unchecked")

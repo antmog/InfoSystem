@@ -1,6 +1,9 @@
-package com.infosystem.springmvc.dto;
+package com.infosystem.springmvc.sessioncart;
 
 
+import com.infosystem.springmvc.dto.DeleteFromCartDto;
+import com.infosystem.springmvc.dto.EditContractDto;
+import com.infosystem.springmvc.dto.TariffOptionDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
@@ -53,7 +56,7 @@ public class SessionCart {
         Set<TariffOption> toBeAddedOptions = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
 
         optionsRulesChecker.checkAddToContractCustomer(contractId, toBeAddedOptions);
-        optionsRulesChecker.checkIfContractAlreadyHave(contract,toBeAddedOptions);
+        optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptions);
         if(!options.isEmpty()){
             if(options.containsKey(contractId)){
                 Set<TariffOptionDto> currentOptions = new HashSet<>(options.get(contractId));

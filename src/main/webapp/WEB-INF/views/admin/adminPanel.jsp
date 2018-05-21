@@ -10,154 +10,47 @@
 <jsp:include page="navBar.jsp"/>
 
 <main class="mt-4 ml-4 mr-4">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card mb-4 border-dark">
-                <h5 class="card-header">
-                    <strong>${loggedinuser}</strong>
-                </h5>
-                <div class="card-body">
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
+
+    <main class="mt-4">
+        <div class="container">
+            <div class="pt-4 pb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1 class="h2 mb-0">
+                            ${userDto.login}
+                            <span class="badge badge-secondary">Id: ${userDto.id}</span>
+                        </h1>
+                    </div>
                 </div>
-            </div>
-            <br/>
-        </div>
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <h5 class="card-header">
-                    <div class="row">
-                        <div class="col-auto mr-auto">
-                            Users list
-                        </div>
-                        <div class="col-auto">
-                            <div class="input-group">
-                                Search by number:
-                                <input class="searchUserByNumberInput" type="number" height="3">
-                                <i class="fas fa-search search-icon searchUserByNumber"></i>
+                <div class="row pt-5">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <h5 class="card-header">
+                                Info
+                            </h5>
+                            <div class="card-body">
+                                <dl>
+                                    <dt>First name</dt>
+                                    <dd>${userDto.firstName}</dd>
+                                    <dt>Last name</dt>
+                                    <dd>${userDto.lastName}</dd>
+                                    <dt>Address</dt>
+                                    <dd>${userDto.address}</dd>
+                                    <dt>Birth date</dt>
+                                    <dd>${userDto.birthDate}</dd>
+                                    <dt>E-mail</dt>
+                                    <dd>${userDto.mail}</dd>
+                                    <dt>Passport</dt>
+                                    <dd>${userDto.passport}</dd>
+                                </dl>
                             </div>
                         </div>
                     </div>
-                </h5>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <table class="table table-hover users-table">
-                                <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>firstName</th>
-                                    <th>lastName</th>
-                                    <th>passport</th>
-                                    <th>mail</th>
-                                    <th>contracts</th>
-                                    <th>status</th>
-                                    <th width="100"></th>
-                                    <th width="100"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${users}" var="user">
-                                    <tr class="user-row">
-                                        <td>${user.id}</td>
-                                        <td>${user.firstName}</td>
-                                        <td>${user.lastName}</td>
-                                        <td>${user.passport}</td>
-                                        <td>${user.mail}</td>
-                                        <td><c:forEach items="${user.userContracts}" var="contract">
-                                            ${contract.id};
-                                        </c:forEach></td>
-                                        <td>${user.status}</td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </li>
-                    </ul>
                 </div>
-                <a href="/adminPanel/allUsers" class="card-link">All Users</a>
-                <a href="/adminPanel/allContracts" class="card-link">All Contracts</a>
-                <button type="button" class="btn btn-success" id="addUserButton">Add user</button>
-                <button type="button" class="btn btn-success" id="addContractButton">Add contract</button>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <h5 class="card-header">
-                    <strong>Tariffs</strong>
-                </h5>
-                <div class="card-body">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <table class="table table-hover tariffs-table">
-                            <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>name</th>
-                                <th>price</th>
-                                <th width="100"></th>
-                                <th width="100"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${tariffs}" var="tariff">
-                                <tr class="tariff-row">
-                                    <td>${tariff.id}</td>
-                                    <td>${tariff.name}</td>
-                                    <td>${tariff.price}</td>
-                                </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
-                    </li>
-                </div>
-                <a href="/adminPanel/allTariffs" class="card-link">All tariffs</a>
-                <button type="button" class="btn btn-success" id="addTariffButton">Add tariff</button>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <h5 class="card-header">
-                    <div class="row">
-                        <div class="col-auto mr-auto">
-                            Options list
-                        </div>
-                    </div>
-                </h5>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <table class="table table-hover options-table">
-                                <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>costofadd</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${tariffOptions}" var="option">
-                                    <tr class="option-row">
-                                        <td>${option.id}</td>
-                                        <td>${option.name}</td>
-                                        <td>${option.price}</td>
-                                        <td>${option.costofadd}</td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </li>
-                    </ul>
-                </div>
-                <a href="/adminPanel/allOptions" class="card-link">All Options</a>
-                <button type="button" class="btn btn-success" id="addOptionButton">Add option</button>
-            </div>
-        </div>
-    </div>
+    </main>
+
 </main>
 <jsp:include page="../footer.jsp"/>
 </body>

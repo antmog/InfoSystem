@@ -1,25 +1,33 @@
 package com.infosystem.springmvc.dao;
 
 import java.util.List;
+import java.util.Set;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.User;
 
 
 public interface UserDao {
 
-	User findById(int id);
+    User findById(int id) throws DatabaseException;
 
-	void save(User user);
-	
-	List<User> findAllUsers();
+    void save(User user);
 
-	void deleteById(int id);
+    List<User> findAllUsers();
 
-	User findByLogin(String login);
+    void deleteById(int id);
 
-	User findByEmail(String mail);
+    User findByParameter(String parameter, String parameterValue) throws DatabaseException;
 
-	User findByPassport(Integer passport);
+//    User findByLogin(String login) throws DatabaseException;
+//
+//    User findByEmail(String mail) throws DatabaseException;
+//
+//    User findByPassport(Integer passport) throws DatabaseException;
+
+    List<User> findListOfUsers(int startIndex, int count);
+
+    int userCount();
 
 }
 

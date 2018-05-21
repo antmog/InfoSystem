@@ -51,8 +51,8 @@ public abstract class ControllerTemplate {
         return authenticationTrustResolver.isAnonymous(authentication);
     }
 
-    protected String prepareErrorPage(ModelMap model, MyBusinessException e){
-        model.addAttribute("error", e.getMessage());
+    protected String prepareErrorPage(ModelMap model, String errorText){
+        model.addAttribute("error", errorText);
         model.addAttribute("loggedinuser", getPrincipal());
         return path + "errorPage";
     }

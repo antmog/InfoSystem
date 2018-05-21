@@ -13,7 +13,7 @@ public class V1_5__add_contracts implements JdbcMigration {
                 "VALUES( ?,?,?,?,?);");
 
         for (int i = 0; i < 4; i++) {
-            statement.setString(1, "+79811337"+(i+1)*100);
+            statement.setString(1, "79811337"+(i+1)*100);
             statement.setDouble(2, (double)(i+1));
             statement.setString(3, "ACTIVE");
             statement.setInt(4, (i+1));

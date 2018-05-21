@@ -1,10 +1,12 @@
 package com.infosystem.springmvc.service;
 
 import java.util.List;
+
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
 import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
+import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
@@ -15,17 +17,17 @@ public interface UserService {
 
     User findById(int id) throws DatabaseException;
 
-    User findByLogin(String login);
+    User findByLogin(String login) throws DatabaseException;
 
-    User findByEmail(String mail);
-
-    User findByPassport(Integer passport);
+//    User findByEmail(String mail) throws DatabaseException;
+//
+//    User findByPassport(Integer passport) throws DatabaseException;
 
     void saveUser(User user);
 
     List<User> findAllUsers();
 
-    List<User> findFirstUsers();
+    List<User> findListOfUsers(int startIndex, int count);
 
     void deleteUserById(int id) throws LogicException, DatabaseException;
 
@@ -37,19 +39,27 @@ public interface UserService {
 
     void updateUserAddress(EditAddressDto editAddressDto) throws DatabaseException, ValidationException;
 
-    User findByPhoneNumber(SearchByNumber searchByNumber) throws LogicException;
+    User findByPhoneNumber(SearchByNumberDto searchByNumberDto) throws LogicException;
 
     void addUser(AddUserDto addUserDto);
 
-    boolean doesLoginExist(String login) ;
+//    boolean doesLoginExist(String login) throws DatabaseException;
+//
+//    boolean doesEmailExist(String mail) throws DatabaseException;
+//
+//    boolean doesPassportExist(String passport) throws DatabaseException;
 
-    boolean doesEmailExist(String mail);
-
-    boolean doesPassportExist(String passport);
+    boolean checkParameterNotUnique(String parameter, String parameterValue);
 
     void addFunds(FundsDto fundsDto, String login) throws DatabaseException;
 
     void spendFunds(FundsDto fundsDto, String login) throws DatabaseException;
 
     String getBalance(GetBalanceDto getBalanceDto) throws DatabaseException;
+
+    int getPagesCount(int itemsPerPAge);
+
+    void addFunds(AdminFundsDto adminFundsDto) throws DatabaseException;
+
+    void editUser(EditUserDto editUserDto) throws DatabaseException;
 }

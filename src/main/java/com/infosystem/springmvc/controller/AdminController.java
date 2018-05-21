@@ -2,21 +2,18 @@ package com.infosystem.springmvc.controller;
 
 
 import com.infosystem.springmvc.dto.*;
+import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.entity.Contract;
-import com.infosystem.springmvc.model.entity.Tariff;
-import com.infosystem.springmvc.model.entity.TariffOption;
-import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Role;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.dataservice.DataService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
 import com.infosystem.springmvc.service.UserService;
+import com.infosystem.springmvc.validators.EditUserValidator;
 import com.infosystem.springmvc.validators.TariffOptionFormValidator;
 import com.infosystem.springmvc.validators.UserFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -30,8 +27,11 @@ import java.util.*;
 @SessionAttributes("roles")
 public class AdminController extends ControllerTemplate {
 
+    private final int ITEMS_PER_PAGE = 10;
+
     private final UserFormValidator userFormValidator;
     private final TariffOptionFormValidator tariffOptionFormValidator;
+    private final EditUserValidator editUserValidator;
     private final UserService userService;
     private final DataService dataService;
     private final ContractService contractService;
@@ -40,11 +40,12 @@ public class AdminController extends ControllerTemplate {
 
     @Autowired
     public AdminController(UserFormValidator userFormValidator, TariffOptionFormValidator tariffOptionFormValidator,
-                           UserService userService, DataService dataService, ContractService contractService,
+                           EditUserValidator editUserValidator, UserService userService, DataService dataService, ContractService contractService,
                            TariffOptionService tariffOptionService, TariffService tariffService) {
         super("admin/");
         this.userFormValidator = userFormValidator;
         this.tariffOptionFormValidator = tariffOptionFormValidator;
+        this.editUserValidator = editUserValidator;
         this.userService = userService;
         this.dataService = dataService;
         this.contractService = contractService;
@@ -52,20 +53,22 @@ public class AdminController extends ControllerTemplate {
         this.tariffService = tariffService;
     }
 
-
     /**
      * Returns view of main admin panel.
      *
-     * @param model
+     * @param model model
      * @return view of main admin panel
      */
     @RequestMapping("/adminPanel")
     public String adminPanel(ModelMap model) {
-        AdminPanelDto adminPanelDto = dataService.getAdminPanelData();
+        UserDto userDto = null;
+        try {
+            userDto = dataService.getAdminPanelData(getPrincipal());
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model, e.getMessage());
+        }
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("users", adminPanelDto.getUsers());
-        model.addAttribute("tariffOptions", adminPanelDto.getTariffOptions());
-        model.addAttribute("tariffs", adminPanelDto.getTariffs());
+        model.addAttribute("userDto", userDto);
         return path + "adminPanel";
     }
 
@@ -75,11 +78,15 @@ public class AdminController extends ControllerTemplate {
      * @param model model
      * @return view with list of all users
      */
-    @RequestMapping("/adminPanel/allUsers")
-    public String adminPanelAllUsers(ModelMap model) {
-        List<User> users = userService.findAllUsers();
+    @RequestMapping("/adminPanel/allUsers/{pageNumber}")
+    public String adminPanelAllUsers(@PathVariable(value = "pageNumber") Integer pageNumber, ModelMap model) {
+        AllEntitiesDto<UserDto> allUsersDto = dataService.getAllEntityPageData(UserDto.class, pageNumber, ITEMS_PER_PAGE);
+        if (illegalPage(allUsersDto.getPageCount(), pageNumber, model)) {
+            return prepareErrorPage(model, "No such page.");
+        }
+        allUsersDto.setPageNumber(pageNumber);
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("users", users);
+        model.addAttribute("allUsersDto", allUsersDto);
         return path + "allUsers";
     }
 
@@ -89,11 +96,15 @@ public class AdminController extends ControllerTemplate {
      * @param model model
      * @return view of all contracts
      */
-    @RequestMapping("/adminPanel/allContracts")
-    public String adminPanelAllContracts(ModelMap model) {
-        List<Contract> contracts = contractService.findAllContracts();
+    @RequestMapping("/adminPanel/allContracts/{pageNumber}")
+    public String adminPanelAllContracts(@PathVariable(value = "pageNumber") Integer pageNumber, ModelMap model) {
+        AllEntitiesDto<ContractDto> allContractsDto = dataService.getAllEntityPageData(ContractDto.class, pageNumber, ITEMS_PER_PAGE);
+        if (illegalPage(allContractsDto.getPageCount(), pageNumber, model)) {
+            return prepareErrorPage(model, "No such page.");
+        }
+        allContractsDto.setPageNumber(pageNumber);
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("contracts", contracts);
+        model.addAttribute("allContractsDto", allContractsDto);
         return path + "allContracts";
     }
 
@@ -103,11 +114,15 @@ public class AdminController extends ControllerTemplate {
      * @param model model
      * @return view of all tariffs
      */
-    @RequestMapping("/adminPanel/allTariffs")
-    public String adminPanelAllTariffs(ModelMap model) {
-        List<Tariff> tariffs = tariffService.findAllTariffs();
+    @RequestMapping("/adminPanel/allTariffs/{pageNumber}")
+    public String adminPanelAllTariffs(@PathVariable(value = "pageNumber") Integer pageNumber, ModelMap model) {
+        AllEntitiesDto<TariffDto> allTariffsDto = dataService.getAllEntityPageData(TariffDto.class, pageNumber, ITEMS_PER_PAGE);
+        if (illegalPage(allTariffsDto.getPageCount(), pageNumber, model)) {
+            return prepareErrorPage(model, "No such page.");
+        }
+        allTariffsDto.setPageNumber(pageNumber);
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("tariffs", tariffs);
+        model.addAttribute("allTariffsDto", allTariffsDto);
         return path + "allTariffs";
     }
 
@@ -117,11 +132,16 @@ public class AdminController extends ControllerTemplate {
      * @param model model
      * @return view of all options
      */
-    @RequestMapping("/adminPanel/allOptions")
-    public String adminPanelAllOptions(ModelMap model) {
-        List<TariffOption> tariffOptions = tariffOptionService.findAllTariffOptions();
+    @RequestMapping("/adminPanel/allOptions/{pageNumber}")
+    public String adminPanelAllOptions(@PathVariable(value = "pageNumber") Integer pageNumber, ModelMap model) {
+        AllEntitiesDto<TariffOptionDtoShort> allTariffOptionsDto =
+                dataService.getAllEntityPageData(TariffOptionDtoShort.class, pageNumber, ITEMS_PER_PAGE);
+        if (illegalPage(allTariffOptionsDto.getPageCount(), pageNumber, model)) {
+            return prepareErrorPage(model, "No such page.");
+        }
+        allTariffOptionsDto.setPageNumber(pageNumber);
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("options", tariffOptions);
+        model.addAttribute("allTariffOptionsDto", allTariffOptionsDto);
         return path + "allOptions";
     }
 
@@ -145,7 +165,7 @@ public class AdminController extends ControllerTemplate {
      *
      * @param addUserDto addUserDto
      * @param result     validation result
-     * @param model model
+     * @param model      model
      * @return success page on success or addUser view
      */
     @RequestMapping(value = "/adminPanel/addUser", method = RequestMethod.POST)
@@ -172,9 +192,9 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/addContract", method = RequestMethod.GET)
     public String addContract(ModelMap model) {
+        List<TariffDto> tariffDtoList = dataService.findAllActiveTariffs();
         model.addAttribute("loggedinuser", getPrincipal());
-        List<Tariff> tariffs = tariffService.findAllActiveTariffs();
-        model.addAttribute("tariffs", tariffs);
+        model.addAttribute("tariffs", tariffDtoList);
         return path + "addContract";
     }
 
@@ -182,15 +202,15 @@ public class AdminController extends ControllerTemplate {
      * Returns view with addContract custom form with selected userId
      *
      * @param userId userId
-     * @param model model
+     * @param model  model
      * @return view
      */
     @RequestMapping(value = "/adminPanel/addContractToUser/{userId}", method = RequestMethod.GET)
     public String addContractToUser(@PathVariable(value = "userId") Integer userId, ModelMap model) {
+        List<TariffDto> tariffDtoList = dataService.findAllActiveTariffs();
         model.addAttribute("loggedinuser", getPrincipal());
-        List<Tariff> tariffs = tariffService.findAllActiveTariffs();
         model.addAttribute("userId", userId);
-        model.addAttribute("tariffs", tariffs);
+        model.addAttribute("tariffs", tariffDtoList);
         return path + "addContract";
     }
 
@@ -202,8 +222,8 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/addOption", method = RequestMethod.GET)
     public String addOption(ModelMap model) {
-        model.addAttribute("loggedinuser", getPrincipal());
         AddTariffOptionDto addTariffOptionDto = new AddTariffOptionDto();
+        model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("addTariffOptionDto", addTariffOptionDto);
         return path + "addOption";
     }
@@ -212,8 +232,8 @@ public class AdminController extends ControllerTemplate {
      * Validates and saves tariffOption if data is correct.
      *
      * @param addTariffOptionDto addTariffOptionDto
-     * @param result validation result
-     * @param model model
+     * @param result             validation result
+     * @param model              model
      * @return result
      */
     @RequestMapping(value = "/adminPanel/addOption", method = RequestMethod.POST)
@@ -236,29 +256,30 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/addTariff", method = RequestMethod.GET)
     public String addTariff(ModelMap model) {
+        List<TariffOptionDtoShort> tariffOptionDtoShortList = dataService.findAllTariffOptions();
         model.addAttribute("loggedinuser", getPrincipal());
-        List<TariffOption> tariffOptions = tariffOptionService.findAllTariffOptions();
-        model.addAttribute("options", tariffOptions);
+        model.addAttribute("options", tariffOptionDtoShortList);
         return path + "addTariff";
     }
 
+    //todo
     /**
      * Returns user page view.
      *
      * @param userId userId
-     * @param model model
+     * @param model  model
      * @return error page view if user doesn't exist
      */
     @RequestMapping(value = "/adminPanel/user/{userId}")
     public String user(@PathVariable(value = "userId") Integer userId, ModelMap model) {
-        User user = null;
+        UserPageDto userPageDto;
         try {
-            user = userService.findById(userId);
+            userPageDto = dataService.getUserPageDto(userId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model, e);
+            return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("user", user);
+        model.addAttribute("userPageDto", userPageDto);
         return path + "user";
     }
 
@@ -266,7 +287,7 @@ public class AdminController extends ControllerTemplate {
      * Returns contract page view.
      *
      * @param contractId contractId
-     * @param model model
+     * @param model      model
      * @return error page view if contract doesn't exist
      */
     @RequestMapping(value = "/adminPanel/contract/{contractId}")
@@ -275,7 +296,7 @@ public class AdminController extends ControllerTemplate {
         try {
             contractPageDto = dataService.getContractPageData(contractId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model, e);
+            return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("contractPageDto", contractPageDto);
         model.addAttribute("loggedinuser", getPrincipal());
@@ -286,7 +307,7 @@ public class AdminController extends ControllerTemplate {
      * Returns tariff page view.
      *
      * @param tariffId tariffId
-     * @param model model
+     * @param model    model
      * @return error page view if tariff doesn't exist
      */
     @RequestMapping(value = "/adminPanel/tariff/{tariffId}")
@@ -295,7 +316,7 @@ public class AdminController extends ControllerTemplate {
         try {
             tariffPageDto = dataService.getTariffPageData(tariffId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model, e);
+            return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffPageDto", tariffPageDto);
@@ -306,7 +327,7 @@ public class AdminController extends ControllerTemplate {
      * Returns option page view.
      *
      * @param optionId optionId
-     * @param model model
+     * @param model    model
      * @return error page view if option doesn't exist
      */
     @RequestMapping(value = "/adminPanel/option/{optionId}")
@@ -315,12 +336,79 @@ public class AdminController extends ControllerTemplate {
         try {
             tariffOptionPageDto = dataService.getTariffOptionPageData(optionId);
         } catch (DatabaseException e) {
-            return prepareErrorPage(model, e);
+            return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("loggedinuser", getPrincipal());
         model.addAttribute("tariffOptionPageDto", tariffOptionPageDto);
         return path + "option";
     }
 
+    /**
+     * Returns addFunds view.
+     *
+     * @return view
+     */
+    @RequestMapping("/adminPanel/addFunds/{userId}")
+    public String addFunds(@PathVariable(value = "userId") Integer userId, ModelMap model) {
+        AdminFundsDto adminFundsDto = new AdminFundsDto();
+        try {
+            adminFundsDto = dataService.getAdminAddPageData(userId);
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model, e.getMessage());
+        }
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("adminFundsDto", adminFundsDto);
+        return path + "addFunds";
+    }
+
+    /**
+     * Returns addFunds view.
+     *
+     * @return view
+     */
+    @RequestMapping("/adminPanel/editUser{userId}")
+    public String editUser(@PathVariable(value = "userId") Integer userId, ModelMap model) {
+        EditUserDto editUserDto = new EditUserDto();
+        try {
+            editUserDto = dataService.getEditUserData(userId);
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model, e.getMessage());
+        }
+        model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("editUserDto", editUserDto);
+        return path + "editUser";
+    }
+
+    /**
+     * Validates and saves user data if it is correct.
+     *
+     * @param editUserDto editUserDto
+     * @param result             validation result
+     * @param model              model
+     * @return result
+     */
+    @RequestMapping(value = "/adminPanel/editUser{userId}", method = RequestMethod.POST)
+    public String editUserSubmit(@Valid EditUserDto editUserDto, BindingResult result, ModelMap model) {
+        if (result.hasErrors()) {
+            return path + "editUser";
+        }
+        editUserValidator.validate(editUserDto, result);
+        if (result.hasErrors()) {
+            return path + "editUser";
+        }
+        try {
+            userService.editUser(editUserDto);
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model, e.getMessage());
+        }
+        model.addAttribute("success", "User " + editUserDto.getFirstName() + " " +
+                editUserDto.getLastName()+" edited successfully");
+        model.addAttribute("loggedinuser", getPrincipal());
+        return path + "addSuccess";
+    }
+
+    private boolean illegalPage(int pagesCount, int pageNumber, ModelMap model) {
+        return pageNumber > pagesCount || pageNumber < 1;
+    }
 
 }

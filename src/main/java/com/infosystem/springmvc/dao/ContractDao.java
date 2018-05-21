@@ -15,4 +15,9 @@ public interface ContractDao {
     void deleteById(int id);
 
     Contract findByPhoneNumber(String phoneNumber);
+
+    @SuppressWarnings("unchecked")
+    List<Contract> findListOfContracts(int startIndex, int count);
+
+    int contractCount();
 }

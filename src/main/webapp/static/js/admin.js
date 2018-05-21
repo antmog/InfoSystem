@@ -1,5 +1,17 @@
 (function () {
 
+    $("#prevPage").on("click", function () {
+        if (pageNumber - 1 > 0) {
+            document.location.href = "/adminPanel/all" + entities + "/" + (pageNumber - 1);
+        }
+    });
+
+    $("#nextPage").on("click", function () {
+        if (pageNumber + 1 <= pageCount) {
+            document.location.href = "/adminPanel/all" + entities + "/" + (pageNumber + 1);
+        }
+    });
+
     $(".users-table").on("click", "tr.user-row", function () {
         document.location.href = "/adminPanel/user/" + $(this).find("td:first").html();
     });
@@ -829,6 +841,56 @@
         }).fail(function (jqXHR, textStatus) {
             alert(jqXHR.responseText);
 
+        });
+    }
+
+    $('#addFunds').click(function () {
+        var amount = $('#addFundsInput').val();
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'text/html; charset=utf-8'
+            },
+            type: "POST",
+            url: "/adminPanel/addFunds",
+            // The key needs to match your method's input parameter (case-sensitive).
+            data: JSON.stringify({
+                amount: amount,
+                userId: user_id
+            })
+        }).done(function (msg) {
+            alert(msg);
+            updateCartBalance();
+        }).fail(function (jqXHR, textStatus) {
+            alert(jqXHR.responseText);
+        });
+    });
+
+    function updateCartBalance() {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'text/html; charset=utf-8'
+            },
+            type: "POST",
+            url: "/adminPanel/getBalance",
+            data: JSON.stringify({
+                userId: user_id
+            })
+        }).done(function (msg) {
+            $("#walletBalance").html(msg);
+        }).fail(function (jqXHR, textStatus) {
+            alert(jqXHR.responseText);
         });
     }
 

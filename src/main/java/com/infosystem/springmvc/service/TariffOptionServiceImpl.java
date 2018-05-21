@@ -177,6 +177,16 @@ public class TariffOptionServiceImpl implements TariffOptionService {
         }
     }
 
+    @Override
+    public List<TariffOption> findListOfTariffOptions(int startIndex, int count) {
+        return dao.findListOfTariffOptions(startIndex, count);
+    }
+
+    @Override
+    public int getPagesCount(int itemsPerPage) {
+        return (dao.tariffOptionCount()-1)/itemsPerPage + 1;
+    }
+
     /**
      * Check if trying to make rule for itself (tariffOption).
      *

@@ -4,6 +4,7 @@ import com.infosystem.springmvc.dto.AddTariffOptionDto;
 import com.infosystem.springmvc.dto.TariffOptionRulesDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
 import java.util.List;
 import java.util.Set;
@@ -32,4 +33,7 @@ public interface TariffOptionService {
 
     void delRuleTariffOptions(TariffOptionRulesDto tariffOptionRulesDto) throws LogicException, DatabaseException;
 
+    List<TariffOption> findListOfTariffOptions(int startIndex, int count);
+
+    int getPagesCount(int itemsPerPage);
 }

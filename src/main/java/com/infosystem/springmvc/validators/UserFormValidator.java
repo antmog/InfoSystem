@@ -26,13 +26,13 @@ public class UserFormValidator implements Validator {
     public void validate(Object o, Errors errors) {
         AddUserDto addUserDto = (AddUserDto) o;
 
-        if (userService.doesLoginExist(addUserDto.getLogin())) {
+        if (userService.checkParameterNotUnique("login", addUserDto.getLogin())) {
             errors.rejectValue("login", "Unique.addUserDto.login");
         }
-        if (userService.doesEmailExist(addUserDto.getMail())) {
+        if (userService.checkParameterNotUnique("mail", addUserDto.getMail())) {
             errors.rejectValue("mail", "Unique.addUserDto.mail");
         }
-        if (userService.doesPassportExist(addUserDto.getPassport())) {
+        if (userService.checkParameterNotUnique("passport", addUserDto.getPassport())) {
             errors.rejectValue("passport", "Unique.addUserDto.passport");
         }
 
