@@ -11,12 +11,12 @@
     <div class="container">
         <c:if test="${userPageDto.status == 'BLOCKED'}">
             <div class="alert alert-danger" role="alert">
-                Contract is blocked!
+                User is blocked!
             </div>
         </c:if>
         <c:if test="${userPageDto.status == 'INACTIVE'}">
             <div class="alert alert-warning" role="alert">
-                Contract is inactive.
+                User is inactive.
             </div>
         </c:if>
         <div class="pt-4 pb-4">

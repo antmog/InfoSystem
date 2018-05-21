@@ -27,4 +27,6 @@ public interface DataService {
     AdminFundsDto getAdminAddPageData(Integer userId) throws DatabaseException;
 
     EditUserDto getEditUserData(int userId) throws DatabaseException;
+
+    UserPageDto getCustomerPageData(String login) throws DatabaseException;
 }

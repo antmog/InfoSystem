@@ -109,10 +109,15 @@ public class DataServiceImpl implements DataService {
         return modelMapper.mapToDto(EditUserDto.class, userService.findById(userId));
     }
 
+    @Override
+    public UserPageDto getCustomerPageData(String login) throws DatabaseException {
+        return modelMapper.mapToDto(UserPageDto.class, userService.findByLogin(login));
+    }
 
 
 
 
+    
 
     @Override
     public TariffPageDto getTariffPageData(Integer tariffId) throws DatabaseException {

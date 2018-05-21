@@ -1,6 +1,7 @@
 package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.ContractPageDto;
+import com.infosystem.springmvc.dto.UserPageDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.service.ContractService;
@@ -41,14 +42,14 @@ public class CustomerController extends ControllerTemplate {
     @RequestMapping("/customerPanel")
     public String customerPanel(ModelMap model) {
         String login = getPrincipal();
-        User user = null;
+        UserPageDto userPageDto;
         try {
-            user = userService.findByLogin(login);
+            userPageDto = dataService.getCustomerPageData(login);
         } catch (DatabaseException e) {
-            prepareErrorPage(model, e.getMessage());
+            return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("loggedinuser", login);
-        model.addAttribute("user", user);
+        model.addAttribute("userPageDto", userPageDto);
         return path + "customerPanel";
     }
 

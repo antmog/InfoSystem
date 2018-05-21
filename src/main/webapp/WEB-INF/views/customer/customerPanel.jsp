@@ -7,102 +7,96 @@
     <jsp:include page="../header.jsp"/>
 </head>
 <body>
-
 <jsp:include page="navBar.jsp"/>
-
 <main class="mt-4">
     <div class="container">
-        <c:if test="${user.status == 'BLOCKED'}">
+        <c:if test="${userPageDto.status == 'BLOCKED'}">
             <div class="alert alert-danger" role="alert">
-                Your profile is blocked!
+                User is blocked!
             </div>
         </c:if>
-        <c:if test="${user.status == 'INACTIVE'}">
+        <c:if test="${userPageDto.status == 'INACTIVE'}">
             <div class="alert alert-warning" role="alert">
-                Your profile is inactive.
+                User is inactive.
             </div>
         </c:if>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4 border-dark">
-                    <h5 class="card-header">
-                        Welcome, dear ${user.firstName} ${user.lastName}!
-                    </h5>
-                    <div class="card-body">
-                        <table class="table table-hover userEditableTable">
-                            <tbody>
-                            <tr class="editable">
-                                <td>Address</td>
-                                <td>${user.address}</td>
-                            </tr>
-                            <tr>
-                                <td>Birth date</td>
-                                <td>${user.birthDate}</td>
-                            </tr>
-                            <tr class="editable">
-                                <td>Mail</td>
-                                <td>${user.mail}</td>
-                            </tr>
-                            <tr class="editable">
-                                <td>Passport</td>
-                                <td>${user.passport}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <p><button type="button" class="btn btn-primary btn-sm">Change first/last name</button>
-                        <button type="button" class="btn btn-primary btn-sm">Change password</button></p>
-                        <p>Wallet balance: ${user.balance}</p>
-                        <a class="btn btn-info btn-sm" href="/customerPanel/addFunds" role="button">Add funds to wallet</a>
-                    </div>
+        <div class="pt-4 pb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 class="h2 mb-0">
+                        ${userPageDto.firstName} ${userPageDto.lastName}
+                        <span class="badge badge-secondary">Id: ${userPageDto.id}</span>
+                    </h1>
+                </div>
+                <div class="col-md-6 text-right">
                     <c:choose>
                         <c:when test="${user.status == 'INACTIVE'}">
-                            <button type="button" class="btn btn-success" id="unBlockUserButton">Activate account
+                            <button type="button" class="btn btn-sm btn-success" id="unBlockUserButton">Activate user</button>
                             </button>
                         </c:when>
                         <c:when test="${user.status == 'ACTIVE'}">
-                            <button type="button" class="btn btn-warning" id="deactivateUserButton">Deactivate account
-                            </button>
+                            <button type="button" class="btn btn-sm btn-primary" id="deactivateUserButton">Deactivate user</button>
                         </c:when>
                     </c:choose>
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="card mb-8">
-                    <h5 class="card-header">
-                        My Contracts
-                    </h5>
-                    <div class="card-body">
+            <div class="row pt-5">
+                <div class="col-md-4">
+                    <div class="card text-white bg-info mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Wallet balance: ${userPageDto.balance} €</h5>
+                            <a href="/adminPanel/addFunds/${userPageDto.id}" class="btn btn-outline-light btn-sm">Add funds</a>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h5 class="card-header">
+                            Info
+                        </h5>
+                        <div class="card-body">
+                            <dl>
+                                <dt>First name</dt>
+                                <dd>${userPageDto.firstName}</dd>
+                                <dt>Last name</dt>
+                                <dd>${userPageDto.lastName}</dd>
+                                <dt>Address</dt>
+                                <dd>${userPageDto.address}</dd>
+                                <dt>Birth date</dt>
+                                <dd>${userPageDto.birthDate}</dd>
+                                <dt>E-mail</dt>
+                                <dd>${userPageDto.mail}</dd>
+                                <dt>Passport</dt>
+                                <dd>${userPageDto.passport}</dd>
+                            </dl>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/adminPanel/editUser${userPageDto.id}" class="btn btn-outline-primary btn-sm">Edit</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <h5 class="card-header">
+                            Contract list
+                        </h5>
                         <table class="table table-hover contracts-table">
                             <thead>
                             <tr>
-                                <th>id</th>
-                                <th>phoneNumber</th>
-                                <th>price</th>
-                                <th>active options</th>
-                                <th>tariff</th>
-                                <th>status</th>
-                                <th width="100"></th>
-                                <th width="100"></th>
+                                <th>Id</th>
+                                <th>Phone number</th>
+                                <th>Tariff</th>
+                                <th>Price</th>
+                                <th>Status</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${user.userContracts}" var="contract">
+                            <c:forEach items="${userPageDto.userContracts}" var="contract">
                                 <tr class="contract-row">
                                     <td>${contract.id}</td>
                                     <td>${contract.phoneNumber}</td>
-                                    <td>${contract.price}</td>
-                                    <td><c:forEach items="${contract.activeOptions}" var="option">
-                                        ${option.id};
-                                    </c:forEach></td>
                                     <td>${contract.tariff.name}</td>
-                                    <td>
-                                        <c:if test="${contract.status == 'ACTIVE'}"><span value="ACTIVE"
-                                                                                          class="badge badge-pill badge-success">ACTIVE</span></c:if>
-                                        <c:if test="${contract.status == 'BLOCKED'}"><span value="BLOCKED"
-                                                                                           class="badge badge-pill badge-danger">BLOCKED</span></c:if>
-                                        <c:if test="${contract.status == 'INACTIVE'}"><span value="INACTIVE"
-                                                                                            class="badge badge-pill badge-warning">INACTIVE</span></c:if>
-                                    </td>
+                                    <td>${contract.price}</td>
+                                    <td>${contract.status}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -112,7 +106,6 @@
             </div>
         </div>
     </div>
-
 </main>
 <script>
     var user_id = ${user.id};

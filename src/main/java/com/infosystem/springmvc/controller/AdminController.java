@@ -262,7 +262,6 @@ public class AdminController extends ControllerTemplate {
         return path + "addTariff";
     }
 
-    //todo
     /**
      * Returns user page view.
      *
