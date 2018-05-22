@@ -10,8 +10,10 @@ import javax.validation.constraints.Size;
 public class AddTariffOptionDto {
     @Size(min = 6, max = 32)
     private String name;
+    //todo pattern
     @NotNull
     private double price;
+    //todo pattern
     @NotNull
     private double costofadd;
 }

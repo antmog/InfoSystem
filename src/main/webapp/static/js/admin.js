@@ -71,7 +71,7 @@
         }
 
         function updateUserTable(msg) {
-            document.location.href = "/adminPanel/user/" + msg.id;
+            document.location.href = "/adminPanel/user/" + msg;
         }
 
 
@@ -434,6 +434,16 @@
 
         function addContract() {
             var part1 = $('#addContractAddedOptions').tableToJSON();
+            part1.forEach(function(element) {
+                element["costofadd"] = element["Cost of add"];
+                delete element["Cost of add"];
+                element.id = element.Id;
+                delete element.Id;
+                element.name = element.Name;
+                delete element.Name;
+                element.price = element.Price;
+                delete element.Price;
+            });
             var tariffId = null;
             tariffId = $("#addContractTariffs tr.add-tariff-table-selected").find('td:first').html();
             var token = $("meta[name='_csrf']").attr("content");

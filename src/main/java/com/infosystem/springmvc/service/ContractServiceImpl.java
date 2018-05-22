@@ -106,7 +106,7 @@ public class ContractServiceImpl implements ContractService {
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
 
         optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptionsList);
-        optionsRulesChecker.checkAddToContract(editContractDto.getContractId(), toBeAddedOptionsList);
+        optionsRulesChecker.checkAddToContract(contract, toBeAddedOptionsList);
         Amount amount = new Amount();
         contract.getActiveOptions().addAll(toBeAddedOptionsList);
         toBeAddedOptionsList.forEach(option -> amount.add(option.getCostOfAdd()));
@@ -149,7 +149,7 @@ public class ContractServiceImpl implements ContractService {
             }
             toBeAddedOptionsList = modelMapperWrapper.mapToSet(TariffOption.class,entry.getValue());
             optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
-            optionsRulesChecker.checkAddToContract(contract.getId(), toBeAddedOptionsList);
+            optionsRulesChecker.checkAddToContract(contract, toBeAddedOptionsList);
             optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptionsList);
             for (TariffOption tariffOption : toBeAddedOptionsList) {
                 amount += tariffOption.getCostOfAdd();
@@ -274,7 +274,7 @@ public class ContractServiceImpl implements ContractService {
         Set<TariffOption> toBeAddedOptionsList;
         if (!addContractDto.getTariffOptionDtoList().isEmpty()) {
             toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addContractDto.getTariffOptionDtoList());
-            optionsRulesChecker.checkAddToContract(contract.getId(), toBeAddedOptionsList);
+            optionsRulesChecker.checkAddToContract(contract, toBeAddedOptionsList);
             contract.setActiveOptions(toBeAddedOptionsList);
         }
         contract.getActiveOptions().forEach(option -> amount.add(option.getCostOfAdd()));

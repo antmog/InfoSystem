@@ -39,7 +39,7 @@ public interface UserService {
 
     void updateUserAddress(EditAddressDto editAddressDto) throws DatabaseException, ValidationException;
 
-    User findByPhoneNumber(SearchByNumberDto searchByNumberDto) throws LogicException;
+    Integer findByPhoneNumber(SearchByNumberDto searchByNumberDto) throws LogicException;
 
     void addUser(AddUserDto addUserDto);
 
@@ -62,4 +62,8 @@ public interface UserService {
     void addFunds(UserFundsDto userFundsDto) throws DatabaseException;
 
     void editUser(EditUserDto editUserDto) throws DatabaseException;
+
+    void editUser(ChangePasswordDto changePasswordDto) throws DatabaseException;
+
+    boolean checkIfUserPasswordMatches(ChangePasswordDto changePasswordDto) throws DatabaseException;
 }

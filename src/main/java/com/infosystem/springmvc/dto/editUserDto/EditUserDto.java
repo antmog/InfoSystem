@@ -1,28 +1,15 @@
 package com.infosystem.springmvc.dto.editUserDto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class EditUserDto {
-
-    private int id;
-
-    @Size(min = 4, max = 32)
-    private String firstName;
-
-    @Size(min = 4, max = 32)
-    private String lastName;
-
-    @Size(min = 6, max = 32)
-    private String address;
-
-    @Email
-    @Size(min = 6, max = 32)
-    private String mail;
+public class EditUserDto  extends  CustomerEditUserDto{
 
     @Size(min = 4, max = 32)
     private String password;

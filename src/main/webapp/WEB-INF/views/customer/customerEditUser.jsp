@@ -15,7 +15,7 @@
             </h1>
             <div class="row pt-5">
                 <div class="col-md-6">
-                    <form:form method="POST" modelAttribute="editUserDto" class="form-horizontal">
+                    <form:form method="POST" modelAttribute="customerEditUserDto" class="form-horizontal">
                         <form:input type="hidden" path="id" id="id"/>
                         <div class="form-group">
                             <label for="firstName">First name</label>
@@ -43,13 +43,6 @@
                             <form:input type="" path="mail" id="mail" class="form-control input-sm"/>
                             <div class="has-error">
                                 <form:errors path="mail" class="help-inline"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <form:input type="password" path="password" id="password" class="form-control input-sm" value=""/>
-                            <div class="has-error">
-                                <form:errors path="password" class="help-inline"/>
                             </div>
                         </div>
                         <input type="submit" value="Save" class="btn btn-success btn-sm"/> or

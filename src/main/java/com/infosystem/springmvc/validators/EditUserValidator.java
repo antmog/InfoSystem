@@ -1,15 +1,15 @@
 package com.infosystem.springmvc.validators;
 
+import com.infosystem.springmvc.dto.editUserDto.CustomerEditUserDto;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.service.UserService;
+import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
-import javax.xml.crypto.Data;
 
 @Component
 public class EditUserValidator implements Validator {
@@ -29,11 +29,12 @@ public class EditUserValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         EditUserDto editUserDto = (EditUserDto) o;
+
         User user = new User();
         try {
             user = userService.findById(editUserDto.getId());
         } catch (DatabaseException e) {
-            errors.rejectValue("mail", "Custom.editUserDto.user");
+            errors.rejectValue("mail", "Custom.editUserDto.mail");
         }
         if(!user.getMail().equals(editUserDto.getMail())){
             if (userService.checkParameterNotUnique("mail", editUserDto.getMail())) {

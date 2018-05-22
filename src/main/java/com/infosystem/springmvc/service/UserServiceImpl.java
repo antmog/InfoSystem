@@ -139,12 +139,12 @@ public class UserServiceImpl implements UserService {
      * @throws LogicException if there is no contract (user) with such phone number
      */
     @Override
-    public User findByPhoneNumber(SearchByNumberDto searchByNumberDto) throws LogicException {
+    public Integer findByPhoneNumber(SearchByNumberDto searchByNumberDto) throws LogicException {
         Contract contract = contractService.findByPhoneNumber(searchByNumberDto.getPhoneNumber());
         if (contract == null) {
             throw new LogicException("No such number.");
         }
-        return contractService.findByPhoneNumber(searchByNumberDto.getPhoneNumber()).getUser();
+        return contract.getUser().getId();
     }
 
     public void addUser(AddUserDto addUserDto) {
@@ -156,23 +156,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkParameterNotUnique(String parameter, String parameterValue) {
+        User user;
         try {
-            User user = dao.findByParameter(parameter, parameterValue);
+            if(parameter.equals("passport")){
+                user = dao.findByPassport(Integer.valueOf(parameterValue));
+            }else{
+                user = dao.findByParameter(parameter, parameterValue);
+            }
         } catch (DatabaseException dbe) {
             return false;
         }
         return true;
     }
-
-//    public boolean doesEmailExist(String mail) throws DatabaseException {
-//        User user = findByEmail(mail);
-//        return (user != null);
-//    }
-//
-//    public boolean doesPassportExist(String passport) throws DatabaseException {
-//        User user = findByPassport(Integer.valueOf(passport));
-//        return (user != null);
-//    }
 
     public void addFunds(FundsDto FundsDto, String login) throws DatabaseException {
         addFunds(findByLogin(login), FundsDto.getAmount());
@@ -189,8 +184,22 @@ public class UserServiceImpl implements UserService {
         user.setLastName(editUserDto.getLastName());
         user.setAddress(editUserDto.getAddress());
         user.setMail(editUserDto.getMail());
-        user.setPassword(passwordEncoder.encode(editUserDto.getPassword()));
+        if(editUserDto.getPassword()!=null){
+            user.setPassword(passwordEncoder.encode(editUserDto.getPassword()));
+        }
 }
+
+    @Override
+    public void editUser(ChangePasswordDto changePasswordDto) throws DatabaseException {
+        User user = findById(changePasswordDto.getUserId());
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+    }
+
+    @Override
+    public boolean checkIfUserPasswordMatches(ChangePasswordDto changePasswordDto) throws DatabaseException {
+        User user = findById(changePasswordDto.getUserId());
+        return passwordEncoder.matches(changePasswordDto.getPassword(),user.getPassword());
+    }
 
     private void addFunds(User user, double amount) {
         user.addFunds(amount);

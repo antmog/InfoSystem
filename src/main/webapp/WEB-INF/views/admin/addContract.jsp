@@ -23,7 +23,7 @@
                     <c:choose>
                         <c:when test="${empty userId}">
                             <label class="control-lable" for="userId">userId</label>
-                            <input type="text" id="userId" class="form-control input-sm"/>
+                            <input type="number" id="userId" class="form-control input-sm"/>
                         </c:when>
                         <c:otherwise>
                             <input type="hidden" path="userId" id="userId" class="form-control input-sm" value="${userId}"/>
@@ -44,10 +44,10 @@
                             <table class="table" id="addContractAddedOptions">
                                 <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>cost</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Cost of add</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -71,8 +71,8 @@
                                 <table class="table" id="addContractTariffs">
                                     <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>name</th>
+                                        <th>Id</th>
+                                        <th>Name</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -94,10 +94,10 @@
                                 <table class="table" id="addContractAvailableOptions">
                                     <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>name</th>
-                                        <th>price</th>
-                                        <th>cost</th>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Cost of add</th>
                                     </tr>
                                     </thead>
                                     <tbody>

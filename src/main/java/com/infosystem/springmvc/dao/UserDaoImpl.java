@@ -37,41 +37,16 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
         return (User) users.get(0);
     }
 
-//    @Override
-//    public User findByLogin(String login) throws DatabaseException {
-//        List users = getSession()
-//                .createQuery("SELECT u FROM User u WHERE u.login LIKE :Login")
-//                .setParameter("Login", login)
-//                .getResultList();
-//        if (users.isEmpty()) {
-//            throw new DatabaseException("User doesn't exist.");
-//        }
-//        return (User) users.get(0);
-//    }
-//
-//    @Override
-//    public User findByEmail(String mail) throws DatabaseException {
-//        List users = getSession()
-//                .createQuery("SELECT u FROM User u WHERE u.mail LIKE :mail")
-//                .setParameter("mail", mail)
-//                .getResultList();
-//        if (users.isEmpty()) {
-//            throw new DatabaseException("User doesn't exist.");
-//        }
-//        return (User) users.get(0);
-//    }
-//
-//    @Override
-//    public User findByPassport(Integer passport) throws DatabaseException {
-//        List users = getSession()
-//                .createQuery("SELECT u FROM User u WHERE u.passport LIKE :passport")
-//                .setParameter("passport", passport)
-//                .getResultList();
-//        if (users.isEmpty()) {
-//            throw new DatabaseException("User doesn't exist.");
-//        }
-//        return (User) users.get(0);
-//    }
+    public User findByPassport(Integer passport) throws DatabaseException {
+        List users = getSession()
+                .createQuery("SELECT u FROM User u WHERE u.passport LIKE :passport")
+                .setParameter("passport", passport)
+                .getResultList();
+        if (users.isEmpty()) {
+            throw new DatabaseException("User doesn't exist.");
+        }
+        return (User) users.get(0);
+    }
 
     @SuppressWarnings("unchecked")
     public List<User> findListOfUsers(int startIndex, int count) {

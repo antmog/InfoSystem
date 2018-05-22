@@ -13,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class AddContractDto implements Serializable {
 
+    //todo pattern
+    @Min(1)
     @NotNull
     private int userId;
     @Pattern(regexp = "\\d*", message = "Only numbers here.")

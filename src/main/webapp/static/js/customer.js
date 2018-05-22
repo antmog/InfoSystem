@@ -378,6 +378,12 @@
         });
     }
 
+    $("#changePasswordForm").on("submit",function (e) {
+        if($("#newPassword").val()!==$("#newPasswordRepeat").val()){
+            e.preventDefault();
+            notify("","Repeat password correctly pls.","info");
+        }
+    });
     cartPanel();
     userPanel();
     contractPanel();

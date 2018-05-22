@@ -11,6 +11,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class FundsDto {
 
+    //todo pattern
     @Min(value = 10)
     @NotNull
     private double amount;

@@ -25,6 +25,8 @@ public interface UserDao {
 //
 //    User findByPassport(Integer passport) throws DatabaseException;
 
+    User findByPassport(Integer passport) throws DatabaseException;
+
     List<User> findListOfUsers(int startIndex, int count);
 
     int userCount();

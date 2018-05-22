@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 public class AddOptionsDto {
+    //todo pattern
     @NotNull
     private int userId;
-
 }

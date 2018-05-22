@@ -35,8 +35,5 @@ public class UserFormValidator implements Validator {
         if (userService.checkParameterNotUnique("passport", addUserDto.getPassport())) {
             errors.rejectValue("passport", "Unique.addUserDto.passport");
         }
-
     }
-
-
 }

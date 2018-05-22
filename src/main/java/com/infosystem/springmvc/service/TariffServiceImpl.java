@@ -72,8 +72,8 @@ public class TariffServiceImpl implements TariffService {
         }
         Tariff tariff = modelMapperWrapper.mapToTariff(addTariffDto);
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addTariffDto.getTariffOptionDtoList());
-
-        optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptionsList);
+        //todo no options
+        optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptionsList,tariff.getAvailableOptions());
         tariff.setAvailableOptions(toBeAddedOptionsList);
         dao.save(tariff);
     }

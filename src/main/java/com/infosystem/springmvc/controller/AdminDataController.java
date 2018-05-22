@@ -49,7 +49,7 @@ public class AdminDataController {
             method = RequestMethod.POST)
     public String addContract(@Valid @RequestBody AddContractDto addContractDto, BindingResult result) throws LogicException, ValidationException, DatabaseException {
         if (result.hasErrors()) {
-            throw new ValidationException("Enter correct phone number and chose tariff please.");
+            throw new ValidationException("Enter correct phone number (length: 6-32) and chose tariff please.");
         }
         contractService.newContract(addContractDto);
         return "Contract added successfully.";
@@ -85,7 +85,7 @@ public class AdminDataController {
     @RequestMapping(value = "/adminPanel/user/searchUserByNumber", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public @ResponseBody
-    User searchUserByNumber(@Valid @RequestBody SearchByNumberDto searchByNumberDto, BindingResult result) throws ValidationException, LogicException {
+    Integer searchUserByNumber(@Valid @RequestBody SearchByNumberDto searchByNumberDto, BindingResult result) throws ValidationException, LogicException {
         if (result.hasErrors()) {
             throw new ValidationException("Phone number length is between 6 and 32 (only numbers).");
         }

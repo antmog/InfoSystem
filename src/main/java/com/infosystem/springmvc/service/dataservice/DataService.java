@@ -31,4 +31,6 @@ public interface DataService {
     UserPageDto getCustomerPageData(String login) throws DatabaseException;
 
     UserFundsDto getUserAddFundsData(String login) throws DatabaseException;
+
+    ChangePasswordDto getChangePasswordData(int userIdInt) throws DatabaseException;
 }

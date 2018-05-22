@@ -12,6 +12,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class UserFundsDto {
 
+    //todo pattern
     // String: @Pattern(regexp = "^[-+]?[0-9]*[.,]?[0-9]+(?:[eE][-+]?[0-9]+)?$")
     @Min(value = 10)
     private double amount;

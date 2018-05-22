@@ -119,6 +119,12 @@ public class DataServiceImpl implements DataService {
         return new UserFundsDto(user.getBalance(),user.getId());
     }
 
+    @Override
+    public ChangePasswordDto getChangePasswordData(int userIdInt){
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto();
+        changePasswordDto.setUserId(userIdInt);
+        return changePasswordDto;
+    }
 
     @Override
     public TariffPageDto getTariffPageData(Integer tariffId) throws DatabaseException {
