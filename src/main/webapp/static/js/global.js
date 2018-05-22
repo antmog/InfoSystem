@@ -17,7 +17,10 @@ function notify(title, msg, type, icon) {
             from: "top",
             align: "right"
         },
-        offset: 20,
+        offset: {
+            x: 10,
+            y: 70
+        },
         spacing: 10,
         z_index: 1031,
         delay: 3000,

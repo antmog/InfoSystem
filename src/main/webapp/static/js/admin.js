@@ -41,7 +41,7 @@
         $("#searchUserByPhoneNumberForm").on("submit", function (e) {
             e.preventDefault();
             if ($("#searchUserByNumberInput").val() === "") {
-                notify("","Enter phone number.","primary","fas fa-search");
+                notify("", "Enter phone number.", "primary", "fas fa-search");
             } else {
                 searchUserByNumber();
             }
@@ -66,7 +66,7 @@
             }).done(function (msg) {
                 updateUserTable(msg);
             }).fail(function (jqXHR, textStatus) {
-                notify("",jqXHR.responseText,"primary","fas fa-search");
+                notify("", jqXHR.responseText, "primary", "fas fa-search");
             });
         }
 
@@ -86,9 +86,6 @@
         });
         $('#addOptionButton').click(function () {
             document.location.href = "/adminPanel/addOption"
-        });
-        $('#superButton').click(function () {
-            document.location.href = "/adminPanel/addOptionS"
         });
     }
 
@@ -213,9 +210,9 @@
                 url: "/adminPanel/contract/deleteContract",
                 data: contract_id.toString()
             }).done(function (msg) {
-                notify("Leave the page please: ",msg,"success","fas fa-thumbs-up");
+                notify("Leave the page please: ", msg, "success", "fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
-                notify("",jqXHR.responseText,"info");
+                notify("", jqXHR.responseText, "info");
             });
         });
         $("#contractCurrentOptions").on("click", "tbody tr", function () {
@@ -268,11 +265,11 @@
                     contractId: contract_id
                 })
             }).done(function (msg) {
-                notify("",msg,"success","fas fa-thumbs-up");
+                notify("", msg, "success", "fas fa-thumbs-up");
                 $('#tariffTable').find('tr:eq(1)').find('td:eq(1)').html(newTariffId);
                 getOptionsForTariff(newTariffId, header, token);
             }).fail(function (jqXHR, textStatus) {
-                notify("",jqXHR.responseText,"info");
+                notify("", jqXHR.responseText, "info");
             });
         });
 
@@ -298,12 +295,12 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
-                notify("",msg,"success","fas fa-thumbs-up");
+                notify("", msg, "success", "fas fa-thumbs-up");
                 var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
                 tr.removeClass('add-tariff-table-selected');
                 $("#contractCurrentOptions").append(tr);
             }).fail(function (jqXHR, textStatus) {
-                notify("",jqXHR.responseText,"info");
+                notify("", jqXHR.responseText, "info");
             });
             $('#parseTable tr.move-row').remove();
         });
@@ -329,10 +326,10 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
             }).done(function (msg) {
-                notify("",msg,"success","fas fa-thumbs-up");
+                notify("", msg, "success", "fas fa-thumbs-up");
                 var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove();
             }).fail(function (jqXHR, textStatus) {
-                notify("",jqXHR.responseText,"info");
+                notify("", jqXHR.responseText, "info");
             });
             $('#parseTable tr.move-row').remove();
         });
@@ -356,7 +353,7 @@
         }).done(function (msg) {
             location.reload();
         }).fail(function (jqXHR, textStatus) {
-            notify("",jqXHR.responseText,"info");
+            notify("", jqXHR.responseText, "info");
         });
     }
 
@@ -383,16 +380,16 @@
 
             $('#addTariffAddOption').on('click', function () {
                 var tr = $("#addTariffAvailableOptions tr.add-tariff-table-selected").clone();
-                if(tr.length === 0) {
-                    notify("","Chose option to add.","info");
+                if (tr.length === 0) {
+                    notify("", "Chose option to add.", "info");
                 }
                 tr.removeClass('add-tariff-table-selected');
                 $("#addTariffAddedOptions").append(tr);
             });
             $('#addTariffDelOption').on('click', function () {
                 var tr = $("#addTariffAddedOptions tr.add-tariff-table-selected").remove().clone();
-                if(tr.length === 0) {
-                    notify("","Chose option to delete.","info");
+                if (tr.length === 0) {
+                    notify("", "Chose option to delete.", "info");
                 }
                 tr.removeClass('add-tariff-table-selected');
                 $("#addTariffAvailableOptions").append(tr);
@@ -417,9 +414,9 @@
                 // The key needs to match your method's input parameter (case-sensitive).
                 data: JSON.stringify({tariffOptionDtoList: part1, tariffDto: part2})
             }).done(function (msg) {
-                notify("",msg,"success","fas fa-thumbs-up");
+                notify("", msg, "success", "fas fa-thumbs-up");
             }).fail(function (xhr, a, error) {
-                notify("",xhr.responseText,"info");
+                notify("", xhr.responseText, "info");
             })
         }
 
@@ -434,7 +431,7 @@
 
         function addContract() {
             var part1 = $('#addContractAddedOptions').tableToJSON();
-            part1.forEach(function(element) {
+            part1.forEach(function (element) {
                 element["costofadd"] = element["Cost of add"];
                 delete element["Cost of add"];
                 element.id = element.Id;
@@ -458,11 +455,16 @@
                 },
                 type: "POST",
                 url: "/adminPanel/addContract",
-                data: JSON.stringify({tariffOptionDtoList: part1, userId: $('#userId').val(), tariffId: tariffId, phoneNumber: $('#phoneNumber').val()})
+                data: JSON.stringify({
+                    tariffOptionDtoList: part1,
+                    userId: $('#userId').val(),
+                    tariffId: tariffId,
+                    phoneNumber: $('#phoneNumber').val()
+                })
             }).done(function (msg) {
-                notify("",msg,"success","fas fa-thumbs-up")
+                notify("", msg, "success", "fas fa-thumbs-up")
             }).fail(function (xhr) {
-                notify("",xhr.responseText,"primary")
+                notify("", xhr.responseText, "primary")
             })
         }
 
@@ -515,22 +517,22 @@
                     });
                     $("#addContractAvailableOptions").append(tbl_body);
                 }).fail(function (jqXHR, textStatus) {
-                    notify("Error:",jqXHR.responseText,"danger");
+                    notify("Error:", jqXHR.responseText, "danger");
                 });
             });
 
             $('#addContractAddOption').on('click', function () {
                 var tr = $("#addContractAvailableOptions tr.add-tariff-table-selected").clone();
-                if(tr.length===0){
-                    notify("","Chose option to add.","info");
+                if (tr.length === 0) {
+                    notify("", "Chose option to add.", "info");
                 }
                 tr.removeClass('add-tariff-table-selected');
                 $("#addContractAddedOptions").append(tr);
             });
             $('#addContractDelOption').on('click', function () {
                 tr = $("#addContractAddedOptions tr.add-tariff-table-selected");
-                if(tr.length===0){
-                    notify("","Chose option to delete.","info");
+                if (tr.length === 0) {
+                    notify("", "Chose option to delete.", "info");
                 }
                 tr.remove();
             });
@@ -563,9 +565,9 @@
                 url: "/adminPanel/tariff/deleteTariff",
                 data: tariff_id.toString()
             }).done(function (msg) {
-                notify("Leave the page please:",msg,"success","fas fa-thumbs-up");
+                notify("Leave the page please:", msg, "success", "fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
-                notify("",jqXHR.responseText,"info");
+                notify("", jqXHR.responseText, "info");
             });
         });
 
@@ -606,12 +608,12 @@
                     // The key needs to match your method's input parameter (case-sensitive).
                     data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id})
                 }).done(function (msg) {
-                    notify("",msg,"success","fas fa-thumbs-up");
+                    notify("", msg, "success", "fas fa-thumbs-up");
                     var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").clone();
                     tr.removeClass('add-tariff-table-selected');
                     $("#tariffAddedOptions").append(tr);
                 }).fail(function (jqXHR, textStatus) {
-                    notify("",jqXHR.responseText,"info");
+                    notify("", jqXHR.responseText, "info");
                 });
                 $('#parseTable tr.move-row').remove();
             });
@@ -637,10 +639,10 @@
                     // The key needs to match your method's input parameter (case-sensitive).
                     data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id})
                 }).done(function (msg) {
-                    notify("",msg,"success","fas fa-thumbs-up");
+                    notify("", msg, "success", "fas fa-thumbs-up");
                     var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove();
                 }).fail(function (jqXHR, textStatus) {
-                    notify("",jqXHR.responseText,"info");
+                    notify("", jqXHR.responseText, "info");
                 });
                 $('#parseTable tr.move-row').remove();
             });
@@ -665,9 +667,9 @@
                 url: "/adminPanel/option/deleteOption",
                 data: option_id.toString()
             }).done(function (msg) {
-                notify("Leave page please:",msg,"success","fas fa-thumbs-up");
+                notify("Leave page please:", msg, "success", "fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
-                notify("",jqXHR.responseText,"info");
+                notify("", jqXHR.responseText, "info");
             });
         });
 
@@ -707,12 +709,12 @@
                             rule: rule
                         })
                     }).done(function (msg) {
-                        notify("",msg,"success","fas fa-thumbs-up");
+                        notify("", msg, "success", "fas fa-thumbs-up");
                         var tr = availableOptionsTable.find("tr.add-tariff-table-selected").clone();
                         tr.removeClass('add-tariff-table-selected');
                         addedOptionsTable.append(tr);
                     }).fail(function (jqXHR, textStatus) {
-                        notify("",jqXHR.responseText,"info");
+                        notify("", jqXHR.responseText, "info");
                     });
                     $('#parseTable tr.move-row').remove();
                 });
@@ -744,10 +746,10 @@
                             rule: rule
                         })
                     }).done(function (msg) {
-                        notify("",msg,"success","fas fa-thumbs-up");
+                        notify("", msg, "success", "fas fa-thumbs-up");
                         var tr = addedOptionsTable.find("tr.add-tariff-table-selected").remove();
                     }).fail(function (jqXHR, textStatus) {
-                        notify("",jqXHR.responseText,"info");
+                        notify("", jqXHR.responseText, "info");
                     });
                     $('#parseTable tr.move-row').remove();
                 });
@@ -808,7 +810,7 @@
             });
             $("#contractAvailableOptions").append(tbl_body);
         }).fail(function (jqXHR, textStatus) {
-            notify("Error:",jqXHR.responseText,"danger");
+            notify("Error:", jqXHR.responseText, "danger");
         });
     }
 
@@ -832,10 +834,10 @@
                 userId: user_id
             })
         }).done(function (msg) {
-            notify("",msg,"success","fas fa-thumbs-up");
+            notify("", msg, "success", "fas fa-thumbs-up");
             updateCartBalance();
         }).fail(function (jqXHR) {
-            notify("",jqXHR.responseText,"info")
+            notify("", jqXHR.responseText, "info")
         });
     });
 
@@ -858,9 +860,16 @@
         }).done(function (msg) {
             $("#walletBalance").html(msg);
         }).fail(function (jqXHR, textStatus) {
-            notify("Error",jqXHR.responseText,"danger");
+            notify("Error", jqXHR.responseText, "danger");
         });
     }
+
+    $("#addOptionSubmit").on("submit", function (e) {
+        if ($("#addOptionPrice").val() === "" || $("#addOptionCostOfAdd").val() === "") {
+            e.preventDefault();
+            notify("", "Enter price and cost of add.", "info");
+        }
+    });
 
     optionPanel();
     adminPanel();

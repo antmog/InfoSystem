@@ -1,6 +1,13 @@
 #myButton {
     position: absolute;
+    top: 65%;
+    left:23%;
 }
 body{
     background:  url(/static/images/404.png) repeat-y;
+}
+#clickMe{
+    position: absolute;
+    top: 65%;
+    left:17%;
 }

@@ -4,6 +4,7 @@
     }
 
     $("#myButton").hover(function () {
+        $("#clickMe").remove();
         $(this).css({
             top: getRandomInt(0,$( window ).height()-100) + "px",
             left: getRandomInt(0,$( window ).width()-100) + "px"

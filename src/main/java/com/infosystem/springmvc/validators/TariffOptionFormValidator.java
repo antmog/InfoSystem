@@ -25,6 +25,7 @@ public class TariffOptionFormValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         AddTariffOptionDto addTariffOptionDto = (AddTariffOptionDto) o;
+
         if (!tariffOptionService.isTariffOptionUnique(addTariffOptionDto.getName())) {
             errors.rejectValue("name", "Unique.addTariffOptionDto.name");
         }

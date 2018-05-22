@@ -61,10 +61,6 @@
                                 <dd>${contractPageDto.contract.tariff.id} : ${contractPageDto.contract.tariff.name}</dd>
                                 <dt>Price</dt>
                                 <dd>${contractPageDto.contract.price} €</dd>
-                                <dt>Active options</dt>
-                                <c:forEach items="${contractPageDto.contract.activeOptions}" var="option">
-                                    <dd> ${option.id} : ${option.name}</dd>
-                                </c:forEach>
                             </dl>
                         </div>
                     </div>
@@ -72,7 +68,7 @@
                 <div class="col-md-4">
                     <div class="card">
                         <h5 class="card-header">
-                            Current options
+                            Active options
                         </h5>
                         <table class="table table-hover contracts-table" id="contractCurrentOptions">
                             <thead>

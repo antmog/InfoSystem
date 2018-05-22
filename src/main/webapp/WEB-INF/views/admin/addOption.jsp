@@ -14,13 +14,13 @@
 
 Adding option
 <br/>
-<form:form method="POST" modelAttribute="addTariffOptionDto" class="form-horizontal">
+<form:form method="POST" modelAttribute="addTariffOptionDto" class="form-horizontal" id="addOptionSubmit">
 
     <div class="row">
         <div class="form-group col-md-12">
-            <label class="col-md-3 control-lable" for="name">name</label>
+            <label class="col-md-3 control-lable" for="name">Name</label>
             <div class="col-md-7">
-                <form:input type="text" path="name" id="name" class="form-control input-sm"/>
+                <form:input type="text" path="name" id="addOptionName" class="form-control input-sm"/>
                 <div class="has-error">
                     <form:errors path="name" class="help-inline"/>
                 </div>
@@ -30,9 +30,9 @@ Adding option
 
     <div class="row">
         <div class="form-group col-md-12">
-            <label class="col-md-3 control-lable">price</label>
+            <label class="col-md-3 control-lable">Price</label>
             <div class="col-md-7">
-                <form:input type="number" path="price" id="price" class="form-control input-sm"/>
+                <form:input type="number" path="price" id="addOptionPrice" class="form-control input-sm"/>
                 <div class="has-error">
                     <form:errors path="price" class="help-inline"/>
                 </div>
@@ -42,9 +42,9 @@ Adding option
 
     <div class="row">
         <div class="form-group col-md-12">
-            <label class="col-md-3 control-lable">cost of add</label>
+            <label class="col-md-3 control-lable">Cost of add</label>
             <div class="col-md-7">
-                <form:input type="number" path="costofadd" id="costofadd" class="form-control input-sm"/>
+                <form:input type="number" path="costofadd" id="addOptionCostOfAdd" class="form-control input-sm"/>
                 <div class="has-error">
                     <form:errors path="costofadd" class="help-inline"/>
                 </div>

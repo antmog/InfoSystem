@@ -11,7 +11,9 @@
 <jsp:include page="globalNavBar.jsp"/>
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column add-funds">
     <main role="main" class="inner cover">
-        <div><img src="/static/images/telegram.png" height="100" width="100" id="myButton"></div>
+        <img src="/static/images/telegram.png" height="100" width="100"
+             id="myButton">
+        <label id="clickMe"><h5>try to get me)0</h5></label>
     </main>
 </div>
 <jsp:include page="footer.jsp"/>

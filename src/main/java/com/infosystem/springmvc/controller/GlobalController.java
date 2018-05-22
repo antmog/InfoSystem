@@ -42,7 +42,7 @@ public class GlobalController extends ControllerTemplate {
      * Access denied.
      */
     @RequestMapping(value = "/403", method = RequestMethod.GET)
-    public String accessDenied(ModelMap model) {
+    public String accessDenied() {
         return "403";
     }
 

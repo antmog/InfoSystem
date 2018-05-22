@@ -21,7 +21,7 @@
                 </div>
                 <div class="card text-white bg-info mb-4">
                     <div class="card-body">
-                        <h5 class="card-title">Wallet balance: ${user.balance} €</h5>
+                        <h5 class="card-title">Wallet balance: <label id="walletBalance">${user.balance} €</label></h5>
                         <div class="col-md-4"><a href="/customerPanel/addFunds" class="btn btn-outline-light btn-sm">
                             Add funds</a></div>
                         <div class="col-md-4"><p id="buy"><a class="btn btn-outline-light btn-sm">Buy all</a></p></div>
