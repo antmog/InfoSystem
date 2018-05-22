@@ -106,17 +106,15 @@
                 url: "/adminPanel/user/deleteUser",
                 data: user_id.toString()
             }).done(function (msg) {
-                alert(msg);
+                notify("Leave page please:",msg,"success","fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
-                alert(jqXHR.responseText);
-
+                notify("",jqXHR.responseText,"info");
             });
         });
         var newStatus;
         $('#addContractToUserButton').click(function () {
             document.location.href = "/adminPanel/addContractToUser/" + user_id
         });
-
         $('#blockUserButton').click(function () {
             newStatus = 'BLOCKED';
             globalSetNewStatus("user", newStatus, user_id);
@@ -130,6 +128,7 @@
             globalSetNewStatus("user", newStatus, user_id);
         });
 
+        //deprecated
         function updateUserInfo() {
             var input, td, button, editing, canselButton;
             var oldRow, oldValue = "";
@@ -153,10 +152,6 @@
             });
             $(document).on("focusout", ".userEditableTable tr.editing", function (event) {
                 if (button === event.relatedTarget) {
-                    var token = $("meta[name='_csrf']").attr("content");
-                    var header = $("meta[name='_csrf_header']").attr("content");
-                    var editing = $(".userEditableTable tr.editing");
-                    var value = editing.find("input").val();
                     var token = $("meta[name='_csrf']").attr("content");
                     var header = $("meta[name='_csrf_header']").attr("content");
                     var editing = $(".userEditableTable tr.editing");
@@ -589,6 +584,7 @@
 
             $('#tariffAddOption').on('click', function () {
                 var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").clone();
+                console.log(tr);
                 var table = $('#parseTable');
                 for (var i = 0; i < tr.length; i++) {
                     table.append(tr[i]);

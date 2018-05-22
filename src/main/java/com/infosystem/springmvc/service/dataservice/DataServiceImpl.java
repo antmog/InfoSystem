@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.service.dataservice;
 
+import com.infosystem.springmvc.dao.TariffDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
@@ -25,15 +26,17 @@ public class DataServiceImpl implements DataService {
     private final UserService userService;
     private final ContractService contractService;
     private final CustomModelMapper modelMapper;
+    private final TariffDao tariffDao;
 
     @Autowired
     public DataServiceImpl(TariffOptionService tariffOptionService, TariffService tariffService,
-                           UserService userService, ContractService contractService, CustomModelMapper modelMapper) {
+                           UserService userService, ContractService contractService, CustomModelMapper modelMapper, TariffDao tariffDao) {
         this.tariffOptionService = tariffOptionService;
         this.tariffService = tariffService;
         this.userService = userService;
         this.contractService = contractService;
         this.modelMapper = modelMapper;
+        this.tariffDao = tariffDao;
     }
 
     /**
@@ -124,6 +127,18 @@ public class DataServiceImpl implements DataService {
         ChangePasswordDto changePasswordDto = new ChangePasswordDto();
         changePasswordDto.setUserId(userIdInt);
         return changePasswordDto;
+    }
+
+    @Override
+    public List<TariffDto> getIndexPageData() {
+        int tariffCount = tariffDao.tariffCount();
+        Set<Integer> idList = new HashSet<>();
+        while(idList.size()<3){
+            idList.add((int) (Math.random()*tariffCount)+1);
+        }
+        List<TariffDto> randomTariffs = new ArrayList<>();
+        idList.forEach(integer -> randomTariffs.add(modelMapper.mapToList(TariffDto.class,tariffDao.findListOfTariffs(integer,1)).get(0)));
+        return randomTariffs;
     }
 
     @Override

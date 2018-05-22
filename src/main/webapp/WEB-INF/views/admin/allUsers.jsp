@@ -5,10 +5,10 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
+<body class="font-1">
 <jsp:include page="navBar.jsp"/>
 <main class="mt-4">
-    <div class="container">
+    <div class="container content">
         <div class="pt-4 pb-4">
             <div class="row">
                 <div class="col-6">
@@ -80,6 +80,7 @@
                 <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>
             </ul>
         </nav>
+        <br>
     </div>
 </main>
 

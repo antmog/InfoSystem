@@ -6,18 +6,14 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
-
+<body class="font-4">
 <jsp:include page="navBar.jsp"/>
-
-
-<div class="alert alert-danger lead">
+<div class="alert alert-danger lead content">
     ${error}
+    <span class="well floatRight">
+        Go to <a href="/adminPanel">Admin Panel</a>
+    </span>
 </div>
-
-<span class="well floatRight">
-			Go to <a href="/adminPanel">Admin Panel</a>
-</span>
 <jsp:include page="../footer.jsp"/>
 </body>
 </html>

@@ -6,17 +6,19 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
+<body class="font-1">
 <jsp:include page="navBar.jsp"/>
 <main class="mt-4">
-    <div class="container">
+    <div class="container content">
         <c:if test="${userPageDto.status == 'BLOCKED'}">
-            <div class="alert alert-danger" role="alert">
+            <br>
+            <div class="alert alert-danger mt-3" role="alert">
                 User is blocked!
             </div>
         </c:if>
         <c:if test="${userPageDto.status == 'INACTIVE'}">
-            <div class="alert alert-warning" role="alert">
+            <br>
+            <div class="alert alert-warning mt-3" role="alert">
                 User is inactive.
             </div>
         </c:if>
@@ -74,6 +76,7 @@
                             </dl>
                         </div>
                         <div class="card-footer">
+                            <button id="deleteUser" class="btn btn-outline-danger btn-sm">Delete user</button>
                             <a href="/adminPanel/editUser/${userPageDto.id}" class="btn btn-outline-primary btn-sm">Edit</a>
                         </div>
                     </div>
@@ -111,10 +114,8 @@
                             <a href="/adminPanel/addContractToUser/${userPageDto.id}" class="btn btn-outline-primary btn-sm">Add contract</a>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 </main>

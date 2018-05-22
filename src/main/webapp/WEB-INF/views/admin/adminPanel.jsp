@@ -5,14 +5,11 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
-
+<body class="font-1">
 <jsp:include page="navBar.jsp"/>
-
 <main class="mt-4 ml-4 mr-4">
-
     <main class="mt-4">
-        <div class="container">
+        <div class="container content">
             <div class="pt-4 pb-4">
                 <div class="row">
                     <div class="col-md-6">

@@ -20,33 +20,34 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/"><i class="fas fa-phone-square"></i> Info-System</a>
 </nav>
+<%@ include file="/static/vendors/particle/index.html" %>
 
-
-<div class="form-signin-container">
+<div class="form-signin-container login-div">
     <c:url var="loginUrl" value="/login"/>
     <form class="form-signin mt-4" action="${loginUrl}" method="POST">
-        <h1 class="h3 mb-3 font-weight-normal text-center">Log In</h1>
-        <c:if test="${param.error != null}">
-            <div class="alert alert-danger" role="alert">
-                <p>You've entered wrong login/password</p>
+        <div class="col-md-12"><h1 class="h3 mb-3 font-weight-normal text-center">Log In</h1>
+            <c:if test="${param.error != null}">
+                <div class="alert alert-danger" role="alert">
+                    <p>You've entered wrong login/password</p>
+                </div>
+            </c:if>
+            <c:if test="${param.logout != null}">
+                <div class="alert alert-success">
+                    <p>You have been logged out successfully.</p>
+                </div>
+            </c:if>
+            <label class="sr-only">Login</label>
+            <input type="text" class="form-control" id="username" name="login" placeholder="Login" required autofocus>
+            <label class="sr-only">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            <div class="input-group input-sm">
+                <div class="checkbox">
+                    <label><input type="checkbox" id="rememberme" name="remember-me"> Remember Me</label>
+                </div>
             </div>
-        </c:if>
-        <c:if test="${param.logout != null}">
-            <div class="alert alert-success">
-                <p>You have been logged out successfully.</p>
-            </div>
-        </c:if>
-        <label class="sr-only">Login</label>
-        <input type="text" class="form-control" id="username" name="login" placeholder="Login" required autofocus>
-        <label class="sr-only">Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-        <div class="input-group input-sm">
-            <div class="checkbox">
-                <label><input type="checkbox" id="rememberme" name="remember-me"> Remember Me</label>
-            </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" value="Log in">Log in</button>
         </div>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" value="Log in">Log in</button>
     </form>
 </div>
 </body>

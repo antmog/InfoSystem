@@ -108,11 +108,11 @@ public class ContractServiceImpl implements ContractService {
         optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptionsList);
         optionsRulesChecker.checkAddToContract(contract, toBeAddedOptionsList);
         Amount amount = new Amount();
-        contract.getActiveOptions().addAll(toBeAddedOptionsList);
         toBeAddedOptionsList.forEach(option -> amount.add(option.getCostOfAdd()));
         if (user.getBalance() < amount.getAmount()) {
             throw new LogicException("Not enough funds.");
         }
+        contract.getActiveOptions().addAll(toBeAddedOptionsList);
         user.spendFunds(amount.getAmount());
         contract.setPrice(contract.countPrice());
     }

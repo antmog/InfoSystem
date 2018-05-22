@@ -1,0 +1,8 @@
+#particles-js{
+    position:absolute;
+    height:100%;
+    width:100%;
+    background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)),url(/static/images/sky1.jpg);
+    background-size: cover;
+    background-position: center;
+}

@@ -5,10 +5,10 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
+<body class="font-2">
 <jsp:include page="navBar.jsp"/>
 <main class="mt-4">
-    <div class="container">
+    <div class="container content">
         <div class="pt-4 pb-4">
             <h1 class="h2 mb-0">
                 Chaning password

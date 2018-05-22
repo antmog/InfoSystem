@@ -5,58 +5,67 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
-
+<body class="font-4">
 <jsp:include page="navBar.jsp"/>
-
 <main class="mt-4">
-    <div class="container">
+    <div class="container content mb-4">
         <c:if test="${tariffPageDto.tariff.status == 'INACTIVE'}">
+            <br>
             <div class="alert alert-warning" role="alert">
                 Tariff is inactive (archived).
             </div>
         </c:if>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <strong> ${tariffPageDto.tariff.id} : ${tariffPageDto.tariff.name}</strong>
-                    </h5>
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <tbody>
-                            <tr>
-                                <td>price</td>
-                                <td>${tariffPageDto.tariff.price}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <c:choose>
-                            <c:when test="${tariffPageDto.tariff.status == 'INACTIVE'}">
-                                <button id="unArchiveTariff" type="button" class="btn btn-primary btn-sm btn-success">Unarchive tariff</button>
-                                <button id="deleteTariff" type="button" class="btn btn-primary btn-sm btn-danger">Delete tariff</button>
-                            </c:when>
-                            <c:when test="${tariffPageDto.tariff.status == 'ACTIVE'}">
-                                <button id="archiveTariff" type="button" class="btn btn-primary btn-sm btn-warning">Archive tariff</button>
-                            </c:when>
-                        </c:choose>
-                    </div>
+        <div class="pt-4 pb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 class="h2 mb-0">
+                        ${tariffPageDto.tariff.name}
+                        <span class="badge badge-secondary">Id: ${tariffPageDto.tariff.id}</span>
+                    </h1>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <strong>Options available for tariff</strong>
-                    </h5>
-                    <div class="card-body">
-                        <div class="container">
+            <div class="row pt-5">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <h5 class="card-header">
+                            Tariff info
+                        </h5>
+                        <div class="card-body">
+                            <dl>
+                                <dt>Price</dt>
+                                <dd>${tariffPageDto.tariff.price} €</dd>
+                            </dl>
+                            <c:choose>
+                                <c:when test="${tariffPageDto.tariff.status == 'INACTIVE'}">
+                                    <button id="unArchiveTariff" type="button" class="btn btn-sm btn-success">Unarchive
+                                        tariff
+                                    </button>
+                                    <button id="deleteTariff" type="button" class="btn btn-sm btn-danger">Delete
+                                        tariff
+                                    </button>
+                                </c:when>
+                                <c:when test="${tariffPageDto.tariff.status == 'ACTIVE'}">
+                                    <button id="archiveTariff" type="button" class="btn btn-sm btn-primary">Archive
+                                        tariff
+                                    </button>
+                                </c:when>
+                            </c:choose>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header">
+                            Options available for tariff
+                        </h5>
+                        <div class="card-body">
                             <table class="table" id="tariffAddedOptions">
                                 <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>costofadd</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Cost of add</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -71,25 +80,26 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="tariffDelOption">Delete
+                                selected option
+                            </button>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="tariffDelOption">Delete selected option</button>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <strong>All available options</strong>
-                    </h5>
-                    <div class="card-body">
-                        <div class="container">
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header">
+                            All available options
+                        </h5>
+                        <div class="card-body">
                             <table class="table" id="tariffAvailableOptions">
                                 <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>costofadd</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Cost of add</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -104,14 +114,16 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="tariffAddOption">Add
+                                selected option
+                            </button>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="tariffAddOption">Add selected option</button>
                 </div>
             </div>
-
         </div>
     </div>
-
     <table style="visibility:hidden" class="table" id="parseTable">
         <thead>
         <tr>

@@ -5,18 +5,19 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
-
+<body class="font-3">
 <jsp:include page="navBar.jsp"/>
 <main class="mt-4">
-    <div class="container">
+    <div class="container content">
         <c:if test="${contractPageDto.contract.status == 'BLOCKED'}">
-            <div class="alert alert-danger" role="alert">
+            <br>
+            <div class="alert alert-danger mt-3" role="alert">
                 Contract is blocked!
             </div>
         </c:if>
         <c:if test="${contractPageDto.contract.status == 'INACTIVE'}">
-            <div class="alert alert-warning" role="alert">
+            <br>
+            <div class="alert alert-warning mt-3" role="alert">
                 Contract is inactive.
             </div>
         </c:if>

@@ -8,60 +8,44 @@
 </head>
 <body>
 <jsp:include page="globalNavBar.jsp"/>
-
 <main role="main">
-
-    <div class="jumbotron">
-        <div class="container">
-            <h1 class="display-4">Info-System</h1>
-            <p>Cellular Carrier Information System</p>
-            <sec:authorize var="loggedIn" access="isAuthenticated()"/>
-            <c:choose>
-                <c:when test="${loggedIn}">
-                    <strong>WELCOME, dear ${loggedinuser}</strong>
-                </c:when>
-                <c:otherwise>
-                    <a class="btn btn-primary btn-lg" href="/login" role="button">Log In »</a>
-                </c:otherwise>
-            </c:choose>
-            <sec:authorize access="isAuthenticated()">
-                <sec:authorize access="hasAnyRole('ADMIN')">
-                    <a href="/lk">
-                        Admin Panel
-                    </a>
-                </sec:authorize>
-                <sec:authorize access="hasAnyRole('CUSTOMER')">
-                    <a href="/lk">
-                        User Panel
-                    </a>
-                </sec:authorize>
-            </sec:authorize>
-        </div>
-    </div>
-
+    <%@ include file="/static/vendors/particle/index.html" %>
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
-                <h2>Tariffs</h2>
-                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                    mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna
-                    mollis euismod. Donec sed odio dui. </p>
-                <p><a class="btn btn-secondary" href="#" role="button">Подробнее &raquo;</a></p>
+            <div class="col-md-12 div-with-link">
+                <h1 class="display-4">Info-System</h1>
+                <p>Cellular Carrier Information System</p>
+                <sec:authorize var="loggedIn" access="isAuthenticated()"/>
+                <c:choose>
+                    <c:when test="${loggedIn}">
+                        <strong>WELCOME, dear ${loggedinuser}</strong>
+                    </c:when>
+                    <c:otherwise>
+                        <a class="btn btn-primary" href="/login" role="button"> Log In  »</a>
+                    </c:otherwise>
+                </c:choose>
+                <sec:authorize access="isAuthenticated()">
+                    <sec:authorize access="hasAnyRole('ADMIN')">
+                        <a href="/lk">
+                            Admin Panel
+                        </a>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole('CUSTOMER')">
+                        <a href="/lk">
+                            User Panel
+                        </a>
+                    </sec:authorize>
+                </sec:authorize>
             </div>
-            <div class="col-md-4">
-                <h2>LK</h2>
-                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                    mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna
-                    mollis euismod. Donec sed odio dui. </p>
-                <p><a class="btn btn-secondary" href="#" role="button">Подробнее &raquo;</a></p>
-            </div>
-            <div class="col-md-4">
-                <h2>Search</h2>
-                <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula
-                    porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
-                    ut fermentum massa justo sit amet risus.</p>
-                <p><a class="btn btn-secondary" href="#" role="button">Подробнее &raquo;</a></p>
-            </div>
+        </div>
+        <div class="row">
+            <c:forEach items="${tariffDtoList}" var="tariffDto">
+                <div class="col-md-4">
+                    <h3>${tariffDto.name}</h3>
+                    <p>${tariffDto.price}</p>
+                    <p><a class="btn btn-secondary" href="/lk" role="button">Learn more &raquo;</a></p>
+                </div>
+            </c:forEach>
         </div>
 
         <hr>

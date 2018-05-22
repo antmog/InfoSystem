@@ -6,14 +6,12 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
-
+<body class="font-1">
 <jsp:include page="navBar.jsp"/>
-
 <main class="mt-4">
-    <div class="container">
+    <div class="container content mt-1">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 mt-3">
                 <div class="card mb-4 border-dark">
                     <h5 class="card-header">
                         ${user.firstName} ${user.lastName}
@@ -30,14 +28,14 @@
             </div>
             <c:choose>
                 <c:when test="${empty sessionCart.options}">
-                    <div class="col-md-8">
+                    <div class="col-md-8 mt-3">
                         <div class="alert alert-info" role="alert">
                             Cart is empty.
                         </div>
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <div class="col-md-8">
+                    <div class="col-md-8 mt-3">
                         <div class="card mb-8">
                             <h5 class="card-header">
                                 My Contracts

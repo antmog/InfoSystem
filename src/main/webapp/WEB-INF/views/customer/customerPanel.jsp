@@ -7,17 +7,19 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
+<body class="font-1">
 <jsp:include page="navBar.jsp"/>
 <main class="mt-4">
-    <div class="container">
+    <div class="container content">
         <c:if test="${userPageDto.status == 'BLOCKED'}">
-            <div class="alert alert-danger" role="alert">
+            <br>
+            <div class="alert alert-danger mt-3" role="alert">
                 User is blocked!
             </div>
         </c:if>
         <c:if test="${userPageDto.status == 'INACTIVE'}">
-            <div class="alert alert-warning" role="alert">
+            <br>
+            <div class="alert alert-warning mt-3" role="alert">
                 User is inactive.
             </div>
         </c:if>
@@ -31,11 +33,11 @@
                 </div>
                 <div class="col-md-6 text-right">
                     <c:choose>
-                        <c:when test="${user.status == 'INACTIVE'}">
+                        <c:when test="${userPageDto.status == 'INACTIVE'}">
                             <button type="button" class="btn btn-sm btn-success" id="unBlockUserButton">Activate user</button>
                             </button>
                         </c:when>
-                        <c:when test="${user.status == 'ACTIVE'}">
+                        <c:when test="${userPageDto.status == 'ACTIVE'}">
                             <button type="button" class="btn btn-sm btn-primary" id="deactivateUserButton">Deactivate user</button>
                         </c:when>
                     </c:choose>

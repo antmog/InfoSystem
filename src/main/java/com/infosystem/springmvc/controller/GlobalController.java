@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.controller;
 
+import com.infosystem.springmvc.dto.TariffDto;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.User;
@@ -20,11 +21,15 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
 @SessionAttributes("loggedinuser")
 public class GlobalController extends ControllerTemplate {
+
+    @Autowired
+    DataService dataService;
 
     /**
      * Mapping to login screen.
@@ -86,7 +91,9 @@ public class GlobalController extends ControllerTemplate {
      */
     @RequestMapping("/")
     public String startPage(ModelMap model) {
+        List<TariffDto> tariffDtoList = dataService.getIndexPageData();
         model.addAttribute("loggedinuser", getPrincipal());
+        model.addAttribute("tariffDtoList",tariffDtoList);
         return "index";
     }
 }

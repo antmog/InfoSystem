@@ -5,60 +5,61 @@
 <head>
     <jsp:include page="../header.jsp"/>
 </head>
-<body>
-
+<body class="font-1">
 <jsp:include page="navBar.jsp"/>
-
 <main class="mt-4">
-    <div class="container">
-        <div class="row">
-
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <strong> ${tariffOptionPageDto.tariffOption.id} : ${tariffOptionPageDto.tariffOption.name}</strong>
-                    </h5>
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <tbody>
-                            <tr class="contract-row">
-                                <td>price</td>
-                                <td>${tariffOptionPageDto.tariffOption.price}</td>
-                            </tr>
-                            <tr class="contract-row">
-                                <td>cost of add</td>
-                                <td>${tariffOptionPageDto.tariffOption.costofadd}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <button id="deleteOption" type="button" class="btn btn-primary btn-sm btn-danger">Delete
-                            option
-                        </button>
+    <div class="container content mb-4">
+        <div class="pt-4 pb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 class="h2 mb-0">
+                        ${tariffOptionPageDto.tariffOption.name}
+                        <span class="badge badge-secondary">Id: ${tariffOptionPageDto.tariffOption.id}</span>
+                    </h1>
+                </div>
+            </div>
+            <div class="row pt-5">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <h5 class="card-header">
+                            Option info
+                        </h5>
+                        <div class="card-body">
+                            <dl>
+                                <dt>Cost of add</dt>
+                                <dd>${tariffOptionPageDto.tariffOption.costofadd}</dd>
+                                <dt>Price</dt>
+                                <dd>${tariffOptionPageDto.tariffOption.price} €</dd>
+                            </dl>
+                        </div>
+                        <div class="card-footer">
+                            <button id="deleteOption" type="button" class="btn btn-primary btn-sm btn-danger">Delete
+                                option
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <br/>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <strong>Related options</strong>
-                    </h5>
-                    <div class="card-body">
-                        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header">
+                            Related options
+                        </h5>
+                        <div class="card-body">
                             <table class="table" id="optionAddedOptionsRelated">
                                 <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>costofadd</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Cost of add</th>
                                 </tr>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${tariffOptionPageDto.tariffOption.relatedTariffOptions}" var="availableOption">
+                                <c:forEach items="${tariffOptionPageDto.tariffOption.relatedTariffOptions}"
+                                           var="availableOption">
                                     <tr class="move-row">
                                         <td>${availableOption.id}</td>
                                         <td>${availableOption.name}</td>
@@ -69,25 +70,26 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="optionDelOptionRelated">Delete selected
+                                option
+                            </button>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="optionDelOptionRelated">Delete selected option</button>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <strong>All available options</strong>
-                    </h5>
-                    <div class="card-body">
-                        <div class="container">
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header">
+                            All available options
+                        </h5>
+                        <div class="card-body">
                             <table class="table" id="optionAvailableOptionsRelated">
                                 <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>costofadd</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Cost of add</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -102,31 +104,34 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="optionAddOptionRelated">Add selected
+                                option
+                            </button>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="optionAddOptionRelated">Add selected option</button>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <strong>Excluding options</strong>
-                    </h5>
-                    <div class="card-body">
-                        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header">
+                            Excluding options
+                        </h5>
+                        <div class="card-body">
                             <table class="table" id="optionAddedOptionsExcluding">
                                 <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>costofadd</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Cost of add</th>
                                 </tr>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${tariffOptionPageDto.tariffOption.excludingTariffOptions}" var="availableOption">
+                                <c:forEach items="${tariffOptionPageDto.tariffOption.excludingTariffOptions}"
+                                           var="availableOption">
                                     <tr class="move-row">
                                         <td>${availableOption.id}</td>
                                         <td>${availableOption.name}</td>
@@ -137,25 +142,26 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="optionDelOptionExcluding">Delete selected
+                                option
+                            </button>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="optionDelOptionExcluding">Delete selected option</button>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <h5 class="card-header">
-                        <strong>All available options</strong>
-                    </h5>
-                    <div class="card-body">
-                        <div class="container">
+                <div class="col-md-4">
+                    <div class="card">
+                        <h5 class="card-header">
+                            All available options
+                        </h5>
+                        <div class="card-body">
                             <table class="table" id="optionAvailableOptionsExcluding">
                                 <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>costofadd</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Cost of add</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -170,8 +176,12 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="optionAddOptionExcluding">Add selected
+                                option
+                            </button>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="optionAddOptionExcluding">Add selected option</button>
                 </div>
             </div>
         </div>

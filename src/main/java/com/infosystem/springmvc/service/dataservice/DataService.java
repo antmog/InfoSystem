@@ -33,4 +33,6 @@ public interface DataService {
     UserFundsDto getUserAddFundsData(String login) throws DatabaseException;
 
     ChangePasswordDto getChangePasswordData(int userIdInt) throws DatabaseException;
+
+    List<TariffDto> getIndexPageData();
 }
