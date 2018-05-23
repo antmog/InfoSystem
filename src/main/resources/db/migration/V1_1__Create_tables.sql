@@ -86,7 +86,7 @@ CREATE TABLE `excluding_options` (
 TRUNCATE `excluding_options`;
 
 -- related options rules
-DROP TABLE IF EXISTS`related_options`;
+DROP TABLE IF EXISTS `related_options`;
 CREATE TABLE `related_options` (
   `OPTION_ID` int(11) NOT NULL,
   `RELATED_OPTION_ID` int(11) NOT NULL,
@@ -96,12 +96,11 @@ CREATE TABLE `related_options` (
 TRUNCATE `related_options`;
 
 -- list of options, for wich selected option is related
-DROP TABLE IF EXISTS`is_related_for`;
+DROP TABLE IF EXISTS `is_related_for`;
 CREATE TABLE `is_related_for` (
   `OPTION_ID` int(11) NOT NULL,
   `RELATED_FOR` int(11) NOT NULL,
-  PRIMARY KEY (`OPTION_ID`,`RELATED_FOR`),
-  UNIQUE KEY `UK_84hkg122dnqktoq07p0bxc99n` (`RELATED_FOR`)
+  PRIMARY KEY (`OPTION_ID`,`RELATED_FOR`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 TRUNCATE `is_related_for`;
 
