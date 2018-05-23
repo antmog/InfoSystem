@@ -3,13 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html lang="ru">
+<%@ include file="/static/vendors/particle/index.html" %>
 <head>
     <jsp:include page="header.jsp"/>
 </head>
 <body>
 <jsp:include page="globalNavBar.jsp"/>
 <main role="main">
-    <%@ include file="/static/vendors/particle/index.html" %>
     <div class="container">
         <div class="row">
             <div class="col-md-12 div-with-link">
@@ -47,10 +47,7 @@
                 </div>
             </c:forEach>
         </div>
-
-        <hr>
     </div>
-
 </main>
 <jsp:include page="footer.jsp"/>
 </body>

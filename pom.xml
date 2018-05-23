@@ -96,7 +96,6 @@
         </dependency>
 
         <!-- lombok -->
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <html lang="ru">
+<%@ include file="/static/vendors/particle/index.html" %>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="_csrf" content="${_csrf.token}"/>
@@ -16,12 +16,9 @@
           href="/static/vendors/fontawesome-free-5.0.10/web-fonts-with-css/css/fontawesome-all.min.css">
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/"><i class="fas fa-phone-square"></i> Info-System</a>
 </nav>
-<%@ include file="/static/vendors/particle/index.html" %>
-
 <div class="form-signin-container login-div">
     <c:url var="loginUrl" value="/login"/>
     <form class="form-signin mt-4" action="${loginUrl}" method="POST">

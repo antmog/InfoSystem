@@ -1,13 +1,6 @@
-.searchUserByNumberInput {
-    margin-left: 5px;
-    margin-right: 2px;
-}
-
 .add-tariff-table-selected {
-    background-color: #c0ffdb;
+    background-color: #8bffe6;
 }
-
-html,
 body {
     height: 100%;
 }
