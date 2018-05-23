@@ -127,7 +127,7 @@
                         </table>
                         <div class="card-footer">
                             <c:if test="${contractPageDto.contract.status == 'ACTIVE'}">
-                                <p id="contractAddOption"><a class="btn btn-outline-primary btn-sm">Add selected options</a></p>
+                                <p id="contractAddOption"><a class="btn btn-outline-primary btn-sm">Add selected options to cart</a></p>
                             </c:if>
                         </div>
                     </div>
