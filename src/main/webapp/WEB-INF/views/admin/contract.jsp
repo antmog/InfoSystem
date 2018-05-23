@@ -32,17 +32,20 @@
                 <div class="col-md-6 text-right">
                     <c:choose>
                         <c:when test="${contractPageDto.contract.status == 'BLOCKED'}">
-                            <button type="button" class="btn btn-sm btn-success" id="unBlockContractButton">Unblock contract
+                            <button type="button" class="btn btn-sm btn-success" id="unBlockContractButton">Unblock
+                                contract
                             </button>
                         </c:when>
                         <c:when test="${contractPageDto.contract.status == 'INACTIVE'}">
-                            <button type="button" class="btn btn-sm btn-success" id="unBlockContractButton">Activate contract
+                            <button type="button" class="btn btn-sm btn-success" id="unBlockContractButton">Activate
+                                contract
                             </button>
                         </c:when>
                         <c:otherwise>
                             <button type="button" class="btn btn-sm btn-danger" id="blockContractButton">Block contract
                             </button>
-                            <button type="button" class="btn btn-sm btn-primary" id="deactivateContractButton">Deactivate contract
+                            <button type="button" class="btn btn-sm btn-primary" id="deactivateContractButton">
+                                Deactivate contract
                             </button>
                         </c:otherwise>
                     </c:choose>
@@ -53,7 +56,8 @@
                     <div class="card text-white bg-info mb-4">
                         <div class="card-body">
                             <h5 class="card-title">Wallet balance: ${contractPageDto.contract.user.balance} €</h5>
-                            <a href="/adminPanel/addFunds/${contractPageDto.contract.user.id}" class="btn btn-outline-light btn-sm">Add funds</a>
+                            <a href="/adminPanel/addFunds/${contractPageDto.contract.user.id}"
+                               class="btn btn-outline-light btn-sm">Add funds</a>
                         </div>
                     </div>
                     <div class="card">
@@ -71,7 +75,9 @@
                             </dl>
                         </div>
                         <div class="card-footer">
-                            <button id="deleteContract" type="button" class="btn btn-primary btn-sm btn-danger">Delete contract</button>
+                            <button id="deleteContract" type="button" class="btn btn-primary btn-sm btn-danger">Delete
+                                contract
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -81,8 +87,8 @@
                             <strong>Current options</strong>
                         </h5>
                         <div class="card-body">
-                            <div class="container">
-                                <table class="table" id="contractCurrentOptions">
+                            <div class="table-responsive">
+                                <table class="table " id="contractCurrentOptions">
                                     <thead>
                                     <tr>
                                         <th>Id</th>
@@ -105,7 +111,9 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" id="contractDelOption">Delete selected option</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="contractDelOption">Delete
+                                selected option
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -115,7 +123,7 @@
                             <strong>Options available for tariff</strong>
                         </h5>
                         <div class="card-body">
-                            <div class="container">
+                            <div class="table-responsive">
                                 <table class="table" id="contractAvailableOptions">
                                     <thead>
                                     <tr>
@@ -126,7 +134,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach items="${contractPageDto.contract.tariff.availableOptions}" var="availableOption">
+                                    <c:forEach items="${contractPageDto.contract.tariff.availableOptions}"
+                                               var="availableOption">
                                         <tr class="move-row">
                                             <td>${availableOption.id}</td>
                                             <td>${availableOption.name}</td>
@@ -137,9 +146,12 @@
                                     </tbody>
                                 </table>
                             </div>
+
                         </div>
                         <div class="card-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" id="contractAddOption">Add selected option</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="contractAddOption">Add
+                                selected option
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -151,27 +163,30 @@
                             <strong>Tariffs</strong>
                         </h5>
                         <div class="card-body">
-                            <table class="table" id="addContractTariffs">
-                                <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${contractPageDto.tariffs}" var="tariff">
-                                    <tr class="t-row">
-                                        <td>${tariff.id}</td>
-                                        <td>${tariff.name}</td>
-                                        <td>${tariff.price}</td>
+                            <div class="table-responsive">
+                                <table class="table" id="addContractTariffs">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
                                     </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach items="${contractPageDto.tariffs}" var="tariff">
+                                        <tr class="t-row">
+                                            <td>${tariff.id}</td>
+                                            <td>${tariff.name}</td>
+                                            <td>${tariff.price}</td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="card-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" id="switchTariff">Swith to this tariff
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="switchTariff">Swith to this
+                                tariff
                             </button>
                         </div>
                     </div>
@@ -182,19 +197,21 @@
                             <strong>Available options</strong>
                         </h5>
                         <div class="card-body">
-                            <table class="table" id="addContractAvailableOptions">
-                                <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Cost of add</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-responsive">
+                                <table class="table" id="addContractAvailableOptions">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Cost of add</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

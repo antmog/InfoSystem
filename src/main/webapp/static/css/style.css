@@ -131,3 +131,6 @@ p {
     opacity: 0.9;
     filter: alpha(Opacity=90);
 }
+.table-responsive{
+    max-height: 60%;
+}

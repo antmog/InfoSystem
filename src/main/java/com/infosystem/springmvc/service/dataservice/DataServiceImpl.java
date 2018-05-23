@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.service.dataservice;
 
+import com.infosystem.springmvc.converters.JavaUtilDateToStringConverter;
 import com.infosystem.springmvc.dao.TariffDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
@@ -27,16 +28,19 @@ public class DataServiceImpl implements DataService {
     private final ContractService contractService;
     private final CustomModelMapper modelMapper;
     private final TariffDao tariffDao;
+    private final JavaUtilDateToStringConverter javaUtilDateToStringConverter;
 
     @Autowired
     public DataServiceImpl(TariffOptionService tariffOptionService, TariffService tariffService,
-                           UserService userService, ContractService contractService, CustomModelMapper modelMapper, TariffDao tariffDao) {
+                           UserService userService, ContractService contractService, CustomModelMapper modelMapper,
+                           TariffDao tariffDao, JavaUtilDateToStringConverter javaUtilDateToStringConverter) {
         this.tariffOptionService = tariffOptionService;
         this.tariffService = tariffService;
         this.userService = userService;
         this.contractService = contractService;
         this.modelMapper = modelMapper;
         this.tariffDao = tariffDao;
+        this.javaUtilDateToStringConverter = javaUtilDateToStringConverter;
     }
 
     /**
@@ -90,6 +94,7 @@ public class DataServiceImpl implements DataService {
         return modelMapper.mapToList(TariffOptionDtoShort.class, tariffOptionService.findAllTariffOptions());
     }
 
+    //todo
     /**
      * @param userId userId
      * @return UserPageDto for user with userId
@@ -97,7 +102,10 @@ public class DataServiceImpl implements DataService {
      */
     @Override
     public UserPageDto getUserPageDto(Integer userId) throws DatabaseException {
-        return modelMapper.mapToDto(UserPageDto.class, userService.findById(userId));
+        User user = userService.findById(userId);
+        UserPageDto userPageDto = modelMapper.mapToDto(UserPageDto.class,user);
+        userPageDto.setBirthDate(javaUtilDateToStringConverter.convert(user.getBirthDate()));
+        return userPageDto;
     }
 
     @Override
@@ -113,7 +121,10 @@ public class DataServiceImpl implements DataService {
 
     @Override
     public UserPageDto getCustomerPageData(String login) throws DatabaseException {
-        return modelMapper.mapToDto(UserPageDto.class, userService.findByLogin(login));
+        User user = userService.findByLogin(login);
+        UserPageDto userPageDto = modelMapper.mapToDto(UserPageDto.class,user);
+        userPageDto.setBirthDate(javaUtilDateToStringConverter.convert(user.getBirthDate()));
+        return userPageDto;
     }
 
     @Override

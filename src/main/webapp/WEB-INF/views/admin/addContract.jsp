@@ -52,19 +52,21 @@
                         </h5>
                         <div class="card-body">
                             <div class="container">
-                                <table class="table" id="addContractAddedOptions">
-                                    <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th>Price</th>
-                                        <th>Cost of add</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
+                                <div class="table-responsive">
+                                    <table class="table" id="addContractAddedOptions">
+                                        <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Price</th>
+                                            <th>Cost of add</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer">
@@ -81,22 +83,24 @@
                         <h5 class="card-header">
                             Tariffs
                         </h5>
-                        <table class="table" id="addContractTariffs">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Name</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${tariffs}" var="tariff">
-                                <tr class="t-row">
-                                    <td>${tariff.id}</td>
-                                    <td>${tariff.name}</td>
+                        <div class="table-responsive">
+                            <table class="table" id="addContractTariffs">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
                                 </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                <c:forEach items="${tariffs}" var="tariff">
+                                    <tr class="t-row">
+                                        <td>${tariff.id}</td>
+                                        <td>${tariff.name}</td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -105,19 +109,21 @@
                             Available options
                         </h5>
                         <div class="card-body">
-                            <table class="table" id="addContractAvailableOptions">
-                                <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Cost of add</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-responsive">
+                                <table class="table" id="addContractAvailableOptions">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Cost of add</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="addContractAddOption">Add

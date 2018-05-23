@@ -40,6 +40,7 @@
                             Selected options
                         </h5>
                         <div class="card-body">
+                            <div class="table-responsive">
                             <table class="table" id="addTariffAddedOptions">
                                 <thead>
                                 <tr>
@@ -53,6 +54,7 @@
 
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="addTariffDelOption">Delete selected
@@ -67,6 +69,7 @@
                             Available options
                         </h5>
                         <div class="card-body">
+                            <div class="table-responsive">
                             <table class="table" id="addTariffAvailableOptions">
                                 <thead>
                                 <tr>
@@ -87,6 +90,7 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="addTariffAddOption">Add selected option</button>

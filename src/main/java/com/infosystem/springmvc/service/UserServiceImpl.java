@@ -41,7 +41,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public User findById(int id) throws DatabaseException {
-        return dao.findById(id);
+        User user = dao.findById(id);
+        System.out.println(user);
+        return user;
     }
 
     public User findByLogin(String login) throws DatabaseException {

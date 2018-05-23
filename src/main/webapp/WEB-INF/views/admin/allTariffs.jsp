@@ -26,6 +26,7 @@
                 </div>
             </div>
         </div>
+        <div class="table-responsive">
         <table class="table table-hover tariffs-table">
             <thead>
             <tr>
@@ -49,6 +50,7 @@
             </c:forEach>
             </tbody>
         </table>
+        </div>
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item" id="prevPage"><a class="page-link">Previous</a></li>

@@ -19,10 +19,6 @@ public interface UserService {
 
     User findByLogin(String login) throws DatabaseException;
 
-//    User findByEmail(String mail) throws DatabaseException;
-//
-//    User findByPassport(Integer passport) throws DatabaseException;
-
     void saveUser(User user);
 
     List<User> findAllUsers();
@@ -42,12 +38,6 @@ public interface UserService {
     Integer findByPhoneNumber(SearchByNumberDto searchByNumberDto) throws LogicException;
 
     void addUser(AddUserDto addUserDto);
-
-//    boolean doesLoginExist(String login) throws DatabaseException;
-//
-//    boolean doesEmailExist(String mail) throws DatabaseException;
-//
-//    boolean doesPassportExist(String passport) throws DatabaseException;
 
     boolean checkParameterNotUnique(String parameter, String parameterValue);
 

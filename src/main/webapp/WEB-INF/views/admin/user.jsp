@@ -33,15 +33,19 @@
                 <div class="col-md-6 text-right">
                     <c:choose>
                         <c:when test="${userPageDto.status == 'BLOCKED'}">
-                            <button type="button" class="btn btn-sm btn-success" id="unBlockUserButton">Unblock user</button>
+                            <button type="button" class="btn btn-sm btn-success" id="unBlockUserButton">Unblock user
+                            </button>
                         </c:when>
                         <c:when test="${userPageDto.status == 'INACTIVE'}">
-                            <button type="button" class="btn btn-sm btn-success" id="unBlockUserButton">Activate user</button>
+                            <button type="button" class="btn btn-sm btn-success" id="unBlockUserButton">Activate user
+                            </button>
                             </button>
                         </c:when>
                         <c:otherwise>
                             <button type="button" class="btn btn-sm btn-danger" id="blockUserButton">Block User</button>
-                            <button type="button" class="btn btn-sm btn-primary" id="deactivateUserButton">Deactivate user</button>
+                            <button type="button" class="btn btn-sm btn-primary" id="deactivateUserButton">Deactivate
+                                user
+                            </button>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -51,7 +55,8 @@
                     <div class="card text-white bg-info mb-4">
                         <div class="card-body">
                             <h5 class="card-title">Wallet balance: ${userPageDto.balance} €</h5>
-                            <a href="/adminPanel/addFunds/${userPageDto.id}" class="btn btn-outline-light btn-sm">Add funds</a>
+                            <a href="/adminPanel/addFunds/${userPageDto.id}" class="btn btn-outline-light btn-sm">Add
+                                funds</a>
                         </div>
                     </div>
 
@@ -77,7 +82,8 @@
                         </div>
                         <div class="card-footer">
                             <button id="deleteUser" class="btn btn-outline-danger btn-sm">Delete user</button>
-                            <a href="/adminPanel/editUser/${userPageDto.id}" class="btn btn-outline-primary btn-sm">Edit</a>
+                            <a href="/adminPanel/editUser/${userPageDto.id}"
+                               class="btn btn-outline-primary btn-sm">Edit</a>
                         </div>
                     </div>
                 </div>
@@ -86,32 +92,37 @@
                         <h5 class="card-header">
                             Contract list
                         </h5>
-                        <table class="table table-hover contracts-table">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Phone number</th>
-                                <th>Options count</th>
-                                <th>Tariff</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${userPageDto.userContracts}" var="contract">
-                                <tr class="contract-row">
-                                    <td>${contract.id}</td>
-                                    <td>${contract.phoneNumber}</td>
-                                    <td>${fn:length(contract.activeOptions)}</td>
-                                    <td>${contract.tariff.name}</td>
-                                    <td>${contract.price}</td>
-                                    <td>${contract.status}</td>
-                                </tr>
-                            </c:forEach>
-                            </tbody>
-                        </table>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover contracts-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Phone number</th>
+                                        <th>Options count</th>
+                                        <th>Tariff</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach items="${userPageDto.userContracts}" var="contract">
+                                        <tr class="contract-row">
+                                            <td>${contract.id}</td>
+                                            <td>${contract.phoneNumber}</td>
+                                            <td>${fn:length(contract.activeOptions)}</td>
+                                            <td>${contract.tariff.name}</td>
+                                            <td>${contract.price}</td>
+                                            <td>${contract.status}</td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <div class="card-footer">
-                            <a href="/adminPanel/addContractToUser/${userPageDto.id}" class="btn btn-outline-primary btn-sm">Add contract</a>
+                            <a href="/adminPanel/addContractToUser/${userPageDto.id}"
+                               class="btn btn-outline-primary btn-sm">Add contract</a>
                         </div>
                     </div>
                 </div>

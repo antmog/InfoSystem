@@ -34,7 +34,6 @@ public class User implements Serializable {
     @Column(name = "ADRESS", nullable = false)
     private String address;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "BIRTH_DATE", nullable = false)
     private Date birthDate;
 

@@ -1,9 +1,10 @@
 -- users
-CREATE TABLE IF NOT EXISTS `users` (
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
   `USER_ID` int(11) NOT NULL AUTO_INCREMENT,
   `ADRESS` varchar(255) NOT NULL,
   `BALANCE` double NOT NULL,
-  `BIRTH_DATE` datetime NOT NULL,
+  `BIRTH_DATE` date NOT NULL,
   `FIRST_NAME` varchar(255) NOT NULL,
   `LAST_NAME` varchar(255) NOT NULL,
   `LOGIN` varchar(255) NOT NULL,
@@ -18,7 +19,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 TRUNCATE `users`;
 
 -- contracts
-CREATE TABLE IF NOT EXISTS `contracts` (
+DROP TABLE IF EXISTS `contracts`;
+CREATE TABLE `contracts` (
   `CONTRACT_ID` int(11) NOT NULL AUTO_INCREMENT,
   `PHONE_NUMBER` varchar(255) NOT NULL,
   `CONTRACT_PRICE` double NOT NULL,
@@ -32,7 +34,8 @@ CREATE TABLE IF NOT EXISTS `contracts` (
 TRUNCATE `contracts`;
 
 -- active options for contract
-CREATE TABLE IF NOT EXISTS `active_options` (
+DROP TABLE IF EXISTS `active_options`;
+CREATE TABLE `active_options` (
   `CONTRACT_ID` int(11) NOT NULL,
   `OPTION_ID` int(11) NOT NULL,
   PRIMARY KEY (`CONTRACT_ID`,`OPTION_ID`),
@@ -41,7 +44,8 @@ CREATE TABLE IF NOT EXISTS `active_options` (
 TRUNCATE `active_options`;
 
 -- tariffs
-CREATE TABLE IF NOT EXISTS `tariffs` (
+DROP TABLE IF EXISTS `tariffs`;
+CREATE TABLE `tariffs` (
   `TARIFF_ID` int(11) NOT NULL AUTO_INCREMENT,
   `NAME` varchar(255) NOT NULL,
   `PRICE` double NOT NULL,
@@ -51,7 +55,8 @@ CREATE TABLE IF NOT EXISTS `tariffs` (
 TRUNCATE `tariffs`;
 
 -- available options (all options for tariff)
-CREATE TABLE IF NOT EXISTS `available_options` (
+DROP TABLE IF EXISTS `available_options`;
+CREATE TABLE `available_options` (
   `TARIFF_ID` int(11) NOT NULL,
   `OPTION_ID` int(11) NOT NULL,
   PRIMARY KEY (`TARIFF_ID`,`OPTION_ID`),
@@ -60,7 +65,8 @@ CREATE TABLE IF NOT EXISTS `available_options` (
 TRUNCATE `available_options`;
 
 -- options (all options)
-CREATE TABLE IF NOT EXISTS `tariff_options` (
+DROP TABLE IF EXISTS `tariff_options`;
+CREATE TABLE `tariff_options` (
   `OPTION_ID` int(11) NOT NULL AUTO_INCREMENT,
   `COSTOFADD` double NOT NULL,
   `NAME` varchar(255) NOT NULL,
@@ -70,7 +76,8 @@ CREATE TABLE IF NOT EXISTS `tariff_options` (
 TRUNCATE `tariff_options`;
 
 -- excluding options rules
-CREATE TABLE IF NOT EXISTS `excluding_options` (
+DROP TABLE IF EXISTS`excluding_options`;
+CREATE TABLE `excluding_options` (
   `OPTION_ID` int(11) NOT NULL,
   `EXCLUDING_OPTION_ID` int(11) NOT NULL,
   PRIMARY KEY (`OPTION_ID`,`EXCLUDING_OPTION_ID`),
@@ -79,7 +86,8 @@ CREATE TABLE IF NOT EXISTS `excluding_options` (
 TRUNCATE `excluding_options`;
 
 -- related options rules
-CREATE TABLE IF NOT EXISTS `related_options` (
+DROP TABLE IF EXISTS`related_options`;
+CREATE TABLE `related_options` (
   `OPTION_ID` int(11) NOT NULL,
   `RELATED_OPTION_ID` int(11) NOT NULL,
   PRIMARY KEY (`OPTION_ID`,`RELATED_OPTION_ID`),
@@ -88,7 +96,8 @@ CREATE TABLE IF NOT EXISTS `related_options` (
 TRUNCATE `related_options`;
 
 -- list of options, for wich selected option is related
-CREATE TABLE IF NOT EXISTS `is_related_for` (
+DROP TABLE IF EXISTS`is_related_for`;
+CREATE TABLE `is_related_for` (
   `OPTION_ID` int(11) NOT NULL,
   `RELATED_FOR` int(11) NOT NULL,
   PRIMARY KEY (`OPTION_ID`,`RELATED_FOR`),
@@ -97,7 +106,8 @@ CREATE TABLE IF NOT EXISTS `is_related_for` (
 TRUNCATE `is_related_for`;
 
 -- data for login tokens (remember me function)
-CREATE TABLE IF NOT EXISTS `persistent_logins` (
+DROP TABLE IF EXISTS`persistent_logins`;
+CREATE TABLE `persistent_logins` (
   `username` varchar(64) NOT NULL,
   `series` varchar(64) NOT NULL,
   `token` varchar(64) NOT NULL,

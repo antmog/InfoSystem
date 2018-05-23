@@ -46,7 +46,7 @@
                         <h5 class="card-header">
                             Related options
                         </h5>
-                        <div class="card-body">
+                        <div class="card-body"><div class="table-responsive">
                             <table class="table" id="optionAddedOptionsRelated">
                                 <thead>
                                 <tr>
@@ -70,6 +70,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="optionDelOptionRelated">Delete selected
                                 option
@@ -83,6 +84,7 @@
                             All available options
                         </h5>
                         <div class="card-body">
+                            <div class="table-responsive">
                             <table class="table" id="optionAvailableOptionsRelated">
                                 <thead>
                                 <tr>
@@ -103,6 +105,7 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="optionAddOptionRelated">Add selected
@@ -119,6 +122,7 @@
                             Excluding options
                         </h5>
                         <div class="card-body">
+                            <div class="table-responsive">
                             <table class="table" id="optionAddedOptionsExcluding">
                                 <thead>
                                 <tr>
@@ -141,6 +145,7 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="optionDelOptionExcluding">Delete selected
@@ -155,6 +160,7 @@
                             All available options
                         </h5>
                         <div class="card-body">
+                            <div class="table-responsive">
                             <table class="table" id="optionAvailableOptionsExcluding">
                                 <thead>
                                 <tr>
@@ -175,6 +181,7 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="optionAddOptionExcluding">Add selected

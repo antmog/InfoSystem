@@ -21,9 +21,7 @@ import javax.validation.Valid;
 public class CustomerDataController extends ControllerTemplate {
 
     private final UserService userService;
-
     private final ContractService contractService;
-
     private final SessionCart sessionCart;
 
     @Autowired

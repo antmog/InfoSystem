@@ -21,8 +21,9 @@ public class UserPageDto {
 
     private String address;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date birthDate;
+    //todo string? date?
+    //@DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String birthDate;
 
     private String passport;
 
@@ -33,5 +34,6 @@ public class UserPageDto {
     private Status status;
 
     private Double balance;
+
 
 }

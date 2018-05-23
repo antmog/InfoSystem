@@ -59,6 +59,7 @@
                             Options available for tariff
                         </h5>
                         <div class="card-body">
+                            <div class="table-responsive">
                             <table class="table" id="tariffAddedOptions">
                                 <thead>
                                 <tr>
@@ -79,6 +80,7 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="tariffDelOption">Delete
@@ -93,6 +95,7 @@
                             All available options
                         </h5>
                         <div class="card-body">
+                            <div class="table-responsive">
                             <table class="table" id="tariffAvailableOptions">
                                 <thead>
                                 <tr>
@@ -113,6 +116,7 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="tariffAddOption">Add

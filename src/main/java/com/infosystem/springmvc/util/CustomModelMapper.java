@@ -1,42 +1,38 @@
 package com.infosystem.springmvc.util;
 
-import com.infosystem.springmvc.dao.TariffDao;
-import com.infosystem.springmvc.dao.UserDao;
+import com.infosystem.springmvc.converters.JavaUtilDateToStringConverter;
 import com.infosystem.springmvc.dto.*;
-import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
-import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.UserService;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
 public class CustomModelMapper {
 
     @Autowired
+    JavaUtilDateToStringConverter javaUtilDateToStringConverter;
+    @Autowired
     TariffOptionService tariffOptionService;
     @Autowired
     UserService userService;
 
-    private TariffDao tariffDao;
-    private UserDao userDao;
     private ModelMapper modelMapper = new ModelMapper();
 
     {
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
-    }
-
-    @Autowired
-    public CustomModelMapper(TariffDao tariffDao, UserDao userDao) {
-        this.tariffDao = tariffDao;
-        this.userDao = userDao;
+        //todo
+        //modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        //modelMapper.addConverter((Converter<Date, String>) date ->
+                //new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date));
     }
 
     /**
@@ -95,9 +91,6 @@ public class CustomModelMapper {
         return new HashSet<>(tariffOptionService.selectListByIdList(optionIdList));
     }
 
-
-
-
     /**
      * @param addTariffDto addTariffDto
      * @return tariff with name and price from addTariffDto
@@ -108,8 +101,6 @@ public class CustomModelMapper {
         tariff.setPrice(addTariffDto.getTariffDto().getPrice());
         return tariff;
     }
-
-
 
     /**
      * @param addTariffOptionDto addTariffOptionDto
@@ -139,14 +130,11 @@ public class CustomModelMapper {
         return modelMapper.map(tariffOption, TariffOptionDto.class);
     }
 
-
-
     public List<TariffDto> mapToTariffDtoList(List<Tariff> tariffs) {
         List<TariffDto> tariffDtoList = new ArrayList<>();
         tariffs.forEach(tariff -> tariffDtoList.add(modelMapper.map(tariff, TariffDto.class)));
         return tariffDtoList;
     }
-
 
     public ContractDto mapToContractDto(Contract contract) {
         return modelMapper.map(contract, ContractDto.class);
