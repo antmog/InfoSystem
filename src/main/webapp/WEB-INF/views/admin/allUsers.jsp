@@ -27,7 +27,7 @@
                                                placeholder="Search by phone number">
                                     </div>
                                     <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary mb-2">
+                                        <button type="submit" class="btn btn-primary mb-2 search-button">
                                             <i class="fas fa-search search-icon"></i>
                                         </button>
                                     </div>
