@@ -106,9 +106,9 @@
                 url: "/adminPanel/user/deleteUser",
                 data: user_id.toString()
             }).done(function (msg) {
-                notify("Leave page please:",msg,"success","fas fa-thumbs-up");
+                notify("Leave page please:", msg, "success", "fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
-                notify("",jqXHR.responseText,"info");
+                notify("", jqXHR.responseText, "info");
             });
         });
         var newStatus;
@@ -372,14 +372,26 @@
                     $(this).addClass('add-tariff-table-selected');
                 }
             });
-
             $('#addTariffAddOption').on('click', function () {
-                var tr = $("#addTariffAvailableOptions tr.add-tariff-table-selected").clone();
+                var success = true;
+                var tr = $("#addTariffAvailableOptions tr.add-tariff-table-selected");
                 if (tr.length === 0) {
                     notify("", "Chose option to add.", "info");
                 }
-                tr.removeClass('add-tariff-table-selected');
-                $("#addTariffAddedOptions").append(tr);
+                target = $("#addTariffAddedOptions");
+                table = target.tableToJSON();
+                for (var i = 0; i < table.length; i++) {
+                    $.each(tr, function () {
+                        if ($(this).find("td:first")[0].innerText === table[i].Id) {
+                            notify("", "Option " + table[i].Name + " is already in list.", "info");
+                            success = false;
+                        }
+                    });
+                }
+                if(success){
+                    tr.removeClass('add-tariff-table-selected');
+                    target.append(tr.clone());
+                }
             });
             $('#addTariffDelOption').on('click', function () {
                 var tr = $("#addTariffAddedOptions tr.add-tariff-table-selected").remove().clone();

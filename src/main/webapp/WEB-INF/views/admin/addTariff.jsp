@@ -44,10 +44,10 @@
                             <table class="table" id="addTariffAddedOptions">
                                 <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>costofadd</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Cost of add</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -73,10 +73,10 @@
                             <table class="table" id="addTariffAvailableOptions">
                                 <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>price</th>
-                                    <th>costofadd</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Cost of add</th>
                                 </tr>
                                 </thead>
                                 <tbody>

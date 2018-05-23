@@ -251,4 +251,21 @@ public class OptionsRulesChecker {
             throw new LogicException(sb.toString());
         }
     }
+
+    /**
+     * Checking if tariff already have options from toBeAddedOptionsList
+     * @param tariff tariff
+     * @param toBeAddedOptionsList toBeAddedOptionsList
+     * @throws LogicException if contract already have options from toBeAddedOptionsList
+     */
+    public void checkIfTariffAlreadyHave(Tariff tariff, Set<TariffOption> toBeAddedOptionsList) throws LogicException {
+        Set<TariffOption> currentOptions = new HashSet<>(tariff.getAvailableOptions());
+        currentOptions.retainAll(toBeAddedOptionsList);
+        if (!currentOptions.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            currentOptions.forEach(tariffOption -> sb.append("Tariff ").append(tariff.getId()).append(" already has ")
+                    .append(tariffOption.getName()).append(" option.\n"));
+            throw new LogicException(sb.toString());
+        }
+    }
 }
