@@ -46,7 +46,17 @@
                     <td>${fn:length(contract.activeOptions)}</td>
                     <td>${contract.tariff.name}</td>
                     <td>${contract.price}</td>
-                    <td><span class="badge badge-success">${contract.status}</span></td>
+                    <c:choose>
+                        <c:when test="${contract.status} == 'BLOCKED'}">
+                            <td><span class="badge badge-danger">${contract.status}</span></td>
+                        </c:when>
+                        <c:when test="${contract.status} == 'INACTIVE'}">
+                            <td><span class="badge badge-warning">${contract.status}</span></td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><span class="badge badge-success">${contract.status}</span></td>
+                        </c:otherwise>
+                    </c:choose>
                 </tr>
             </c:forEach>
             </tbody>

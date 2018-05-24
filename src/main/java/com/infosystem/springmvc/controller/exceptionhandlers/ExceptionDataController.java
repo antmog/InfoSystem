@@ -13,7 +13,18 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class ExceptionDataController {
 
-    //todo cheat catch exception (error)
+    //todo delete this(error)
+    /**
+     * Sends bad request to the page with selected message.
+     * @param e Logic exception
+     * @return message
+     */
+    @ExceptionHandler({Exception.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    String exc(Exception e) {
+        return "Whoops, something went wrong.";
+    }
 
     /**
      * Sends bad request to the page with selected message.

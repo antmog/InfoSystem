@@ -43,9 +43,18 @@
                     <td>${tariff.id}</td>
                     <td>${tariff.name}</td>
                     <td>${fn:length(tariff.availableOptions)}</td>
-                    <td>${tariff.name}</td>
                     <td>${tariff.price}</td>
-                    <td><span class="badge badge-success">${tariff.status}</span></td>
+                    <c:choose>
+                        <c:when test="${tariff.status} == 'BLOCKED'}">
+                            <td><span class="badge badge-danger">${tariff.status}</span></td>
+                        </c:when>
+                        <c:when test="${tariff.status} == 'INACTIVE'}">
+                            <td><span class="badge badge-warning">${tariff.status}</span></td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><span class="badge badge-success">${tariff.status}</span></td>
+                        </c:otherwise>
+                    </c:choose>
                 </tr>
             </c:forEach>
             </tbody>

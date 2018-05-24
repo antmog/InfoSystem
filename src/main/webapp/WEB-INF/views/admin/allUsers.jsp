@@ -61,8 +61,17 @@
                     <td>${user.passport}</td>
                     <td>${user.address}</td>
                     <td>${user.mail}</td>
-                    <td>${user.status}</td>
-                    <td><span class="badge badge-success">${user.status}</span></td>
+                    <c:choose>
+                        <c:when test="${user.status} == 'BLOCKED'}">
+                            <td><span class="badge badge-danger">${user.status}</span></td>
+                        </c:when>
+                        <c:when test="${user.status} == 'INACTIVE'}">
+                            <td><span class="badge badge-warning">${user.status}</span></td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><span class="badge badge-success">${user.status}</span></td>
+                        </c:otherwise>
+                    </c:choose>
                 </tr>
             </c:forEach>
             </tbody>

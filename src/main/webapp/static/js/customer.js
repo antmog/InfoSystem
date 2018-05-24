@@ -154,8 +154,6 @@
             for (var i = 0; i < tr.length; i++) {
                 table.append(tr[i]);
             }
-            console.log(table);
-            console.log(table.tableToJSON());
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             $.ajax({
