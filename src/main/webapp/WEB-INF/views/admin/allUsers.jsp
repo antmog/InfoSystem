@@ -62,10 +62,10 @@
                     <td>${user.address}</td>
                     <td>${user.mail}</td>
                     <c:choose>
-                        <c:when test="${user.status} == 'BLOCKED'}">
+                        <c:when test="${user.status == 'BLOCKED'}">
                             <td><span class="badge badge-danger">${user.status}</span></td>
                         </c:when>
-                        <c:when test="${user.status} == 'INACTIVE'}">
+                        <c:when test="${user.status == 'INACTIVE'}">
                             <td><span class="badge badge-warning">${user.status}</span></td>
                         </c:when>
                         <c:otherwise>

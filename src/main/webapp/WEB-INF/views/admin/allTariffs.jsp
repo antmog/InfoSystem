@@ -45,10 +45,10 @@
                     <td>${fn:length(tariff.availableOptions)}</td>
                     <td>${tariff.price}</td>
                     <c:choose>
-                        <c:when test="${tariff.status} == 'BLOCKED'}">
+                        <c:when test="${tariff.status == 'BLOCKED'}">
                             <td><span class="badge badge-danger">${tariff.status}</span></td>
                         </c:when>
-                        <c:when test="${tariff.status} == 'INACTIVE'}">
+                        <c:when test="${tariff.status == 'INACTIVE'}">
                             <td><span class="badge badge-warning">${tariff.status}</span></td>
                         </c:when>
                         <c:otherwise>

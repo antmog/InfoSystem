@@ -47,10 +47,10 @@
                     <td>${contract.tariff.name}</td>
                     <td>${contract.price}</td>
                     <c:choose>
-                        <c:when test="${contract.status} == 'BLOCKED'}">
+                        <c:when test="${contract.status == 'BLOCKED'}">
                             <td><span class="badge badge-danger">${contract.status}</span></td>
                         </c:when>
-                        <c:when test="${contract.status} == 'INACTIVE'}">
+                        <c:when test="${contract.status == 'INACTIVE'}">
                             <td><span class="badge badge-warning">${contract.status}</span></td>
                         </c:when>
                         <c:otherwise>
