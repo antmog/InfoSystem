@@ -33,8 +33,6 @@
                                     <dd>${userDto.lastName}</dd>
                                     <dt>Address</dt>
                                     <dd>${userDto.address}</dd>
-                                    <dt>Birth date</dt>
-                                    <dd>${userDto.birthDate}</dd>
                                     <dt>E-mail</dt>
                                     <dd>${userDto.mail}</dd>
                                     <dt>Passport</dt>

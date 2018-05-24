@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
 @SessionAttributes("loggedinuser")
 public class GlobalController extends ControllerTemplate {
 

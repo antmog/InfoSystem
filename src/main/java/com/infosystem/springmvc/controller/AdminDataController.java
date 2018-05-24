@@ -19,7 +19,6 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/")
 public class AdminDataController {
 
     private final UserService userService;

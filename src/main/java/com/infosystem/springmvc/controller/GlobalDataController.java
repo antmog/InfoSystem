@@ -24,7 +24,6 @@ import java.util.Set;
 
 
 @RestController
-@RequestMapping("/")
 public class GlobalDataController {
 
     private final UserService userService;

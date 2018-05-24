@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/")
-//@SessionAttributes("roles")
 public class CustomerController extends ControllerTemplate {
 
     public final UserService userService;

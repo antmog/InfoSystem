@@ -22,7 +22,6 @@ import javax.validation.constraints.Min;
 import java.util.*;
 
 @Controller
-@RequestMapping("/")
 @SessionAttributes("roles")
 public class AdminController extends ControllerTemplate {
 

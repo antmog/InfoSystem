@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/")
 public class CustomerDataController extends ControllerTemplate {
 
     private final UserService userService;
