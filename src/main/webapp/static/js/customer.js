@@ -6,7 +6,6 @@
 
     function userPanel() {
         var newStatus;
-
         $('#addFunds').click(function () {
             var amount = $('#addFundsInput').val();
             var token = $("meta[name='_csrf']").attr("content");

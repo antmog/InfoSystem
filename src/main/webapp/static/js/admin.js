@@ -271,6 +271,7 @@
         $('#contractAddOption').on('click', function () {
             // OPTIONS RULES
             var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
+            $('#parseTable tbody tr').remove();
             var table = $('#parseTable');
             for (var i = 0; i < tr.length; i++) {
                 table.append(tr[i]);
@@ -297,11 +298,11 @@
             }).fail(function (jqXHR, textStatus) {
                 notify("", jqXHR.responseText, "info");
             });
-            $('#parseTable tr.move-row').remove();
         });
 
         $('#contractDelOption').on('click', function () {
             var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").clone();
+            $('#parseTable tbody tr').remove();
             var table = $('#parseTable');
             for (var i = 0; i < tr.length; i++) {
                 table.append(tr[i]);
@@ -326,7 +327,6 @@
             }).fail(function (jqXHR, textStatus) {
                 notify("", jqXHR.responseText, "info");
             });
-            $('#parseTable tr.move-row').remove();
         });
     }
 
@@ -399,12 +399,21 @@
                     notify("", "Chose option to delete.", "info");
                 }
                 tr.removeClass('add-tariff-table-selected');
-                $("#addTariffAvailableOptions").append(tr);
             });
         }
 
         function addTariff() {
             var part1 = $('#addTariffAddedOptions').tableToJSON();
+            part1.forEach(function (element) {
+                element["costofadd"] = element["Cost of add"];
+                delete element["Cost of add"];
+                element.id = element.Id;
+                delete element.Id;
+                element.name = element.Name;
+                delete element.Name;
+                element.price = element.Price;
+                delete element.Price;
+            });
             var part2 = {name: $('#name').val(), price: $('#price').val()};
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -529,12 +538,25 @@
             });
 
             $('#addContractAddOption').on('click', function () {
-                var tr = $("#addContractAvailableOptions tr.add-tariff-table-selected").clone();
+                var success = true;
+                var tr = $("#addContractAvailableOptions tr.add-tariff-table-selected");
                 if (tr.length === 0) {
                     notify("", "Chose option to add.", "info");
                 }
-                tr.removeClass('add-tariff-table-selected');
-                $("#addContractAddedOptions").append(tr);
+                target = $("#addContractAddedOptions");
+                table = target.tableToJSON();
+                for (var i = 0; i < table.length; i++) {
+                    $.each(tr, function () {
+                        if ($(this).find("td:first")[0].innerText === table[i].Id) {
+                            notify("", "Option " + table[i].Name + " is already in list.", "info");
+                            success = false;
+                        }
+                    });
+                }
+                if(success){
+                    tr.removeClass('add-tariff-table-selected');
+                    target.append(tr.clone());
+                }
             });
             $('#addContractDelOption').on('click', function () {
                 tr = $("#addContractAddedOptions tr.add-tariff-table-selected");
@@ -596,7 +618,7 @@
 
             $('#tariffAddOption').on('click', function () {
                 var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").clone();
-                console.log(tr);
+                $('#parseTable tbody tr').remove();
                 var table = $('#parseTable');
                 for (var i = 0; i < tr.length; i++) {
                     table.append(tr[i]);
@@ -623,11 +645,12 @@
                 }).fail(function (jqXHR, textStatus) {
                     notify("", jqXHR.responseText, "info");
                 });
-                $('#parseTable tr.move-row').remove();
+
             });
 
             $('#tariffDelOption').on('click', function () {
                 var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").clone();
+                $('#parseTable tbody tr').remove();
                 var table = $('#parseTable');
                 for (var i = 0; i < tr.length; i++) {
                     table.append(tr[i]);
@@ -652,7 +675,6 @@
                 }).fail(function (jqXHR, textStatus) {
                     notify("", jqXHR.responseText, "info");
                 });
-                $('#parseTable tr.move-row').remove();
             });
         }
 
@@ -692,10 +714,26 @@
             // selecting table rows processed in tariff page function
             function editOptions(rule, addButton, delButton, availableOptionsTable, addedOptionsTable) {
                 addButton.on('click', function () {
-                    // OPTIONS RULES\
+                    var success = true;
                     var tr = availableOptionsTable.find("tr.add-tariff-table-selected").clone();
+                    if (tr.length === 0) {
+                        notify("", "Chose option to add.", "info");
+                    }
+                    var checktable = addedOptionsTable.tableToJSON();
+                    for (var i = 0; i < checktable.length; i++) {
+                        $.each(tr, function () {
+                            if ($(this).find("td:first")[0].innerText === checktable[i].Id) {
+                                notify("", "Option " + checktable[i].Name + " is already in list.", "info");
+                                success = false;
+                            }
+                        });
+                    }
+                    if(!success) {
+                        return;
+                    }
+                    $('#parseTable tbody tr').remove();
                     var table = $('#parseTable');
-                    for (var i = 0; i < tr.length; i++) {
+                    for (i = 0; i < tr.length; i++) {
                         table.append(tr[i]);
                     }
                     var token = $("meta[name='_csrf']").attr("content");
@@ -724,13 +762,10 @@
                     }).fail(function (jqXHR, textStatus) {
                         notify("", jqXHR.responseText, "info");
                     });
-                    $('#parseTable tr.move-row').remove();
                 });
-
                 delButton.on('click', function () {
-                    // OPTIONS RULES
-
                     var tr = addedOptionsTable.find("tr.add-tariff-table-selected").clone();
+                    $('#parseTable tbody tr').remove();
                     var table = $('#parseTable');
                     for (var i = 0; i < tr.length; i++) {
                         table.append(tr[i]);
@@ -759,7 +794,6 @@
                     }).fail(function (jqXHR, textStatus) {
                         notify("", jqXHR.responseText, "info");
                     });
-                    $('#parseTable tr.move-row').remove();
                 });
             }
 
