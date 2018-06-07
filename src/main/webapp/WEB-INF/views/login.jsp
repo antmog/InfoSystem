@@ -20,8 +20,8 @@
     <a class="navbar-brand" href="/"><i class="fas fa-phone-square"></i> Info-System</a>
 </nav>
 <div class="form-signin-container login-div">
-    <c:url var="loginUrl" value="/login"/>
-    <form class="form-signin mt-4" action="${loginUrl}" method="POST">
+    <!-- <c:url var="loginUrl" value="/login"/> -->
+    <form class="form-signin mt-4" action="${loginUrl}" method="POST" id="loginForm">
         <div class="col-md-12"><h1 class="h3 mb-3 font-weight-normal text-center">Log In</h1>
             <c:if test="${param.error != null}">
                 <div class="alert alert-danger" role="alert">
@@ -33,10 +33,13 @@
                     <p>You have been logged out successfully.</p>
                 </div>
             </c:if>
-            <label class="sr-only">Login</label>
-            <input type="text" class="form-control" id="username" name="login" placeholder="Login" required autofocus>
-            <label class="sr-only">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            <label class="sr-only prelogin">Login</label>
+
+            <!-- prelogin todo -->
+            <input type="text" class="form-control prelogin" id="username" name="login" placeholder="Login" required autofocus>
+            <label class="sr-only prelogin">Password</label>
+            <input type="password" class="form-control prelogin" id="password" name="password" placeholder="Password" required>
+            <label class="sr-only login">Code</label>
             <div class="input-group input-sm">
                 <div class="checkbox">
                     <label><input type="checkbox" id="rememberme" name="remember-me"> Remember Me</label>
@@ -47,5 +50,6 @@
         </div>
     </form>
 </div>
+<script src="/static/js/global.js" defer></script>
 </body>
 </html>

@@ -155,5 +155,4 @@ public class TariffServiceImpl implements TariffService {
         Tariff tariff = findByName(tariffName);
         return (tariff == null);
     }
-
 }

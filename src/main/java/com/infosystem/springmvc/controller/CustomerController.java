@@ -67,7 +67,7 @@ public class CustomerController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/contract/{contractId}")
     public String contract(@PathVariable(value = "contractId") String contractId, ModelMap model) {
         if (!pathVariableIsANumber(contractId)) {
-            return prepareErrorPage(model, "Wrong path variable.");
+            return prepareErrorPage(model, "Wrong path variable");
         }
         int contractIdInt = Integer.parseInt(contractId);
         ContractPageDto contractPageDto;

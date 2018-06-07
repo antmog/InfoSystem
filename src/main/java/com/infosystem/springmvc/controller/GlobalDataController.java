@@ -170,4 +170,14 @@ public class GlobalDataController {
     }
 
 
+//    //todo
+//    @RequestMapping(value = "/prelogin", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+//    public String prelogin(@RequestBody @Valid PreLoginDto editAddressDto, BindingResult result) throws DatabaseException, ValidationException {
+//        if (result.hasErrors()) {
+//            throw new ValidationException("Wrong input!");
+//        }
+//        userService.updateUserAddress(editAddressDto);
+//        return "Address modified successfully.";
+//    }
+
 }

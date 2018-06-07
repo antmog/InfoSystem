@@ -48,3 +48,24 @@ function notify(title, msg, type, icon) {
         '</div>'
     });
 }
+
+// $("#loginForm").on("submit",function (e) {
+//
+//     e.preventDefault();
+//     $.ajax({
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Accept': 'text/html; charset=utf-8'
+//         },
+//         type: "POST",
+//         url: "/prelogin",
+//         data: JSON.stringify({
+//             username: $("#username").val(),
+//             password: $("#password").val()
+//         })
+//     }).done(function (msg) {
+//
+//     }).fail(function (jqXHR, textStatus) {
+//         notify("Wrong login/password. ", jqXHR.responseText, "danger");
+//     });
+// });

@@ -1,6 +1,7 @@
 .add-tariff-table-selected {
     background-color: #9bc3de;
 }
+
 body {
     height: 100%;
 }
@@ -84,49 +85,62 @@ p {
     text-align: center;
     min-width: 1em;
 }
-.div-with-link{
+
+.div-with-link {
     margin-top: 10%;
     margin-bottom: 10%;
 }
-.login-div{
+
+.login-div {
     margin-top: 10%;
 }
-.font-1{
-    height:100%;
-    width:100%;
-    background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)),url(/static/images/b1.jpg);
+
+.font-1 {
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(/static/images/b1.jpg);
     background-size: cover;
     background-position: center;
 }
-.font-2{
-    height:100%;
-    width:100%;
-    background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)),url(/static/images/b2.png);
+
+.font-2 {
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(/static/images/b2.png);
     background-size: cover;
     background-position: center;
 }
-.font-3{
-     height:100%;
-     width:100%;
-     background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)),url(/static/images/b3.png);
-     background-size: cover;
-     background-position: center;
- }
-.font-4{
-    height:100%;
-    width:100%;
-    background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)),url(/static/images/b4.png);
+
+.font-3 {
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(/static/images/b3.png);
     background-size: cover;
     background-position: center;
 }
-.content{
+
+.font-4 {
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(/static/images/b4.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.content {
     background-color: white;
     opacity: 0.9;
     filter: alpha(Opacity=90);
 }
-.table-responsive{
+
+.table-responsive {
     max-height: 60%;
 }
-.search-button{
-    height:38px;
+
+.search-button {
+    height: 38px;
+}
+
+.login {
+    display: none;
 }

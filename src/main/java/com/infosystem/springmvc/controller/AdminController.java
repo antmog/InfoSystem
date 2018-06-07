@@ -1,13 +1,17 @@
 package com.infosystem.springmvc.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
+import com.infosystem.springmvc.dto.jms.JmsNotification;
 import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.jms.MessageSender;
 import com.infosystem.springmvc.model.enums.Role;
 import com.infosystem.springmvc.service.dataservice.DataService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.UserService;
+import com.infosystem.springmvc.util.ToAdvertismentJmsJsonMapper;
 import com.infosystem.springmvc.validators.EditUserValidator;
 import com.infosystem.springmvc.validators.TariffOptionFormValidator;
 import com.infosystem.springmvc.validators.UserFormValidator;
@@ -18,7 +22,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.*;
 
 @Controller
@@ -128,6 +131,11 @@ public class AdminController extends ControllerTemplate {
         return path + "allTariffs";
     }
 
+    //todo del
+    @Autowired
+    MessageSender messageSender;
+    @Autowired
+    ToAdvertismentJmsJsonMapper toAdvertismentJmsJsonMapper;
     /**
      * Returns view with all tariffOptions.
      *
@@ -147,6 +155,19 @@ public class AdminController extends ControllerTemplate {
         }
         allTariffOptionsDto.setPageNumber(pageNumberInt);
         model.addAttribute("allTariffOptionsDto", allTariffOptionsDto);
+
+        //todo del
+        JmsNotification jmsNotification = new JmsNotification();
+        jmsNotification.setType("Alert");
+        jmsNotification.setItem("Tariff");
+        jmsNotification.setItemName("Super Hot");
+        jmsNotification.setDescription("Description blah blahblah blah blah");
+        try {
+            messageSender.sendMessage(toAdvertismentJmsJsonMapper.mapToAdvertismentJmsJson(jmsNotification));
+        } catch (JsonProcessingException e) {
+            //todo normal exception handling
+            e.printStackTrace();
+        }
         return path + "allOptions";
     }
 
@@ -430,5 +451,4 @@ public class AdminController extends ControllerTemplate {
     private boolean illegalPage(int pagesCount, int pageNumber, ModelMap model) {
         return pageNumber > pagesCount || pageNumber < 1;
     }
-
 }
