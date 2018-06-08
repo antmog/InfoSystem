@@ -23,6 +23,9 @@ public class Tariff implements Serializable {
     @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
+    @Column(name = "DESCRIPTION")
+    private String description;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "TARIFF_STATUS", nullable = false)
     private Status status = Status.ACTIVE;

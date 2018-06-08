@@ -17,9 +17,10 @@ import java.util.Properties;
 public class JMSConfig {
     private Context namingContext;
     private static final String DEFAULT_CONNECTION_FACTORY = "jms/RemoteConnectionFactory";
-    private static final String DEFAULT_DESTINATION = "jms/queue/test";
-    private static final String DEFAULT_USERNAME = "infoSystemUser";
-    private static final String DEFAULT_PASSWORD = "infoSystemPassword";
+    //private static final String DEFAULT_DESTINATION = "jms/queue/test";
+    private static final String DEFAULT_DESTINATION = "jms/queue/infoSystem";
+    private static final String DEFAULT_USERNAME = "antmog";
+    private static final String DEFAULT_PASSWORD = "qwrp124";
     private static final String INITIAL_CONTEXT_FACTORY = "org.wildfly.naming.client.WildFlyInitialContextFactory";
     private static final String PROVIDER_URL = "http-remoting://127.0.0.1:8080";
     private static final String BROKER_URL = "tcp://127.0.0.1:8080";

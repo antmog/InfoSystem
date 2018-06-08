@@ -22,6 +22,9 @@ public class TariffOption implements Serializable {
     @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
+    @Column(name = "DESCRIPTION")
+    private String description;
+
     @Column(name = "PRICE", nullable = false)
     private Double price;
 
