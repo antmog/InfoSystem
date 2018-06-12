@@ -9,10 +9,7 @@ import com.infosystem.springmvc.sessioncart.SessionCart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -141,12 +138,12 @@ public class CustomerDataController extends ControllerTemplate {
      * @throws ValidationException if amount value is null
      * @throws DatabaseException   if user doesn't exist
      */
-    @RequestMapping(value = "/customerPanel/getBalance", method = RequestMethod.POST)
-    public String getBalance(@RequestBody @Valid GetBalanceDto getBalanceDto, BindingResult result) throws DatabaseException, ValidationException {
-        if (result.hasErrors()) {
-            throw new ValidationException("Wrong input!");
+    @RequestMapping(value = "/customerPanel/getBalance/{userId}", method = RequestMethod.GET)
+    public String getBalance(@PathVariable String userId) throws DatabaseException, ValidationException {
+        if(!pathVariableIsANumber(userId)){
+            throw new ValidationException("Wrong path variable.");
         }
-        return userService.getBalance(getBalanceDto);
+        return userService.getBalance(Integer.parseInt(userId));
     }
 
     /**

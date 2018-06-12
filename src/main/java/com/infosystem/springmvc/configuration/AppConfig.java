@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.configuration;
 
+import com.infosystem.springmvc.Interceptors.JspRestInterceptor;
 import com.infosystem.springmvc.converters.JavaUtilDateToStringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -24,9 +25,16 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.infosystem.springmvc")
 public class AppConfig implements WebMvcConfigurer {
 
-    //todo
-//    @Autowired
-//    JavaUtilDateToStringConverter javaUtilDateToStringConverter;
+    @Bean
+    public JavaUtilDateToStringConverter javaUtilDateToStringConverter()
+    {
+        return new JavaUtilDateToStringConverter();
+    }
+
+    @Bean
+    JspRestInterceptor jspRestInterceptor() {
+        return new JspRestInterceptor();
+    }
 
     @Bean
     HandlerExceptionResolver customExceptionResolver () {
@@ -38,6 +46,20 @@ public class AppConfig implements WebMvcConfigurer {
         //This resolver will be processed before default ones
         simpleMappingExceptionResolver.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return simpleMappingExceptionResolver;
+    }
+
+    @Override
+    public void addFormatters (FormatterRegistry registry) {
+        registry.addConverter(javaUtilDateToStringConverter());
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(jspRestInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/static/**", "/login, /favicon.ico");
+        // assuming you put your serve your static files with /resources/ mapping
+        // and the pre login page is served with /login mapping
     }
 
     /**
@@ -54,15 +76,6 @@ public class AppConfig implements WebMvcConfigurer {
         viewResolver.setExposedContextBeanNames("sessionCart");
         registry.viewResolver(viewResolver);
     }
-
-    //todo
-//    /**
-//     * Configure Converter to be used.
-//     */
-//    @Override
-//    public void addFormatters(FormatterRegistry registry) {
-//        registry.addConverter(javaUtilDateToStringConverter);
-//    }
 
     /**
      * Configure ResourceHandlers to serve static resources like CSS/ Javascript etc...

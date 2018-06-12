@@ -6,6 +6,7 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.dto.jms.JmsNotification;
 import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.jms.MessageSender;
 import com.infosystem.springmvc.model.enums.Role;
 import com.infosystem.springmvc.service.dataservice.DataService;
@@ -447,6 +448,7 @@ public class AdminController extends ControllerTemplate {
                 editUserDto.getLastName()+" edited successfully");
         return path + "addSuccess";
     }
+
 
     private boolean illegalPage(int pagesCount, int pageNumber, ModelMap model) {
         return pageNumber > pagesCount || pageNumber < 1;

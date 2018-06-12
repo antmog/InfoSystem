@@ -40,6 +40,19 @@ public class V1_3__add_users implements JdbcMigration {
         statement.setString(11, "ACTIVE");
         statement.addBatch();
 
+        statement.setString(1, "Address3");
+        statement.setDouble(2, 0.0);
+        statement.setString(3, "1993-04-12");
+        statement.setString(4, "Katharina");
+        statement.setString(5, "Adele");
+        statement.setString(6, "sadele");
+        statement.setString(7, "dohot@t-systems.kz");
+        statement.setInt(8, 157326725);
+        statement.setString(9, "$2a$10$B7jg5.qngCxHJ1xcCVOBpOatk8APp/AR4HvMTLnAqVOEVFvrAoTM6");
+        statement.setString(10, "CUSTOMER");
+        statement.setString(11, "ACTIVE");
+        statement.addBatch();
+
 
         try {
             statement.executeBatch();

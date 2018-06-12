@@ -344,11 +344,8 @@
                 'Content-Type': 'application/json',
                 'Accept': 'text/html; charset=utf-8'
             },
-            type: "POST",
-            url: "/customerPanel/getBalance",
-            data: JSON.stringify({
-                userId: user_id
-            })
+            type: "GET",
+            url: "/customerPanel/getBalance/"+user_id
         }).done(function (msg) {
             $("#walletBalance").html(msg);
         }).fail(function (jqXHR, textStatus) {

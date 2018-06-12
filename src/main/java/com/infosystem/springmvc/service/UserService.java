@@ -45,7 +45,7 @@ public interface UserService {
 
     void spendFunds(User user, double amount);
 
-    String getBalance(GetBalanceDto getBalanceDto) throws DatabaseException;
+    String getBalance(Integer userId) throws DatabaseException;
 
     int getPagesCount(int itemsPerPAge);
 

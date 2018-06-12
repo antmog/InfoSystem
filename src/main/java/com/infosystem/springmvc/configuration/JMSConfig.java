@@ -40,8 +40,6 @@ public class JMSConfig {
         //class org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory
         String connectionFactoryString = System.getProperty("connection.factory", DEFAULT_CONNECTION_FACTORY);
         ConnectionFactory connectionFactory = (ConnectionFactory) namingContext.lookup(connectionFactoryString) ;
-
-
 //        ConnectionFactory connectionFactory = wrapper.wrapConnectionFactory(
 //                new ArtemisConnectionFactoryFactory(beanFactory, properties)
 //                        .createConnectionFactory(ActiveMQXAConnectionFactory.class))

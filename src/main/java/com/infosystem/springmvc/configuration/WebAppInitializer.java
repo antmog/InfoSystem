@@ -1,10 +1,12 @@
 package com.infosystem.springmvc.configuration;
 
+import com.infosystem.springmvc.filters.JspRestFilter;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -13,6 +15,10 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     public void onStartup(ServletContext container) {
+        //todo
+        container.addFilter("jspRestFilter",new JspRestFilter())
+                .addMappingForUrlPatterns( null, false, "/*");
+
         // Create the dispatcher servlet's Spring application context
         AnnotationConfigWebApplicationContext dispatcherContext =
                 new AnnotationConfigWebApplicationContext();

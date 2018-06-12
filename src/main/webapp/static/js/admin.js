@@ -55,16 +55,13 @@
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
                 },
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                type: "POST",
-                url: "/adminPanel/user/searchUserByNumber",
+                type: "GET",
+                url: "/adminPanel/user/searchUserByNumber/" + phoneNumber,
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({phoneNumber: phoneNumber}),
+                //data: JSON.stringify({phoneNumber: phoneNumber}),
                 dataType: "json"
             }).done(function (msg) {
-                updateUserTable(msg);
+                updateUserTable(msg.userId);
             }).fail(function (jqXHR, textStatus) {
                 notify("", jqXHR.responseText, "primary", "fas fa-search");
             });
@@ -99,14 +96,13 @@
                     xhr.setRequestHeader(header, token);
                 },
                 headers: {
-                    'Content-Type': 'text/html; charset=utf-8',
-                    'Accept': 'text/html; charset=utf-8'
+                    'Content-Type': 'text/html; charset=utf-8'
                 },
-                type: "POST",
-                url: "/adminPanel/user/deleteUser",
-                data: user_id.toString()
+                type: "DELETE",
+                url: "/adminPanel/user/deleteUser/" + user_id.toString(),
+                dataType: "json"
             }).done(function (msg) {
-                notify("Leave page please:", msg, "success", "fas fa-thumbs-up");
+                notify("Leave page please:", msg.responseText, "success", "fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
                 notify("", jqXHR.responseText, "info");
             });
@@ -164,7 +160,7 @@
                             'Content-Type': 'application/json',
                             'Accept': 'text/html; charset=utf-8'
                         },
-                        type: "POST",
+                        type: "PUT",
                         url: "/user/editUser" + editing.find("td:first").html(),
                         // The key needs to match your method's input parameter (case-sensitive).
                         data: JSON.stringify({
@@ -199,13 +195,12 @@
                 },
                 headers: {
                     'Content-Type': 'text/html; charset=utf-8',
-                    'Accept': 'text/html; charset=utf-8'
                 },
-                type: "POST",
-                url: "/adminPanel/contract/deleteContract",
-                data: contract_id.toString()
+                type: "DELETE",
+                url: "/adminPanel/contract/deleteContract/" + contract_id.toString(),
+                dataType: "json"
             }).done(function (msg) {
-                notify("Leave the page please: ", msg, "success", "fas fa-thumbs-up");
+                notify("Leave the page please: ", msg.responseText, "success", "fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
                 notify("", jqXHR.responseText, "info");
             });
@@ -250,7 +245,6 @@
                 },
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'text/html; charset=utf-8'
                 },
                 type: "POST",
                 url: "/adminPanel/contract/switchTariff",
@@ -258,9 +252,10 @@
                 data: JSON.stringify({
                     tariffId: newTariffId,
                     contractId: contract_id
-                })
+                }),
+                datatype: "json"
             }).done(function (msg) {
-                notify("", msg, "success", "fas fa-thumbs-up");
+                notify("", msg.responseText, "success", "fas fa-thumbs-up");
                 $('#tariffTable').find('tr:eq(1)').find('td:eq(1)').html(newTariffId);
                 getOptionsForTariff(newTariffId, header, token);
             }).fail(function (jqXHR, textStatus) {
@@ -284,14 +279,14 @@
                 },
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'text/html; charset=utf-8'
                 },
                 type: "POST",
                 url: "/adminPanel/contract/addOptions",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
+                data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id}),
+                datatype: "json"
             }).done(function (msg) {
-                notify("", msg, "success", "fas fa-thumbs-up");
+                notify("", msg.responseText, "success", "fas fa-thumbs-up");
                 var tr = $("#contractAvailableOptions tr.add-tariff-table-selected").clone();
                 tr.removeClass('add-tariff-table-selected');
                 $("#contractCurrentOptions").append(tr);
@@ -315,14 +310,14 @@
                 },
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'text/html; charset=utf-8'
                 },
-                type: "POST",
+                type: "DELETE",
                 url: "/adminPanel/contract/delOptions",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id})
+                data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), contractId: contract_id}),
+                datatype: "json"
             }).done(function (msg) {
-                notify("", msg, "success", "fas fa-thumbs-up");
+                notify("", msg.responseText, "success", "fas fa-thumbs-up");
                 var tr = $("#contractCurrentOptions tr.add-tariff-table-selected").remove();
             }).fail(function (jqXHR, textStatus) {
                 notify("", jqXHR.responseText, "info");
@@ -388,7 +383,7 @@
                         }
                     });
                 }
-                if(success){
+                if (success) {
                     tr.removeClass('add-tariff-table-selected');
                     target.append(tr.clone());
                 }
@@ -422,15 +417,15 @@
                     xhr.setRequestHeader(header, token);
                 },
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'text/html; charset=utf-8'
+                    'Content-Type': 'application/json'
                 },
                 type: "POST",
                 url: "/adminPanel/addTariff",
                 // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify({tariffOptionDtoList: part1, tariffDto: part2})
+                data: JSON.stringify({tariffOptionDtoList: part1, tariffDto: part2}),
+                dataType: "json"
             }).done(function (msg) {
-                notify("", msg, "success", "fas fa-thumbs-up");
+                notify("", msg.responseText, "success", "fas fa-thumbs-up");
             }).fail(function (xhr, a, error) {
                 notify("", xhr.responseText, "info");
             })
@@ -466,8 +461,7 @@
                     xhr.setRequestHeader(header, token);
                 },
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'text/html; charset=utf-8'
+                    'Content-Type': 'application/json'
                 },
                 type: "POST",
                 url: "/adminPanel/addContract",
@@ -476,9 +470,10 @@
                     userId: $('#userId').val(),
                     tariffId: tariffId,
                     phoneNumber: $('#phoneNumber').val()
-                })
+                }),
+                dataType: "json"
             }).done(function (msg) {
-                notify("", msg, "success", "fas fa-thumbs-up")
+                notify("", msg.responseText, "success", "fas fa-thumbs-up")
             }).fail(function (xhr) {
                 notify("", xhr.responseText, "primary")
             })
@@ -553,7 +548,7 @@
                         }
                     });
                 }
-                if(success){
+                if (success) {
                     tr.removeClass('add-tariff-table-selected');
                     target.append(tr.clone());
                 }
@@ -588,13 +583,12 @@
                 },
                 headers: {
                     'Content-Type': 'text/html; charset=utf-8',
-                    'Accept': 'text/html; charset=utf-8'
                 },
-                type: "POST",
-                url: "/adminPanel/tariff/deleteTariff",
-                data: tariff_id.toString()
+                type: "DELETE",
+                url: "/adminPanel/tariff/deleteTariff/" + tariff_id.toString(),
+                dataType: "json"
             }).done(function (msg) {
-                notify("Leave the page please:", msg, "success", "fas fa-thumbs-up");
+                notify("Leave the page please:", msg.responseText, "success", "fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
                 notify("", jqXHR.responseText, "info");
             });
@@ -630,15 +624,15 @@
                         xhr.setRequestHeader(header, token);
                     },
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'text/html; charset=utf-8'
+                        'Content-Type': 'application/json'
                     },
                     type: "POST",
                     url: "/adminPanel/tariff/addOptions",
                     // The key needs to match your method's input parameter (case-sensitive).
-                    data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id})
+                    data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id}),
+                    datatype: "json"
                 }).done(function (msg) {
-                    notify("", msg, "success", "fas fa-thumbs-up");
+                    notify("", msg.responseText, "success", "fas fa-thumbs-up");
                     var tr = $("#tariffAvailableOptions tr.add-tariff-table-selected").clone();
                     tr.removeClass('add-tariff-table-selected');
                     $("#tariffAddedOptions").append(tr);
@@ -662,15 +656,15 @@
                         xhr.setRequestHeader(header, token);
                     },
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'text/html; charset=utf-8'
+                        'Content-Type': 'application/json'
                     },
-                    type: "POST",
+                    type: "DELETE",
                     url: "/adminPanel/tariff/delOptions",
                     // The key needs to match your method's input parameter (case-sensitive).
-                    data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id})
+                    data: JSON.stringify({tariffOptionDtoList: table.tableToJSON(), tariffId: tariff_id}),
+                    datatype: "json"
                 }).done(function (msg) {
-                    notify("", msg, "success", "fas fa-thumbs-up");
+                    notify("", msg.responseText, "success", "fas fa-thumbs-up");
                     var tr = $("#tariffAddedOptions tr.add-tariff-table-selected").remove();
                 }).fail(function (jqXHR, textStatus) {
                     notify("", jqXHR.responseText, "info");
@@ -691,13 +685,12 @@
                 },
                 headers: {
                     'Content-Type': 'text/html; charset=utf-8',
-                    'Accept': 'text/html; charset=utf-8'
                 },
-                type: "POST",
-                url: "/adminPanel/option/deleteOption",
-                data: option_id.toString()
+                type: "DELETE",
+                url: "/adminPanel/option/deleteOption/" + option_id.toString(),
+                dataType: "json"
             }).done(function (msg) {
-                notify("Leave page please:", msg, "success", "fas fa-thumbs-up");
+                notify("Leave page please:", msg.responseText, "success", "fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
                 notify("", jqXHR.responseText, "info");
             });
@@ -728,7 +721,7 @@
                             }
                         });
                     }
-                    if(!success) {
+                    if (!success) {
                         return;
                     }
                     $('#parseTable tbody tr').remove();
@@ -743,8 +736,7 @@
                             xhr.setRequestHeader(header, token);
                         },
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'text/html; charset=utf-8'
+                            'Content-Type': 'application/json'
                         },
                         type: "POST",
                         url: "/adminPanel/option/addOptions",
@@ -753,9 +745,10 @@
                             tariffOptionDtoList: table.tableToJSON(),
                             tariffOptionId: option_id,
                             rule: rule
-                        })
+                        }),
+                        datatype: "json"
                     }).done(function (msg) {
-                        notify("", msg, "success", "fas fa-thumbs-up");
+                        notify("", msg.responseText, "success", "fas fa-thumbs-up");
                         var tr = availableOptionsTable.find("tr.add-tariff-table-selected").clone();
                         tr.removeClass('add-tariff-table-selected');
                         addedOptionsTable.append(tr);
@@ -777,19 +770,19 @@
                             xhr.setRequestHeader(header, token);
                         },
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'text/html; charset=utf-8'
+                            'Content-Type': 'application/json'
                         },
-                        type: "POST",
+                        type: "DELETE",
                         url: "/adminPanel/option/delOptions",
                         // The key needs to match your method's input parameter (case-sensitive).
                         data: JSON.stringify({
                             tariffOptionDtoList: table.tableToJSON(),
                             tariffOptionId: option_id,
                             rule: rule
-                        })
+                        }),
+                        datatype: "json"
                     }).done(function (msg) {
-                        notify("", msg, "success", "fas fa-thumbs-up");
+                        notify("", msg.responseText, "success", "fas fa-thumbs-up");
                         var tr = addedOptionsTable.find("tr.add-tariff-table-selected").remove();
                     }).fail(function (jqXHR, textStatus) {
                         notify("", jqXHR.responseText, "info");
@@ -865,8 +858,7 @@
                 xhr.setRequestHeader(header, token);
             },
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'text/html; charset=utf-8'
+                'Content-Type': 'application/json'
             },
             type: "POST",
             url: "/adminPanel/addFunds",
@@ -874,9 +866,10 @@
             data: JSON.stringify({
                 amount: amount,
                 userId: user_id
-            })
+            }),
+            datatype: "json"
         }).done(function (msg) {
-            notify("", msg, "success", "fas fa-thumbs-up");
+            notify("", msg.responseText, "success", "fas fa-thumbs-up");
             updateCartBalance();
         }).fail(function (jqXHR) {
             notify("", jqXHR.responseText, "info")
@@ -894,11 +887,8 @@
                 'Content-Type': 'application/json',
                 'Accept': 'text/html; charset=utf-8'
             },
-            type: "POST",
-            url: "/adminPanel/getBalance",
-            data: JSON.stringify({
-                userId: user_id
-            })
+            type: "GET",
+            url: "/adminPanel/getBalance/" + user_id
         }).done(function (msg) {
             $("#walletBalance").html(msg);
         }).fail(function (jqXHR, textStatus) {

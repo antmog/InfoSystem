@@ -81,7 +81,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void deleteUserById(int id) throws LogicException, DatabaseException {
-        findById(id);
         if (!dao.findById(id).getUserContracts().isEmpty()) {
             throw new LogicException("User still have contracts!");
         }
@@ -211,8 +210,8 @@ public class UserServiceImpl implements UserService {
         user.spendFunds(amount);
     }
 
-    public String getBalance(GetBalanceDto getBalanceDto) throws DatabaseException {
-        return String.valueOf(findById(getBalanceDto.getUserId()).getBalance());
+    public String getBalance(Integer userId) throws DatabaseException {
+        return String.valueOf(findById(userId).getBalance());
     }
 
     @Override

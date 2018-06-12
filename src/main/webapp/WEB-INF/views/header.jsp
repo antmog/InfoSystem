@@ -1,16 +1,6 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: antmog
-  Date: 06.05.2018
-  Time: 15:57
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
-<head>
-</head>
-<body>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
@@ -29,5 +19,4 @@
 
     </sec:authorize>
 </sec:authorize>
-</body>
 </html>

@@ -8,7 +8,11 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 public class SearchByNumberDto {
-    @Pattern(regexp = "\\d*", message = "Only numbers here.")
-    @Size(min = 6, max = 32)
+//    @Pattern(regexp = "\\d*", message = "Only numbers here.")
+//    @Size(min = 6, max = 32)
     private String phoneNumber;
+
+    public SearchByNumberDto(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
