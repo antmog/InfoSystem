@@ -36,6 +36,179 @@
             });
         }
     }
+    function advProfileTariff() {
+        $("#advProfileTariffSubmit").on("click",function () {
+            var img = $("#carouselItem.active")[0].dataset.name;
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                type: "PUT",
+                url: "/adminPanel/advProfile/editTariff",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({
+                    advProfileId: advProfileId,
+                    tariffId: tariffId,
+                    img: img
+                }),
+                dataType: "json"
+            }).done(function (msg) {
+                notify("", msg.responseText, "success", "fas fa-thumbs-up");
+            }).fail(function (jqXHR, textStatus) {
+                notify("Error:", jqXHR.responseText, "danger");
+            });
+        });
+        $("#advProfileTariffDelete").on("click",function () {
+            var img = $("#carouselItem.active")[0].dataset.name;
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                type: "DELETE",
+                url: "/adminPanel/advProfile/deleteTariff",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({
+                    advProfileId: advProfileId,
+                    tariffId: tariffId,
+                    img: img
+                }),
+                dataType: "json"
+            }).done(function (msg) {
+                notify("", msg.responseText, "success", "fas fa-thumbs-up");
+            }).fail(function (jqXHR, textStatus) {
+                notify("Error:", jqXHR.responseText, "danger");
+            });
+        });
+    }
+
+    function advProfileAddTariff() {
+        $("#addAdvProfileTariffSubmit").on("click",function () {
+            var advTariffId = $("#addContractTariffs tr.add-tariff-table-selected").find("td:first").html();
+            var img = $("#carouselItem.active")[0].dataset.name;
+            console.log(img);
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                url: "/adminPanel/advProfile/addTariff",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: JSON.stringify({
+                    advProfileId: advProfileId,
+                    tariffId: advTariffId,
+                    img: img
+                }),
+                dataType: "json"
+            }).done(function (msg) {
+                notify("", msg.responseText, "success", "fas fa-thumbs-up");
+            }).fail(function (jqXHR, textStatus) {
+                notify("Error:", jqXHR.responseText, "danger");
+            });
+        });
+    }
+
+    function advPanel() {
+        $("#addAdvProfileTariff").on("click",function () {
+            var profileId = $(".advProfiles.add-tariff-table-selected")[0].dataset.id;
+            document.location.href = "/adminPanel/advProfile/addTariff/"+profileId;
+        });
+
+        $(".advProfiles").on("click", function () {
+            if (!$(this).hasClass('add-tariff-table-selected')) {
+                $(this).addClass('add-tariff-table-selected').siblings().removeClass('add-tariff-table-selected');
+            }
+            var advProfileId = $(this)[0].dataset.id;
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8'
+                },
+                type: "GET",
+                url: "/adminPanel/advProfiles/" + advProfileId,
+                // The key needs to match your method's input parameter (case-sensitive).
+                dataType: "json"
+            }).done(function (json) {
+                var profileStatusDiv = $("#profileStatus");
+                if(json.status === "ACTIVE"){
+                    document.getElementById("advProfileActivate").style.visibility="hidden";
+                    profileStatusDiv.removeClass("alert-warning");
+                    profileStatusDiv.addClass("alert-success");
+                    profileStatusDiv.html("Profile is active.");
+                }else{
+                    document.getElementById("advProfileActivate").style.visibility="visible";
+                    profileStatusDiv.removeClass("alert-success");
+                    profileStatusDiv.addClass("alert-warning");
+                    profileStatusDiv.html("Profile is inactive.");
+                }
+                $("#advProfileTable tbody").remove();
+                var tbl_body = document.createElement("tbody");
+                $.each(json.advProfileTariffsList, function () {
+                    var tbl_row = tbl_body.insertRow();
+                    tbl_row.className = "move-row";
+                    $.each(this, function (k, v) {
+                        if((k!=="advProfileId")&&(k!=="imgs")){
+                            var cell = tbl_row.insertCell();
+                            cell.appendChild(document.createTextNode(v.toString()));
+                        }
+                    });
+                });
+                $("#advProfileTable").append(tbl_body);
+            }).fail(function (jqXHR, textStatus) {
+                notify("Error:", jqXHR.responseText, "danger");
+            });
+        });
+        $("#advProfileTable").on("click","tbody tr",function () {
+            var profileId = $(".advProfiles.add-tariff-table-selected")[0].dataset.id;
+            var tariffId = $(this).find("td:first").html();
+            document.location.href = "/adminPanel/advProfile/"+profileId+"/"+tariffId;
+        });
+        $("#advProfileActivate").on("click",function () {
+            var profileId = $(".advProfiles.add-tariff-table-selected")[0].dataset.id;
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                headers: {
+                    'Content-Type': 'text/html; charset=utf-8'
+                },
+                type: "PUT",
+                url: "/adminPanel/advProfiles/activate/" + profileId,
+                // The key needs to match your method's input parameter (case-sensitive).
+                //data: JSON.stringify({phoneNumber: phoneNumber}),
+                dataType: "json"
+            }).done(function (msg) {
+                document.getElementById("advProfileActivate").style.visibility="hidden";
+                var profileStatusDiv = $("#profileStatus");
+                profileStatusDiv.removeClass("alert-warning");
+                profileStatusDiv.addClass("alert-success");
+                profileStatusDiv.html("Profile is active.");
+                notify("", msg.responseText, "success", "fas fa-thumbs-up");
+            }).fail(function (jqXHR, textStatus) {
+                notify("", jqXHR.responseText, "primary", "fas fa-search");
+            });
+        });
+    }
 
     function adminPanel() {
         $("#searchUserByPhoneNumberForm").on("submit", function (e) {
@@ -514,7 +687,7 @@
                     dataType: "json"
                 }).done(function (json) {
                     $("#addContractAddedOptions tbody tr").remove();
-                    $("#addContractAvailableOptions tbody tr").remove();
+                    $("#addContractAvailableOptions tbody").remove();
                     var tbl_body = document.createElement("tbody");
                     var odd_even = false;
                     $.each(json, function () {
@@ -902,7 +1075,14 @@
             notify("", "Enter price and cost of add.", "info");
         }
     });
+    function activateCarousel() {
+        $("#carouselItem").first().addClass("active");
+    }
 
+    advProfileTariff();
+    advProfileAddTariff();
+    activateCarousel();
+    advPanel();
     optionPanel();
     adminPanel();
     userPanel();

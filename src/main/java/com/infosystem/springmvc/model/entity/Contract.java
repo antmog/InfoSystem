@@ -14,6 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "CONTRACTS")
 public class Contract implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CONTRACT_ID")

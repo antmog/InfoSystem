@@ -4,9 +4,7 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.service.ContractService;
-import com.infosystem.springmvc.service.TariffOptionService;
-import com.infosystem.springmvc.service.TariffService;
+import com.infosystem.springmvc.service.*;
 import com.infosystem.springmvc.validators.SearchUserByNumberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -15,8 +13,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-
-import com.infosystem.springmvc.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Locale;
@@ -31,18 +27,20 @@ public class AdminDataController extends ControllerTemplate {
     private final TariffService tariffService;
     private final SearchUserByNumberValidator searchUserByNumberValidator;
     private final MessageSource messageSource;
+    private final AdvProfileService advProfileService;
 
     @Autowired
     public AdminDataController(UserService userService, ContractService contractService,
                                TariffOptionService tariffOptionService, TariffService tariffService,
                                SearchUserByNumberValidator searchUserByNumberValidator,
-                               MessageSource messageSource) {
+                               MessageSource messageSource, AdvProfileService advProfileService) {
         this.userService = userService;
         this.contractService = contractService;
         this.tariffOptionService = tariffOptionService;
         this.tariffService = tariffService;
         this.searchUserByNumberValidator = searchUserByNumberValidator;
         this.messageSource = messageSource;
+        this.advProfileService = advProfileService;
     }
 
     /**
@@ -97,7 +95,7 @@ public class AdminDataController extends ControllerTemplate {
         }
         SearchByNumberDto searchByNumberDto = new SearchByNumberDto(phoneNumber);
         Errors errors = new BeanPropertyBindingResult(searchByNumberDto, "searchByNumberDto");
-        searchUserByNumberValidator.validate(searchByNumberDto,errors);
+        searchUserByNumberValidator.validate(searchByNumberDto, errors);
         if (errors.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             errors.getAllErrors().forEach(err -> sb.append(messageSource.getMessage(err, Locale.ENGLISH)).append(System.lineSeparator()));
@@ -116,7 +114,7 @@ public class AdminDataController extends ControllerTemplate {
      */
     @PostMapping(value = "/adminPanel/user/deleteUser/{userId}")
     public ResponseDto deleteUser(@PathVariable String userId) throws LogicException, DatabaseException, ValidationException {
-        if(!pathVariableIsANumber(userId)){
+        if (!pathVariableIsANumber(userId)) {
             throw new ValidationException("Wrong path variable.");
         }
         userService.deleteUserById(Integer.parseInt(userId));
@@ -133,7 +131,7 @@ public class AdminDataController extends ControllerTemplate {
      */
     @PostMapping(value = "/adminPanel/tariff/deleteTariff/{tariffId}")
     public ResponseDto deleteTariff(@PathVariable String tariffId) throws DatabaseException, LogicException, ValidationException {
-        if(!pathVariableIsANumber(tariffId)){
+        if (!pathVariableIsANumber(tariffId)) {
             throw new ValidationException("Wrong path variable.");
         }
         tariffService.deleteTariffById(Integer.parseInt(tariffId));
@@ -150,7 +148,7 @@ public class AdminDataController extends ControllerTemplate {
      */
     @PostMapping(value = "/adminPanel/contract/deleteContract/{contractId}")
     public ResponseDto deleteContract(@PathVariable String contractId) throws DatabaseException, ValidationException {
-        if(!pathVariableIsANumber(contractId)){
+        if (!pathVariableIsANumber(contractId)) {
             throw new ValidationException("Wrong path variable.");
         }
         contractService.deleteContractById(Integer.parseInt(contractId));
@@ -167,7 +165,7 @@ public class AdminDataController extends ControllerTemplate {
      */
     @PostMapping(value = "/adminPanel/option/deleteOption/{optionId}")
     public ResponseDto deleteOption(@PathVariable String optionId) throws DatabaseException, LogicException, ValidationException {
-        if(!pathVariableIsANumber(optionId)){
+        if (!pathVariableIsANumber(optionId)) {
             throw new ValidationException("Wrong path variable.");
         }
         tariffOptionService.deleteTariffOptionById(Integer.parseInt(optionId));
@@ -325,10 +323,62 @@ public class AdminDataController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/getBalance/{userId}", method = RequestMethod.GET)
     public String getBalance(@PathVariable String userId) throws DatabaseException, ValidationException {
-        if(!pathVariableIsANumber(userId)){
+        if (!pathVariableIsANumber(userId)) {
             throw new ValidationException("Wrong path variable.");
         }
         return userService.getBalance(Integer.parseInt(userId));
+    }
+
+    @RequestMapping(value = "/adminPanel/advProfiles/{advProfileId}", method = RequestMethod.GET)
+    public AdvProfileDto getAdvProfile(@PathVariable String advProfileId) throws DatabaseException, ValidationException {
+        if (!pathVariableIsANumber(advProfileId)) {
+            throw new ValidationException("Wrong path variable.");
+        }
+        return advProfileService.getProfileById(Integer.parseInt(advProfileId));
+    }
+
+    @RequestMapping(value = "/adminPanel/advProfile/addTariff", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseDto advProfileAddTariff(@RequestBody @Valid AdvProfileTariffDto advProfileTariffDto, BindingResult result)
+            throws DatabaseException, ValidationException, LogicException {
+        if(result.hasErrors()){
+            throw new ValidationException("Incorrect input data.");
+        }
+        advProfileService.addTariffToProfile(advProfileTariffDto);
+        return new ResponseDto("Tariff " + advProfileTariffDto.getTariffName() +
+                " added to profile " + advProfileTariffDto.getAdvProfileId() + ".");
+    }
+
+    @RequestMapping(value = "/adminPanel/advProfile/editTariff", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseDto advProfileEditTariff(@RequestBody @Valid AdvProfileTariffDto advProfileTariffDto, BindingResult result)
+            throws DatabaseException, ValidationException, LogicException {
+        if(result.hasErrors()){
+            throw new ValidationException("Incorrect input data.");
+        }
+        advProfileService.advProfileEditTariff(advProfileTariffDto);
+        return new ResponseDto("Tariff " + advProfileTariffDto.getTariffName() +
+                " edited for " + advProfileTariffDto.getAdvProfileId() + ".");
+    }
+
+    @RequestMapping(value = "/adminPanel/advProfile/deleteTariff", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseDto advProfileDeleteTariff(@RequestBody @Valid AdvProfileTariffDto advProfileTariffDto, BindingResult result)
+            throws DatabaseException, ValidationException, LogicException {
+        if(result.hasErrors()){
+            throw new ValidationException("Incorrect input data.");
+        }
+        advProfileService.advProfileDeleteTariff(advProfileTariffDto);
+        return new ResponseDto("Tariff " + advProfileTariffDto.getTariffName() +
+                " deleted for " + advProfileTariffDto.getAdvProfileId() + ".");
+    }
+
+
+    @RequestMapping(value = "/adminPanel/advProfiles/activate/{advProfileId}", method = RequestMethod.POST)
+    public ResponseDto advProfileActivate(@PathVariable String advProfileId)
+            throws DatabaseException, ValidationException, LogicException {
+        if (!pathVariableIsANumber(advProfileId)) {
+            throw new ValidationException("Wrong path variable.");
+        }
+        advProfileService.activate(Integer.parseInt(advProfileId));
+        return new ResponseDto("Profile " + advProfileId +" is activated.");
     }
 }
 

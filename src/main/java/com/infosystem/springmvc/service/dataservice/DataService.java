@@ -35,4 +35,10 @@ public interface DataService {
     ChangePasswordDto getChangePasswordData(int userIdInt) throws DatabaseException;
 
     List<TariffDto> getIndexPageData();
+
+    AdminPanelDto getAdminPanelData(String login) throws DatabaseException;
+
+    AdvProfileTariffDto getAdvProfileTariffData(Integer profileId, Integer tariffId) throws DatabaseException;
+
+    AdvProfileAddTariffDto getAdvProfileAddTariffData();
 }

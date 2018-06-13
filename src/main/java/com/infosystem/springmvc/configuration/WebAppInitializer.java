@@ -15,7 +15,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     public void onStartup(ServletContext container) {
-        //todo
         container.addFilter("jspRestFilter",new JspRestFilter())
                 .addMappingForUrlPatterns( null, false, "/*");
 

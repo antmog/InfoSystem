@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -30,6 +28,12 @@ public class Tariff implements Serializable {
     @Column(name = "TARIFF_STATUS", nullable = false)
     private Status status = Status.ACTIVE;
 
+    @OneToMany(
+            mappedBy = "tariff",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<AdvProfileTariffs> tags = new ArrayList<>();
     /**
      * per month
      * Allows to use the tariff -> allows to use the options (options have its own cost/price)

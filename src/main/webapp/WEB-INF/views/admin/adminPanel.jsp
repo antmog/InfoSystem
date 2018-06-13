@@ -10,12 +10,28 @@
 <main class="mt-4 ml-4 mr-4">
     <main class="mt-4">
         <div class="container content">
+            <br>
+            <c:if test="${adminPanelDto.advProfileDtoList.get(0).status == 'INACTIVE'}">
+                <div id="profileStatus" class="alert alert-warning" role="alert">
+                    Profile is inactive.
+                </div>
+            </c:if>
+            <c:if test="${adminPanelDto.advProfileDtoList.get(0).status == 'ACTIVE'}">
+                <div id="profileStatus" class="alert alert-success" role="alert">
+                    Profile is active.
+                </div>
+            </c:if>
             <div class="pt-4 pb-4">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <h1 class="h2 mb-0">
-                            ${userDto.login}
-                            <span class="badge badge-secondary">Id: ${userDto.id}</span>
+                            ${adminPanelDto.userDto.login}
+                            <span class="badge badge-secondary">Id: ${adminPanelDto.userDto.id}</span>
+                        </h1>
+                    </div>
+                    <div class="col-md-4">
+                        <h1 class="h2 mb-0">
+                            Advertisment profiles
                         </h1>
                     </div>
                 </div>
@@ -28,16 +44,74 @@
                             <div class="card-body">
                                 <dl>
                                     <dt>First name</dt>
-                                    <dd>${userDto.firstName}</dd>
+                                    <dd>${adminPanelDto.userDto.firstName}</dd>
                                     <dt>Last name</dt>
-                                    <dd>${userDto.lastName}</dd>
+                                    <dd>${adminPanelDto.userDto.lastName}</dd>
                                     <dt>Address</dt>
-                                    <dd>${userDto.address}</dd>
+                                    <dd>${adminPanelDto.userDto.address}</dd>
                                     <dt>E-mail</dt>
-                                    <dd>${userDto.mail}</dd>
+                                    <dd>${adminPanelDto.userDto.mail}</dd>
                                     <dt>Passport</dt>
-                                    <dd>${userDto.passport}</dd>
+                                    <dd>${adminPanelDto.userDto.passport}</dd>
                                 </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <h5 class="card-header">
+                                <div class="adv">
+                                    <c:forEach items="${adminPanelDto.advProfileDtoList}" var="profile"
+                                               varStatus="loop">
+                                        <c:choose>
+                                            <c:when test="${loop.index == 0}">
+                                                <label class="advProfiles add-tariff-table-selected"
+                                                       data-id="${loop.index+1}">${profile.name}</label>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <label class="advProfiles"
+                                                       data-id="${loop.index+1}">${profile.name}</label>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </div>
+                            </h5>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table " id="advProfileTable">
+                                        <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Image</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${adminPanelDto.advProfileDtoList[0].advProfileTariffsList}"
+                                                   var="tariff">
+                                            <tr class="move-row">
+                                                <td>${tariff.tariffId}</td>
+                                                <td>${tariff.tariffName}</td>
+                                                <td>${tariff.img}</td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <button id="addAdvProfileTariff" class="btn btn-outline-primary btn-sm">Add tariff
+                                    </button>
+                                    <button visibility="hidden" id="advProfileActivate"
+                                            class="btn btn-outline-primary btn-sm">Activate profile
+                                    </button>
+                                </div>
+                                <c:if test="${adminPanelDto.advProfileDtoList.get(0).status == 'INACTIVE'}">
+                                    <script>
+                                        document.getElementById("advProfileActivate").style.visibility = "visible";
+                                    </script>
+                                </c:if>
                             </div>
                         </div>
                     </div>
@@ -45,7 +119,6 @@
             </div>
         </div>
     </main>
-
 </main>
 <jsp:include page="../footer.jsp"/>
 </body>

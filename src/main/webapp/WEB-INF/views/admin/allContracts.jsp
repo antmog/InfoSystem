@@ -25,52 +25,55 @@
             </div>
         </div>
         <div class="table-responsive">
-        <table class="table table-hover contracts-table">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>User id</th>
-                <th>Phone Number</th>
-                <th>Options count </th>
-                <th>Tariff</th>
-                <th>Price</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${allContractsDto.entityDtoList}" var="contract">
-                <tr class="contract-row">
-                    <td>${contract.id}</td>
-                    <td>${contract.user.id}</td>
-                    <td>${contract.phoneNumber}</td>
-                    <td>${fn:length(contract.activeOptions)}</td>
-                    <td>${contract.tariff.name}</td>
-                    <td>${contract.price}</td>
-                    <c:choose>
-                        <c:when test="${contract.status == 'BLOCKED'}">
-                            <td><span class="badge badge-danger">${contract.status}</span></td>
-                        </c:when>
-                        <c:when test="${contract.status == 'INACTIVE'}">
-                            <td><span class="badge badge-warning">${contract.status}</span></td>
-                        </c:when>
-                        <c:otherwise>
-                            <td><span class="badge badge-success">${contract.status}</span></td>
-                        </c:otherwise>
-                    </c:choose>
+            <table class="table table-hover contracts-table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>User id</th>
+                    <th>Phone Number</th>
+                    <th>Options count</th>
+                    <th>Tariff</th>
+                    <th>Price</th>
+                    <th>Status</th>
                 </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <c:forEach items="${allContractsDto.entityDtoList}" var="contract">
+                    <tr class="contract-row">
+                        <td>${contract.id}</td>
+                        <td>${contract.user.id}</td>
+                        <td>${contract.phoneNumber}</td>
+                        <td>${fn:length(contract.activeOptions)}</td>
+                        <td>${contract.tariff.name}</td>
+                        <td>${contract.price}</td>
+                        <c:choose>
+                            <c:when test="${contract.status == 'BLOCKED'}">
+                                <td><span class="badge badge-danger">${contract.status}</span></td>
+                            </c:when>
+                            <c:when test="${contract.status == 'INACTIVE'}">
+                                <td><span class="badge badge-warning">${contract.status}</span></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><span class="badge badge-success">${contract.status}</span></td>
+                            </c:otherwise>
+                        </c:choose>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
         </div>
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item" id="prevPage"><a class="page-link">Previous</a></li>
                 <c:forEach begin="1" end="${allContractsDto.pageCount}" varStatus="loop">
-                    <c:if test = "${allContractsDto.pageNumber == loop.index }">
-                        <li class="page-item active"><a class="page-link" href="/adminPanel/allContracts/${loop.index}">${loop.index}</a></li>
+                    <c:if test="${allContractsDto.pageNumber == loop.index }">
+                        <li class="page-item active"><a class="page-link"
+                                                        href="/adminPanel/allContracts/${loop.index}">${loop.index}</a>
+                        </li>
                     </c:if>
-                    <c:if test = "${allContractsDto.pageNumber != loop.index }">
-                        <li class="page-item"><a class="page-link" href="/adminPanel/allContracts/${loop.index}">${loop.index}</a></li>
+                    <c:if test="${allContractsDto.pageNumber != loop.index }">
+                        <li class="page-item"><a class="page-link"
+                                                 href="/adminPanel/allContracts/${loop.index}">${loop.index}</a></li>
                     </c:if>
                 </c:forEach>
                 <li class="page-item" id="nextPage"><a class="page-link">Next</a></li>

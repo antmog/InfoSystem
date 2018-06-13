@@ -1,13 +1,12 @@
 package com.infosystem.springmvc.service.dataservice;
 
 import com.infosystem.springmvc.converters.JavaUtilDateToStringConverter;
+import com.infosystem.springmvc.dao.AdvProfileDao;
 import com.infosystem.springmvc.dao.TariffDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.entity.Tariff;
-import com.infosystem.springmvc.model.entity.TariffOption;
-import com.infosystem.springmvc.model.entity.User;
+import com.infosystem.springmvc.model.entity.*;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffService;
@@ -29,19 +28,23 @@ public class DataServiceImpl implements DataService {
     private final ContractService contractService;
     private final CustomModelMapper modelMapper;
     private final TariffDao tariffDao;
+    private final AdvProfileDao advProfileDao;
     private final JavaUtilDateToStringConverter javaUtilDateToStringConverter;
+    private final List<String> imgList;
 
     @Autowired
     public DataServiceImpl(TariffOptionService tariffOptionService, TariffService tariffService,
                            UserService userService, ContractService contractService, CustomModelMapper modelMapper,
-                           TariffDao tariffDao, JavaUtilDateToStringConverter javaUtilDateToStringConverter) {
+                           TariffDao tariffDao, AdvProfileDao advProfileDao, JavaUtilDateToStringConverter javaUtilDateToStringConverter, List<String> imgList) {
         this.tariffOptionService = tariffOptionService;
         this.tariffService = tariffService;
         this.userService = userService;
         this.contractService = contractService;
         this.modelMapper = modelMapper;
         this.tariffDao = tariffDao;
+        this.advProfileDao = advProfileDao;
         this.javaUtilDateToStringConverter = javaUtilDateToStringConverter;
+        this.imgList = imgList;
     }
 
     /**
@@ -145,12 +148,53 @@ public class DataServiceImpl implements DataService {
     public List<TariffDto> getIndexPageData() {
         int tariffCount = tariffDao.tariffCount();
         Set<Integer> idList = new HashSet<>();
-        while(idList.size()<3){
+        // id list
+        Integer capacity = 3;
+        if(tariffCount<capacity){
+            capacity = tariffCount;
+        }
+        while(idList.size()<capacity){
             idList.add((int) (Math.random()*tariffCount)+1);
         }
         List<TariffDto> randomTariffs = new ArrayList<>();
-        idList.forEach(integer -> randomTariffs.add(modelMapper.mapToList(TariffDto.class,tariffDao.findListOfTariffs(integer,1)).get(0)));
+        if(!idList.isEmpty()){
+            idList.forEach(integer -> randomTariffs.add(modelMapper.mapToList(TariffDto.class,tariffDao.findListOfTariffs(integer,1)).get(0)));
+        }
         return randomTariffs;
+    }
+
+    @Override
+    public AdminPanelDto getAdminPanelData(String login) throws DatabaseException {
+        AdminPanelDto adminPanelDto = new AdminPanelDto();
+        List<AdvProfile> advProfileList = advProfileDao.findAllAdvProfiles();
+        adminPanelDto.setAdvProfileDtoList(modelMapper.mapToAdvProfileDtoList(advProfileList));
+        adminPanelDto.setUserDto(getUserInfo(login));
+        return adminPanelDto;
+    }
+
+    @Override
+    public AdvProfileTariffDto getAdvProfileTariffData(Integer profileId, Integer tariffId) throws DatabaseException {
+        AdvProfileTariffDto advProfileTariffDto = new AdvProfileTariffDto();
+        AdvProfile advProfile = advProfileDao.findById(profileId);
+        AdvProfileTariffs advProfileTariffs  = advProfile.getAdvProfileTariffsList().stream().filter(profile->profile.getTariff().getId()
+                .equals(tariffId)).findFirst().orElse(null);
+        if(advProfileTariffs==null){
+            throw new DatabaseException("No such tariff for that profile.");
+        }
+        advProfileTariffDto.setImg(advProfileTariffs.getImg());
+        advProfileTariffDto.setTariffName(advProfileTariffs.getTariff().getName());
+        advProfileTariffDto.setTariffId(advProfileTariffs.getTariff().getId());
+        advProfileTariffDto.setAdvProfileId(profileId);
+        advProfileTariffDto.setImgs(imgList);
+        return advProfileTariffDto;
+    }
+
+    @Override
+    public AdvProfileAddTariffDto getAdvProfileAddTariffData() {
+        AdvProfileAddTariffDto advProfileAddTariffDto = new AdvProfileAddTariffDto();
+        advProfileAddTariffDto.setTariffs(modelMapper.mapToList(TariffDto.class,tariffService.findAllActiveTariffs()));
+        advProfileAddTariffDto.setImgs(imgList);
+        return advProfileAddTariffDto;
     }
 
     @Override

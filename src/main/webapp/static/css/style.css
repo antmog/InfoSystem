@@ -134,7 +134,7 @@ p {
 }
 
 .table-responsive {
-    max-height: 60%;
+    max-height: 65%;
 }
 
 .search-button {
@@ -143,4 +143,22 @@ p {
 
 .login {
     display: none;
+}
+.adv{
+    display: flex;
+}
+.advProfiles{
+    margin-right: 10px;
+}
+#addAdvProfile{
+    margin:5px;
+}
+#deleteAdvProfile{
+    margin:5px;
+}
+#buy{
+    margin:5px;
+}
+#advProfileActivate{
+    margin-left:5px;
 }

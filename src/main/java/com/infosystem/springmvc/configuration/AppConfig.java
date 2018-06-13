@@ -18,6 +18,9 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 @Configuration
@@ -114,6 +117,15 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public HttpFirewall defaultHttpFirewall() {
         return new DefaultHttpFirewall();
+    }
+
+    @Bean
+    public List<String> imgList(){
+        List<String> imgList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            imgList.add("advImage"+(i+1));
+        }
+        return imgList;
     }
 
 }

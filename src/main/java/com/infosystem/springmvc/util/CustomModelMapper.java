@@ -2,9 +2,8 @@ package com.infosystem.springmvc.util;
 
 import com.infosystem.springmvc.converters.JavaUtilDateToStringConverter;
 import com.infosystem.springmvc.dto.*;
-import com.infosystem.springmvc.model.entity.Contract;
-import com.infosystem.springmvc.model.entity.Tariff;
-import com.infosystem.springmvc.model.entity.TariffOption;
+import com.infosystem.springmvc.dto.adv.AdvTariffDto;
+import com.infosystem.springmvc.model.entity.*;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.UserService;
@@ -146,5 +145,9 @@ public class CustomModelMapper {
 
     public Status mapToStatus(String status) {
         return modelMapper.map(status, Status.class);
+    }
+
+    public List<AdvProfileDto> mapToAdvProfileDtoList(List<AdvProfile> advProfileList) {
+        return mapToList(AdvProfileDto.class,advProfileList);
     }
 }

@@ -59,14 +59,40 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping("/adminPanel")
     public String adminPanel(ModelMap model) {
-        UserDto userDto = null;
+        AdminPanelDto adminPanelDto = new AdminPanelDto();
         try {
-            userDto = dataService.getUserInfo(getPrincipal());
+            adminPanelDto = dataService.getAdminPanelData(getPrincipal());
         } catch (DatabaseException e) {
             return prepareErrorPage(model, e.getMessage());
         }
-        model.addAttribute("userDto", userDto);
+        model.addAttribute("adminPanelDto", adminPanelDto);
         return path + "adminPanel";
+    }
+
+    @RequestMapping("/adminPanel/advProfile/{profileId}/{tariffId}")
+    public String advProfileTariff(@PathVariable String profileId, @PathVariable String tariffId, ModelMap model) {
+        if (!(pathVariableIsANumber(profileId) && pathVariableIsANumber(tariffId))) {
+            return prepareErrorPage(model, "Wrong path variable.");
+        }
+        AdvProfileTariffDto advProfileTariffDto = new AdvProfileTariffDto();
+        try {
+            advProfileTariffDto = dataService.getAdvProfileTariffData(Integer.parseInt(profileId), Integer.parseInt(tariffId));
+        } catch (DatabaseException e) {
+            return prepareErrorPage(model, e.getMessage());
+        }
+        model.addAttribute("advProfileTariffDto", advProfileTariffDto);
+        return path + "advProfileTariff";
+    }
+
+    @RequestMapping("/adminPanel/advProfile/addTariff/{profileId}")
+    public String advProfileAddTariff(@PathVariable String profileId, ModelMap model) {
+        if (!(pathVariableIsANumber(profileId))) {
+            return prepareErrorPage(model, "Wrong path variable.");
+        }
+        AdvProfileAddTariffDto advProfileAddTariffDto = dataService.getAdvProfileAddTariffData();
+        advProfileAddTariffDto.setAdvProfileId(Integer.parseInt(profileId));
+        model.addAttribute("advProfileAddTariffDto", advProfileAddTariffDto);
+        return path + "advProfileAddTariff";
     }
 
     /**
@@ -77,7 +103,7 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping("/adminPanel/allUsers/{pageNumber}")
     public String adminPanelAllUsers(@PathVariable(value = "pageNumber") String pageNumber, ModelMap model) {
-        if(!pathVariableIsANumber(pageNumber)){
+        if (!pathVariableIsANumber(pageNumber)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int pageNumberInt = Integer.parseInt(pageNumber);
@@ -98,7 +124,7 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping("/adminPanel/allContracts/{pageNumber}")
     public String adminPanelAllContracts(@PathVariable(value = "pageNumber") String pageNumber, ModelMap model) {
-        if(!pathVariableIsANumber(pageNumber)){
+        if (!pathVariableIsANumber(pageNumber)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int pageNumberInt = Integer.parseInt(pageNumber);
@@ -119,11 +145,11 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping("/adminPanel/allTariffs/{pageNumber}")
     public String adminPanelAllTariffs(@PathVariable(value = "pageNumber") String pageNumber, ModelMap model) {
-        if(!pathVariableIsANumber(pageNumber)){
+        if (!pathVariableIsANumber(pageNumber)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int pageNumberInt = Integer.parseInt(pageNumber);
-        AllEntitiesDto<TariffDto> allTariffsDto = dataService.getAllEntityPageData(TariffDto.class,pageNumberInt, ITEMS_PER_PAGE);
+        AllEntitiesDto<TariffDto> allTariffsDto = dataService.getAllEntityPageData(TariffDto.class, pageNumberInt, ITEMS_PER_PAGE);
         if (illegalPage(allTariffsDto.getPageCount(), pageNumberInt, model)) {
             return prepareErrorPage(model, "No such page.");
         }
@@ -137,6 +163,7 @@ public class AdminController extends ControllerTemplate {
     MessageSender messageSender;
     @Autowired
     ToAdvertismentJmsJsonMapper toAdvertismentJmsJsonMapper;
+
     /**
      * Returns view with all tariffOptions.
      *
@@ -145,7 +172,7 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping("/adminPanel/allOptions/{pageNumber}")
     public String adminPanelAllOptions(@PathVariable(value = "pageNumber") String pageNumber, ModelMap model) {
-        if(!pathVariableIsANumber(pageNumber)){
+        if (!pathVariableIsANumber(pageNumber)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int pageNumberInt = Integer.parseInt(pageNumber);
@@ -231,7 +258,7 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/addContractToUser/{userId}", method = RequestMethod.GET)
     public String addContractToUser(@PathVariable(value = "userId") String userId, ModelMap model) {
-        if(!pathVariableIsANumber(userId)){
+        if (!pathVariableIsANumber(userId)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int userIdInt = Integer.parseInt(userId);
@@ -295,7 +322,7 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/user/{userId}")
     public String user(@PathVariable(value = "userId") String userId, ModelMap model) {
-        if(!pathVariableIsANumber(userId)){
+        if (!pathVariableIsANumber(userId)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         UserPageDto userPageDto;
@@ -317,7 +344,7 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/contract/{contractId}")
     public String contract(@PathVariable(value = "contractId") String contractId, ModelMap model) {
-        if(!pathVariableIsANumber(contractId)){
+        if (!pathVariableIsANumber(contractId)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int contractIdInt = Integer.parseInt(contractId);
@@ -340,7 +367,7 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/tariff/{tariffId}")
     public String tariff(@PathVariable(value = "tariffId") String tariffId, ModelMap model) {
-        if(!pathVariableIsANumber(tariffId)){
+        if (!pathVariableIsANumber(tariffId)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int tariffIdInt = Integer.parseInt(tariffId);
@@ -363,7 +390,7 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping(value = "/adminPanel/option/{optionId}")
     public String option(@PathVariable(value = "optionId") String optionId, ModelMap model) {
-        if(!pathVariableIsANumber(optionId)){
+        if (!pathVariableIsANumber(optionId)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int optionIdInt = Integer.parseInt(optionId);
@@ -384,7 +411,7 @@ public class AdminController extends ControllerTemplate {
      */
     @RequestMapping("/adminPanel/addFunds/{userId}")
     public String addFunds(@PathVariable(value = "userId") String userId, ModelMap model) {
-        if(!pathVariableIsANumber(userId)){
+        if (!pathVariableIsANumber(userId)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int userIdInt = Integer.parseInt(userId);
@@ -400,12 +427,12 @@ public class AdminController extends ControllerTemplate {
 
     /**
      * @param userId userId
-     * @param model model
+     * @param model  model
      * @return edit user view
      */
     @RequestMapping("/adminPanel/editUser/{userId}")
     public String editUser(@PathVariable(value = "userId") String userId, ModelMap model) {
-        if(!pathVariableIsANumber(userId)){
+        if (!pathVariableIsANumber(userId)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         int userIdInt = Integer.parseInt(userId);
@@ -416,20 +443,20 @@ public class AdminController extends ControllerTemplate {
             return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("editUserDto", editUserDto);
-        return path+"editUser";
+        return path + "editUser";
     }
 
     /**
      * Validates and saves user data if it is correct.
      *
      * @param editUserDto editUserDto
-     * @param result             validation result
-     * @param model              model
+     * @param result      validation result
+     * @param model       model
      * @return result
      */
     @RequestMapping(value = "/adminPanel/editUser/{userId}", method = RequestMethod.POST)
     public String editUserSubmit(@PathVariable(value = "userId") String userId, @Valid EditUserDto editUserDto, BindingResult result, ModelMap model) {
-        if(!pathVariableIsANumber(userId)){
+        if (!pathVariableIsANumber(userId)) {
             return prepareErrorPage(model, "Wrong path variable.");
         }
         if (result.hasErrors()) {
@@ -445,7 +472,7 @@ public class AdminController extends ControllerTemplate {
             return prepareErrorPage(model, e.getMessage());
         }
         model.addAttribute("success", "User " + editUserDto.getFirstName() + " " +
-                editUserDto.getLastName()+" edited successfully");
+                editUserDto.getLastName() + " edited successfully");
         return path + "addSuccess";
     }
 

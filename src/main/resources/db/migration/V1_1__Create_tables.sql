@@ -107,7 +107,7 @@ CREATE TABLE `is_related_for` (
 TRUNCATE `is_related_for`;
 
 -- data for login tokens (remember me function)
-DROP TABLE IF EXISTS`persistent_logins`;
+DROP TABLE IF EXISTS `persistent_logins`;
 CREATE TABLE `persistent_logins` (
   `username` varchar(64) NOT NULL,
   `series` varchar(64) NOT NULL,
@@ -117,4 +117,24 @@ CREATE TABLE `persistent_logins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 TRUNCATE `persistent_logins`;
 
+-- tariffs for advertisment profiles
+DROP TABLE IF EXISTS `adv_profile_tariffs`;
+CREATE TABLE `adv_profile_tariffs` (
+  `IMG` varchar(255) DEFAULT NULL,
+  `advProfile_ADV_PROFILE_ID` int(11) NOT NULL,
+  `tariff_TARIFF_ID` int(11) NOT NULL,
+  PRIMARY KEY (`advProfile_ADV_PROFILE_ID`,`tariff_TARIFF_ID`),
+  KEY `FKde76pulkphfhiipwg1jrc5jdn` (`tariff_TARIFF_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+TRUNCATE `persistent_logins`;
+
+-- advertisment profiles
+DROP TABLE IF EXISTS `adv_profile`;
+CREATE TABLE `adv_profile` (
+  `ADV_PROFILE_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(255) NOT NULL,
+  `STATUS` varchar(255) NOT NULL,
+  PRIMARY KEY (`ADV_PROFILE_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+TRUNCATE `adv_profile`;
 
