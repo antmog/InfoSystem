@@ -6,9 +6,15 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.model.entity.AdvProfile;
 
+import java.util.List;
+
 public interface AdvProfileService {
 
     AdvProfile findById(Integer id) throws DatabaseException;
+
+    List<AdvProfile> findAll() throws DatabaseException;
+
+    List<AdvProfile> findActive() throws DatabaseException;
 
     AdvProfileDto getProfileById(Integer id) throws DatabaseException;
 

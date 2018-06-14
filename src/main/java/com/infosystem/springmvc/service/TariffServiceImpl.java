@@ -4,9 +4,7 @@ import com.infosystem.springmvc.dao.TariffDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
-import com.infosystem.springmvc.model.entity.Contract;
-import com.infosystem.springmvc.model.entity.Tariff;
-import com.infosystem.springmvc.model.entity.TariffOption;
+import com.infosystem.springmvc.model.entity.*;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,9 @@ public class TariffServiceImpl implements TariffService {
 
     @Autowired
     OptionsRulesChecker optionsRulesChecker;
+
+    @Autowired
+    AdvProfileService advProfileService;
 
     private final TariffDao dao;
 
@@ -89,6 +90,13 @@ public class TariffServiceImpl implements TariffService {
         for (Contract contract : contractService.findAllContracts()) {
             if (contract.getTariff().equals(tariff)) {
                 throw new LogicException("Tariff is still used.");
+            }
+        }
+        for(AdvProfile advProfile: advProfileService.findAll()){
+            AdvProfileTariffs advProfileTariffs = advProfile.getAdvProfileTariffsList().stream()
+                    .filter(advProfileTariff -> advProfileTariff.getTariff().equals(tariff)).findFirst().orElse(null);
+            if(advProfileTariffs!=null){
+                throw new LogicException("Tariff is still used in advertisment.");
             }
         }
         dao.deleteById(id);

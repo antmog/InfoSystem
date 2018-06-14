@@ -1,6 +1,7 @@
 package com.infosystem.springmvc.controller.rest;
 
 import com.infosystem.springmvc.dto.adv.AdvInitialDataDto;
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.service.adv.AdvService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ public class AdvController {
     }
 
     @RequestMapping(value = "/getInitialAdvData")
-    public AdvInitialDataDto getInitialAdvData() {
+    public AdvInitialDataDto getInitialAdvData() throws DatabaseException {
         AdvInitialDataDto advInitialDataDto = advService.getInitialAdvData();
         LOGGER.info(() -> "InitialAdvData request.");
         return advInitialDataDto;

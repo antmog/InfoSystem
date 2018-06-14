@@ -2,28 +2,52 @@ package com.infosystem.springmvc.service.adv;
 
 import com.infosystem.springmvc.dto.adv.AdvInitialDataDto;
 import com.infosystem.springmvc.dto.adv.AdvTariffDto;
+import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.model.entity.AdvProfile;
+import com.infosystem.springmvc.model.entity.AdvProfileTariffs;
+import com.infosystem.springmvc.model.entity.Tariff;
+import com.infosystem.springmvc.model.enums.Status;
+import com.infosystem.springmvc.service.AdvProfileService;
 import com.infosystem.springmvc.service.dataservice.DataService;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service("advService")
 @Transactional
 public class AdvService {
 
-    private DataService dataService;
-    private CustomModelMapper customModelMapper;
+    private final DataService dataService;
+    private final CustomModelMapper customModelMapper;
+    private final AdvProfileService advProfileService;
 
     @Autowired
-    public AdvService(DataService dataService, CustomModelMapper customModelMapper){
+    public AdvService(DataService dataService, CustomModelMapper customModelMapper, AdvProfileService advProfileService){
         this.dataService = dataService;
         this.customModelMapper = customModelMapper;
+        this.advProfileService = advProfileService;
     }
 
-    public AdvInitialDataDto getInitialAdvData() {
+    public AdvInitialDataDto getInitialAdvData() throws DatabaseException {
         AdvInitialDataDto advInitialDataDto = new AdvInitialDataDto();
-        advInitialDataDto.setAdvTariffDtoList(customModelMapper.mapToList(AdvTariffDto.class,dataService.getIndexPageData()));
+        List<AdvTariffDto> advTariffDtoList = new ArrayList<>();
+
+        AdvProfile advProfile = advProfileService.findAll().stream()
+                .filter(anotherAdvProfile -> anotherAdvProfile.getStatus().equals(Status.ACTIVE)).findFirst().orElse(null);
+        if(advProfile==null){
+            throw new DatabaseException("No active advertisment profiles.");
+        }
+        for(AdvProfileTariffs advProfileTariffs:advProfile.getAdvProfileTariffsList()){
+            AdvTariffDto advTariffDto = customModelMapper.mapToDto(AdvTariffDto.class,advProfileTariffs.getTariff());
+            advTariffDto.setImage(advProfileTariffs.getImg());
+            advTariffDtoList.add(advTariffDto);
+        }
+
+        advInitialDataDto.setAdvTariffDtoList(advTariffDtoList);
         return advInitialDataDto;
     }
 }

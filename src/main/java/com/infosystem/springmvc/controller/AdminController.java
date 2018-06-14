@@ -158,12 +158,6 @@ public class AdminController extends ControllerTemplate {
         return path + "allTariffs";
     }
 
-    //todo del
-    @Autowired
-    MessageSender messageSender;
-    @Autowired
-    ToAdvertismentJmsJsonMapper toAdvertismentJmsJsonMapper;
-
     /**
      * Returns view with all tariffOptions.
      *
@@ -183,19 +177,6 @@ public class AdminController extends ControllerTemplate {
         }
         allTariffOptionsDto.setPageNumber(pageNumberInt);
         model.addAttribute("allTariffOptionsDto", allTariffOptionsDto);
-
-        //todo del
-        JmsNotification jmsNotification = new JmsNotification();
-        jmsNotification.setType("Alert");
-        jmsNotification.setItem("Tariff");
-        jmsNotification.setItemName("Super Hot");
-        jmsNotification.setDescription("Description blah blahblah blah blah");
-        try {
-            messageSender.sendMessage(toAdvertismentJmsJsonMapper.mapToAdvertismentJmsJson(jmsNotification));
-        } catch (JsonProcessingException e) {
-            //todo normal exception handling
-            e.printStackTrace();
-        }
         return path + "allOptions";
     }
 

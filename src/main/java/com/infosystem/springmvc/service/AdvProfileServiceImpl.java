@@ -38,6 +38,17 @@ public class AdvProfileServiceImpl implements AdvProfileService {
     }
 
     @Override
+    public List<AdvProfile> findAll() throws DatabaseException {
+        return advProfileDao.findAllAdvProfiles();
+    }
+
+    //todo
+    @Override
+    public List<AdvProfile> findActive() throws DatabaseException {
+        return null;
+    }
+
+    @Override
     public AdvProfileDto getProfileById(Integer id) throws DatabaseException {
         return customModelMapper.mapToDto(AdvProfileDto.class, findById(id));
     }
