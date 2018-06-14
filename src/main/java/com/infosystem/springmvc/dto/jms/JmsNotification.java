@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.dto.jms;
 
+import com.infosystem.springmvc.dto.adv.AdvTariffDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,8 +9,14 @@ import lombok.NoArgsConstructor;
 public class JmsNotification {
 
     private String type;
-    private String item;
-    private String itemName;
-    private String description;
+    private AdvTariffDto advTariffDto;
 
+    public JmsNotification(String type, AdvTariffDto advTariffDto) {
+        this.type = type;
+        this.advTariffDto = advTariffDto;
+    }
+
+    public JmsNotification(String type) {
+        this.type = type;
+    }
 }

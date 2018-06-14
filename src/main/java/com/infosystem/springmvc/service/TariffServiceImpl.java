@@ -4,6 +4,7 @@ import com.infosystem.springmvc.dao.TariffDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.jms.JmsDataMapper;
 import com.infosystem.springmvc.model.entity.*;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
@@ -30,6 +31,9 @@ public class TariffServiceImpl implements TariffService {
 
     @Autowired
     AdvProfileService advProfileService;
+
+    @Autowired
+    JmsDataMapper jmsDataMapper;
 
     private final TariffDao dao;
 
@@ -115,6 +119,7 @@ public class TariffServiceImpl implements TariffService {
         optionsRulesChecker.checkIfTariffAlreadyHave(tariff, toBeAddedOptions);
         optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptions, tariff.getAvailableOptions());
         tariff.getAvailableOptions().addAll(modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList()));
+        jmsDataMapper.tariffAddOptions(editTariffDto.getTariffId(),editTariffDto.getTariffOptionDtoList());
     }
 
     /**
@@ -131,6 +136,7 @@ public class TariffServiceImpl implements TariffService {
         optionsRulesChecker.checkDelRalated(toBeDeletedOptions, tariff.getAvailableOptions());
 
         tariff.getAvailableOptions().removeAll(modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList()));
+        jmsDataMapper.tariffDelOptions(editTariffDto.getTariffId(),editTariffDto.getTariffOptionDtoList());
     }
 
     @Override
@@ -155,8 +161,16 @@ public class TariffServiceImpl implements TariffService {
      * @param setNewStatusDto setNewStatusDto
      * @throws DatabaseException if tariff doesn't exist
      */
-    public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
-        findById(setNewStatusDto.getEntityId()).setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
+    public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, LogicException {
+        Tariff tariff = findById(setNewStatusDto.getEntityId());
+        for(AdvProfile advProfile: advProfileService.findAll()){
+            AdvProfileTariffs advProfileTariffs = advProfile.getAdvProfileTariffsList().stream()
+                    .filter(advProfileTariff -> advProfileTariff.getTariff().equals(tariff)).findFirst().orElse(null);
+            if(advProfileTariffs!=null){
+                throw new LogicException("Tariff is still used in advertisment.");
+            }
+        }
+        tariff.setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
     }
 
     private boolean isNameUnique(String tariffName) {

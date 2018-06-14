@@ -7,6 +7,7 @@ import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
 import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
 import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
@@ -15,6 +16,8 @@ import com.infosystem.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,12 +110,18 @@ public class GlobalDataController {
      * @throws ValidationException if input is wrong
      */
     @RequestMapping(value = "/tariff/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-    public String setTariffStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException, ValidationException {
+    public String setTariffStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result)
+            throws DatabaseException, ValidationException, LogicException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getAuthorities().stream()
+                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+            throw new ValidationException("You are not admin to do this.");
+        }
         if (result.hasErrors()) {
             throw new ValidationException("Wrong contract id or status!");
         }
         tariffService.setStatus(setNewStatusDto);
-        return "User is now " + setNewStatusDto.getEntityStatus() + ".";
+        return "Tariff is now " + setNewStatusDto.getEntityStatus() + ".";
     }
 
     /**

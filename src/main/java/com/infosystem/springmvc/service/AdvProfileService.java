@@ -24,5 +24,5 @@ public interface AdvProfileService {
 
     void advProfileDeleteTariff(AdvProfileTariffDto advProfileTariffDto) throws DatabaseException;
 
-    void activate(int advProfileId) throws DatabaseException;
+    void activate(int advProfileId) throws DatabaseException, LogicException;
 }

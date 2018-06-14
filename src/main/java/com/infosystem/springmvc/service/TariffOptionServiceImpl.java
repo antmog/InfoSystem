@@ -5,14 +5,13 @@ import com.infosystem.springmvc.dto.AddTariffOptionDto;
 import com.infosystem.springmvc.dto.TariffOptionRulesDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
-import com.infosystem.springmvc.model.entity.Contract;
-import com.infosystem.springmvc.model.entity.Tariff;
-import com.infosystem.springmvc.model.entity.TariffOption;
+import com.infosystem.springmvc.model.entity.*;
 import com.infosystem.springmvc.model.enums.TariffOptionRule;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -29,13 +28,15 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     private final TariffService tariffService;
     private final TariffOptionDao dao;
     private final CustomModelMapper modelMapperWrapper;
+    private final AdvProfileService advProfileService;
 
     @Autowired
     public TariffOptionServiceImpl(TariffService tariffService, TariffOptionDao dao,
-                                   CustomModelMapper modelMapperWrapper) {
+                                   CustomModelMapper modelMapperWrapper, AdvProfileService advProfileService) {
         this.tariffService = tariffService;
         this.dao = dao;
         this.modelMapperWrapper = modelMapperWrapper;
+        this.advProfileService = advProfileService;
     }
 
     public TariffOption findById(int id) throws DatabaseException {
@@ -184,13 +185,13 @@ public class TariffOptionServiceImpl implements TariffOptionService {
 
     @Override
     public int getPagesCount(int itemsPerPage) {
-        return (dao.tariffOptionCount()-1)/itemsPerPage + 1;
+        return (dao.tariffOptionCount() - 1) / itemsPerPage + 1;
     }
 
     /**
      * Check if trying to make rule for itself (tariffOption).
      *
-     * @param tariffOption tariffOption
+     * @param tariffOption  tariffOption
      * @param tariffOptions tariffOptions
      */
     private void isWrongRule(TariffOption tariffOption, Set<TariffOption> tariffOptions) throws LogicException {

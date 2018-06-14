@@ -23,7 +23,7 @@ public interface TariffService {
 
     void deleteTariffById(int id) throws LogicException, DatabaseException;
 
-    void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException;
+    void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, LogicException;
 
     List<Tariff> findFirstTariffs();
 

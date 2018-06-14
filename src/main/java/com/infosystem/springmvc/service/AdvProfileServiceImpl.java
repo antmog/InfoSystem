@@ -5,6 +5,7 @@ import com.infosystem.springmvc.dto.AdvProfileDto;
 import com.infosystem.springmvc.dto.AdvProfileTariffDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.jms.JmsDataMapper;
 import com.infosystem.springmvc.model.entity.AdvProfile;
 import com.infosystem.springmvc.model.entity.AdvProfileTariffs;
 import com.infosystem.springmvc.model.enums.Status;
@@ -12,7 +13,6 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.rmi.runtime.Log;
 
 import java.util.List;
 
@@ -24,6 +24,8 @@ public class AdvProfileServiceImpl implements AdvProfileService {
     private final CustomModelMapper customModelMapper;
     private final TariffService tariffService;
 
+    @Autowired
+    private JmsDataMapper jmsDataMapper;
 
     @Autowired
     public AdvProfileServiceImpl(AdvProfileDao advProfileDao, CustomModelMapper customModelMapper, TariffService tariffService) {
@@ -63,26 +65,34 @@ public class AdvProfileServiceImpl implements AdvProfileService {
             throw new LogicException("Profile alrdy has that tariff.");
         }
         advProfile.getAdvProfileTariffsList().add(advProfileTariffs);
+        jmsDataMapper.advProfileAddTariff(advProfileTariffDto.getTariffId(),advProfileTariffDto.getAdvProfileId());
     }
 
     @Override
     public void advProfileEditTariff(AdvProfileTariffDto advProfileTariffDto) throws DatabaseException {
         AdvProfile advProfile = findById(advProfileTariffDto.getAdvProfileId());
         getAdvProfileTariffs(advProfileTariffDto,advProfile).setImg(advProfileTariffDto.getImg());
+        jmsDataMapper.advProfileTariffImgChanged(advProfileTariffDto.getTariffId(),
+                advProfileTariffDto.getAdvProfileId(),advProfileTariffDto.getImg());
     }
 
     @Override
     public void advProfileDeleteTariff(AdvProfileTariffDto advProfileTariffDto) throws DatabaseException {
         AdvProfile advProfile = findById(advProfileTariffDto.getAdvProfileId());
         advProfile.getAdvProfileTariffsList().remove(getAdvProfileTariffs(advProfileTariffDto,advProfile));
+        jmsDataMapper.advProfileDeleteTariff(advProfileTariffDto.getTariffId(),advProfileTariffDto.getAdvProfileId());
     }
 
     @Override
-    public void activate(int advProfileId) throws DatabaseException {
-        List<AdvProfile> advProfileList = advProfileDao.findAllAdvProfiles();
-        advProfileList.forEach(advProfile -> advProfile.setStatus(Status.INACTIVE));
+    public void activate(int advProfileId) throws DatabaseException, LogicException {
         AdvProfile advProfile = findById(advProfileId);
+        if(advProfile.getStatus().equals(Status.ACTIVE)){
+            throw new LogicException("Profile is alrdy active.");
+        }
+        List<AdvProfile> advProfileList = advProfileDao.findAllAdvProfiles();
+        advProfileList.forEach(anotherAdvProfile -> anotherAdvProfile.setStatus(Status.INACTIVE));
         advProfile.setStatus(Status.ACTIVE);
+        jmsDataMapper.advProfileActivate();
     }
 
     private AdvProfileTariffs getAdvProfileTariffs(AdvProfileTariffDto advProfileTariffDto, AdvProfile advProfile) throws DatabaseException {
