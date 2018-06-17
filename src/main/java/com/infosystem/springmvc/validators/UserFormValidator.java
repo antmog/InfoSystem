@@ -32,7 +32,7 @@ public class UserFormValidator implements Validator {
         if (userService.checkParameterNotUnique("mail", addUserDto.getMail())) {
             errors.rejectValue("mail", "Unique.addUserDto.mail");
         }
-        if (userService.checkParameterNotUnique("passport", addUserDto.getPassport())) {
+        if (userService.checkParameterNotUnique("passport", Integer.parseInt(addUserDto.getPassport()))) {
             errors.rejectValue("passport", "Unique.addUserDto.passport");
         }
     }

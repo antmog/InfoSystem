@@ -25,11 +25,18 @@ import com.infosystem.springmvc.model.entity.User;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    ContractService contractService;
+    private ContractService contractService;
 
     @Autowired
-    CustomModelMapper modelMapperWrapper;
+    public void setContractService(ContractService contractService) {
+        this.contractService = contractService;
+    }
+
+    private CustomModelMapper customModelMapper;
+
+    public void setCustomModelMapper(CustomModelMapper customModelMapper) {
+        this.customModelMapper = customModelMapper;
+    }
 
     private final UserDao dao;
     private final PasswordEncoder passwordEncoder;
@@ -38,24 +45,16 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserDao dao, PasswordEncoder passwordEncoder) {
         this.dao = dao;
         this.passwordEncoder = passwordEncoder;
+
     }
 
     public User findById(int id) throws DatabaseException {
         User user = dao.findById(id);
-        System.out.println(user);
         return user;
     }
 
     public User findByLogin(String login) throws DatabaseException {
         return dao.findByParameter("login", login);
-    }
-
-    public User findByEmail(String mail) throws DatabaseException {
-        return dao.findByParameter("mail", mail);
-    }
-
-    public User findByPassport(Integer passport) throws DatabaseException {
-        return dao.findByParameter("passport", String.valueOf(passport));
     }
 
     public void saveUser(User user) {
@@ -95,7 +94,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
-        findById(setNewStatusDto.getEntityId()).setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
+        User user = findById(setNewStatusDto.getEntityId());
+        Status status = customModelMapper.mapToStatus(setNewStatusDto.getEntityStatus());
+        user.setStatus(status);
     }
 
     /**
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService {
      * @throws DatabaseException if user doesn't exist
      */
     @Override
-    public void updateUserAddress(EditAddressDto editAddressDto) throws DatabaseException, ValidationException {
+    public void updateUserAddress(EditAddressDto editAddressDto) throws DatabaseException {
         User user = findById(editAddressDto.getUserId());
         user.setAddress(editAddressDto.getValue());
     }
@@ -117,7 +118,7 @@ public class UserServiceImpl implements UserService {
      * @throws DatabaseException if user doesn't exist
      */
     @Override
-    public void updateUserMail(EditMailDto editMailDto) throws DatabaseException, ValidationException {
+    public void updateUserMail(EditMailDto editMailDto) throws DatabaseException {
         User user = findById(editMailDto.getUserId());
         user.setMail(editMailDto.getValue());
     }
@@ -129,7 +130,7 @@ public class UserServiceImpl implements UserService {
      * @throws DatabaseException if user doesn't exist
      */
     @Override
-    public void updateUserPassport(EditPassportDto editPassportDto) throws DatabaseException, ValidationException {
+    public void updateUserPassport(EditPassportDto editPassportDto) throws DatabaseException {
         User user = findById(editPassportDto.getUserId());
         user.setPassport(Integer.valueOf(editPassportDto.getValue()));
     }
@@ -149,21 +150,16 @@ public class UserServiceImpl implements UserService {
     }
 
     public void addUser(AddUserDto addUserDto) {
-        User user = modelMapperWrapper.mapToEntity(User.class, addUserDto);
+        User user = customModelMapper.mapToEntity(User.class, addUserDto);
         user.setBalance(0.0);
         user.setStatus(Status.ACTIVE);
         saveUser(user);
     }
 
     @Override
-    public boolean checkParameterNotUnique(String parameter, String parameterValue) {
-        User user;
+    public <T> boolean checkParameterNotUnique(String parameter, T parameterValue) {
         try {
-            if(parameter.equals("passport")){
-                user = dao.findByPassport(Integer.valueOf(parameterValue));
-            }else{
-                user = dao.findByParameter(parameter, parameterValue);
-            }
+            dao.findByParameter(parameter, parameterValue);
         } catch (DatabaseException dbe) {
             return false;
         }
@@ -185,10 +181,10 @@ public class UserServiceImpl implements UserService {
         user.setLastName(editUserDto.getLastName());
         user.setAddress(editUserDto.getAddress());
         user.setMail(editUserDto.getMail());
-        if(editUserDto.getPassword()!=null){
+        if (editUserDto.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(editUserDto.getPassword()));
         }
-}
+    }
 
     @Override
     public void editUser(ChangePasswordDto changePasswordDto) throws DatabaseException {
@@ -199,15 +195,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkIfUserPasswordMatches(ChangePasswordDto changePasswordDto) throws DatabaseException {
         User user = findById(changePasswordDto.getUserId());
-        return passwordEncoder.matches(changePasswordDto.getPassword(),user.getPassword());
+        return passwordEncoder.matches(changePasswordDto.getPassword(), user.getPassword());
     }
 
     private void addFunds(User user, double amount) {
         user.addFunds(amount);
-    }
-
-    public void spendFunds(User user, double amount) {
-        user.spendFunds(amount);
     }
 
     public String getBalance(Integer userId) throws DatabaseException {

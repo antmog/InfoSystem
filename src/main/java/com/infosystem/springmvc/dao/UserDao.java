@@ -17,7 +17,7 @@ public interface UserDao {
 
     void deleteById(int id);
 
-    User findByParameter(String parameter, String parameterValue) throws DatabaseException;
+    <T> User findByParameter(String parameter, T parameterValue) throws DatabaseException;
 
 //    User findByLogin(String login) throws DatabaseException;
 //

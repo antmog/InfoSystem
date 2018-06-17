@@ -60,10 +60,7 @@ public class TariffOption implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TariffOption that = (TariffOption) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(price, that.price) &&
-                Objects.equals(costOfAdd, that.costOfAdd);
+        return Objects.equals(id, that.id);
     }
 
     @Override

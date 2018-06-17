@@ -11,6 +11,7 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.User;
+import com.infosystem.springmvc.util.CustomModelMapper;
 
 
 public interface UserService {
@@ -39,11 +40,9 @@ public interface UserService {
 
     void addUser(AddUserDto addUserDto);
 
-    boolean checkParameterNotUnique(String parameter, String parameterValue);
+    <T> boolean checkParameterNotUnique(String parameter, T parameterValue);
 
     void addFunds(FundsDto fundsDto, String login) throws DatabaseException;
-
-    void spendFunds(User user, double amount);
 
     String getBalance(Integer userId) throws DatabaseException;
 
@@ -56,4 +55,6 @@ public interface UserService {
     void editUser(ChangePasswordDto changePasswordDto) throws DatabaseException;
 
     boolean checkIfUserPasswordMatches(ChangePasswordDto changePasswordDto) throws DatabaseException;
+
+    void setCustomModelMapper(CustomModelMapper customModelMapper);
 }

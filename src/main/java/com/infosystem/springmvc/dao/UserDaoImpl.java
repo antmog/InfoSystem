@@ -26,7 +26,7 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
         return user;
     }
 
-    public User findByParameter(String parameter, String parameterValue) throws DatabaseException {
+    public <T> User findByParameter(String parameter, T parameterValue) throws DatabaseException {
         List users = getSession()
                 .createQuery("SELECT u FROM User u WHERE u." + parameter + " LIKE :parameter")
                 .setParameter("parameter", parameterValue)

@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -24,6 +25,12 @@ public class CustomModelMapper {
     TariffOptionService tariffOptionService;
     @Autowired
     UserService userService;
+
+    //todo check if fails
+    @PostConstruct
+    public void init() {
+        userService.setCustomModelMapper(this);
+    }
 
     private ModelMapper modelMapper = new ModelMapper();
 
