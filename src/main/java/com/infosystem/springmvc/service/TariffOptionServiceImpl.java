@@ -11,6 +11,7 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.rmi.runtime.Log;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,28 +23,33 @@ import java.util.stream.Collectors;
 @Transactional
 public class TariffOptionServiceImpl implements TariffOptionService {
 
-    @Autowired
-    ContractService contractService;
-
-    private final TariffService tariffService;
+    private ContractService contractService;
+    private TariffService tariffService;
     private final TariffOptionDao dao;
-    private final CustomModelMapper modelMapperWrapper;
-    private final AdvProfileService advProfileService;
+    private CustomModelMapper modelMapperWrapper;
 
     @Autowired
-    public TariffOptionServiceImpl(TariffService tariffService, TariffOptionDao dao,
-                                   CustomModelMapper modelMapperWrapper, AdvProfileService advProfileService) {
+    public void setTariffService(TariffService tariffService) {
         this.tariffService = tariffService;
-        this.dao = dao;
+    }
+
+    @Autowired
+    public void setContractService(ContractService contractService) {
+        this.contractService = contractService;
+    }
+
+    @Autowired
+    public void setModelMapperWrapper(CustomModelMapper modelMapperWrapper) {
         this.modelMapperWrapper = modelMapperWrapper;
-        this.advProfileService = advProfileService;
+    }
+
+    @Autowired
+    public TariffOptionServiceImpl(TariffOptionDao dao) {
+        this.dao = dao;
     }
 
     public TariffOption findById(int id) throws DatabaseException {
         TariffOption tariffOption = dao.findById(id);
-        if (tariffOption == null) {
-            throw new DatabaseException("TariffOption doesn't exist.");
-        }
         return tariffOption;
     }
 
@@ -110,47 +116,81 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     @Override
     public void addRuleTariffOptions(TariffOptionRulesDto tariffOptionRulesDto) throws DatabaseException, LogicException {
         TariffOptionRule rule = TariffOptionRule.valueOf(tariffOptionRulesDto.getRule());
-
+        HashSet<TariffOption> realRelatedOptions;
         Set<TariffOption> optionList = modelMapperWrapper.mapToTariffOptionSet(tariffOptionRulesDto.getTariffOptionDtoList());
         TariffOption tariffOption = findById(tariffOptionRulesDto.getTariffOptionId());
 
         isWrongRule(tariffOption, optionList);
         if (rule.equals(TariffOptionRule.RELATED)) {
-            Set<TariffOption> expectedTariffOptions = new HashSet<>(tariffOption.getRelatedTariffOptions());
-            expectedTariffOptions.addAll(optionList);
-            if (!Collections.disjoint(tariffOption.getExcludingTariffOptions(), optionList)) {
-                throw new LogicException("One or more of chosen options are in exclude list.");
+            HashSet<TariffOption> expectedSet = new HashSet<>();
+            HashSet<TariffOption> topSet = findTop(tariffOption);
+            for (TariffOption tariffOptionTop : topSet) {
+                realRelatedOptions = generateRealRelatedOptionList(tariffOptionTop.getRelatedTariffOptions());
+                realRelatedOptions.add(tariffOptionTop);
+                expectedSet.addAll(realRelatedOptions);
             }
-            for (TariffOption option : optionList) {
-                if (!Collections.disjoint(option.getExcludingTariffOptions(), expectedTariffOptions)) {
-                    throw new LogicException("Some of option you want to add are excluding each other, or current related.");
+            for (TariffOption toBeAddedOption : optionList) {
+                topSet = findTop(toBeAddedOption);
+                for (TariffOption tariffOptionTop : topSet) {
+                    realRelatedOptions = generateRealRelatedOptionList(tariffOptionTop.getRelatedTariffOptions());
+                    realRelatedOptions.add(tariffOptionTop);
+                    expectedSet.addAll(realRelatedOptions);
+                }
+            }
+            for (TariffOption option : expectedSet) {
+                option.getExcludingTariffOptions().retainAll(expectedSet);
+                if (!option.getExcludingTariffOptions().isEmpty()) {
+                    StringBuilder sb = new StringBuilder();
+                    option.getExcludingTariffOptions().forEach(anotherOption -> sb.append(anotherOption.getName()).append(";"));
+                    throw new LogicException("Options " + sb.toString() + " exclude " + option.getName() + ".");
                 }
             }
             optionList.forEach(relatedTariffOption -> relatedTariffOption.getIsRelatedFor().add(tariffOption));
             tariffOption.getRelatedTariffOptions().addAll(optionList);
         }
         if (rule.equals(TariffOptionRule.EXCLUDING)) {
-            for (TariffOption toBeExcluded : optionList) {
-                if (!Collections.disjoint(tariffOption.getRelatedTariffOptions(), toBeExcluded.getIsRelatedFor())) {
-                    throw new LogicException("One or more of chosen options are related for one of related options.");
-                }
-            }
-            if (!Collections.disjoint(tariffOption.getRelatedTariffOptions(), optionList)) {
-                throw new LogicException("One or more of chosen options are in related list.");
-            }
-            if (!tariffOption.getIsRelatedFor().isEmpty()) {
-                for (TariffOption isRelatedForThis : tariffOption.getIsRelatedFor()) {
-                    if (optionList.contains(isRelatedForThis)) {
-                        throw new LogicException("This option is related for one of chosen.");
-                    }
-                    if (!Collections.disjoint(isRelatedForThis.getRelatedTariffOptions(), optionList)) {
-                        throw new LogicException("Cant exclude one or more options. " + isRelatedForThis.getName() +
-                                " option has current option, with one or more options you want to exclude, in related list.");
-                    }
+            HashSet<TariffOption> topSet = findTop(tariffOption);
+            for (TariffOption tariffOptionTop : topSet) {
+                realRelatedOptions = generateRealRelatedOptionList(tariffOptionTop.getRelatedTariffOptions());
+                realRelatedOptions.add(tariffOptionTop);
+                realRelatedOptions.retainAll(optionList);
+                if (!realRelatedOptions.isEmpty()) {
+                    StringBuilder sb = new StringBuilder();
+                    realRelatedOptions.forEach(option -> sb.append(option.getName()).append(";"));
+                    throw new LogicException("Cant exclude options " + sb.toString() + ".");
                 }
             }
             tariffOption.getExcludingTariffOptions().addAll(optionList);
             optionList.forEach(excludingTariffOption -> excludingTariffOption.getExcludingTariffOptions().add(tariffOption));
+        }
+    }
+
+    private HashSet<TariffOption> findTop(TariffOption tariffOption) {
+        HashSet<TariffOption> topSet = new HashSet<>();
+        anotherIsRelatedFor(tariffOption, topSet);
+        return topSet;
+    }
+
+    private void anotherIsRelatedFor(TariffOption anotherIsRelatedFor, HashSet<TariffOption> topSet) {
+        if (anotherIsRelatedFor.getIsRelatedFor().isEmpty()) {
+            topSet.add(anotherIsRelatedFor);
+        }
+        for (TariffOption isRelatedFor : anotherIsRelatedFor.getIsRelatedFor()) {
+            anotherIsRelatedFor(isRelatedFor, topSet);
+        }
+    }
+
+    private HashSet<TariffOption> generateRealRelatedOptionList
+            (Set<TariffOption> anotherRelatedOptionList) {
+        HashSet<TariffOption> realRelatedOptions = new HashSet<>();
+        anotherSet(anotherRelatedOptionList, realRelatedOptions);
+        return realRelatedOptions;
+    }
+
+    private void anotherSet(Set<TariffOption> anotherRelatedOptionList, HashSet<TariffOption> realRelatedOptions) {
+        realRelatedOptions.addAll(anotherRelatedOptionList);
+        for (TariffOption tariffOption : anotherRelatedOptionList) {
+            anotherSet(tariffOption.getRelatedTariffOptions(), realRelatedOptions);
         }
     }
 

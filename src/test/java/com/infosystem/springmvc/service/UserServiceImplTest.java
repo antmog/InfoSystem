@@ -16,6 +16,9 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -25,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,7 +37,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
-    @Spy
     private List<User> users = new ArrayList<>();
 
     @Mock
@@ -245,11 +248,27 @@ class UserServiceImplTest {
         verify(userDao, atLeastOnce()).findById(user.getId());
     }
 
-    @Test
-    void testGetPagesCount() {
-        int usersCount = users.size();
-        when(userDao.userCount()).thenReturn(usersCount);
-        assertEquals(userService.getPagesCount(10), 1);
+    /**
+     * Method: getPagesCount(int itemsPerPage)
+     */
+    @ParameterizedTest(name = "{index} => itemsCount={0}, pagesCount={1}")
+    @MethodSource("dataProvider")
+    void testGetPagesCount(int itemsCount, int pagesCount) throws Exception {
+        when(userDao.userCount()).thenReturn(itemsCount);
+        assertEquals(userService.getPagesCount(10), pagesCount);
+    }
+
+    private static Stream<Arguments> dataProvider() {
+        return Stream.of(
+                Arguments.of(1, 1),
+                Arguments.of(9, 1),
+                Arguments.of(10, 1),
+                Arguments.of(11, 2),
+                Arguments.of(19, 2),
+                Arguments.of(20, 2),
+                Arguments.of(21, 3),
+                Arguments.of(0, 1)
+        );
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.service;
 
+import com.infosystem.springmvc.dao.TariffDao;
 import com.infosystem.springmvc.dao.TariffDaoImpl;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
@@ -34,11 +35,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TariffServiceImplTest {
 
-    @Spy
     private List<Tariff> tariffs = new ArrayList<>();
 
     @Mock
-    private TariffDaoImpl tariffDao;
+    private TariffDao tariffDao;
 
     @Mock
     private CustomModelMapper modelMapperWrapper;
@@ -288,7 +288,6 @@ class TariffServiceImplTest {
     @ParameterizedTest(name = "{index} => itemsCount={0}, pagesCount={1}")
     @MethodSource("dataProvider")
     void testGetPagesCount(int itemsCount, int pagesCount) throws Exception {
-        int tariffsCount = tariffs.size();
         when(tariffDao.tariffCount()).thenReturn(itemsCount);
         assertEquals(tariffService.getPagesCount(10), pagesCount);
     }

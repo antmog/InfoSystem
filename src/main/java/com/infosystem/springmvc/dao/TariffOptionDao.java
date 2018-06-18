@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.dao;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 
 public interface TariffOptionDao {
 
-    TariffOption findById(int id);
+    TariffOption findById(int id) throws DatabaseException;
 
     void save(TariffOption tariffOption);
 

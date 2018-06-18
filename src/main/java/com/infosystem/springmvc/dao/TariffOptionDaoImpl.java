@@ -1,6 +1,7 @@
 package com.infosystem.springmvc.dao;
 
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.TariffOption;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
@@ -13,10 +14,10 @@ import java.util.Set;
 @Repository("TariffOptionDao")
 public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> implements TariffOptionDao {
 
-    public TariffOption findById(int id) {
+    public TariffOption findById(int id) throws DatabaseException {
         TariffOption tariffOption = getByKey(id);
-        if(tariffOption!=null){
-            Hibernate.initialize(tariffOption);
+        if (tariffOption == null) {
+            throw new DatabaseException("Tariff doesn't exist.");
         }
         return tariffOption;
     }
@@ -36,7 +37,7 @@ public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> impl
     @SuppressWarnings("unchecked")
     public List<TariffOption> findAllTariffOptions() {
         List<TariffOption> tariffOptions = getSession()
-                .createQuery("SELECT t FROM TariffOption t")
+                .createQuery("SELECT t FROM TariffOption t ORDER BY t.id")
                 .getResultList();
         return tariffOptions;
     }
@@ -47,7 +48,7 @@ public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> impl
             return new HashSet<>();
         }
         List<TariffOption> tariffOptions = getSession()
-                .createQuery("SELECT t FROM TariffOption t WHERE t.id IN (:idList)")
+                .createQuery("SELECT t FROM TariffOption t WHERE t.id IN (:idList) ORDER BY t.id")
                 .setParameter("idList",optionIdList)
                 .getResultList();
         return new HashSet<>(tariffOptions) ;
@@ -71,7 +72,7 @@ public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> impl
             return new ArrayList<>();
         }
         List<TariffOption> tariffOptions = getSession()
-                .createQuery("SELECT u FROM TariffOption u ORDER BY u.id")
+                .createQuery("SELECT t FROM TariffOption t ORDER BY t.id")
                 .setFirstResult(startIndex - 1)
                 .setMaxResults(count)
                 .getResultList();
