@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service("advProfileService")
@@ -32,6 +33,11 @@ public class AdvProfileServiceImpl implements AdvProfileService {
         this.advProfileDao = advProfileDao;
         this.customModelMapper = customModelMapper;
         this.tariffService = tariffService;
+    }
+
+    @PostConstruct
+    public void init() {
+        tariffService.setAdvProfileService(this);
     }
 
     @Override

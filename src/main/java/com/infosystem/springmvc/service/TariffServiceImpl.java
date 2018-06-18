@@ -20,22 +20,40 @@ import java.util.stream.Collectors;
 @Transactional
 public class TariffServiceImpl implements TariffService {
 
-    @Autowired
-    ContractService contractService;
 
-    @Autowired
-    CustomModelMapper modelMapperWrapper;
-
-    @Autowired
-    OptionsRulesChecker optionsRulesChecker;
-
-    @Autowired
-    AdvProfileService advProfileService;
-
-    @Autowired
-    JmsDataMapper jmsDataMapper;
-
+    private ContractService contractService;
     private final TariffDao dao;
+    private CustomModelMapper modelMapperWrapper;
+    private OptionsRulesChecker optionsRulesChecker;
+    private AdvProfileService advProfileService;
+    private JmsDataMapper jmsDataMapper;
+
+    public void setAdvProfileService(AdvProfileService advProfileService) {
+        this.advProfileService = advProfileService;
+    }
+
+    @Autowired
+    public ContractService getContractService() {
+        return contractService;
+    }
+
+    public void setContractService(ContractService contractService) {
+        this.contractService = contractService;
+    }
+
+    @Autowired
+    public void setModelMapperWrapper(CustomModelMapper modelMapperWrapper) {
+        this.modelMapperWrapper = modelMapperWrapper;
+    }
+
+    @Autowired
+    public void setOptionsRulesChecker(OptionsRulesChecker optionsRulesChecker) {
+        this.optionsRulesChecker = optionsRulesChecker;
+    }
+
+    public void setJmsDataMapper(JmsDataMapper jmsDataMapper) {
+        this.jmsDataMapper = jmsDataMapper;
+    }
 
     @Autowired
     public TariffServiceImpl(TariffDao dao) {
@@ -44,9 +62,6 @@ public class TariffServiceImpl implements TariffService {
 
     public Tariff findById(int id) throws DatabaseException {
         Tariff tariff = dao.findById(id);
-        if (tariff == null) {
-            throw new DatabaseException("Tariff doesn't exist.");
-        }
         return tariff;
     }
 
@@ -72,12 +87,13 @@ public class TariffServiceImpl implements TariffService {
      * @param addTariffDto addTariffDto
      */
     public void addTariff(AddTariffDto addTariffDto) throws LogicException {
-        if (!isNameUnique(addTariffDto.getTariffDto().getName())) {
+        Tariff tariff = findByName(addTariffDto.getTariffDto().getName());
+        if (tariff != null) {
             throw new LogicException("Chose another name for tariff.");
         }
-        Tariff tariff = modelMapperWrapper.mapToTariff(addTariffDto);
+        tariff = modelMapperWrapper.mapToTariff(addTariffDto);
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addTariffDto.getTariffOptionDtoList());
-        optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptionsList,tariff.getAvailableOptions());
+        optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptionsList, tariff.getAvailableOptions());
         tariff.setAvailableOptions(toBeAddedOptionsList);
         dao.save(tariff);
     }
@@ -96,10 +112,10 @@ public class TariffServiceImpl implements TariffService {
                 throw new LogicException("Tariff is still used.");
             }
         }
-        for(AdvProfile advProfile: advProfileService.findAll()){
+        for (AdvProfile advProfile : advProfileService.findAll()) {
             AdvProfileTariffs advProfileTariffs = advProfile.getAdvProfileTariffsList().stream()
                     .filter(advProfileTariff -> advProfileTariff.getTariff().equals(tariff)).findFirst().orElse(null);
-            if(advProfileTariffs!=null){
+            if (advProfileTariffs != null) {
                 throw new LogicException("Tariff is still used in advertisment.");
             }
         }
@@ -118,8 +134,8 @@ public class TariffServiceImpl implements TariffService {
         Set<TariffOption> toBeAddedOptions = modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList());
         optionsRulesChecker.checkIfTariffAlreadyHave(tariff, toBeAddedOptions);
         optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptions, tariff.getAvailableOptions());
-        tariff.getAvailableOptions().addAll(modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList()));
-        jmsDataMapper.tariffAddOptions(editTariffDto.getTariffId(),editTariffDto.getTariffOptionDtoList());
+        tariff.getAvailableOptions().addAll(toBeAddedOptions);
+        jmsDataMapper.tariffAddOptions(editTariffDto.getTariffId(), editTariffDto.getTariffOptionDtoList());
     }
 
     /**
@@ -136,7 +152,7 @@ public class TariffServiceImpl implements TariffService {
         optionsRulesChecker.checkDelRalated(toBeDeletedOptions, tariff.getAvailableOptions());
 
         tariff.getAvailableOptions().removeAll(modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList()));
-        jmsDataMapper.tariffDelOptions(editTariffDto.getTariffId(),editTariffDto.getTariffOptionDtoList());
+        jmsDataMapper.tariffDelOptions(editTariffDto.getTariffId(), editTariffDto.getTariffOptionDtoList());
     }
 
     @Override
@@ -163,18 +179,13 @@ public class TariffServiceImpl implements TariffService {
      */
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, LogicException {
         Tariff tariff = findById(setNewStatusDto.getEntityId());
-        for(AdvProfile advProfile: advProfileService.findAll()){
+        for (AdvProfile advProfile : advProfileService.findAll()) {
             AdvProfileTariffs advProfileTariffs = advProfile.getAdvProfileTariffsList().stream()
                     .filter(advProfileTariff -> advProfileTariff.getTariff().equals(tariff)).findFirst().orElse(null);
-            if(advProfileTariffs!=null){
+            if (advProfileTariffs != null) {
                 throw new LogicException("Tariff is still used in advertisment.");
             }
         }
         tariff.setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
-    }
-
-    private boolean isNameUnique(String tariffName) {
-        Tariff tariff = findByName(tariffName);
-        return (tariff == null);
     }
 }

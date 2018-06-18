@@ -14,10 +14,10 @@ import java.util.List;
 @Repository("TariffDao")
 public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements TariffDao {
 
-    public Tariff findById(int id) {
+    public Tariff findById(int id) throws DatabaseException {
         Tariff tariff = getByKey(id);
-        if(tariff!=null){
-            Hibernate.initialize(tariff);
+        if (tariff == null) {
+            throw new DatabaseException("Tariff doesn't exist.");
         }
         return tariff;
     }

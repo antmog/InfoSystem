@@ -26,7 +26,6 @@ public class CustomModelMapper {
     @Autowired
     UserService userService;
 
-    //todo check if fails
     @PostConstruct
     public void init() {
         userService.setCustomModelMapper(this);

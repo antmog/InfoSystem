@@ -1,12 +1,13 @@
 package com.infosystem.springmvc.dao;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.Tariff;
 
 import java.util.List;
 
 public interface TariffDao {
 
-    Tariff findById(int id);
+    Tariff findById(int id) throws DatabaseException;
 
     void save(Tariff tariff);
 

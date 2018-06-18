@@ -14,6 +14,7 @@ import com.infosystem.springmvc.util.ToAdvertismentJmsJsonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
@@ -31,6 +32,11 @@ public class JmsDataMapper {
         this.messageSender = messageSender;
         this.tariffService = tariffService;
         this.customModelMapper = customModelMapper;
+    }
+
+    @PostConstruct
+    public void init(){
+        tariffService.setJmsDataMapper(this);
     }
 
     public void tariffAddOptions(int tariffId, List<TariffOptionDto> tariffOptionDtoList) throws DatabaseException {
