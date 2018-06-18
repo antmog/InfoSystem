@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
+import java.util.TreeSet;
 
 
 @RestController
@@ -53,16 +54,12 @@ public class GlobalDataController {
      */
     @RequestMapping(value = "/tariffOptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    Set<TariffOptionDtoShort> tariffOptions(@RequestBody @NotNull String tariffId, BindingResult result) throws DatabaseException, ValidationException {
+    TreeSet<TariffOptionDtoShort> tariffOptions(@RequestBody @NotNull String tariffId, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
             throw new ValidationException("Wrong tariff ID!");
         }
         return tariffService.getAvailableOptionsForTariff(Integer.parseInt(tariffId));
     }
-
-    // Careful. Status setters are NOT protected from "hackers" :D (you still can generate request with valid header etc
-    // and do smth like unBan user if you are not admin. In application customer just don't have button to set status
-    // if account/contract is banned.
 
     /**
      * Set new status for contract.
@@ -135,6 +132,11 @@ public class GlobalDataController {
      */
     @RequestMapping(value = "/user/editUserMail", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String editUserMail(@RequestBody @Valid EditMailDto editMailDto, BindingResult result) throws DatabaseException, ValidationException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getAuthorities().stream()
+                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+            throw new ValidationException("You are not admin to do this.");
+        }
         if (result.hasErrors()) {
             throw new ValidationException("Wrong input!");
         }
@@ -153,6 +155,11 @@ public class GlobalDataController {
      */
     @RequestMapping(value = "/user/editUserPassport", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String editUserPassport(@RequestBody @Valid EditPassportDto editPassportDto, BindingResult result) throws DatabaseException, ValidationException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getAuthorities().stream()
+                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+            throw new ValidationException("You are not admin to do this.");
+        }
         if (result.hasErrors()) {
             throw new ValidationException("Wrong input!");
         }
@@ -171,6 +178,11 @@ public class GlobalDataController {
      */
     @RequestMapping(value = "/user/editUserAddress", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String editUserAddress(@RequestBody @Valid EditAddressDto editAddressDto, BindingResult result) throws DatabaseException, ValidationException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getAuthorities().stream()
+                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+            throw new ValidationException("You are not admin to do this.");
+        }
         if (result.hasErrors()) {
             throw new ValidationException("Wrong input!");
         }

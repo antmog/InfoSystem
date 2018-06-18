@@ -3,6 +3,7 @@ package com.infosystem.springmvc.service;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.Contract;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface ContractService {
 
     void deleteContractById(int id) throws DatabaseException;
 
-    void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException;
+    void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, ValidationException;
 
     Contract findByPhoneNumber(String phoneNumber);
 

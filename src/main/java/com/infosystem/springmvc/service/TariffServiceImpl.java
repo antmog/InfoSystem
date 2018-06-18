@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service("tariffService")
@@ -156,8 +158,10 @@ public class TariffServiceImpl implements TariffService {
     }
 
     @Override
-    public Set<TariffOptionDtoShort> getAvailableOptionsForTariff(int tariffId) throws DatabaseException {
-        return modelMapperWrapper.mapToTariffOptionDtoShortSet(findById(tariffId).getAvailableOptions());
+    public TreeSet<TariffOptionDtoShort> getAvailableOptionsForTariff(int tariffId) throws DatabaseException {
+        TreeSet<TariffOptionDtoShort> options = new TreeSet<>(Comparator.comparingInt(TariffOptionDtoShort::getId));
+        options.addAll(modelMapperWrapper.mapToTariffOptionDtoShortSet(findById(tariffId).getAvailableOptions()));
+        return options;
     }
 
     @Override

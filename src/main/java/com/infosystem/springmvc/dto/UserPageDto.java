@@ -5,9 +5,8 @@ import com.infosystem.springmvc.model.enums.Status;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -30,6 +29,12 @@ public class UserPageDto {
     private String mail;
 
     private Set<Contract> userContracts = new HashSet<Contract>();
+
+    public TreeSet<Contract> getUserContracts(){
+        TreeSet<Contract> options = new TreeSet<>(Comparator.comparingInt(Contract::getId));
+        options.addAll(userContracts);
+        return options;
+    }
 
     private Status status;
 

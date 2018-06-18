@@ -28,7 +28,7 @@ public interface UserService {
 
     void deleteUserById(int id) throws LogicException, DatabaseException;
 
-    void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException;
+    void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, ValidationException;
 
     void updateUserMail(EditMailDto editMailDto) throws DatabaseException, ValidationException;
 

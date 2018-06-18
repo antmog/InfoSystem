@@ -23,16 +23,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Component("sessionCart")
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Data
 public class SessionCart {
     private Map<Integer, Set<TariffOptionDto>> options = new HashMap<>();
+
+    public Map<Integer, TreeSet<TariffOptionDto>> getOptionsDto(){
+        Map<Integer,TreeSet<TariffOptionDto>> map = new HashMap<>();
+        for ( Map.Entry<Integer, Set<TariffOptionDto>> entry : options.entrySet() ) {
+            TreeSet<TariffOptionDto> treeSet = new TreeSet<>(Comparator.comparingInt(TariffOptionDto::getId));
+            treeSet.addAll(entry.getValue());
+            map.put(entry.getKey(),treeSet);
+        }
+        return map;
+    }
+
     private Integer count = 0;
 
     @Autowired

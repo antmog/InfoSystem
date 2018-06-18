@@ -8,6 +8,7 @@ import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Status;
@@ -117,7 +118,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testSetStatus() throws DatabaseException {
+    void testSetStatus() throws DatabaseException, ValidationException {
         User user = users.get(0);
         Status status = Status.ACTIVE;
         SetNewStatusDto setNewStatusDto = new SetNewStatusDto();

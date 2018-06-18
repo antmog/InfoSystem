@@ -52,7 +52,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach items="${sessionCart.options}" var="item">
+                                    <c:forEach items="${sessionCart.optionsDto}" var="item">
                                         <c:forEach items="${item.value}" var="option">
                                             <tr>
                                                 <td>${item.key}</td>

@@ -5,10 +5,9 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.jms.JmsDataMapper;
 import com.infosystem.springmvc.model.entity.Tariff;
-import com.infosystem.springmvc.model.entity.User;
 
 import java.util.List;
-import java.util.Set;
+import java.util.TreeSet;
 
 public interface TariffService {
 
@@ -32,7 +31,7 @@ public interface TariffService {
 
     void delOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException;
 
-    Set<TariffOptionDtoShort> getAvailableOptionsForTariff(int tariffId) throws DatabaseException;
+    TreeSet<TariffOptionDtoShort> getAvailableOptionsForTariff(int tariffId) throws DatabaseException;
 
     List<Tariff> findListOfTariffs(int startIndex, int count);
 

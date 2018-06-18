@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Data
 @NoArgsConstructor
@@ -28,5 +29,5 @@ public class ContractDto implements Serializable {
 
     private TariffDto tariff;
 
-    private Set<TariffOptionDto> activeOptions;
+    private TreeSet<TariffOptionDto> activeOptions;
 }

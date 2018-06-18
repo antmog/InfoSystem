@@ -14,6 +14,8 @@ import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,8 +95,13 @@ public class UserServiceImpl implements UserService {
      * @throws DatabaseException if user doesn't exist
      */
     @Override
-    public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
+    public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, ValidationException {
         User user = findById(setNewStatusDto.getEntityId());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (user.getStatus().equals(Status.BLOCKED)&&authentication.getAuthorities().stream()
+                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+            throw new ValidationException("You are not admin to do this.");
+        }
         Status status = customModelMapper.mapToStatus(setNewStatusDto.getEntityStatus());
         user.setStatus(status);
     }

@@ -4,6 +4,7 @@ import com.infosystem.springmvc.dao.ContractDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.Amount;
 import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.User;
@@ -14,6 +15,8 @@ import com.infosystem.springmvc.sessioncart.SessionCart;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,8 +84,14 @@ public class ContractServiceImpl implements ContractService {
      * @throws DatabaseException if contract doesn't exist
      */
     @Override
-    public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException {
-        findById(setNewStatusDto.getEntityId()).setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
+    public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, ValidationException {
+        Contract contract = findById(setNewStatusDto.getEntityId());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (contract.getStatus().equals(Status.BLOCKED)&&authentication.getAuthorities().stream()
+                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+            throw new ValidationException("You are not admin to do this.");
+        }
+        contract.setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
     }
 
     /**
