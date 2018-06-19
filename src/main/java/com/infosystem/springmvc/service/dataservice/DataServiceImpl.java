@@ -7,10 +7,7 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.*;
-import com.infosystem.springmvc.service.ContractService;
-import com.infosystem.springmvc.service.TariffOptionService;
-import com.infosystem.springmvc.service.TariffService;
-import com.infosystem.springmvc.service.UserService;
+import com.infosystem.springmvc.service.*;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -179,7 +176,8 @@ public class DataServiceImpl implements DataService {
         AdvProfileTariffs advProfileTariffs  = advProfile.getAdvProfileTariffsList().stream().filter(profile->profile.getTariff().getId()
                 .equals(tariffId)).findFirst().orElse(null);
         if(advProfileTariffs==null){
-            throw new DatabaseException("No such tariff for that profile.");
+            String exceptionMessage = "No such tariff for that profile.";
+            throw new DatabaseException(exceptionMessage);
         }
         advProfileTariffDto.setImg(advProfileTariffs.getImg());
         advProfileTariffDto.setTariffName(advProfileTariffs.getTariff().getName());

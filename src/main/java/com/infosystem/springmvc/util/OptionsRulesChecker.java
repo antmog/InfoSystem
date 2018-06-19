@@ -1,5 +1,6 @@
 package com.infosystem.springmvc.util;
 
+import com.infosystem.springmvc.service.TariffOptionServiceImpl;
 import com.infosystem.springmvc.sessioncart.SessionCart;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
@@ -9,8 +10,9 @@ import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,14 +21,18 @@ import java.util.stream.Stream;
 @Component
 public class OptionsRulesChecker {
 
-    @Autowired
-    ContractService contractService;
-
+    private final ContractService contractService;
     private final CustomModelMapper modelMapperWrapper;
     private final SessionCart sessionCart;
 
+    @PostConstruct
+    public void init() {
+        contractService.setOptionsRulesChecker(this);
+    }
+
     @Autowired
-    public OptionsRulesChecker(CustomModelMapper modelMapperWrapper, SessionCart sessionCart) {
+    public OptionsRulesChecker(ContractService contractService, CustomModelMapper modelMapperWrapper, SessionCart sessionCart) {
+        this.contractService = contractService;
         this.modelMapperWrapper = modelMapperWrapper;
         this.sessionCart = sessionCart;
     }
@@ -62,7 +68,8 @@ public class OptionsRulesChecker {
             toBeAddedOptionsList.removeAll(contractAvailableOptions);
             StringBuilder sb = new StringBuilder("Current tariff doesn't allow these options:\n");
             toBeAddedOptionsList.forEach(tariffOption -> sb.append(tariffOption.getName()).append("\n"));
-            throw new LogicException(sb.toString());
+            String exceptionMessage = sb.toString();
+            throw new LogicException(exceptionMessage);
         }
     }
 
@@ -126,7 +133,8 @@ public class OptionsRulesChecker {
                 StringBuilder sb = new StringBuilder();
                 optionExcludingOptions.forEach(tariffOption -> sb.append(expectedActiveTariffOption.getName())
                         .append(" excludes ").append(tariffOption.getName()).append(".\n"));
-                throw new LogicException(sb.toString());
+                String exceptionMessage = sb.toString();
+                throw new LogicException(exceptionMessage);
             }
         }
     }
@@ -145,7 +153,8 @@ public class OptionsRulesChecker {
                 StringBuilder sb = new StringBuilder();
                 optionRelatedOptions.forEach(tariffOption ->  sb.append(toBeAddedOption.getName()).append(" related with ")
                         .append(tariffOption.getName()).append(".\n"));
-                throw new LogicException(sb.toString());
+                String exceptionMessage = sb.toString();
+                throw new LogicException(exceptionMessage);
             }
         }
     }
@@ -230,7 +239,8 @@ public class OptionsRulesChecker {
                 StringBuilder sb = new StringBuilder();
                 optionRelatedOptions.forEach(tariffOption -> sb.append(expectedActiveTariffOption.getName())
                         .append(" related with ").append(tariffOption.getName()).append(".\n"));
-                throw new LogicException(sb.toString());
+                String exceptionMessage = sb.toString();
+                throw new LogicException(exceptionMessage);
             }
         }
     }
@@ -248,7 +258,8 @@ public class OptionsRulesChecker {
             StringBuilder sb = new StringBuilder();
             currentOptions.forEach(tariffOption -> sb.append("Contract ").append(contract.getId()).append(" already has ")
                     .append(tariffOption.getName()).append(" option.\n"));
-            throw new LogicException(sb.toString());
+            String exceptionMessage = sb.toString();
+            throw new LogicException(exceptionMessage);
         }
     }
 
@@ -265,7 +276,8 @@ public class OptionsRulesChecker {
             StringBuilder sb = new StringBuilder();
             currentOptions.forEach(tariffOption -> sb.append("Tariff ").append(tariff.getId()).append(" already has ")
                     .append(tariffOption.getName()).append(" option.\n"));
-            throw new LogicException(sb.toString());
+            String exceptionMessage = sb.toString();
+            throw new LogicException(exceptionMessage);
         }
     }
 }

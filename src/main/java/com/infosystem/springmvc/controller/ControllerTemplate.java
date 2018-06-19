@@ -1,14 +1,12 @@
 package com.infosystem.springmvc.controller;
 
+import com.infosystem.springmvc.service.TariffOptionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
-import org.springframework.ui.ModelMap;
-
-
 
 public abstract class ControllerTemplate {
 
@@ -28,7 +26,7 @@ public abstract class ControllerTemplate {
     /**
      * This method returns the principal[user-name] of logged-in user.
      */
-    protected String getPrincipal() {
+    String getPrincipal() {
         String userName = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -48,16 +46,10 @@ public abstract class ControllerTemplate {
         return authenticationTrustResolver.isAnonymous(authentication);
     }
 
-    protected String prepareErrorPage(ModelMap model, String errorText){
-        model.addAttribute("error", errorText);
-        model.addAttribute("loggedinuser", getPrincipal());
-        return path + "errorPage";
-    }
-
     /**
      *  r
      */
-    protected boolean pathVariableIsANumber(String variable){
+    boolean pathVariableIsANumber(String variable){
         return variable.matches("\\d*");
     }
 }

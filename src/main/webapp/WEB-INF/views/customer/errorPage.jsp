@@ -11,7 +11,7 @@
 <div class="alert alert-danger lead content">
     ${error}
     <span class="well floatRight">
-        Go to <a href="/adminPanel">Admin Panel</a>
+        Go to <a href="/customerPanel">user panel</a>.
     </span>
 </div>
 <jsp:include page="../footer.jsp"/>

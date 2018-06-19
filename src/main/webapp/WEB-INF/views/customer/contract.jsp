@@ -71,7 +71,7 @@
                         <h5 class="card-header">
                             Active options
                         </h5>
-                        <table class="table table-hover contracts-table" id="contractCurrentOptions">
+                        <table class="table contracts-table" id="contractCurrentOptions">
                             <thead>
                             <tr>
                                 <th>Id</th>
@@ -104,7 +104,7 @@
                         <h5 class="card-header">
                             Options available for tariff
                         </h5>
-                        <table class="table table-hover contracts-table" id="contractAvailableOptions">
+                        <table class="table contracts-table" id="contractAvailableOptions">
                             <thead>
                             <tr>
                                 <th>Id</th>
@@ -139,7 +139,7 @@
                         <h5 class="card-header">
                             Tariffs
                         </h5>
-                        <table class="table table-hover " id="addContractTariffs">
+                        <table class="table" id="addContractTariffs">
                             <thead>
                             <tr>
                                 <th>Id</th>

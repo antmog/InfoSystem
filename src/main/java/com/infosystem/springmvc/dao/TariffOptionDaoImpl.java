@@ -1,9 +1,7 @@
 package com.infosystem.springmvc.dao;
 
-
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.TariffOption;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -17,7 +15,8 @@ public class TariffOptionDaoImpl extends AbstractDao<Integer, TariffOption> impl
     public TariffOption findById(int id) throws DatabaseException {
         TariffOption tariffOption = getByKey(id);
         if (tariffOption == null) {
-            throw new DatabaseException("Tariff doesn't exist.");
+            String exceptionMessage = "Option doesn't exist.";
+            throw new DatabaseException(exceptionMessage);
         }
         return tariffOption;
     }

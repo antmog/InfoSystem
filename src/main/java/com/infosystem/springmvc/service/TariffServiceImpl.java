@@ -4,6 +4,7 @@ import com.infosystem.springmvc.dao.TariffDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.jms.JmsDataMapper;
 import com.infosystem.springmvc.model.entity.*;
 import com.infosystem.springmvc.util.CustomModelMapper;
@@ -21,7 +22,6 @@ import java.util.stream.Collectors;
 @Service("tariffService")
 @Transactional
 public class TariffServiceImpl implements TariffService {
-
 
     private ContractService contractService;
     private final TariffDao dao;
@@ -91,7 +91,8 @@ public class TariffServiceImpl implements TariffService {
     public void addTariff(AddTariffDto addTariffDto) throws LogicException {
         Tariff tariff = findByName(addTariffDto.getTariffDto().getName());
         if (tariff != null) {
-            throw new LogicException("Chose another name for tariff.");
+            String exceptionMessage = "Chose another name for tariff.";
+            throw new LogicException(exceptionMessage);
         }
         tariff = modelMapperWrapper.mapToTariff(addTariffDto);
         Set<TariffOption> toBeAddedOptionsList = modelMapperWrapper.mapToTariffOptionSet(addTariffDto.getTariffOptionDtoList());
@@ -111,14 +112,16 @@ public class TariffServiceImpl implements TariffService {
         Tariff tariff = findById(id);
         for (Contract contract : contractService.findAllContracts()) {
             if (contract.getTariff().equals(tariff)) {
-                throw new LogicException("Tariff is still used.");
+                String exceptionMessage = "Tariff is still used.";
+                throw new LogicException(exceptionMessage);
             }
         }
         for (AdvProfile advProfile : advProfileService.findAll()) {
             AdvProfileTariffs advProfileTariffs = advProfile.getAdvProfileTariffsList().stream()
                     .filter(advProfileTariff -> advProfileTariff.getTariff().equals(tariff)).findFirst().orElse(null);
             if (advProfileTariffs != null) {
-                throw new LogicException("Tariff is still used in advertisment.");
+                String exceptionMessage = "Tariff is still used in advertisment.";
+                throw new LogicException(exceptionMessage);
             }
         }
         dao.deleteById(id);
@@ -131,7 +134,7 @@ public class TariffServiceImpl implements TariffService {
      * @throws DatabaseException if tariff doesn't exist
      */
     @Override
-    public void addOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException {
+    public void addOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException, ValidationException {
         Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> toBeAddedOptions = modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList());
         optionsRulesChecker.checkIfTariffAlreadyHave(tariff, toBeAddedOptions);
@@ -147,7 +150,7 @@ public class TariffServiceImpl implements TariffService {
      * @throws DatabaseException if tariff doesn't exist
      */
     @Override
-    public void delOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException {
+    public void delOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException, ValidationException {
         Tariff tariff = findById(editTariffDto.getTariffId());
         Set<TariffOption> toBeDeletedOptions = modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList());
 
@@ -187,7 +190,8 @@ public class TariffServiceImpl implements TariffService {
             AdvProfileTariffs advProfileTariffs = advProfile.getAdvProfileTariffsList().stream()
                     .filter(advProfileTariff -> advProfileTariff.getTariff().equals(tariff)).findFirst().orElse(null);
             if (advProfileTariffs != null) {
-                throw new LogicException("Tariff is still used in advertisment.");
+                String exceptionMessage = "Cant change status, tariff is still used in advertisment.";
+                throw new LogicException(exceptionMessage);
             }
         }
         tariff.setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));

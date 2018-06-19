@@ -39,7 +39,8 @@ public class CustomerDataController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/contract/switchTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String switchTariff(@RequestBody @Valid SwitchTariffDto switchTariffDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
         if (result.hasErrors()) {
-            throw new ValidationException("Select tariff.");
+            String exceptionMessage = "Select tariff.";
+            throw new ValidationException(exceptionMessage);
         }
         contractService.customerSwitchTariff(switchTariffDto);
         return "Switched to tariff (id:" + switchTariffDto.getTariffId() + ").";
@@ -57,7 +58,8 @@ public class CustomerDataController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/contract/addOptionsToCart", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String contractAddOptionsToCart(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
         if (result.hasErrors()) {
-            throw new ValidationException("Select options to add.");
+            String exceptionMessage = "Select options to add.";
+            throw new ValidationException(exceptionMessage);
         }
         sessionCart.addCartItems(editContractDto);
         return "Options added to cart.";
@@ -75,7 +77,8 @@ public class CustomerDataController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/contract/delOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String contractDelOptions(@RequestBody @Valid EditContractDto editContractDto, BindingResult result) throws DatabaseException, ValidationException, LogicException {
         if (result.hasErrors()) {
-            throw new ValidationException("Select options to delete.");
+            String exceptionMessage = "Select options to delete.";
+            throw new ValidationException(exceptionMessage);
         }
         contractService.customerDelOptions(editContractDto);
         return "Options deleted.";
@@ -93,7 +96,8 @@ public class CustomerDataController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/contract/delOptionsFromCart", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String contractDelOptionsFromCart(@RequestBody @Valid DeleteFromCartDto deleteFromCartDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            throw new ValidationException("Wrong delete data.");
+            String exceptionMessage = "Wrong delete data.";
+            throw new ValidationException(exceptionMessage);
         }
         sessionCart.delCartItems(deleteFromCartDto);
         return "Options deleted from cart.";
@@ -109,7 +113,8 @@ public class CustomerDataController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/addOptions", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String addOptions(@Valid @RequestBody AddOptionsDto addOptionsDto, BindingResult result) throws DatabaseException, LogicException, ValidationException {
         if (result.hasErrors()) {
-            throw new ValidationException("Wrong input.");
+            String exceptionMessage = "Wrong input.";
+            throw new ValidationException(exceptionMessage);
         }
         contractService.customerAddOptions(addOptionsDto);
         return "Bought all successfully.";
@@ -125,7 +130,8 @@ public class CustomerDataController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/addFunds", method = RequestMethod.POST)
     public String addFunds(@RequestBody @Valid FundsDto fundsDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            throw new ValidationException("Chose the amount of money you want to add (min 10).");
+            String exceptionMessage = "Chose the amount of money you want to add (min 10).";
+            throw new ValidationException(exceptionMessage);
         }
         userService.addFunds(fundsDto, getPrincipal());
         return fundsDto.getAmount() + " funds added.";
@@ -141,7 +147,8 @@ public class CustomerDataController extends ControllerTemplate {
     @RequestMapping(value = "/customerPanel/getBalance/{userId}", method = RequestMethod.GET)
     public String getBalance(@PathVariable String userId) throws DatabaseException, ValidationException {
         if(!pathVariableIsANumber(userId)){
-            throw new ValidationException("Wrong path variable.");
+            String exceptionMessage = "Wrong path variable.";
+            throw new ValidationException(exceptionMessage);
         }
         return userService.getBalance(Integer.parseInt(userId));
     }

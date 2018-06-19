@@ -1,11 +1,9 @@
 package com.infosystem.springmvc.dao;
 
 import com.infosystem.springmvc.exception.DatabaseException;
-import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.model.entity.Tariff;
-
-import org.hibernate.Hibernate;
+import com.infosystem.springmvc.service.TariffOptionServiceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -17,7 +15,8 @@ public class TariffDaoImpl extends AbstractDao<Integer, Tariff> implements Tarif
     public Tariff findById(int id) throws DatabaseException {
         Tariff tariff = getByKey(id);
         if (tariff == null) {
-            throw new DatabaseException("Tariff doesn't exist.");
+            String exceptionMessage = "Tariff doesn't exist.";
+            throw new DatabaseException(exceptionMessage);
         }
         return tariff;
     }

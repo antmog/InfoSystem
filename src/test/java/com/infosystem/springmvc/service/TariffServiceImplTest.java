@@ -1,10 +1,10 @@
 package com.infosystem.springmvc.service;
 
 import com.infosystem.springmvc.dao.TariffDao;
-import com.infosystem.springmvc.dao.TariffDaoImpl;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.jms.JmsDataMapper;
 import com.infosystem.springmvc.model.entity.*;
 
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -207,7 +206,7 @@ class TariffServiceImplTest {
      * Method: addOptions(EditTariffDto editTariffDto)
      */
     @Test
-    void testAddOptions() throws DatabaseException, LogicException {
+    void testAddOptions() throws DatabaseException, LogicException, ValidationException {
         Tariff tariff = tariffs.get(0);
         TariffOption tariffOption1 = new TariffOption();
         tariffOption1.setId(1);
@@ -233,7 +232,7 @@ class TariffServiceImplTest {
      * Method: delOptions(EditTariffDto editTariffDto)
      */
     @Test
-    void testDelOptions() throws DatabaseException, LogicException {
+    void testDelOptions() throws DatabaseException, LogicException, ValidationException {
         Tariff tariff = tariffs.get(0);
         TariffOption tariffOption1 = new TariffOption();
         tariffOption1.setId(1);
@@ -280,6 +279,7 @@ class TariffServiceImplTest {
     void testFindListOfTariffs() {
         when(tariffDao.findListOfTariffs(anyInt(),anyInt())).thenReturn(tariffs);
         assertEquals(tariffs,tariffService.findListOfTariffs(anyInt(),anyInt()));
+        verify(tariffDao, atLeastOnce()).findListOfTariffs(anyInt(), anyInt());
     }
 
     /**

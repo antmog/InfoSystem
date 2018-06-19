@@ -12,9 +12,9 @@ import com.infosystem.springmvc.model.entity.TariffOption;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
+import com.infosystem.springmvc.service.TariffOptionServiceImpl;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
-import javassist.bytecode.analysis.Executor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -57,7 +57,8 @@ public class SessionCart {
         Integer contractId = editContractDto.getContractId();
         Contract contract = contractService.findById(contractId);
         if(!contract.getStatus().equals(Status.ACTIVE)){
-            throw new LogicException("Contract is not active. Refresh page.");
+            String exceptionMessage = "Contract is not active. Refresh page.";
+            throw new LogicException(exceptionMessage);
         }
         Set<TariffOptionDto> newSet = new HashSet<>();
         Set<TariffOption> toBeAddedOptions = modelMapperWrapper.mapToTariffOptionSet(editContractDto.getTariffOptionDtoList());
@@ -74,7 +75,8 @@ public class SessionCart {
                         sb.append("Option ").append(tariffOptionDto.getName()).append(" for contract ").append(contractId)
                                 .append(" alrdy in cart.\n");
                     }
-                    throw new LogicException(sb.toString());
+                    String exceptionMessage = sb.toString();
+                    throw new LogicException(exceptionMessage);
                 }
             }
         }
@@ -94,7 +96,8 @@ public class SessionCart {
             TariffOption tariffOption = tariffOptionService.findById(deleteFromCartDto.getOptionId());
             TariffOptionDto tariffOptionDto = modelMapperWrapper.mapToTariffOptionDto(tariffOption);
             if(!currentOptions.remove(tariffOptionDto)){
-                throw new ValidationException("No such element, hacker.");
+                String exceptionMessage = "No such element, hacker.";
+                throw new ValidationException(exceptionMessage);
             }
             options.put(deleteFromCartDto.getContractId(),currentOptions);
             if(currentOptions.isEmpty()){

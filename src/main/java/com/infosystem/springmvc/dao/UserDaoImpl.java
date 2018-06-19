@@ -1,10 +1,7 @@
 package com.infosystem.springmvc.dao;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import com.infosystem.springmvc.exception.DatabaseException;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +18,8 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
     public User findById(int id) throws DatabaseException {
         User user = getByKey(id);
         if (user == null) {
-            throw new DatabaseException("User doesn't exist.");
+            String exceptionMessage = "User doesn't exist.";
+            throw new DatabaseException(exceptionMessage);
         }
         return user;
     }
@@ -32,7 +30,8 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
                 .setParameter("parameter", parameterValue)
                 .getResultList();
         if (users.isEmpty()) {
-            throw new DatabaseException("User doesn't exist.");
+            String exceptionMessage = "User doesn't exist.";
+            throw new DatabaseException(exceptionMessage);
         }
         return (User) users.get(0);
     }
@@ -43,7 +42,8 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
                 .setParameter("passport", passport)
                 .getResultList();
         if (users.isEmpty()) {
-            throw new DatabaseException("User doesn't exist.");
+            String exceptionMessage = "User doesn't exist.";
+            throw new DatabaseException(exceptionMessage);
         }
         return (User) users.get(0);
     }

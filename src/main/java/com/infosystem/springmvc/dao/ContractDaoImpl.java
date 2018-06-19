@@ -2,7 +2,7 @@ package com.infosystem.springmvc.dao;
 
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.Contract;
-import org.hibernate.Hibernate;
+import com.infosystem.springmvc.service.TariffOptionServiceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -11,10 +11,11 @@ import java.util.List;
 @Repository("contractDao")
 public class ContractDaoImpl extends AbstractDao<Integer, Contract> implements ContractDao {
 
-    public Contract findById(int id) {
+    public Contract findById(int id) throws DatabaseException {
         Contract contract = getByKey(id);
-        if (contract != null) {
-            Hibernate.initialize(contract);
+        if (contract == null) {
+            String exceptionMessage = "Contract doesn't exist.";
+            throw new DatabaseException(exceptionMessage);
         }
         return contract;
     }

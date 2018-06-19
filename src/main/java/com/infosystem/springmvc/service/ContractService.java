@@ -5,6 +5,7 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.Contract;
+import com.infosystem.springmvc.util.OptionsRulesChecker;
 
 import java.util.List;
 
@@ -39,4 +40,6 @@ public interface ContractService {
     List<Contract> findListOfContracts(int startIndex, int count);
 
     int getPagesCount(int itemsPerPage);
+
+    void setOptionsRulesChecker(OptionsRulesChecker optionsRulesChecker);
 }

@@ -5,9 +5,9 @@ import com.infosystem.springmvc.dto.adv.AdvTariffDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.AdvProfile;
 import com.infosystem.springmvc.model.entity.AdvProfileTariffs;
-import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.service.AdvProfileService;
+import com.infosystem.springmvc.service.TariffOptionServiceImpl;
 import com.infosystem.springmvc.service.dataservice.DataService;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,8 @@ public class AdvService {
         AdvProfile advProfile = advProfileService.findAll().stream()
                 .filter(anotherAdvProfile -> anotherAdvProfile.getStatus().equals(Status.ACTIVE)).findFirst().orElse(null);
         if(advProfile==null){
-            throw new DatabaseException("No active advertisment profiles.");
+            String exceptionMessage = "No active advertisment profiles.";
+            throw new DatabaseException(exceptionMessage);
         }
         for(AdvProfileTariffs advProfileTariffs:advProfile.getAdvProfileTariffsList()){
             AdvTariffDto advTariffDto = customModelMapper.mapToDto(AdvTariffDto.class,advProfileTariffs.getTariff());

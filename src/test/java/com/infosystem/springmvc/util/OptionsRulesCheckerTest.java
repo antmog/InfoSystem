@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class OptionsRulesCheckerTest {
 
     private Tariff tariff;
-
     private Set<TariffOption> tariffOptionSet = new HashSet<>();
     private Set<TariffOption> toBeAddedOptionsList = new HashSet<>();
     private Set<TariffOption> toBeAddedOptionsListTariffAlrdyHave = new HashSet<>();
@@ -79,10 +78,11 @@ public class OptionsRulesCheckerTest {
 
         LogicException exception = assertThrows(LogicException.class, () -> {
             if (!currentOptions.isEmpty()) {
-                throw new LogicException(sb.toString());
+                String exceptionMessage = sb.toString();
+                //todo fix this LOL
+                throw new LogicException(exceptionMessage);
             }
         });
         assertEquals(sb.toString(), exception.getMessage());
     }
-
 }

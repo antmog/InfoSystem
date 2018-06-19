@@ -4,6 +4,7 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.dto.editUserDto.CustomerEditUserDto;
 import com.infosystem.springmvc.dto.editUserDto.EditUserDto;
 import com.infosystem.springmvc.exception.DatabaseException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.service.dataservice.DataService;
 import com.infosystem.springmvc.service.UserService;
 import com.infosystem.springmvc.util.CustomModelMapper;
@@ -45,14 +46,9 @@ public class CustomerController extends ControllerTemplate {
      * @return view
      */
     @RequestMapping("/customerPanel")
-    public String customerPanel(ModelMap model) {
+    public String customerPanel(ModelMap model) throws DatabaseException {
         String login = getPrincipal();
-        UserPageDto userPageDto;
-        try {
-            userPageDto = dataService.getCustomerPageData(login);
-        } catch (DatabaseException e) {
-            return prepareErrorPage(model, e.getMessage());
-        }
+        UserPageDto userPageDto = dataService.getCustomerPageData(login);
         model.addAttribute("userPageDto", userPageDto);
         return path + "customerPanel";
     }
@@ -65,17 +61,12 @@ public class CustomerController extends ControllerTemplate {
      * @return view
      */
     @RequestMapping(value = "/customerPanel/contract/{contractId}")
-    public String contract(@PathVariable(value = "contractId") String contractId, ModelMap model) {
+    public String contract(@PathVariable(value = "contractId") String contractId, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(contractId)) {
-            return prepareErrorPage(model, "Wrong path variable");
+            throw new ValidationException("Wrong path variable");
         }
         int contractIdInt = Integer.parseInt(contractId);
-        ContractPageDto contractPageDto;
-        try {
-            contractPageDto = dataService.getContractPageData(contractIdInt);
-        } catch (DatabaseException e) {
-            return prepareErrorPage(model, e.getMessage());
-        }
+        ContractPageDto contractPageDto = dataService.getContractPageData(contractIdInt);
         model.addAttribute("contractPageDto", contractPageDto);
         return path + "contract";
     }
@@ -86,14 +77,9 @@ public class CustomerController extends ControllerTemplate {
      * @return view
      */
     @RequestMapping(value = "/customerPanel/cart")
-    public String cart(ModelMap model) {
+    public String cart(ModelMap model) throws DatabaseException {
         String login = getPrincipal();
-        UserDto userDto = new UserDto();
-        try {
-            userDto = dataService.getUserInfo(login);
-        } catch (DatabaseException e) {
-            prepareErrorPage(model, e.getMessage());
-        }
+        UserDto userDto = dataService.getUserInfo(login);
         model.addAttribute("user", userDto);
         return path + "cart";
     }
@@ -104,14 +90,9 @@ public class CustomerController extends ControllerTemplate {
      * @return view
      */
     @RequestMapping("/customerPanel/addFunds")
-    public String addFunds(ModelMap model) {
+    public String addFunds(ModelMap model) throws DatabaseException {
         String login = getPrincipal();
-        UserFundsDto userFundsDto = new UserFundsDto();
-        try {
-            userFundsDto = dataService.getUserAddFundsData(login);
-        } catch (DatabaseException e) {
-            prepareErrorPage(model, e.getMessage());
-        }
+        UserFundsDto userFundsDto = dataService.getUserAddFundsData(login);
         model.addAttribute("user", userFundsDto);
         return path + "addFunds";
     }
@@ -122,17 +103,12 @@ public class CustomerController extends ControllerTemplate {
      * @return edit user view
      */
     @RequestMapping("/customerPanel/editUser/{userId}")
-    public String editUser(@PathVariable(value = "userId") String userId, ModelMap model) {
+    public String editUser(@PathVariable(value = "userId") String userId, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(userId)) {
-            return prepareErrorPage(model, "Wrong path variable.");
+            throw new ValidationException("Wrong path variable.");
         }
         int userIdInt = Integer.parseInt(userId);
-        CustomerEditUserDto customerEditUserDto;
-        try {
-            customerEditUserDto = dataService.getEditUserData(userIdInt);
-        } catch (DatabaseException e) {
-            return prepareErrorPage(model, e.getMessage());
-        }
+        CustomerEditUserDto customerEditUserDto = dataService.getEditUserData(userIdInt);
         model.addAttribute("customerEditUserDto", customerEditUserDto);
         return path + "customerEditUser";
     }
@@ -141,14 +117,14 @@ public class CustomerController extends ControllerTemplate {
      * Validates and saves user data if it is correct.
      *
      * @param customerEditUserDto customerEditUserDto
-     * @param result      validation result
-     * @param model       model
+     * @param result              validation result
+     * @param model               model
      * @return result
      */
     @RequestMapping(value = "/customerPanel/editUser/{userId}", method = RequestMethod.POST)
-    public String editUserSubmit(@PathVariable(value = "userId") String userId, @Valid CustomerEditUserDto customerEditUserDto, BindingResult result, ModelMap model) {
+    public String editUserSubmit(@PathVariable(value = "userId") String userId, @Valid CustomerEditUserDto customerEditUserDto, BindingResult result, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(userId)) {
-            return prepareErrorPage(model, "Wrong path variable.");
+            throw new ValidationException("Wrong path variable.");
         }
         if (result.hasErrors()) {
             return path + "customerEditUser";
@@ -157,11 +133,7 @@ public class CustomerController extends ControllerTemplate {
         if (result.hasErrors()) {
             return path + "customerEditUser";
         }
-        try {
-            userService.editUser(customModelMapper.mapToDto(EditUserDto.class, customerEditUserDto));
-        } catch (DatabaseException e) {
-            return prepareErrorPage(model, e.getMessage());
-        }
+        userService.editUser(customModelMapper.mapToDto(EditUserDto.class, customerEditUserDto));
         model.addAttribute("success", "User " + customerEditUserDto.getFirstName() + " " +
                 customerEditUserDto.getLastName() + " edited successfully");
         return path + "addSuccess";
@@ -173,17 +145,12 @@ public class CustomerController extends ControllerTemplate {
      * @return edit user view
      */
     @RequestMapping("/customerPanel/editUser/changePassword/{userId}")
-    public String changePassword(@PathVariable(value = "userId") String userId, ModelMap model) {
+    public String changePassword(@PathVariable(value = "userId") String userId, ModelMap model) throws DatabaseException, ValidationException {
         if (!pathVariableIsANumber(userId)) {
-            return prepareErrorPage(model, "Wrong path variable.");
+            throw new ValidationException("Wrong path variable.");
         }
         int userIdInt = Integer.parseInt(userId);
-        ChangePasswordDto changePasswordDto;
-        try {
-            changePasswordDto = dataService.getChangePasswordData(userIdInt);
-        } catch (DatabaseException e) {
-            return prepareErrorPage(model, e.getMessage());
-        }
+        ChangePasswordDto changePasswordDto = dataService.getChangePasswordData(userIdInt);
         model.addAttribute("changePasswordDto", changePasswordDto);
         return path + "customerChangePassword";
     }
@@ -197,22 +164,19 @@ public class CustomerController extends ControllerTemplate {
      * @return result
      */
     @RequestMapping(value = "/customerPanel/editUser/changePassword/{userId}", method = RequestMethod.POST)
-    public String changePasswordSubmit(@PathVariable(value = "userId") String userId, @Valid ChangePasswordDto changePasswordDto, BindingResult result, ModelMap model) {
+    public String changePasswordSubmit(@PathVariable(value = "userId") String userId, @Valid ChangePasswordDto changePasswordDto, BindingResult result, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(userId)) {
-            return prepareErrorPage(model, "Wrong path variable.");
+            throw new ValidationException("Wrong path variable.");
         }
         if (result.hasErrors()) {
             return path + "customerChangePassword";
         }
-        changePasswordValidator.validate(changePasswordDto, result);
+        //changePasswordValidator.validate(changePasswordDto, result);
+        changePasswordValidator.validateWithException(changePasswordDto, result);
         if (result.hasErrors()) {
             return path + "customerChangePassword";
         }
-        try {
-            userService.editUser(changePasswordDto);
-        } catch (DatabaseException e) {
-            return prepareErrorPage(model, e.getMessage());
-        }
+        userService.editUser(changePasswordDto);
         model.addAttribute("success", "Password changed successfully");
         return path + "addSuccess";
     }

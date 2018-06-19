@@ -1,7 +1,6 @@
 package com.infosystem.springmvc.dao;
 
 import com.infosystem.springmvc.model.entity.PersistentLogin;
-
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Repository;
@@ -37,6 +36,7 @@ public class HibernateTokenRepositoryImpl extends AbstractDao<String, Persistent
             return new PersistentRememberMeToken(persistentLogin.getUsername(), persistentLogin.getSeries(),
                     persistentLogin.getToken(), persistentLogin.getLast_used());
         } catch (Exception e) {
+            String exceptionMessage = e.getMessage();
             return null;
         }
     }

@@ -4,6 +4,8 @@ import com.infosystem.springmvc.model.enums.Status;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Objects;
 

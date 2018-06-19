@@ -1,7 +1,6 @@
 package com.infosystem.springmvc.controller;
 
 import com.infosystem.springmvc.dto.SetNewStatusDto;
-import com.infosystem.springmvc.dto.TariffOptionDto;
 import com.infosystem.springmvc.dto.TariffOptionDtoShort;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
 import com.infosystem.springmvc.dto.editUserDto.EditMailDto;
@@ -9,10 +8,7 @@ import com.infosystem.springmvc.dto.editUserDto.EditPassportDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.service.ContractService;
-import com.infosystem.springmvc.service.TariffOptionService;
-import com.infosystem.springmvc.service.TariffService;
-import com.infosystem.springmvc.service.UserService;
+import com.infosystem.springmvc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -23,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 import java.util.TreeSet;
 
 
@@ -56,7 +51,8 @@ public class GlobalDataController {
     public @ResponseBody
     TreeSet<TariffOptionDtoShort> tariffOptions(@RequestBody @NotNull String tariffId, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            throw new ValidationException("Wrong tariff ID!");
+            String exceptionMessage = "Wrong tariff ID!";
+            throw new ValidationException(exceptionMessage);
         }
         return tariffService.getAvailableOptionsForTariff(Integer.parseInt(tariffId));
     }
@@ -73,7 +69,8 @@ public class GlobalDataController {
     @RequestMapping(value = "/contract/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String setContractStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            throw new ValidationException("Wrong contract id or status!");
+            String exceptionMessage = "Wrong contract id or status!";
+            throw new ValidationException(exceptionMessage);
         }
         contractService.setStatus(setNewStatusDto);
         return "Contract is now " + setNewStatusDto.getEntityStatus() + ".";
@@ -91,7 +88,8 @@ public class GlobalDataController {
     @RequestMapping(value = "/user/setStatus", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public String setUserStatus(@RequestBody @Valid SetNewStatusDto setNewStatusDto, BindingResult result) throws DatabaseException, ValidationException {
         if (result.hasErrors()) {
-            throw new ValidationException("Wrong contract id or status!");
+            String exceptionMessage = "Wrong contract id or status!";
+            throw new ValidationException(exceptionMessage);
         }
         userService.setStatus(setNewStatusDto);
         return "User is now " + setNewStatusDto.getEntityStatus() + ".";
@@ -112,10 +110,12 @@ public class GlobalDataController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getAuthorities().stream()
                 .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
-            throw new ValidationException("You are not admin to do this.");
+            String exceptionMessage = "You are not admin to do this, naughty hacker.";
+            throw new ValidationException(exceptionMessage);
         }
         if (result.hasErrors()) {
-            throw new ValidationException("Wrong contract id or status!");
+            String exceptionMessage = "Wrong contract id or status!";
+            throw new ValidationException(exceptionMessage);
         }
         tariffService.setStatus(setNewStatusDto);
         return "Tariff is now " + setNewStatusDto.getEntityStatus() + ".";
@@ -135,10 +135,12 @@ public class GlobalDataController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getAuthorities().stream()
                 .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
-            throw new ValidationException("You are not admin to do this.");
+            String exceptionMessage = "You are not admin to do this.";
+            throw new ValidationException(exceptionMessage);
         }
         if (result.hasErrors()) {
-            throw new ValidationException("Wrong input!");
+            String exceptionMessage = "Wrong input!";
+            throw new ValidationException(exceptionMessage);
         }
         userService.updateUserMail(editMailDto);
         return "Email modified successfully.";
@@ -158,10 +160,12 @@ public class GlobalDataController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getAuthorities().stream()
                 .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
-            throw new ValidationException("You are not admin to do this.");
+            String exceptionMessage = "You are not admin to do this.";
+            throw new ValidationException(exceptionMessage);
         }
         if (result.hasErrors()) {
-            throw new ValidationException("Wrong input!");
+            String exceptionMessage = "Wrong input!";
+            throw new ValidationException(exceptionMessage);
         }
         userService.updateUserPassport(editPassportDto);
         return "Passport modified successfully.";
@@ -181,10 +185,12 @@ public class GlobalDataController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getAuthorities().stream()
                 .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
-            throw new ValidationException("You are not admin to do this.");
+            String exceptionMessage = "You are not admin to do this.";
+            throw new ValidationException(exceptionMessage);
         }
         if (result.hasErrors()) {
-            throw new ValidationException("Wrong input!");
+            String exceptionMessage = "Wrong input!";
+            throw new ValidationException(exceptionMessage);
         }
         userService.updateUserAddress(editAddressDto);
         return "Address modified successfully.";

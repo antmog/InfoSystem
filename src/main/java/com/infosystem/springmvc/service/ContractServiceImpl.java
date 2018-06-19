@@ -27,20 +27,39 @@ import java.util.*;
 @Transactional
 public class ContractServiceImpl implements ContractService {
 
-    @Autowired
-    UserService userService;
+    private UserService userService;
+
+    private TariffService tariffService;
+
+    private OptionsRulesChecker optionsRulesChecker;
+
+    private SessionCart sessionCart;
+
+    private CustomModelMapper modelMapperWrapper;
 
     @Autowired
-    TariffService tariffService;
+    public void setTariffService(TariffService tariffService) {
+        this.tariffService = tariffService;
+    }
 
     @Autowired
-    OptionsRulesChecker optionsRulesChecker;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @Autowired
-    SessionCart sessionCart;
+    public void setSessionCart(SessionCart sessionCart) {
+        this.sessionCart = sessionCart;
+    }
+
+    public void setOptionsRulesChecker(OptionsRulesChecker optionsRulesChecker) {
+        this.optionsRulesChecker = optionsRulesChecker;
+    }
 
     @Autowired
-    CustomModelMapper modelMapperWrapper;
+    public void setModelMapperWrapper(CustomModelMapper modelMapperWrapper) {
+        this.modelMapperWrapper = modelMapperWrapper;
+    }
 
     private final ContractDao dao;
 
@@ -51,9 +70,6 @@ public class ContractServiceImpl implements ContractService {
 
     public Contract findById(int id) throws DatabaseException {
         Contract contract = dao.findById(id);
-        if (contract == null) {
-            throw new DatabaseException("Contract doesn't exist.");
-        }
         return contract;
     }
 
@@ -87,9 +103,10 @@ public class ContractServiceImpl implements ContractService {
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, ValidationException {
         Contract contract = findById(setNewStatusDto.getEntityId());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (contract.getStatus().equals(Status.BLOCKED)&&authentication.getAuthorities().stream()
+        if (contract.getStatus().equals(Status.BLOCKED) && authentication.getAuthorities().stream()
                 .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
-            throw new ValidationException("You are not admin to do this.");
+            String exceptionMessage = "You are not admin to do this.";
+            throw new ValidationException(exceptionMessage);
         }
         contract.setStatus(modelMapperWrapper.mapToStatus(setNewStatusDto.getEntityStatus()));
     }
@@ -119,7 +136,8 @@ public class ContractServiceImpl implements ContractService {
         Amount amount = new Amount();
         toBeAddedOptionsList.forEach(option -> amount.add(option.getCostOfAdd()));
         if (user.getBalance() < amount.getAmount()) {
-            throw new LogicException("Not enough funds.");
+            String exceptionMessage = "Not enough funds.";
+            throw new LogicException(exceptionMessage);
         }
         contract.getActiveOptions().addAll(toBeAddedOptionsList);
         user.spendFunds(amount.getAmount());
@@ -149,14 +167,16 @@ public class ContractServiceImpl implements ContractService {
         User user = userService.findById(addOptionsDto.getUserId());
         Double amount = 0.0;
         if (sessionCart.getOptions().isEmpty()) {
-            throw new LogicException("Cart is empty.");
+            String exceptionMessage = "Cart is empty.";
+            throw new LogicException(exceptionMessage);
         }
         for (Map.Entry<Integer, Set<TariffOptionDto>> entry : sessionCart.getOptions().entrySet()) {
             contract = findById(entry.getKey());
             if (!contract.getStatus().equals(Status.ACTIVE)) {
-                throw new LogicException("Contract " + contract.getId() + " is NOT active, sorry.");
+                String exceptionMessage = "Contract " + contract.getId() + " is NOT active, sorry.";
+                throw new LogicException(exceptionMessage);
             }
-            toBeAddedOptionsList = modelMapperWrapper.mapToSet(TariffOption.class,entry.getValue());
+            toBeAddedOptionsList = modelMapperWrapper.mapToSet(TariffOption.class, entry.getValue());
             optionsRulesChecker.checkIfAllowedByTariff(toBeAddedOptionsList, contract.getTariff());
             optionsRulesChecker.checkAddToContract(contract, toBeAddedOptionsList);
             optionsRulesChecker.checkIfContractAlreadyHave(contract, toBeAddedOptionsList);
@@ -164,7 +184,8 @@ public class ContractServiceImpl implements ContractService {
                 amount += tariffOption.getCostOfAdd();
             }
             if (user.getBalance() < amount) {
-                throw new LogicException("Not enough funds.");
+                String exceptionMessage = "Not enough funds.";
+                throw new LogicException(exceptionMessage);
             }
             contract.getActiveOptions().addAll(toBeAddedOptionsList);
         }
@@ -209,7 +230,8 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void customerDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException {
         if (!findById(editContractDto.getContractId()).getStatus().equals(Status.ACTIVE)) {
-            throw new LogicException("Sorry, contract is not active, refresh page.");
+            String exceptionMessage = "Sorry, contract is not active, refresh page.";
+            throw new LogicException(exceptionMessage);
         }
         delOptions(editContractDto);
     }
@@ -226,11 +248,13 @@ public class ContractServiceImpl implements ContractService {
         if (!newTariff.getAvailableOptions().containsAll(contract.getActiveOptions())) {
             List<TariffOption> contractOptions = new ArrayList<>(contract.getActiveOptions());
             contractOptions.removeAll(newTariff.getAvailableOptions());
-            StringBuilder sb = new StringBuilder("New tariff doesn't include all current options. To switch remove options:\n");
+            StringBuilder sb = new StringBuilder("New tariff doesn't include all current options. To switch remove options: ");
             for (TariffOption tariffOption : contractOptions) {
                 sb.append(tariffOption.getName()).append("\n");
             }
-            throw new LogicException(sb.toString());
+            sb.append(".");
+            String exceptionMessage = sb.toString();
+            throw new LogicException(exceptionMessage);
         }
         contract.setTariff(newTariff);
         contract.setPrice(contract.countPrice());
@@ -257,7 +281,8 @@ public class ContractServiceImpl implements ContractService {
     public void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException {
         Contract contract = findById(switchTariffDto.getContractId());
         if (!contract.getStatus().equals(Status.ACTIVE)) {
-            throw new LogicException("Sorry, contract is not active, refresh page.");
+            String exceptionMessage = "Sorry, contract is not active, refresh page.";
+            throw new LogicException(exceptionMessage);
         }
         switchTariff(switchTariffDto);
     }
@@ -271,7 +296,8 @@ public class ContractServiceImpl implements ContractService {
     public void newContract(AddContractDto addContractDto) throws LogicException, DatabaseException {
         Amount amount = new Amount();
         if (doesPhoneNumberExist(addContractDto.getPhoneNumber())) {
-            throw new LogicException("Contract with that phone number already exists.");
+            String exceptionMessage = "Contract with that phone number already exists.";
+            throw new LogicException(exceptionMessage);
         }
         User user = userService.findById(addContractDto.getUserId());
         Tariff tariff = tariffService.findById(addContractDto.getTariffId());
@@ -289,7 +315,8 @@ public class ContractServiceImpl implements ContractService {
         contract.getActiveOptions().forEach(option -> amount.add(option.getCostOfAdd()));
 
         if (user.getBalance() < amount.getAmount()) {
-            throw new LogicException("Not enough funds.");
+            String exceptionMessage = "Not enough funds.";
+            throw new LogicException(exceptionMessage);
         }
         user.spendFunds(amount.getAmount());
         contract.setPrice(contract.countPrice());
@@ -303,7 +330,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public int getPagesCount(int itemsPerPage) {
-        return (dao.contractCount()-1)/itemsPerPage + 1;
+        return (dao.contractCount() - 1) / itemsPerPage + 1;
     }
 
 

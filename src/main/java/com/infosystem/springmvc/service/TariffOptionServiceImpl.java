@@ -11,9 +11,7 @@ import com.infosystem.springmvc.util.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.rmi.runtime.Log;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,19 +86,19 @@ public class TariffOptionServiceImpl implements TariffOptionService {
      * @throws LogicException    if tariffOption is still used
      */
     public void deleteTariffOptionById(int id) throws DatabaseException, LogicException {
+        String exceptionMessage = "This option is still used.";
         TariffOption tariffOption = findById(id);
         for (Contract contract : contractService.findAllContracts()) {
             for (TariffOption option : contract.getActiveOptions()) {
                 if (tariffOption.equals(option)) {
-                    //todo log (warn)
-                    throw new LogicException("This option is still used.");
+                    throw new LogicException(exceptionMessage);
                 }
             }
         }
         for (Tariff tariff : tariffService.findAllTariffs()) {
             for (TariffOption option : tariff.getAvailableOptions()) {
                 if (tariffOption.equals(option)) {
-                    throw new LogicException("This option is still used.");
+                    throw new LogicException(exceptionMessage);
                 }
             }
         }
@@ -142,7 +140,8 @@ public class TariffOptionServiceImpl implements TariffOptionService {
                 if (!option.getExcludingTariffOptions().isEmpty()) {
                     StringBuilder sb = new StringBuilder();
                     option.getExcludingTariffOptions().forEach(anotherOption -> sb.append(anotherOption.getName()).append(";"));
-                    throw new LogicException("Options " + sb.toString() + " exclude " + option.getName() + ".");
+                    String exceptionMessage = "Options " + sb.toString() + " exclude " + option.getName() + ".";
+                    throw new LogicException(exceptionMessage);
                 }
             }
             optionList.forEach(relatedTariffOption -> relatedTariffOption.getIsRelatedFor().add(tariffOption));
@@ -157,7 +156,8 @@ public class TariffOptionServiceImpl implements TariffOptionService {
                 if (!realRelatedOptions.isEmpty()) {
                     StringBuilder sb = new StringBuilder();
                     realRelatedOptions.forEach(option -> sb.append(option.getName()).append(";"));
-                    throw new LogicException("Cant exclude options " + sb.toString() + ".");
+                    String exceptionMessage = "Cant exclude options " + sb.toString() + ".";
+                    throw new LogicException(exceptionMessage);
                 }
             }
             tariffOption.getExcludingTariffOptions().addAll(optionList);
@@ -183,14 +183,14 @@ public class TariffOptionServiceImpl implements TariffOptionService {
     private HashSet<TariffOption> generateRealRelatedOptionList
             (Set<TariffOption> anotherRelatedOptionList) {
         HashSet<TariffOption> realRelatedOptions = new HashSet<>();
-        anotherSet(anotherRelatedOptionList, realRelatedOptions);
+        anotherRelatedFor(anotherRelatedOptionList, realRelatedOptions);
         return realRelatedOptions;
     }
 
-    private void anotherSet(Set<TariffOption> anotherRelatedOptionList, HashSet<TariffOption> realRelatedOptions) {
+    private void anotherRelatedFor(Set<TariffOption> anotherRelatedOptionList, HashSet<TariffOption> realRelatedOptions) {
         realRelatedOptions.addAll(anotherRelatedOptionList);
         for (TariffOption tariffOption : anotherRelatedOptionList) {
-            anotherSet(tariffOption.getRelatedTariffOptions(), realRelatedOptions);
+            anotherRelatedFor(tariffOption.getRelatedTariffOptions(), realRelatedOptions);
         }
     }
 
@@ -236,7 +236,8 @@ public class TariffOptionServiceImpl implements TariffOptionService {
      */
     private void isWrongRule(TariffOption tariffOption, Set<TariffOption> tariffOptions) throws LogicException {
         if (tariffOptions.remove(tariffOption)) {
-            throw new LogicException("Oh, cmon, hacker)00)0");
+            String exceptionMessage = "Oh, cmon, hacker)00)0";
+            throw new LogicException(exceptionMessage);
         }
     }
 

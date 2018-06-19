@@ -13,6 +13,7 @@ import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.util.CustomModelMapper;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +28,7 @@ import com.infosystem.springmvc.model.entity.User;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    private static final Logger logger = Logger.getLogger(TariffOptionServiceImpl.class);
     private ContractService contractService;
 
     @Autowired
@@ -83,7 +85,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(int id) throws LogicException, DatabaseException {
         if (!dao.findById(id).getUserContracts().isEmpty()) {
-            throw new LogicException("User still have contracts!");
+            String exceptionMessage = "User still have contracts!";
+            throw new LogicException(exceptionMessage);
         }
         dao.deleteById(id);
     }
@@ -98,9 +101,10 @@ public class UserServiceImpl implements UserService {
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, ValidationException {
         User user = findById(setNewStatusDto.getEntityId());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (user.getStatus().equals(Status.BLOCKED)&&authentication.getAuthorities().stream()
+        if (user.getStatus().equals(Status.BLOCKED) && authentication.getAuthorities().stream()
                 .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
-            throw new ValidationException("You are not admin to do this.");
+            String exceptionMessage = "You are not admin to do this.";
+            throw new ValidationException(exceptionMessage);
         }
         Status status = customModelMapper.mapToStatus(setNewStatusDto.getEntityStatus());
         user.setStatus(status);
@@ -151,7 +155,8 @@ public class UserServiceImpl implements UserService {
     public Integer findByPhoneNumber(SearchByNumberDto searchByNumberDto) throws LogicException {
         Contract contract = contractService.findByPhoneNumber(searchByNumberDto.getPhoneNumber());
         if (contract == null) {
-            throw new LogicException("No such number.");
+            String exceptionMessage = "No such number.";
+            throw new LogicException(exceptionMessage);
         }
         return contract.getUser().getId();
     }
@@ -168,6 +173,8 @@ public class UserServiceImpl implements UserService {
         try {
             dao.findByParameter(parameter, parameterValue);
         } catch (DatabaseException dbe) {
+            String exceptionMessage = dbe.getMessage();
+            logger.warn(exceptionMessage);
             return false;
         }
         return true;

@@ -5,6 +5,7 @@ import com.infosystem.springmvc.dto.AdvProfileDto;
 import com.infosystem.springmvc.dto.AdvProfileTariffDto;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.jms.JmsDataMapper;
 import com.infosystem.springmvc.model.entity.AdvProfile;
 import com.infosystem.springmvc.model.entity.AdvProfileTariffs;
@@ -62,20 +63,21 @@ public class AdvProfileServiceImpl implements AdvProfileService {
     }
 
     @Override
-    public void addTariffToProfile(AdvProfileTariffDto advProfileTariffDto) throws DatabaseException, LogicException {
+    public void addTariffToProfile(AdvProfileTariffDto advProfileTariffDto) throws DatabaseException, LogicException, ValidationException {
         AdvProfile advProfile = findById(advProfileTariffDto.getAdvProfileId());
         AdvProfileTariffs advProfileTariffs = new AdvProfileTariffs(advProfile, tariffService.findById(advProfileTariffDto.getTariffId()));
         advProfileTariffs.setImg(advProfileTariffDto.getImg());
         advProfileTariffDto.setTariffName(tariffService.findById(advProfileTariffDto.getTariffId()).getName());
         if (advProfile.getAdvProfileTariffsList().contains(advProfileTariffs)) {
-            throw new LogicException("Profile alrdy has that tariff.");
+            String exceptionMessage = "Profile alrdy has that tariff.";
+            throw new LogicException(exceptionMessage);
         }
         advProfile.getAdvProfileTariffsList().add(advProfileTariffs);
         jmsDataMapper.advProfileAddTariff(advProfileTariffDto.getTariffId(),advProfileTariffDto.getAdvProfileId());
     }
 
     @Override
-    public void advProfileEditTariff(AdvProfileTariffDto advProfileTariffDto) throws DatabaseException {
+    public void advProfileEditTariff(AdvProfileTariffDto advProfileTariffDto) throws DatabaseException, ValidationException {
         AdvProfile advProfile = findById(advProfileTariffDto.getAdvProfileId());
         getAdvProfileTariffs(advProfileTariffDto,advProfile).setImg(advProfileTariffDto.getImg());
         jmsDataMapper.advProfileTariffImgChanged(advProfileTariffDto.getTariffId(),
@@ -83,17 +85,18 @@ public class AdvProfileServiceImpl implements AdvProfileService {
     }
 
     @Override
-    public void advProfileDeleteTariff(AdvProfileTariffDto advProfileTariffDto) throws DatabaseException {
+    public void advProfileDeleteTariff(AdvProfileTariffDto advProfileTariffDto) throws DatabaseException, ValidationException {
         AdvProfile advProfile = findById(advProfileTariffDto.getAdvProfileId());
         advProfile.getAdvProfileTariffsList().remove(getAdvProfileTariffs(advProfileTariffDto,advProfile));
         jmsDataMapper.advProfileDeleteTariff(advProfileTariffDto.getTariffId(),advProfileTariffDto.getAdvProfileId());
     }
 
     @Override
-    public void activate(int advProfileId) throws DatabaseException, LogicException {
+    public void activate(int advProfileId) throws DatabaseException, LogicException, ValidationException {
         AdvProfile advProfile = findById(advProfileId);
         if(advProfile.getStatus().equals(Status.ACTIVE)){
-            throw new LogicException("Profile is alrdy active.");
+            String exceptionMessage = "Profile is alrdy active.";
+            throw new LogicException(exceptionMessage);
         }
         List<AdvProfile> advProfileList = advProfileDao.findAllAdvProfiles();
         advProfileList.forEach(anotherAdvProfile -> anotherAdvProfile.setStatus(Status.INACTIVE));
@@ -107,7 +110,8 @@ public class AdvProfileServiceImpl implements AdvProfileService {
                 .filter(advProfileTariff -> advProfileTariff.getTariff().getId().equals(advProfileTariffDto.getTariffId()))
                 .findFirst().orElse(null);
         if(advProfileTariffs==null){
-            throw new DatabaseException("No such tariff for current profile.");
+            String exceptionMessage = "No such tariff for current profile.";
+            throw new DatabaseException(exceptionMessage);
         }
         return advProfileTariffs;
     }

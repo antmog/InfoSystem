@@ -1,12 +1,13 @@
 package com.infosystem.springmvc.dao;
 
+import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.Contract;
 
 import java.util.List;
 
 public interface ContractDao {
 
-    Contract findById(int id);
+    Contract findById(int id) throws DatabaseException;
 
     void save(Contract contract);
 

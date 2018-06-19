@@ -3,6 +3,7 @@ package com.infosystem.springmvc.service;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.jms.JmsDataMapper;
 import com.infosystem.springmvc.model.entity.Tariff;
 
@@ -27,9 +28,9 @@ public interface TariffService {
 
     List<Tariff> findFirstTariffs();
 
-    void addOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException;
+    void addOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException, ValidationException;
 
-    void delOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException;
+    void delOptions(EditTariffDto editTariffDto) throws DatabaseException, LogicException, ValidationException;
 
     TreeSet<TariffOptionDtoShort> getAvailableOptionsForTariff(int tariffId) throws DatabaseException;
 

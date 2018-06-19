@@ -34,6 +34,9 @@ public class User implements Serializable {
     @Column(name = "ADRESS", nullable = false)
     private String address;
 
+    @Column(name = "PHONE_NUMBER", nullable = false, unique = true)
+    private String phoneNumber;
+
     @Column(name = "BIRTH_DATE", nullable = false)
     private Date birthDate;
 

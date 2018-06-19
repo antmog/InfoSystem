@@ -2,9 +2,9 @@ package com.infosystem.springmvc.service.security;
 
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.User;
+import com.infosystem.springmvc.service.TariffOptionServiceImpl;
 import com.infosystem.springmvc.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,7 +20,7 @@ import java.util.List;
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
+    private static final Logger logger = Logger.getLogger(TariffOptionServiceImpl.class);
 
     @Autowired
     UserService userService;
@@ -32,6 +32,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         try{
             user = userService.findByLogin(login);
         }catch(DatabaseException dbe){
+            String exceptionMessage = dbe.getMessage();
+            logger.error(exceptionMessage);
             throw new UsernameNotFoundException("Username not found");
         }
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(),
@@ -41,7 +43,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     private List<GrantedAuthority> getGrantedAuthorities(User user) {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
-        logger.info("authorities : {}", authorities);
         return authorities;
     }
 
