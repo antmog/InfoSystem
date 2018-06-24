@@ -272,7 +272,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testEditUser() throws DatabaseException {
+    void testEditUser() throws DatabaseException, ValidationException {
         User user = users.get(0);
         EditUserDto editUserDto = new EditUserDto();
         editUserDto.setId(user.getId());

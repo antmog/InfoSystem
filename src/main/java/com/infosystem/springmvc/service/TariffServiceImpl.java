@@ -104,7 +104,7 @@ public class TariffServiceImpl implements TariffService {
     /**
      * Deletes tariff if its not used.
      *
-     * @param id
+     * @param id id
      * @throws LogicException    if tariff is still used in any contracts
      * @throws DatabaseException if tariff doesn't exist
      */

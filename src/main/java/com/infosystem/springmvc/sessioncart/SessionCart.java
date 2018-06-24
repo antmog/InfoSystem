@@ -13,12 +13,15 @@ import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.service.ContractService;
 import com.infosystem.springmvc.service.TariffOptionService;
 import com.infosystem.springmvc.service.TariffOptionServiceImpl;
+import com.infosystem.springmvc.service.UserService;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -50,12 +53,17 @@ public class SessionCart {
     @Autowired
     private OptionsRulesChecker optionsRulesChecker;
     @Autowired
-    TariffOptionService tariffOptionService;
+    private TariffOptionService tariffOptionService;
+    @Autowired
+    private UserService userService;
 
     @Transactional
-    public void addCartItems(EditContractDto editContractDto) throws DatabaseException, LogicException {
+    public void addCartItems(EditContractDto editContractDto) throws DatabaseException, LogicException, ValidationException {
         Integer contractId = editContractDto.getContractId();
         Contract contract = contractService.findById(contractId);
+        if(!userService.findByLogin(getPrincipal()).equals(contract.getUser())){
+            throw new ValidationException("STOP IT, HACKER. That contract doesn't belong to you.");
+        }
         if(!contract.getStatus().equals(Status.ACTIVE)){
             String exceptionMessage = "Contract is not active. Refresh page.";
             throw new LogicException(exceptionMessage);
@@ -110,5 +118,20 @@ public class SessionCart {
     public void countItems(){
         count = 0;
         options.forEach((k,v)-> count+=v.size());
+    }
+
+    /**
+     * This method returns the principal[user-name] of logged-in user.
+     */
+    private String getPrincipal() {
+        String userName = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails) principal).getUsername();
+        } else {
+            userName = principal.toString();
+        }
+        return userName;
     }
 }

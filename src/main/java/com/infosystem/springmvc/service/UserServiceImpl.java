@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,8 +102,11 @@ public class UserServiceImpl implements UserService {
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, ValidationException {
         User user = findById(setNewStatusDto.getEntityId());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (user.getStatus().equals(Status.BLOCKED) && authentication.getAuthorities().stream()
-                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+        User principal = findByLogin(((UserDetails) authentication.getPrincipal()).getUsername());
+        if(authentication.getAuthorities().stream()
+                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))
+                && (!principal.equals(user)
+                || user.getStatus().equals(Status.BLOCKED))){
             String exceptionMessage = "You are not admin to do this.";
             throw new ValidationException(exceptionMessage);
         }
@@ -189,8 +193,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(EditUserDto editUserDto) throws DatabaseException {
+    public void editUser(EditUserDto editUserDto) throws DatabaseException, ValidationException {
         User user = findById(editUserDto.getId());
+        verifyUser(user);
         user.setFirstName(editUserDto.getFirstName());
         user.setLastName(editUserDto.getLastName());
         user.setAddress(editUserDto.getAddress());
@@ -201,8 +206,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(ChangePasswordDto changePasswordDto) throws DatabaseException {
+    public void editUser(ChangePasswordDto changePasswordDto) throws DatabaseException, ValidationException {
         User user = findById(changePasswordDto.getUserId());
+        verifyUser(user);
         user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
     }
 
@@ -223,5 +229,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public int getPagesCount(int itemsPerPage) {
         return (dao.userCount() - 1) / itemsPerPage + 1;
+    }
+
+    private void verifyUser(User user) throws ValidationException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getAuthorities().stream()
+                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))
+                && !((UserDetails) authentication.getPrincipal()).getUsername().equals(user.getLogin())){
+            throw new ValidationException("You cant do it, naughty hacker.");
+        }
     }
 }

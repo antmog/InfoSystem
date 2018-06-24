@@ -50,9 +50,9 @@ public interface UserService {
 
     void addFunds(UserFundsDto userFundsDto) throws DatabaseException;
 
-    void editUser(EditUserDto editUserDto) throws DatabaseException;
+    void editUser(EditUserDto editUserDto) throws DatabaseException, ValidationException;
 
-    void editUser(ChangePasswordDto changePasswordDto) throws DatabaseException;
+    void editUser(ChangePasswordDto changePasswordDto) throws DatabaseException, ValidationException;
 
     boolean checkIfUserPasswordMatches(ChangePasswordDto changePasswordDto) throws DatabaseException;
 

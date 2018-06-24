@@ -25,15 +25,15 @@ public interface ContractService {
 
     void adminAddOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
 
-    void customerAddOptions(AddOptionsDto addOptionsDto) throws DatabaseException, LogicException;
+    void customerAddOptions(AddOptionsDto addOptionsDto) throws DatabaseException, LogicException, ValidationException;
 
     void adminDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
 
-    void customerDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException;
+    void customerDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException, ValidationException;
 
     void adminSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException;
 
-    void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException;
+    void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException, ValidationException;
 
     void newContract(AddContractDto addContractDto) throws LogicException, DatabaseException;
 

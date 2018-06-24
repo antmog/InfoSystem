@@ -49,7 +49,6 @@ public class GlobalDataController {
      */
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST)
     public ResponseDto sendSms(@Valid @RequestBody ForgotPasswordDto forgotPasswordDto, BindingResult result) throws ValidationException {
-        System.out.println(forgotPasswordDto);
         if (result.hasErrors()) {
             throw new ValidationException("Wrong phone number format.");
         }

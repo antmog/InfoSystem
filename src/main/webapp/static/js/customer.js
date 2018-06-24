@@ -273,7 +273,7 @@
             data: JSON.stringify({entityId: entity_id, entityStatus: status})
         }).done(function (msg) {
             notify("",msg,"success","fas fa-thumbs-up");
-            location.reload();
+            //location.reload();
         }).fail(function (jqXHR, textStatus) {
             notify("Error",jqXHR.responseText,"danger");
         });
