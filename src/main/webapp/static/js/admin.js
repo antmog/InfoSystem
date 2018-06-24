@@ -150,14 +150,14 @@
                 var profileStatusDiv = $("#profileStatus");
                 if(json.status === "ACTIVE"){
                     document.getElementById("advProfileActivate").style.visibility="hidden";
-                    profileStatusDiv.removeClass("alert-warning");
+                    rofile is profileStatusDiv.removeClass("alert-warning");
                     profileStatusDiv.addClass("alert-success");
-                    profileStatusDiv.html("Profile is active.");
+                    profileStatusDiv.html("Advertisment profile is active.");
                 }else{
                     document.getElementById("advProfileActivate").style.visibility="visible";
                     profileStatusDiv.removeClass("alert-success");
                     profileStatusDiv.addClass("alert-warning");
-                    profileStatusDiv.html("Profile is inactive.");
+                    profileStatusDiv.html("Advertisment profile is inactive.");
                 }
                 $("#advProfileTable tbody").remove();
                 var tbl_body = document.createElement("tbody");
@@ -202,7 +202,7 @@
                 var profileStatusDiv = $("#profileStatus");
                 profileStatusDiv.removeClass("alert-warning");
                 profileStatusDiv.addClass("alert-success");
-                profileStatusDiv.html("Profile is active.");
+                profileStatusDiv.html("Advertisment profile is active.");
                 notify("", msg.responseText, "success", "fas fa-thumbs-up");
             }).fail(function (jqXHR, textStatus) {
                 notify("", jqXHR.responseText, "primary", "fas fa-search");

@@ -11,8 +11,8 @@ public class V1_3__add_users implements JdbcMigration {
 
         PreparedStatement statement = connection.prepareStatement("INSERT INTO `users` " +
                 "(`ADRESS`,`BALANCE`,`BIRTH_DATE`,`FIRST_NAME`,`LAST_NAME`,`LOGIN`,`MAIL`,`PASSPORT_ID`, " +
-                "`PASSWORD`,`ROLE`, `STATUS`, `PHONE_NUMBER`) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                "`PASSWORD`,`ROLE`, `STATUS`) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
         statement.setString(1, "Address1");
         statement.setDouble(2, 0.0);
@@ -25,7 +25,6 @@ public class V1_3__add_users implements JdbcMigration {
         statement.setString(9, "$2a$10$B7jg5.qngCxHJ1xcCVOBpOatk8APp/AR4HvMTLnAqVOEVFvrAoTM6");
         statement.setString(10, "ADMIN");
         statement.setString(11, "ACTIVE");
-        statement.setString(12, "89817071894");
         statement.addBatch();
 
         statement.setString(1, "Address2");
@@ -39,7 +38,6 @@ public class V1_3__add_users implements JdbcMigration {
         statement.setString(9, "$2a$10$B7jg5.qngCxHJ1xcCVOBpOatk8APp/AR4HvMTLnAqVOEVFvrAoTM6");
         statement.setString(10, "CUSTOMER");
         statement.setString(11, "ACTIVE");
-        statement.setString(12, "89819690492");
         statement.addBatch();
 
         statement.setString(1, "Address3");
@@ -53,7 +51,6 @@ public class V1_3__add_users implements JdbcMigration {
         statement.setString(9, "$2a$10$B7jg5.qngCxHJ1xcCVOBpOatk8APp/AR4HvMTLnAqVOEVFvrAoTM6");
         statement.setString(10, "CUSTOMER");
         statement.setString(11, "ACTIVE");
-        statement.setString(12, "89817071893");
         statement.addBatch();
 
 

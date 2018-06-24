@@ -5,7 +5,7 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.jms.JmsDataMapper;
+import com.infosystem.springmvc.jms.AdvJmsDataMapper;
 import com.infosystem.springmvc.model.entity.*;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
@@ -28,7 +28,7 @@ public class TariffServiceImpl implements TariffService {
     private CustomModelMapper modelMapperWrapper;
     private OptionsRulesChecker optionsRulesChecker;
     private AdvProfileService advProfileService;
-    private JmsDataMapper jmsDataMapper;
+    private AdvJmsDataMapper advJmsDataMapper;
 
     public void setAdvProfileService(AdvProfileService advProfileService) {
         this.advProfileService = advProfileService;
@@ -53,8 +53,8 @@ public class TariffServiceImpl implements TariffService {
         this.optionsRulesChecker = optionsRulesChecker;
     }
 
-    public void setJmsDataMapper(JmsDataMapper jmsDataMapper) {
-        this.jmsDataMapper = jmsDataMapper;
+    public void setAdvJmsDataMapper(AdvJmsDataMapper advJmsDataMapper) {
+        this.advJmsDataMapper = advJmsDataMapper;
     }
 
     @Autowired
@@ -140,7 +140,7 @@ public class TariffServiceImpl implements TariffService {
         optionsRulesChecker.checkIfTariffAlreadyHave(tariff, toBeAddedOptions);
         optionsRulesChecker.checkAddRelatedAdmin(toBeAddedOptions, tariff.getAvailableOptions());
         tariff.getAvailableOptions().addAll(toBeAddedOptions);
-        jmsDataMapper.tariffAddOptions(editTariffDto.getTariffId(), editTariffDto.getTariffOptionDtoList());
+        advJmsDataMapper.tariffAddOptions(editTariffDto.getTariffId(), editTariffDto.getTariffOptionDtoList());
     }
 
     /**
@@ -157,7 +157,7 @@ public class TariffServiceImpl implements TariffService {
         optionsRulesChecker.checkDelRalated(toBeDeletedOptions, tariff.getAvailableOptions());
 
         tariff.getAvailableOptions().removeAll(modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList()));
-        jmsDataMapper.tariffDelOptions(editTariffDto.getTariffId(), editTariffDto.getTariffOptionDtoList());
+        advJmsDataMapper.tariffDelOptions(editTariffDto.getTariffId(), editTariffDto.getTariffOptionDtoList());
     }
 
     @Override

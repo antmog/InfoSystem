@@ -7,7 +7,6 @@ CREATE TABLE `users` (
   `BIRTH_DATE` date NOT NULL,
   `FIRST_NAME` varchar(255) NOT NULL,
   `LAST_NAME` varchar(255) NOT NULL,
-  `PHONE_NUMBER` varchar(255) NOT NULL,
   `LOGIN` varchar(255) NOT NULL,
   `MAIL` varchar(255) NOT NULL,
   `PASSPORT_ID` int(11) NOT NULL,

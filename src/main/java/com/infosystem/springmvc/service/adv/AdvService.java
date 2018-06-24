@@ -21,13 +21,11 @@ import java.util.List;
 @Transactional
 public class AdvService {
 
-    private final DataService dataService;
     private final CustomModelMapper customModelMapper;
     private final AdvProfileService advProfileService;
 
     @Autowired
-    public AdvService(DataService dataService, CustomModelMapper customModelMapper, AdvProfileService advProfileService){
-        this.dataService = dataService;
+    public AdvService(CustomModelMapper customModelMapper, AdvProfileService advProfileService){
         this.customModelMapper = customModelMapper;
         this.advProfileService = advProfileService;
     }

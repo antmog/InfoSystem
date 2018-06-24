@@ -112,6 +112,7 @@
             </div>
         </div>
     </div>
+    <br>
 </main>
 <script>
     var user_id = ${userPageDto.id};

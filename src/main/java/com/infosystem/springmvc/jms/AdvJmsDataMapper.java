@@ -18,35 +18,35 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
-public class JmsDataMapper {
+public class AdvJmsDataMapper {
 
     @Autowired
     private AdvProfileService advProfileService;
 
-    private final MessageSender messageSender;
+    private final AdvMessageSender advMessageSender;
     private final TariffService tariffService;
     private final CustomModelMapper customModelMapper;
 
     @Autowired
-    public JmsDataMapper(MessageSender messageSender,
-                         TariffService tariffService, CustomModelMapper customModelMapper) {
-        this.messageSender = messageSender;
+    public AdvJmsDataMapper(AdvMessageSender advMessageSender,
+                            TariffService tariffService, CustomModelMapper customModelMapper) {
+        this.advMessageSender = advMessageSender;
         this.tariffService = tariffService;
         this.customModelMapper = customModelMapper;
     }
 
     @PostConstruct
     public void init() {
-        tariffService.setJmsDataMapper(this);
+        tariffService.setAdvJmsDataMapper(this);
     }
 
     public void tariffAddOptions(int tariffId, List<TariffOptionDto> tariffOptionDtoList) throws DatabaseException, ValidationException {
-        messageSender.initiateSendEditTariff("addOptions", tariffService.findById(tariffId).getName(),
+        advMessageSender.initiateSendEditTariff("addOptions", tariffService.findById(tariffId).getName(),
                 customModelMapper.mapToList(AdvTariffOptionDto.class, tariffOptionDtoList));
     }
 
     public void tariffDelOptions(int tariffId, List<TariffOptionDto> tariffOptionDtoList) throws DatabaseException, ValidationException {
-        messageSender.initiateSendEditTariff("delOptions", tariffService.findById(tariffId).getName(),
+        advMessageSender.initiateSendEditTariff("delOptions", tariffService.findById(tariffId).getName(),
                 customModelMapper.mapToList(AdvTariffOptionDto.class, tariffOptionDtoList));
     }
 
@@ -62,26 +62,26 @@ public class JmsDataMapper {
             }
             AdvTariffDto advTariffDto = customModelMapper.mapToDto(AdvTariffDto.class, tariffService.findById(tariffId));
             advTariffDto.setImage(advProfileTariffs.getImg());
-            messageSender.initiateSendNewTariff(advTariffDto);
+            advMessageSender.initiateSendNewTariff(advTariffDto);
         }
     }
 
     public void advProfileTariffImgChanged(int tariffId, int advProfileId, String img) throws DatabaseException, ValidationException {
         AdvProfile advProfile = advProfileService.findById(advProfileId);
         if (advProfile.getStatus().equals(Status.ACTIVE)) {
-            messageSender.initiateSendChangeImage(tariffService.findById(tariffId).getName(), img);
+            advMessageSender.initiateSendChangeImage(tariffService.findById(tariffId).getName(), img);
         }
     }
 
     public void advProfileDeleteTariff(int tariffId, int advProfileId) throws DatabaseException, ValidationException {
         AdvProfile advProfile = advProfileService.findById(advProfileId);
         if (advProfile.getStatus().equals(Status.ACTIVE)) {
-            messageSender.initiateSendDelTariff(tariffService.findById(tariffId).getName());
+            advMessageSender.initiateSendDelTariff(tariffService.findById(tariffId).getName());
         }
     }
 
     public void advProfileActivate() throws ValidationException {
-        messageSender.initiateSend();
+        advMessageSender.initiateSend();
     }
 }
 

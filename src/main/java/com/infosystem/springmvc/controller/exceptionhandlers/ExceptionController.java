@@ -6,14 +6,19 @@ import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.MyBusinessException;
 import com.infosystem.springmvc.exception.ValidationException;
 import org.apache.log4j.Logger;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-@ControllerAdvice
+
+@ControllerAdvice(annotations = Controller.class)
+@Order(2)
 public class ExceptionController extends ControllerTemplate {
 
     private static final Logger logger = Logger.getLogger(ExceptionController.class);

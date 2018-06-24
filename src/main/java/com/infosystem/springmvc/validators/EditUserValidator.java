@@ -14,7 +14,7 @@ import org.springframework.validation.Validator;
 @Component
 public class EditUserValidator implements Validator {
 
-    private static final Logger logger = Logger.getLogger(TariffOptionServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(EditUserValidator.class);
     private final UserService userService;
 
     @Autowired

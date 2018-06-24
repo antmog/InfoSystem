@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"loggedinuser","relations","yesno"})
+@SessionAttributes({"loggedinuser"})
 public class GlobalController extends ControllerTemplate {
 
     @Autowired
@@ -32,6 +32,14 @@ public class GlobalController extends ControllerTemplate {
         } else {
             return "redirect:/";
         }
+    }
+
+    /**
+     * Mapping to forgotPassword screen.
+     */
+    @RequestMapping(value = "/forgotPassword", method = RequestMethod.GET)
+    public String forgotPassword() {
+        return "forgotPassword";
     }
 
     /**
@@ -58,6 +66,7 @@ public class GlobalController extends ControllerTemplate {
 
     /**
      * Redirects to LK(main menu of account interface) admin/customer.
+     *
      * @param model model
      * @return adminPanel if current user is ADMIN, customerPanel if CUSTOMER
      */
@@ -77,6 +86,7 @@ public class GlobalController extends ControllerTemplate {
 
     /**
      * Index page.
+     *
      * @param model model
      * @return startPage
      */
@@ -84,7 +94,7 @@ public class GlobalController extends ControllerTemplate {
     public String startPage(ModelMap model) {
         List<TariffDto> tariffDtoList = dataService.getIndexPageData();
         model.addAttribute("loggedinuser", getPrincipal());
-        model.addAttribute("tariffDtoList",tariffDtoList);
+        model.addAttribute("tariffDtoList", tariffDtoList);
         return "index";
     }
 }

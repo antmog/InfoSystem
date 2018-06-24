@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ToAdvertismentJmsJsonMapper {
-    ObjectMapper jacksonMapper = new ObjectMapper();
+    private ObjectMapper jacksonMapper = new ObjectMapper();
 
     public String mapToAdvertismentJmsJson(JmsNotification jmsNotification) throws JsonProcessingException {
         return jacksonMapper.writeValueAsString(jmsNotification);

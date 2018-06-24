@@ -1,11 +1,9 @@
 package com.infosystem.springmvc.jms;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.infosystem.springmvc.controller.exceptionhandlers.ExceptionController;
 import com.infosystem.springmvc.dto.adv.AdvTariffDto;
 import com.infosystem.springmvc.dto.adv.AdvTariffOptionDto;
 import com.infosystem.springmvc.dto.jms.JmsNotification;
-import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.util.ToAdvertismentJmsJsonMapper;
 import org.apache.log4j.Logger;
@@ -15,18 +13,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Component
-public class MessageSender {
+public class AdvMessageSender {
 
-    private static final Logger logger = Logger.getLogger(ExceptionController.class);
+    private static final Logger logger = Logger.getLogger(AdvMessageSender.class);
     private final JmsTemplate jmsTemplate;
     private final ToAdvertismentJmsJsonMapper toAdvertismentJmsJsonMapper;
 
     @Autowired
-    public MessageSender(JmsTemplate jmsTemplate, ToAdvertismentJmsJsonMapper toAdvertismentJmsJsonMapper) {
-        this.jmsTemplate = jmsTemplate;
+    public AdvMessageSender(JmsTemplate jmsAdvTemplate, ToAdvertismentJmsJsonMapper toAdvertismentJmsJsonMapper) {
+        this.jmsTemplate = jmsAdvTemplate;
         this.toAdvertismentJmsJsonMapper = toAdvertismentJmsJsonMapper;
     }
 

@@ -4,7 +4,7 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.jms.JmsDataMapper;
+import com.infosystem.springmvc.jms.AdvJmsDataMapper;
 import com.infosystem.springmvc.model.entity.Tariff;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public interface TariffService {
 
     int getPagesCount(int itemsPerPage);
 
-    public void setAdvProfileService(AdvProfileService advProfileService);
+    void setAdvProfileService(AdvProfileService advProfileService);
 
-    public void setJmsDataMapper(JmsDataMapper jmsDataMapper);
+    void setAdvJmsDataMapper(AdvJmsDataMapper advJmsDataMapper);
 }

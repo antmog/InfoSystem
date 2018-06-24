@@ -13,12 +13,12 @@
             <br>
             <c:if test="${adminPanelDto.advProfileDtoList.get(0).status == 'INACTIVE'}">
                 <div id="profileStatus" class="alert alert-warning" role="alert">
-                    Profile is inactive.
+                    Advertisment profile is inactive.
                 </div>
             </c:if>
             <c:if test="${adminPanelDto.advProfileDtoList.get(0).status == 'ACTIVE'}">
                 <div id="profileStatus" class="alert alert-success" role="alert">
-                    Profile is active.
+                    Advertisment profile is active.
                 </div>
             </c:if>
             <div class="pt-4 pb-4">

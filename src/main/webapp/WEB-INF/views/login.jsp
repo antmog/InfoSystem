@@ -18,6 +18,20 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/"><i class="fas fa-phone-square"></i> Info-System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/forgotPassword">
+                    Forgot password
+                </a>
+            </li>
+        </ul>
+    </div>
 </nav>
 <div class="form-signin-container login-div">
     <!-- <c:url var="loginUrl" value="/login"/> -->
@@ -33,13 +47,11 @@
                     <p>You have been logged out successfully.</p>
                 </div>
             </c:if>
-            <label class="sr-only prelogin">Login</label>
+            <label class="sr-only">Login</label>
 
-            <!-- prelogin todo -->
             <input type="text" class="form-control prelogin" id="username" name="login" placeholder="Login" required autofocus>
-            <label class="sr-only prelogin">Password</label>
+            <label class="sr-only">Password</label>
             <input type="password" class="form-control prelogin" id="password" name="password" placeholder="Password" required>
-            <label class="sr-only login">Code</label>
             <div class="input-group input-sm">
                 <div class="checkbox">
                     <label><input type="checkbox" id="rememberme" name="remember-me"> Remember Me</label>
@@ -50,6 +62,8 @@
         </div>
     </form>
 </div>
+<script src="/static/vendors/jquery/jquery-3.3.1.min.js" defer></script>
+<script src="/static/vendors/bootstrap-notify/bootstrap-notify.min.js" defer></script>
 <script src="/static/js/global.js" defer></script>
 </body>
 </html>

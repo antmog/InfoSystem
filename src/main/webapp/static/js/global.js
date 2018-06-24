@@ -44,28 +44,54 @@ function notify(title, msg, type, icon) {
         '<div class="progress" data-notify="progressbar">' +
         '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
         '</div>' +
-       // '<a href="{3}" target="{4}" data-notify="url"></a>' +
+        // '<a href="{3}" target="{4}" data-notify="url"></a>' +
         '</div>'
     });
 }
+(function () {
 
-// $("#loginForm").on("submit",function (e) {
-//
-//     e.preventDefault();
-//     $.ajax({
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'Accept': 'text/html; charset=utf-8'
-//         },
-//         type: "POST",
-//         url: "/prelogin",
-//         data: JSON.stringify({
-//             username: $("#username").val(),
-//             password: $("#password").val()
-//         })
-//     }).done(function (msg) {
-//
-//     }).fail(function (jqXHR, textStatus) {
-//         notify("Wrong login/password. ", jqXHR.responseText, "danger");
-//     });
-// });
+
+    function randomInteger(min, max) {
+        var rand = min + Math.random() * (max + 1 - min);
+        rand = Math.floor(rand);
+        return rand;
+    }
+
+    var captchaValue = randomInteger(0, 10000);
+    $("#captchaLabel").html(captchaValue);
+
+    $("#sendSmsForm").on("submit", function (e) {
+        e.preventDefault();
+        var captcha = $("#captcha").val();
+        console.log(captcha);
+        console.log(captchaValue);
+        if (parseInt(captcha) !== captchaValue) {
+            captchaValue = randomInteger(0, 10000);
+            $("#captchaLabel").html(captchaValue);
+            notify("", "Wrong captcha.", "info");
+            return;
+        }
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var phoneNumber = $("#phoneNumber").val();
+        $.ajax({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            type: "POST",
+            url: "/sendSms",
+            // The key needs to match your method's input parameter (case-sensitive).
+            data: JSON.stringify({
+                phoneNumber: phoneNumber
+            }),
+            datatype: "json"
+        }).done(function (msg) {
+            document.location = "/login";
+        }).fail(function (jqXHR) {
+            notify("", jqXHR.responseText, "info")
+        });
+    })
+})();

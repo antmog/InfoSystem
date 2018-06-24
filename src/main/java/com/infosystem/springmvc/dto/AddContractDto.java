@@ -2,9 +2,6 @@ package com.infosystem.springmvc.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 public class AddContractDto implements Serializable {
 
-    //todo pattern
     @Min(1)
     @NotNull
     private int userId;

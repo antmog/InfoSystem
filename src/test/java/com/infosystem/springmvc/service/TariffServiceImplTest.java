@@ -5,7 +5,7 @@ import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.jms.JmsDataMapper;
+import com.infosystem.springmvc.jms.AdvJmsDataMapper;
 import com.infosystem.springmvc.model.entity.*;
 
 
@@ -49,7 +49,7 @@ class TariffServiceImplTest {
     private ContractService contractService;
 
     @Mock
-    private JmsDataMapper jmsDataMapper;
+    private AdvJmsDataMapper advJmsDataMapper;
 
     @Mock
     private AdvProfileService advProfileService;
@@ -218,7 +218,7 @@ class TariffServiceImplTest {
         HashSet<TariffOption> tariffOptions = new HashSet<>(Collections.singletonList(tariffOption2));
         tariffService.setModelMapperWrapper(modelMapperWrapper);
         tariffService.setOptionsRulesChecker(optionsRulesChecker);
-        tariffService.setJmsDataMapper(jmsDataMapper);
+        tariffService.setAdvJmsDataMapper(advJmsDataMapper);
         when(tariffDao.findById(editTariffDto.getTariffId())).thenReturn(tariff);
         when(modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList())).thenReturn(tariffOptions);
 
@@ -242,7 +242,7 @@ class TariffServiceImplTest {
         HashSet<TariffOption> tariffOptions = new HashSet<>(Collections.singletonList(tariffOption1));
         tariffService.setModelMapperWrapper(modelMapperWrapper);
         tariffService.setOptionsRulesChecker(optionsRulesChecker);
-        tariffService.setJmsDataMapper(jmsDataMapper);
+        tariffService.setAdvJmsDataMapper(advJmsDataMapper);
         when(tariffDao.findById(editTariffDto.getTariffId())).thenReturn(tariff);
         when(modelMapperWrapper.mapToTariffOptionSet(editTariffDto.getTariffOptionDtoList())).thenReturn(tariffOptions);
 
@@ -327,7 +327,7 @@ class TariffServiceImplTest {
      */
     @Test
     void testAlrdyUsedSetStatus() throws Exception {
-        String exceptionMessage = "Tariff is still used in advertisment.";
+        String exceptionMessage = "Cant change status, tariff is still used in advertisment.";
         Tariff tariff = tariffs.get(0);
         SetNewStatusDto setNewStatusDto = new SetNewStatusDto();
         setNewStatusDto.setEntityId(tariff.getId());

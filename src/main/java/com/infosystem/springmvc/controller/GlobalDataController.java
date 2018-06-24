@@ -1,5 +1,7 @@
 package com.infosystem.springmvc.controller;
 
+import com.infosystem.springmvc.dto.ForgotPasswordDto;
+import com.infosystem.springmvc.dto.ResponseDto;
 import com.infosystem.springmvc.dto.SetNewStatusDto;
 import com.infosystem.springmvc.dto.TariffOptionDtoShort;
 import com.infosystem.springmvc.dto.editUserDto.EditAddressDto;
@@ -9,6 +11,7 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.service.*;
+import com.infosystem.springmvc.service.security.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -32,6 +35,9 @@ public class GlobalDataController {
     private final TariffService tariffService;
 
     @Autowired
+    SmsService smsService;
+
+    @Autowired
     public GlobalDataController(UserService userService, ContractService contractService, TariffOptionService tariffOptionService, MessageSource messageSource, TariffService tariffService) {
         this.userService = userService;
         this.contractService = contractService;
@@ -39,10 +45,23 @@ public class GlobalDataController {
     }
 
     /**
+     * Send sms with new password.
+     */
+    @RequestMapping(value = "/sendSms", method = RequestMethod.POST)
+    public ResponseDto sendSms(@Valid @RequestBody ForgotPasswordDto forgotPasswordDto, BindingResult result) throws ValidationException {
+        System.out.println(forgotPasswordDto);
+        if (result.hasErrors()) {
+            throw new ValidationException("Wrong phone number format.");
+        }
+        smsService.sendNewPassword(forgotPasswordDto.getPhoneNumber());
+        return new ResponseDto("ok");
+    }
+
+    /**
      * Returns options available for tariff.
      *
      * @param tariffId tariffId
-     * @param result    validation result
+     * @param result   validation result
      * @return message
      * @throws DatabaseException   if tariff doesn't exist
      * @throws ValidationException if input is wrong
@@ -150,7 +169,7 @@ public class GlobalDataController {
      * Modifies selected value of user.
      *
      * @param editPassportDto editPassportDto
-     * @param result      validation result
+     * @param result          validation result
      * @return message
      * @throws DatabaseException   if user doesn't exist
      * @throws ValidationException if input is wrong
@@ -175,7 +194,7 @@ public class GlobalDataController {
      * Modifies selected value of user.
      *
      * @param editAddressDto editAddressDto
-     * @param result      validation result
+     * @param result         validation result
      * @return message
      * @throws DatabaseException   if user doesn't exist
      * @throws ValidationException if input is wrong
@@ -195,16 +214,4 @@ public class GlobalDataController {
         userService.updateUserAddress(editAddressDto);
         return "Address modified successfully.";
     }
-
-
-//    //todo
-//    @RequestMapping(value = "/prelogin", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-//    public String prelogin(@RequestBody @Valid PreLoginDto editAddressDto, BindingResult result) throws DatabaseException, ValidationException {
-//        if (result.hasErrors()) {
-//            throw new ValidationException("Wrong input!");
-//        }
-//        userService.updateUserAddress(editAddressDto);
-//        return "Address modified successfully.";
-//    }
-
 }

@@ -28,7 +28,7 @@ import com.infosystem.springmvc.model.entity.User;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private static final Logger logger = Logger.getLogger(TariffOptionServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
     private ContractService contractService;
 
     @Autowired

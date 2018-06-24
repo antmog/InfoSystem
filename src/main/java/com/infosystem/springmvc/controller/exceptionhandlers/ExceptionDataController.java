@@ -4,15 +4,16 @@ import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.MyBusinessException;
 import com.infosystem.springmvc.exception.ValidationException;
-import com.infosystem.springmvc.service.TariffOptionServiceImpl;
 import org.apache.log4j.Logger;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@RestControllerAdvice
+@RestControllerAdvice(annotations = RestController.class)
+@Order(1)
 public class ExceptionDataController {
 
-    private static final Logger logger = Logger.getLogger(TariffOptionServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(ExceptionDataController.class);
 
     /**
      * Sends bad request to the page with selected message.

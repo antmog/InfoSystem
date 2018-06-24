@@ -2,7 +2,6 @@ package com.infosystem.springmvc.service.security;
 
 import com.infosystem.springmvc.exception.DatabaseException;
 import com.infosystem.springmvc.model.entity.User;
-import com.infosystem.springmvc.service.TariffOptionServiceImpl;
 import com.infosystem.springmvc.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import java.util.List;
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private static final Logger logger = Logger.getLogger(TariffOptionServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(CustomUserDetailsService.class);
 
     @Autowired
     UserService userService;
