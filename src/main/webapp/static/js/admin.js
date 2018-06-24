@@ -150,7 +150,7 @@
                 var profileStatusDiv = $("#profileStatus");
                 if(json.status === "ACTIVE"){
                     document.getElementById("advProfileActivate").style.visibility="hidden";
-                    rofile is profileStatusDiv.removeClass("alert-warning");
+                    profileStatusDiv.removeClass("alert-warning");
                     profileStatusDiv.addClass("alert-success");
                     profileStatusDiv.html("Advertisment profile is active.");
                 }else{
