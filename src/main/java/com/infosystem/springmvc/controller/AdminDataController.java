@@ -75,7 +75,7 @@ public class AdminDataController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/addTariff", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     public ResponseDto saveTariff(@Valid @RequestBody AddTariffDto addTariffDto, BindingResult result) throws LogicException, ValidationException {
         if (result.hasErrors()) {
-            String exceptionMessage = "Enter correct name and price for new tariff please (name length between 2 and 32, min price 1).";
+            String exceptionMessage = "Enter correct name, description and price for new tariff please (name/description length between 2 and 32, min price 1).";
             throw new ValidationException(exceptionMessage);
         }
         tariffService.addTariff(addTariffDto);

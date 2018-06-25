@@ -104,6 +104,7 @@ public class CustomModelMapper {
         Tariff tariff = new Tariff();
         tariff.setName(addTariffDto.getTariffDto().getName());
         tariff.setPrice(addTariffDto.getTariffDto().getPrice());
+        tariff.setDescription(addTariffDto.getTariffDto().getDescription());
         return tariff;
     }
 

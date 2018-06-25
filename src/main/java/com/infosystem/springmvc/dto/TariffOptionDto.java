@@ -2,6 +2,7 @@ package com.infosystem.springmvc.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,6 +16,8 @@ public class TariffOptionDto implements Serializable {
     private int id;
     @NotNull
     private String name;
+
+    private String description;
     @NotNull
     private double price;
     @NotNull
@@ -22,7 +25,7 @@ public class TariffOptionDto implements Serializable {
 
     @Override
     public String toString() {
-        return "{id: \""+id+"\",name: \"" + name + "\",price: \""+price+"\",costofadd: \""+costofadd+"\"}";
+        return "{id: \"" + id + "\",name: \"" + name + "\",price: \"" + price + "\",costofadd: \"" + costofadd + "\"}";
     }
 
     private Set<TariffOptionDto> relatedTariffOptions;

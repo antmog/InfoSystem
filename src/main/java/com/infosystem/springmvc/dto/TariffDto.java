@@ -35,6 +35,9 @@ public class TariffDto implements Serializable {
 
     private Status status;
 
+    @Size(min = 2, max = 32)
+    private String description;
+
     @Override
     public String toString() {
         return "{\"name\":\""+name+"\",\"price\":"+price+"}";

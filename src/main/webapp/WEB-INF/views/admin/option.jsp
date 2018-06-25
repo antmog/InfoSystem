@@ -30,6 +30,8 @@
                                 <dd>${tariffOptionPageDto.tariffOption.costofadd}</dd>
                                 <dt>Price</dt>
                                 <dd>${tariffOptionPageDto.tariffOption.price} €</dd>
+                                <dt>Price</dt>
+                                <dd>${tariffOptionPageDto.tariffOption.description}</dd>
                             </dl>
                         </div>
                         <div class="card-footer">

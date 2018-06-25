@@ -35,6 +35,10 @@
                                 <dt>Price</dt>
                                 <dd>${tariffPageDto.tariff.price} €</dd>
                             </dl>
+                            <dl>
+                                <dt>Description</dt>
+                                <dd>${tariffPageDto.tariff.description}</dd>
+                            </dl>
                             <c:choose>
                                 <c:when test="${tariffPageDto.tariff.status == 'INACTIVE'}">
                                     <button id="unArchiveTariff" type="button" class="btn btn-sm btn-success">Unarchive

@@ -38,6 +38,13 @@
                                 <form:errors path="costofadd" class="help-inline"/>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="description">Option description</label>
+                            <form:input type="text" path="description" id="addOptionDescription" class="form-control input-sm"/>
+                            <div class="has-error">
+                                <form:errors path="description" class="help-inline"/>
+                            </div>
+                        </div>
                         <input type="submit" value="Add" class="btn btn-success btn-sm"/> or <a href="/adminPanel/allOptions/">Cancel</a>
                     </form:form>
                 </div>

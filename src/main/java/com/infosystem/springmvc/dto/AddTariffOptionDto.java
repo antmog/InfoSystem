@@ -3,7 +3,7 @@ package com.infosystem.springmvc.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,4 +18,7 @@ public class AddTariffOptionDto {
 
     @NotNull
     private double costofadd;
+
+    @Size(min = 6, max = 32)
+    private String description;
 }

@@ -24,10 +24,12 @@
                             Tariff common data
                         </h5>
                         <div class="card-body">
-                            <label class="col-md-3 control-lable">name</label>
+                            <label class="control-lable">name</label>
                             <input type="text" id="name" class="form-control input-sm"/>
-                            <label class="col-md-3 control-lable">price</label>
+                            <label class="control-lable">price</label>
                             <input type="number" id="price" class="form-control input-sm"/>
+                            <label class="control-lable">description</label>
+                            <input type="text" id="description" class="form-control input-sm"/>
                         </div>
                         <div class="card-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" id="addTariff">Add Tariff</button>

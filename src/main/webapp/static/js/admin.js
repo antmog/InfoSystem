@@ -582,7 +582,7 @@
                 element.price = element.Price;
                 delete element.Price;
             });
-            var part2 = {name: $('#name').val(), price: $('#price').val()};
+            var part2 = {name: $('#name').val(), price: $('#price').val(),description: $('#description').val() };
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             $.ajax({
