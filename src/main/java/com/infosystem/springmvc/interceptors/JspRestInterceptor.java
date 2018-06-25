@@ -1,11 +1,8 @@
-package com.infosystem.springmvc.Interceptors;
+package com.infosystem.springmvc.interceptors;
 
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 public class JspRestInterceptor implements HandlerInterceptor {

@@ -1,8 +1,7 @@
 package com.infosystem.springmvc.configuration;
 
-import com.infosystem.springmvc.Interceptors.JspRestInterceptor;
+import com.infosystem.springmvc.interceptors.JspRestInterceptor;
 import com.infosystem.springmvc.converters.JavaUtilDateToStringConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -72,7 +71,6 @@ public class AppConfig implements WebMvcConfigurer {
     public void configureViewResolvers(ViewResolverRegistry registry) {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setViewClass(JstlView.class);
-        //viewResolver.setContentType("text/html;charset=UTF-8");
         viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".jsp");
         viewResolver.setExposeContextBeansAsAttributes(true);

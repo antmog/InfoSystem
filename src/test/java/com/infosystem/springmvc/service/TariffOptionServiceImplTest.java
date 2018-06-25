@@ -472,4 +472,4 @@ class TariffOptionServiceImplTest {
 //        field.set(object, value);
     }
 
-} 
+}

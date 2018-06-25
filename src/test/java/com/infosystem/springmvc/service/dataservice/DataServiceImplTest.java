@@ -121,7 +121,7 @@ class DataServiceImplTest {
      */
     @Test
     void testFindAllTariffOptions() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -129,7 +129,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetUserPageDto() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -137,7 +137,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetUserAddFundsDataUserId() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -145,7 +145,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetEditUserData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -153,7 +153,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetCustomerPageData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -161,7 +161,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetUserAddFundsDataLogin() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -169,7 +169,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetChangePasswordData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -177,7 +177,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetIndexPageData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -185,7 +185,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetAdminPanelData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -193,7 +193,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetAdvProfileTariffData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -201,7 +201,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetAdvProfileAddTariffData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -209,7 +209,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetTariffPageData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -217,7 +217,7 @@ class DataServiceImplTest {
      */
     @Test
     void testGetContractPageData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
     /**
@@ -225,8 +225,8 @@ class DataServiceImplTest {
      */
     @Test
     void testGetTariffOptionPageData() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
     }
 
 
-} 
+}

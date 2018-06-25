@@ -26,7 +26,9 @@ import java.util.*;
 @SessionAttributes("roles")
 public class AdminController extends ControllerTemplate {
 
-    private final int ITEMS_PER_PAGE = 10;
+    private static final int ITEMS_PER_PAGE = 10;
+    private static final String WRONG_PATH_VARIABLE = "Wrong path variable.";
+    private static final String NO_SUCH_PAGE = "No such page.";
     private final UserFormValidator userFormValidator;
     private final TariffOptionFormValidator tariffOptionFormValidator;
     private final EditUserValidator editUserValidator;
@@ -61,11 +63,13 @@ public class AdminController extends ControllerTemplate {
     }
 
     @RequestMapping("/adminPanel/advProfile/{profileId}/{tariffId}")
-    public String advProfileTariff(@PathVariable String profileId, @PathVariable String tariffId, ModelMap model) throws ValidationException, DatabaseException {
+    public String advProfileTariff(@PathVariable String profileId, @PathVariable String tariffId, ModelMap model)
+            throws ValidationException, DatabaseException {
         if (!(pathVariableIsANumber(profileId) && pathVariableIsANumber(tariffId))) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
-        AdvProfileTariffDto advProfileTariffDto = advProfileTariffDto = dataService.getAdvProfileTariffData(Integer.parseInt(profileId), Integer.parseInt(tariffId));
+        AdvProfileTariffDto advProfileTariffDto = advProfileTariffDto =
+                dataService.getAdvProfileTariffData(Integer.parseInt(profileId), Integer.parseInt(tariffId));
         model.addAttribute("advProfileTariffDto", advProfileTariffDto);
         return path + "advProfileTariff";
     }
@@ -73,7 +77,7 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping("/adminPanel/advProfile/addTariff/{profileId}")
     public String advProfileAddTariff(@PathVariable String profileId, ModelMap model) throws ValidationException {
         if (!(pathVariableIsANumber(profileId))) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         AdvProfileAddTariffDto advProfileAddTariffDto = dataService.getAdvProfileAddTariffData();
         advProfileAddTariffDto.setAdvProfileId(Integer.parseInt(profileId));
@@ -90,12 +94,12 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping("/adminPanel/allUsers/{pageNumber}")
     public String adminPanelAllUsers(@PathVariable(value = "pageNumber") String pageNumber, ModelMap model) throws ValidationException {
         if (!pathVariableIsANumber(pageNumber)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int pageNumberInt = Integer.parseInt(pageNumber);
         AllEntitiesDto<UserDto> allUsersDto = dataService.getAllEntityPageData(UserDto.class, pageNumberInt, ITEMS_PER_PAGE);
         if (illegalPage(allUsersDto.getPageCount(), pageNumberInt, model)) {
-            throw new ValidationException("No such page.");
+            throw new ValidationException(NO_SUCH_PAGE);
         }
         allUsersDto.setPageNumber(pageNumberInt);
         model.addAttribute("allUsersDto", allUsersDto);
@@ -111,12 +115,12 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping("/adminPanel/allContracts/{pageNumber}")
     public String adminPanelAllContracts(@PathVariable(value = "pageNumber") String pageNumber, ModelMap model) throws ValidationException {
         if (!pathVariableIsANumber(pageNumber)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int pageNumberInt = Integer.parseInt(pageNumber);
         AllEntitiesDto<ContractDto> allContractsDto = dataService.getAllEntityPageData(ContractDto.class, pageNumberInt, ITEMS_PER_PAGE);
         if (illegalPage(allContractsDto.getPageCount(), pageNumberInt, model)) {
-            throw new ValidationException("No such page.");
+            throw new ValidationException(NO_SUCH_PAGE);
         }
         allContractsDto.setPageNumber(pageNumberInt);
         model.addAttribute("allContractsDto", allContractsDto);
@@ -132,12 +136,12 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping("/adminPanel/allTariffs/{pageNumber}")
     public String adminPanelAllTariffs(@PathVariable(value = "pageNumber") String pageNumber, ModelMap model) throws ValidationException {
         if (!pathVariableIsANumber(pageNumber)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int pageNumberInt = Integer.parseInt(pageNumber);
         AllEntitiesDto<TariffDto> allTariffsDto = dataService.getAllEntityPageData(TariffDto.class, pageNumberInt, ITEMS_PER_PAGE);
         if (illegalPage(allTariffsDto.getPageCount(), pageNumberInt, model)) {
-            throw new ValidationException("No such page.");
+            throw new ValidationException(NO_SUCH_PAGE);
         }
         allTariffsDto.setPageNumber(pageNumberInt);
         model.addAttribute("allTariffsDto", allTariffsDto);
@@ -153,13 +157,13 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping("/adminPanel/allOptions/{pageNumber}")
     public String adminPanelAllOptions(@PathVariable(value = "pageNumber") String pageNumber, ModelMap model) throws ValidationException {
         if (!pathVariableIsANumber(pageNumber)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int pageNumberInt = Integer.parseInt(pageNumber);
         AllEntitiesDto<TariffOptionDtoShort> allTariffOptionsDto =
                 dataService.getAllEntityPageData(TariffOptionDtoShort.class, pageNumberInt, ITEMS_PER_PAGE);
         if (illegalPage(allTariffOptionsDto.getPageCount(), pageNumberInt, model)) {
-            throw new ValidationException("No such page.");
+            throw new ValidationException(NO_SUCH_PAGE);
         }
         allTariffOptionsDto.setPageNumber(pageNumberInt);
         model.addAttribute("allTariffOptionsDto", allTariffOptionsDto);
@@ -226,7 +230,7 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/addContractToUser/{userId}", method = RequestMethod.GET)
     public String addContractToUser(@PathVariable(value = "userId") String userId, ModelMap model) throws ValidationException {
         if (!pathVariableIsANumber(userId)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int userIdInt = Integer.parseInt(userId);
         List<TariffDto> tariffDtoList = dataService.findAllActiveTariffs();
@@ -290,7 +294,7 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/user/{userId}")
     public String user(@PathVariable(value = "userId") String userId, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(userId)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         UserPageDto userPageDto = dataService.getUserPageDto(Integer.valueOf(userId));
         model.addAttribute("userPageDto", userPageDto);
@@ -307,7 +311,7 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/contract/{contractId}")
     public String contract(@PathVariable(value = "contractId") String contractId, ModelMap model) throws DatabaseException, ValidationException {
         if (!pathVariableIsANumber(contractId)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int contractIdInt = Integer.parseInt(contractId);
         ContractPageDto contractPageDto = dataService.getContractPageData(contractIdInt);
@@ -325,7 +329,7 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/tariff/{tariffId}")
     public String tariff(@PathVariable(value = "tariffId") String tariffId, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(tariffId)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int tariffIdInt = Integer.parseInt(tariffId);
         TariffPageDto tariffPageDto = dataService.getTariffPageData(tariffIdInt);
@@ -343,7 +347,7 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/option/{optionId}")
     public String option(@PathVariable(value = "optionId") String optionId, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(optionId)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int optionIdInt = Integer.parseInt(optionId);
         TariffOptionPageDto tariffOptionPageDto = dataService.getTariffOptionPageData(optionIdInt);
@@ -359,7 +363,7 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping("/adminPanel/addFunds/{userId}")
     public String addFunds(@PathVariable(value = "userId") String userId, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(userId)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int userIdInt = Integer.parseInt(userId);
         UserFundsDto userFundsDto = dataService.getUserAddFundsData(userIdInt);
@@ -375,7 +379,7 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping("/adminPanel/editUser/{userId}")
     public String editUser(@PathVariable(value = "userId") String userId, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(userId)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         int userIdInt = Integer.parseInt(userId);
         EditUserDto editUserDto = dataService.getEditUserData(userIdInt);
@@ -394,7 +398,7 @@ public class AdminController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/editUser/{userId}", method = RequestMethod.POST)
     public String editUserSubmit(@PathVariable(value = "userId") String userId, @Valid EditUserDto editUserDto, BindingResult result, ModelMap model) throws ValidationException, DatabaseException {
         if (!pathVariableIsANumber(userId)) {
-            throw new ValidationException("Wrong path variable.");
+            throw new ValidationException(WRONG_PATH_VARIABLE);
         }
         if (result.hasErrors()) {
             return path + "editUser";

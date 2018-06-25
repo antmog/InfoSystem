@@ -11,13 +11,12 @@ import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Status;
 import com.infosystem.springmvc.model.entity.Tariff;
 import com.infosystem.springmvc.model.entity.TariffOption;
+import com.infosystem.springmvc.service.security.CustomUserDetailsService;
+import com.infosystem.springmvc.service.security.SecurityService;
 import com.infosystem.springmvc.sessioncart.SessionCart;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +36,13 @@ public class ContractServiceImpl implements ContractService {
     private SessionCart sessionCart;
 
     private CustomModelMapper modelMapperWrapper;
+
+    private SecurityService securityService;
+
+    @Autowired
+    public void setSecurityService(SecurityService securityService){
+        this.securityService = securityService;
+    }
 
     @Autowired
     public void setTariffService(TariffService tariffService) {
@@ -103,10 +109,8 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, ValidationException {
         Contract contract = findById(setNewStatusDto.getEntityId());
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findByLogin(getPrincipal());
-        if(authentication.getAuthorities().stream()
-                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))
+        User user = userService.findByLogin(securityService.getPrincipal());
+        if(!securityService.isPrincipalAdmin()
                 && (!contract.getUser().equals(user)
                 || contract.getStatus().equals(Status.BLOCKED))){
             String exceptionMessage = "You are not admin to do this.";
@@ -169,7 +173,7 @@ public class ContractServiceImpl implements ContractService {
         Contract contract;
         Set<TariffOption> toBeAddedOptionsList;
         User user = userService.findById(addOptionsDto.getUserId());
-        if(!userService.findByLogin(getPrincipal()).equals(user)){
+        if(!userService.findByLogin(securityService.getPrincipal()).equals(user)){
             throw new ValidationException("Hacker!!! Dont try to pay with other user's money, please.");
         }
         Double amount = 0.0;
@@ -237,7 +241,8 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void customerDelOptions(EditContractDto editContractDto) throws DatabaseException, LogicException, ValidationException {
         Contract contract = findById(editContractDto.getContractId());
-        if(!contract.getUser().equals(userService.findByLogin(getPrincipal()))){
+        User user = userService.findByLogin(securityService.getPrincipal());
+        if(!contract.getUser().equals(user)){
             throw new ValidationException("One more hack and you are going to be arrested.");
         }
         if (!contract.getStatus().equals(Status.ACTIVE)) {
@@ -291,7 +296,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void customerSwitchTariff(SwitchTariffDto switchTariffDto) throws DatabaseException, LogicException, ValidationException {
         Contract contract = findById(switchTariffDto.getContractId());
-        if(!userService.findByLogin(getPrincipal()).equals(contract.getUser())){
+        if(!userService.findByLogin(securityService.getPrincipal()).equals(contract.getUser())){
             throw new ValidationException("One more hack and you are going to be arrested.");
         }
         if (!contract.getStatus().equals(Status.ACTIVE)) {
@@ -355,20 +360,5 @@ public class ContractServiceImpl implements ContractService {
     private boolean doesPhoneNumberExist(String phoneNumber) {
         Contract contract = findByPhoneNumber(phoneNumber);
         return (contract != null);
-    }
-
-    /**
-     * This method returns the principal[user-name] of logged-in user.
-     */
-    private String getPrincipal() {
-        String userName = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof UserDetails) {
-            userName = ((UserDetails) principal).getUsername();
-        } else {
-            userName = principal.toString();
-        }
-        return userName;
     }
 }

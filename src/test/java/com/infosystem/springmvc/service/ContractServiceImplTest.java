@@ -3,10 +3,13 @@ package com.infosystem.springmvc.service;
 import com.infosystem.springmvc.dao.ContractDao;
 import com.infosystem.springmvc.dto.*;
 import com.infosystem.springmvc.exception.LogicException;
+import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.*;
 
 
 import com.infosystem.springmvc.model.enums.Status;
+import com.infosystem.springmvc.service.security.CustomUserDetailsService;
+import com.infosystem.springmvc.service.security.SecurityService;
 import com.infosystem.springmvc.sessioncart.SessionCart;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import com.infosystem.springmvc.util.OptionsRulesChecker;
@@ -45,6 +48,9 @@ class ContractServiceImplTest {
     private UserService userService;
 
     @Mock
+    private SecurityService securityService;
+
+    @Mock
     private SessionCart sessionCart;
 
     @Mock
@@ -59,6 +65,12 @@ class ContractServiceImplTest {
     @BeforeEach
     void setUp() {
         getTariffOptionsList();
+        contractService.setUserService(userService);
+        contractService.setSecurityService(securityService);
+        contractService.setTariffService(tariffService);
+        contractService.setOptionsRulesChecker(optionsRulesChecker);
+        contractService.setModelMapperWrapper(modelMapperWrapper);
+        contractService.setSessionCart(sessionCart);
     }
 
     private void getTariffOptionsList() {
@@ -124,12 +136,35 @@ class ContractServiceImplTest {
         Contract contract = contracts.get(0);
         SetNewStatusDto setNewStatusDto = new SetNewStatusDto();
         setNewStatusDto.setEntityId(contract.getId());
-        contractService.setModelMapperWrapper(modelMapperWrapper);
         when(modelMapperWrapper.mapToStatus(any())).thenReturn(Status.INACTIVE);
         when(contractDao.findById(setNewStatusDto.getEntityId())).thenReturn(contract);
+        when(securityService.isPrincipalAdmin()).thenReturn(true);
 
         contractService.setStatus(setNewStatusDto);
         assertEquals(contract.getStatus(), Status.INACTIVE);
+    }
+
+    /**
+     * Method: setStatus(SetNewStatusDto setNewStatusDto)
+     */
+    @Test
+    void test_actionPermitted_SetStatus() throws Exception {
+        String exceptionMessage = "You are not admin to do this.";
+        Contract contract = contracts.get(0);
+        User user = new User();
+        user.setId(1);
+        contract.setUser(user);
+        SetNewStatusDto setNewStatusDto = new SetNewStatusDto();
+        setNewStatusDto.setEntityId(contract.getId());
+        when(contractDao.findById(setNewStatusDto.getEntityId())).thenReturn(contract);
+        when(securityService.isPrincipalAdmin()).thenReturn(false);
+        when(securityService.getPrincipal()).thenReturn("login");
+        when(userService.findByLogin(anyString())).thenReturn(new User());
+
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
+            contractService.setStatus(setNewStatusDto);
+        });
+        assertEquals(exceptionMessage, exception.getMessage());
     }
 
     /**
@@ -173,8 +208,6 @@ class ContractServiceImplTest {
         Set<TariffOption> tariffOptions = new HashSet<>(Arrays.asList(tariffOption1, tariffOption2));
 
         when(contractDao.findById(anyInt())).thenReturn(contract);
-        contractService.setModelMapperWrapper(modelMapperWrapper);
-        contractService.setOptionsRulesChecker(optionsRulesChecker);
         when(modelMapperWrapper.mapToTariffOptionSet(any())).thenReturn(tariffOptions);
 
         contractService.addOptions(editContractDto);
@@ -208,8 +241,6 @@ class ContractServiceImplTest {
         Set<TariffOption> tariffOptions = new HashSet<>(Arrays.asList(tariffOption1, tariffOption2));
 
         when(contractDao.findById(anyInt())).thenReturn(contract);
-        contractService.setModelMapperWrapper(modelMapperWrapper);
-        contractService.setOptionsRulesChecker(optionsRulesChecker);
         when(modelMapperWrapper.mapToTariffOptionSet(any())).thenReturn(tariffOptions);
         LogicException exception = assertThrows(LogicException.class, () -> {
             contractService.addOptions(editContractDto);
@@ -250,14 +281,12 @@ class ContractServiceImplTest {
         User user = new User();
         user.setBalance(initialUserBalance);
         user.setId(addOptionsDto.getUserId());
-        contractService.setSessionCart(sessionCart);
-        contractService.setModelMapperWrapper(modelMapperWrapper);
-        contractService.setOptionsRulesChecker(optionsRulesChecker);
-        contractService.setUserService(userService);
         when(modelMapperWrapper.mapToSet(eq(TariffOption.class), any())).thenReturn(options1mapped).thenReturn(options2mapped);
         when(userService.findById(addOptionsDto.getUserId())).thenReturn(user);
         when(contractDao.findById(anyInt())).thenReturn(contracts.get(0), contracts.get(1));
         when(sessionCart.getOptions()).thenReturn(options);
+        when(securityService.getPrincipal()).thenReturn("login");
+        when(userService.findByLogin(anyString())).thenReturn(user);
 
         contractService.customerAddOptions(addOptionsDto);
 
@@ -274,10 +303,10 @@ class ContractServiceImplTest {
         addOptionsDto.setUserId(1);
         User user = new User();
         user.setId(addOptionsDto.getUserId());
-        contractService.setUserService(userService);
-        contractService.setSessionCart(sessionCart);
         when(userService.findById(addOptionsDto.getUserId())).thenReturn(user);
         when(sessionCart.getOptions()).thenReturn(new HashMap<>());
+        when(securityService.getPrincipal()).thenReturn("login");
+        when(userService.findByLogin(anyString())).thenReturn(user);
 
         String exceptionMessage = "Cart is empty.";
         LogicException exception = assertThrows(LogicException.class, () -> {
@@ -299,11 +328,11 @@ class ContractServiceImplTest {
         addOptionsDto.setUserId(1);
         User user = new User();
         user.setId(addOptionsDto.getUserId());
-        contractService.setSessionCart(sessionCart);
-        contractService.setUserService(userService);
         when(userService.findById(addOptionsDto.getUserId())).thenReturn(user);
+        when(userService.findByLogin(anyString())).thenReturn(user);
         when(contractDao.findById(anyInt())).thenReturn(contracts.get(0));
         when(sessionCart.getOptions()).thenReturn(options);
+        when(securityService.getPrincipal()).thenReturn("login");
 
         String exceptionMessage = "Contract " + contract1.getId() + " is NOT active, sorry.";
         LogicException exception = assertThrows(LogicException.class, () -> {
@@ -345,14 +374,12 @@ class ContractServiceImplTest {
         User user = new User();
         user.setBalance(initialUserBalance);
         user.setId(addOptionsDto.getUserId());
-        contractService.setSessionCart(sessionCart);
-        contractService.setModelMapperWrapper(modelMapperWrapper);
-        contractService.setOptionsRulesChecker(optionsRulesChecker);
-        contractService.setUserService(userService);
         when(modelMapperWrapper.mapToSet(eq(TariffOption.class), any())).thenReturn(options1mapped).thenReturn(options2mapped);
         when(userService.findById(addOptionsDto.getUserId())).thenReturn(user);
         when(contractDao.findById(anyInt())).thenReturn(contracts.get(0), contracts.get(1));
         when(sessionCart.getOptions()).thenReturn(options);
+        when(securityService.getPrincipal()).thenReturn("login");
+        when(userService.findByLogin(anyString())).thenReturn(user);
 
         String exceptionMessage = "Not enough funds.";
         LogicException exception = assertThrows(LogicException.class, () -> {
@@ -373,8 +400,6 @@ class ContractServiceImplTest {
         Set<TariffOption> options = new HashSet<>(Collections.singletonList(new TariffOption()));
         contract.setActiveOptions(options);
         EditContractDto editContractDto = new EditContractDto();
-        contractService.setModelMapperWrapper(modelMapperWrapper);
-        contractService.setOptionsRulesChecker(optionsRulesChecker);
         when(contractDao.findById(anyInt())).thenReturn(contract);
         when(modelMapperWrapper.mapToTariffOptionSet(any())).thenReturn(options);
 
@@ -392,9 +417,14 @@ class ContractServiceImplTest {
     void testCustomerDelOptions() throws Exception {
         String exceptionMessage = "Sorry, contract is not active, refresh page.";
         Contract contract = contracts.get(0);
+        User user = new User();
+        user.setId(1);
+        contract.setUser(user);
         contract.setStatus(Status.INACTIVE);
         EditContractDto editContractDto = new EditContractDto();
+        when(securityService.getPrincipal()).thenReturn("login");
         when(contractDao.findById(anyInt())).thenReturn(contract);
+        when(userService.findByLogin(anyString())).thenReturn(user);
 
         LogicException exception = assertThrows(LogicException.class, () -> {
             contractService.customerDelOptions(editContractDto);
@@ -413,7 +443,7 @@ class ContractServiceImplTest {
         tariff.setPrice(price);
         SwitchTariffDto switchTariffDto = new SwitchTariffDto();
 
-        contractService.setTariffService(tariffService);
+
         when(contractDao.findById(anyInt())).thenReturn(contract);
         when(tariffService.findById(anyInt())).thenReturn(tariff);
 
@@ -438,7 +468,6 @@ class ContractServiceImplTest {
         Tariff tariff = new Tariff();
         SwitchTariffDto switchTariffDto = new SwitchTariffDto();
 
-        contractService.setTariffService(tariffService);
         when(contractDao.findById(anyInt())).thenReturn(contract);
         when(tariffService.findById(anyInt())).thenReturn(tariff);
 
@@ -463,10 +492,37 @@ class ContractServiceImplTest {
         String exceptionMessage = "Sorry, contract is not active, refresh page.";
         Contract contract = contracts.get(0);
         contract.setStatus(Status.INACTIVE);
+        User user = new User();
+        user.setId(1);
+        contract.setUser(user);
         SwitchTariffDto switchTariffDto = new SwitchTariffDto();
         when(contractDao.findById(anyInt())).thenReturn(contract);
+        when(userService.findByLogin(anyString())).thenReturn(user);
+        when(securityService.getPrincipal()).thenReturn("login");
 
         LogicException exception = assertThrows(LogicException.class, () -> {
+            contractService.customerSwitchTariff(switchTariffDto);
+        });
+        assertEquals(exceptionMessage, exception.getMessage());
+    }
+
+    /**
+     * Method: customerSwitchTariff(SwitchTariffDto switchTariffDto)
+     */
+    @Test
+    void test_IllegalAction_CustomerSwitchTariff() throws Exception {
+        String exceptionMessage = "One more hack and you are going to be arrested.";
+        Contract contract = contracts.get(0);
+        contract.setStatus(Status.INACTIVE);
+        User user = new User();
+        user.setId(1);
+        contract.setUser(user);
+        SwitchTariffDto switchTariffDto = new SwitchTariffDto();
+        when(contractDao.findById(anyInt())).thenReturn(contract);
+        when(userService.findByLogin(anyString())).thenReturn(new User());
+        when(securityService.getPrincipal()).thenReturn("login");
+
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
             contractService.customerSwitchTariff(switchTariffDto);
         });
         assertEquals(exceptionMessage, exception.getMessage());
@@ -496,10 +552,6 @@ class ContractServiceImplTest {
         tariffOption2.setPrice(optionPrice);
         Set<TariffOption> toBeAddedOptionsList = new HashSet<>(Arrays.asList(tariffOption1, tariffOption2));
         addContractDto.setTariffOptionDtoList(new ArrayList<>(Collections.singletonList(new TariffOptionDto())));
-        contractService.setTariffService(tariffService);
-        contractService.setUserService(userService);
-        contractService.setModelMapperWrapper(modelMapperWrapper);
-        contractService.setOptionsRulesChecker(optionsRulesChecker);
         when(modelMapperWrapper.mapToTariffOptionSet(any())).thenReturn(toBeAddedOptionsList);
         when(tariffService.findById(anyInt())).thenReturn(tariff);
         when(userService.findById(anyInt())).thenReturn(user);
@@ -551,10 +603,6 @@ class ContractServiceImplTest {
         tariffOption2.setPrice(optionPrice);
         Set<TariffOption> toBeAddedOptionsList = new HashSet<>(Arrays.asList(tariffOption1, tariffOption2));
         addContractDto.setTariffOptionDtoList(new ArrayList<>(Collections.singletonList(new TariffOptionDto())));
-        contractService.setTariffService(tariffService);
-        contractService.setUserService(userService);
-        contractService.setModelMapperWrapper(modelMapperWrapper);
-        contractService.setOptionsRulesChecker(optionsRulesChecker);
         when(modelMapperWrapper.mapToTariffOptionSet(any())).thenReturn(toBeAddedOptionsList);
         when(tariffService.findById(anyInt())).thenReturn(tariff);
         when(userService.findById(anyInt())).thenReturn(user);
@@ -625,4 +673,4 @@ class ContractServiceImplTest {
         assertTrue((boolean)method.invoke(contractService, anyString()));
     }
 
-} 
+}

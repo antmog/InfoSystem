@@ -12,12 +12,13 @@ import com.infosystem.springmvc.exception.LogicException;
 import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.enums.Status;
+import com.infosystem.springmvc.service.security.CustomUserDetailsService;
+import com.infosystem.springmvc.service.security.SecurityService;
 import com.infosystem.springmvc.util.CustomModelMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,13 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
     private ContractService contractService;
+
+    private SecurityService securityService;
+
+    @Autowired
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
+    }
 
     @Autowired
     public void setContractService(ContractService contractService) {
@@ -102,9 +110,8 @@ public class UserServiceImpl implements UserService {
     public void setStatus(SetNewStatusDto setNewStatusDto) throws DatabaseException, ValidationException {
         User user = findById(setNewStatusDto.getEntityId());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User principal = findByLogin(((UserDetails) authentication.getPrincipal()).getUsername());
-        if(authentication.getAuthorities().stream()
-                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))
+        User principal = findByLogin(securityService.getPrincipal());
+        if(!securityService.isPrincipalAdmin()
                 && (!principal.equals(user)
                 || user.getStatus().equals(Status.BLOCKED))){
             String exceptionMessage = "You are not admin to do this.";
@@ -232,10 +239,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private void verifyUser(User user) throws ValidationException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getAuthorities().stream()
-                .noneMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))
-                && !((UserDetails) authentication.getPrincipal()).getUsername().equals(user.getLogin())){
+        if (!securityService.isPrincipalAdmin()
+                && !securityService.getPrincipal().equals(user.getLogin())){
             throw new ValidationException("You cant do it, naughty hacker.");
         }
     }

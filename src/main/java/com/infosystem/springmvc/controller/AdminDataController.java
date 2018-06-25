@@ -28,6 +28,7 @@ public class AdminDataController extends ControllerTemplate {
     private final SearchUserByNumberValidator searchUserByNumberValidator;
     private final MessageSource messageSource;
     private final AdvProfileService advProfileService;
+    private static final String WRONG_PATH_VARIABLE = "Wrong path variable.";
 
     @Autowired
     public AdminDataController(UserService userService, ContractService contractService,
@@ -93,7 +94,7 @@ public class AdminDataController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/user/searchUserByNumber/{phoneNumber}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public SearchByNumberResponseDto searchUserByNumber(@PathVariable String phoneNumber) throws ValidationException, LogicException {
         if (!pathVariableIsANumber(phoneNumber)) {
-            String exceptionMessage = "Wrong path variable.";
+            String exceptionMessage = WRONG_PATH_VARIABLE;
             throw new ValidationException(exceptionMessage);
         }
         SearchByNumberDto searchByNumberDto = new SearchByNumberDto(phoneNumber);
@@ -119,7 +120,7 @@ public class AdminDataController extends ControllerTemplate {
     @PostMapping(value = "/adminPanel/user/deleteUser/{userId}")
     public ResponseDto deleteUser(@PathVariable String userId) throws LogicException, DatabaseException, ValidationException {
         if (!pathVariableIsANumber(userId)) {
-            String exceptionMessage = "Wrong path variable.";
+            String exceptionMessage = WRONG_PATH_VARIABLE;
             throw new ValidationException(exceptionMessage);
         }
         userService.deleteUserById(Integer.parseInt(userId));
@@ -137,7 +138,7 @@ public class AdminDataController extends ControllerTemplate {
     @PostMapping(value = "/adminPanel/tariff/deleteTariff/{tariffId}")
     public ResponseDto deleteTariff(@PathVariable String tariffId) throws DatabaseException, LogicException, ValidationException {
         if (!pathVariableIsANumber(tariffId)) {
-            String exceptionMessage = "Wrong path variable.";
+            String exceptionMessage = WRONG_PATH_VARIABLE;
             throw new ValidationException(exceptionMessage);
         }
         tariffService.deleteTariffById(Integer.parseInt(tariffId));
@@ -155,7 +156,7 @@ public class AdminDataController extends ControllerTemplate {
     @PostMapping(value = "/adminPanel/contract/deleteContract/{contractId}")
     public ResponseDto deleteContract(@PathVariable String contractId) throws DatabaseException, ValidationException {
         if (!pathVariableIsANumber(contractId)) {
-            String exceptionMessage = "Wrong path variable.";
+            String exceptionMessage = WRONG_PATH_VARIABLE;
             throw new ValidationException(exceptionMessage);
         }
         contractService.deleteContractById(Integer.parseInt(contractId));
@@ -173,7 +174,7 @@ public class AdminDataController extends ControllerTemplate {
     @PostMapping(value = "/adminPanel/option/deleteOption/{optionId}")
     public ResponseDto deleteOption(@PathVariable String optionId) throws DatabaseException, LogicException, ValidationException {
         if (!pathVariableIsANumber(optionId)) {
-            String exceptionMessage = "Wrong path variable.";
+            String exceptionMessage = WRONG_PATH_VARIABLE;
             throw new ValidationException(exceptionMessage);
         }
         tariffOptionService.deleteTariffOptionById(Integer.parseInt(optionId));
@@ -340,7 +341,7 @@ public class AdminDataController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/getBalance/{userId}", method = RequestMethod.GET)
     public String getBalance(@PathVariable String userId) throws DatabaseException, ValidationException {
         if (!pathVariableIsANumber(userId)) {
-            String exceptionMessage = "Wrong path variable.";
+            String exceptionMessage = WRONG_PATH_VARIABLE;
             throw new ValidationException(exceptionMessage);
         }
         return userService.getBalance(Integer.parseInt(userId));
@@ -349,7 +350,7 @@ public class AdminDataController extends ControllerTemplate {
     @RequestMapping(value = "/adminPanel/advProfiles/{advProfileId}", method = RequestMethod.GET)
     public AdvProfileDto getAdvProfile(@PathVariable String advProfileId) throws DatabaseException, ValidationException {
         if (!pathVariableIsANumber(advProfileId)) {
-            String exceptionMessage = "Wrong path variable.";
+            String exceptionMessage = WRONG_PATH_VARIABLE;
             throw new ValidationException(exceptionMessage);
         }
         return advProfileService.getProfileById(Integer.parseInt(advProfileId));
@@ -396,7 +397,7 @@ public class AdminDataController extends ControllerTemplate {
     public ResponseDto advProfileActivate(@PathVariable String advProfileId)
             throws DatabaseException, ValidationException, LogicException {
         if (!pathVariableIsANumber(advProfileId)) {
-            String exceptionMessage = "Wrong path variable.";
+            String exceptionMessage = WRONG_PATH_VARIABLE;
             throw new ValidationException(exceptionMessage);
         }
         advProfileService.activate(Integer.parseInt(advProfileId));

@@ -62,9 +62,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
-        PersistentTokenBasedRememberMeServices tokenBasedservice = new PersistentTokenBasedRememberMeServices(
+        return new PersistentTokenBasedRememberMeServices(
                 "remember-me", userDetailsService, tokenRepository);
-        return tokenBasedservice;
     }
 
     @Bean

@@ -12,6 +12,7 @@ import com.infosystem.springmvc.exception.ValidationException;
 import com.infosystem.springmvc.model.entity.Contract;
 import com.infosystem.springmvc.model.entity.User;
 import com.infosystem.springmvc.model.enums.Status;
+import com.infosystem.springmvc.service.security.SecurityService;
 import com.infosystem.springmvc.util.CustomModelMapper;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -51,11 +52,17 @@ class UserServiceImplTest {
     @Mock
     private ContractService contractService;
 
+    @Mock
+    private SecurityService securityService;
+
     @InjectMocks
     private UserServiceImpl userService;
 
     @BeforeEach
     void setUp() {
+        userService.setSecurityService(securityService);
+        userService.setContractService(contractService);
+        userService.setCustomModelMapper(customModelMapper);
         getUsersList();
     }
 
@@ -124,10 +131,14 @@ class UserServiceImplTest {
         setNewStatusDto.setEntityId(user.getId());
         setNewStatusDto.setEntityStatus(status.getStatus());
 
+        when(userDao.findByParameter(eq("login"),anyString())).thenReturn(user);
         when(userDao.findById(user.getId())).thenReturn(user);
         when(customModelMapper.mapToStatus(any())).thenReturn(status);
-        userService.setCustomModelMapper(customModelMapper);
+        when(securityService.getPrincipal()).thenReturn("login");
+        when(securityService.isPrincipalAdmin()).thenReturn(false);
+
         userService.setStatus(setNewStatusDto);
+
         assertEquals(userService.findById(user.getId()).getStatus(), status);
         verify(userDao, atLeastOnce()).findById(user.getId());
     }
@@ -182,15 +193,12 @@ class UserServiceImplTest {
 
         when(contractService.findByPhoneNumber(any())).thenReturn(contract);
 
-        userService.setContractService(contractService);
-
         assertEquals(userService.findByPhoneNumber(searchByNumberDto), users.get(0).getId());
     }
 
     @Test
     void testFindByPhoneNumberWrong() {
         String exceptionMessage = "No such number.";
-        userService.setContractService(contractService);
         when(contractService.findByPhoneNumber(any())).thenReturn(null);
 
         LogicException exception = assertThrows(LogicException.class, () -> {
@@ -206,7 +214,6 @@ class UserServiceImplTest {
 
         when(customModelMapper.mapToEntity(User.class, addUserDto)).thenReturn(user);
 
-        userService.setCustomModelMapper(customModelMapper);
         userService.addUser(addUserDto);
 
         verify(userDao, atLeastOnce()).save(user);
@@ -278,9 +285,30 @@ class UserServiceImplTest {
         editUserDto.setId(user.getId());
         editUserDto.setAddress("address");
         when(userDao.findById(user.getId())).thenReturn(user);
+        when(securityService.isPrincipalAdmin()).thenReturn(true);
+
         userService.editUser(editUserDto);
+
         verify(userDao, atLeastOnce()).findById(user.getId());
         assertEquals(userService.findById(editUserDto.getId()).getAddress(), "address");
+    }
+
+    @Test
+    void test_actionPermitted_EditUser() throws DatabaseException, ValidationException {
+        String exceptionMessage = "You cant do it, naughty hacker.";
+        User user = users.get(0);
+        user.setLogin("login1");
+        EditUserDto editUserDto = new EditUserDto();
+        editUserDto.setId(user.getId());
+        editUserDto.setAddress("address");
+        when(userDao.findById(user.getId())).thenReturn(user);
+        when(securityService.isPrincipalAdmin()).thenReturn(false);
+        when(securityService.getPrincipal()).thenReturn("login");
+
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
+            userService.editUser(editUserDto);
+        });
+        assertEquals(exceptionMessage, exception.getMessage());
     }
 
     @Test

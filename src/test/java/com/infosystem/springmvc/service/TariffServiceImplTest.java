@@ -344,4 +344,4 @@ class TariffServiceImplTest {
         });
         assertEquals(exceptionMessage, exception.getMessage());
     }
-} 
+}
